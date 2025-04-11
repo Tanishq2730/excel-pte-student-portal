@@ -162,7 +162,7 @@ const AdminDashboard = () => {
             </div>
 
             <div className="row">
-              <div className="col-md-7">
+              <div className="col-md-6">
                 <div className="row">
                   {/* Total Students */}
                   <div className="col-xxl-6 col-sm-6 d-flex">
@@ -480,7 +480,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-5">
+              <div className="col-md-6">
                 <div className="card">
                   <div className="card-body">
                     <div className="studyPlan">

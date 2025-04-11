@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
+import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 
 const StudyPlan: React.FC = () => {
   return (
@@ -162,99 +163,77 @@ const StudyPlan: React.FC = () => {
           </div>
         </div>
       </div> */}
-      <div className="card-body px-sm-4 px-2">
+      <div className="card-body">
         <ul
-          className="nav nav-tabs justify-content-center mb-5 tab-style-3"
-          id="myTab2"
+          className="nav nav-tabs tab-style-1 d-sm-flex d-block"
           role="tablist"
         >
-          <li className="nav-item me-0" role="presentation">
-            <button
-              className="nav-link active home py-1"
-              id="home-tab-1"
+          <li className="nav-item">
+            <Link
+              className="nav-link active"
               data-bs-toggle="tab"
-              data-bs-target="#home-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="home-tab-pane" 
-              aria-selected="true"
+              data-bs-target="#orders"
+              aria-current="page"
+              to="#orders"
             >
               Speaking
-            </button>
+            </Link>
           </li>
-          <li className="nav-item me-0" role="presentation">
-            <button
-              className="nav-link about py-1"
-              id="profile-tab-2"
+          <li className="nav-item">
+            <Link
+              className="nav-link"
               data-bs-toggle="tab"
-              data-bs-target="#profile-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="profile-tab-pane"
-              aria-selected="false"
+              data-bs-target="#accepted"
+              to="#accepted"
             >
               Writing
-            </button>
+            </Link>
           </li>
-          <li className="nav-item me-0" role="presentation">
-            <button
-              className="nav-link services py-1"
-              id="contact-tab"
+          <li className="nav-item">
+            <Link
+              className="nav-link"
               data-bs-toggle="tab"
-              data-bs-target="#contact-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="contact-tab-pane"
-              aria-selected="false"
+              data-bs-target="#declined"
+              to="#declined"
             >
               Reading
-            </button>
+            </Link>
           </li>
-          <li className="nav-item me-0" role="presentation">
-            <button
-              className="nav-link services py-1"
-              id="last-tab"
+          <li className="nav-item">
+            <Link
+              className="nav-link"
               data-bs-toggle="tab"
-              data-bs-target="#last-tab-pane"
-              type="button"
-              role="tab"
-              aria-controls="last-tab-pane"
-              aria-selected="false"
+              data-bs-target="#declined"
+              to="#declined"
             >
               Listening
-            </button>
+            </Link>
           </li>
         </ul>
-        <div className="tab-content" id="myTabContent1">
-          <div
-            className="tab-pane fade show active text-muted"
-            id="home-tab-pane"
-            role="tabpanel"
-            aria-labelledby="home-tab-1"
-            tabIndex={0}
-          >
-            <b>Lorem Ipsum is simply dummy text of the printing</b> and
-            typesetting industry. Lorem Ipsum has been the industry&apos;s.
+        <div className="tab-content">
+          <div className="tab-pane active" id="orders" role="tabpanel">
+            <div className="text-muted">
+              <b>Lorem Ipsum is simply dummy text of the printing</b> and
+              typesetting industry. Lorem Ipsum has been the industry&apos;s
+              standard dummy text ever since the 1500s, when an unknown printer
+              took a galley of type and scrambled.
+            </div>
           </div>
-          <div
-            className="tab-pane fade text-muted"
-            id="profile-tab-pane"
-            role="tabpanel"
-            aria-labelledby="profile-tab-2"
-            tabIndex={0}
-          >
-            Many desktop publishing packages as their default model text, and a
-            search for <b>&apos;lorem ipsum&apos;</b> will over the years.
+          <div className="tab-pane" id="accepted" role="tabpanel">
+            <div className="text-muted">
+              Many desktop publishing packages and web page editors now use
+              Lorem Ipsum as their default model text, and a search for{" "}
+              <b>&apos;lorem ipsum&apos;</b> will uncover many web sites still
+              in their infancy. Various versions have evolved over the years.
+            </div>
           </div>
-          <div
-            className="tab-pane fade text-muted"
-            id="contact-tab-pane"
-            role="tabpanel"
-            aria-labelledby="contact-tab"
-            tabIndex={0}
-          >
-            There, <b>by injected humour</b>, or randomised words which
-            don&apos;t look even slightly believable.
+          <div className="tab-pane" id="declined" role="tabpanel">
+            <div className="text-muted">
+              There are many variations of passages of Lorem Ipsum available,
+              but the majority have suffered alteration in some form,
+              <b>by injected humour</b>, or randomised words which don&apos;t
+              look even slightly believable
+            </div>
           </div>
         </div>
       </div>
