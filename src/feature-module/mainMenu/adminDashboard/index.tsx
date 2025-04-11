@@ -20,6 +20,7 @@ const AdminDashboard = () => {
   const [modalSource, setModalSource] = useState("left");
   function SampleNextArrow(props: any) {
     const { style, onClick } = props;
+    
     return (
       <div
         className="slick-nav slick-nav-next class-slides"
