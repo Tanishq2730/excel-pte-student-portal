@@ -1661,11 +1661,12 @@ body.app-chat {
     flex-direction: column;
     align-items: center;
     padding: 1em;
-    width: 5em;
-    height: 5em;
-    font-size: 17px;
+    width: 6em;
+    height: 6em;
+    font-size: 14px;
     color: #232323;
     border-radius: 100px;
+    justify-content: center;
     i {
       font-size: 20px;
       color: #232323;
