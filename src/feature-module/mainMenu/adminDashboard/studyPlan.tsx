@@ -5,7 +5,7 @@ const StudyPlan: React.FC = () => {
   return (
     <div className="studyplantab">
       <div className="card-body p-0">
-        <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3">
+        <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3" style={{justifyContent:'space-between'}}>
           <li className="nav-item">
             <Link
               className="nav-link active one"
