@@ -119,6 +119,12 @@ export const all_routes = {
   uiColor: "/ui-color",
   uiDropdowns: "ui-dropdowns",
   readAloud:"/read-aloud",
+  repeatSentence:"/repeat-sentence",
+  describeImage:"/describe-image",
+  reTellLecture:"/retell-lecture",
+  answerShortQuestion:"/answer-short-question",
+  summarizeSpokenText:"/summarize-spoken-text",
+  writeEssay:"/write-essay",
   // pages routes
   error404: "/error-404",
   error500: "/error-500",

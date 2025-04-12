@@ -3,7 +3,7 @@ import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
 
-const ReadAloud = () => {
+const WriteEssay = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
@@ -15,18 +15,22 @@ const ReadAloud = () => {
         <div className="container">
           <div className="practiceLayout">
             <p className="my-3">
-              Look at the text below. In 40 seconds, you must read this text
-              aloud as naturally and clearly as possible. You have 40 seconds to
-              read aloud. Speak within 3 seconds otherwise the microphone will
-              close and you will lose the marks.
+              Read the passage below and summarize it using one sentence. Type
+              your response in the box at the bottom of the screen. You have 10
+              minutes to finish this task. Your response will be judged on the
+              quality of your writing and on how well your response presents the
+              key points in the passage.
             </p>
             <div className="card">
               <div className="card-header">
-                <div className="card-title text-white"><CardHeading/></div>
+                <div className="card-title text-white">
+                  <CardHeading />
+                </div>
               </div>
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
+                    <span className="text-danger">Submit your response before time finishes! Otherwise your response won`t be saved and scored.</span>
                     <span className="text-danger">Prepare: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
@@ -48,17 +52,20 @@ const ReadAloud = () => {
                   </div>
                   <div className="innercontent">
                     <p>
-                      Tissues are grouped together in the body to form organs.
-                      These include the brain, heart, lungs, kidneys, and liver.
-                      Each body organ has a specific shape and is made up of
-                      different types of tissue that work together. For example,
-                      the heart consists mainly of a specialized type of muscle
-                      tissue, which contracts rhythmically to provide the
-                      heart's pumping action.
+                    Do you agree that genetically modified foods are safe for consumption?
                     </p>
                   </div>
-                  <div className="micSection">
-                    <RecorderComponent />
+                  <div className="card">
+                    <div className="card-header bg-white">
+                      <div className="card-title"><h5>Total Word Count: 0</h5></div>
+                    </div>
+                    <div className="card-body">
+                      <textarea
+                        className="form-control"
+                        rows={4}
+                        placeholder="Write a Essay..."
+                      ></textarea>
+                    </div>
                   </div>
                   {showAnswer && (
                     <div
@@ -129,4 +136,4 @@ const ReadAloud = () => {
   );
 };
 
-export default ReadAloud;
+export default WriteEssay;

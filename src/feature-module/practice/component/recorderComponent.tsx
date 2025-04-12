@@ -115,8 +115,8 @@ const RecorderComponent: React.FC = () => {
               className={`mic-button ${isRecording ? "bg-theme" : ""}`}
               onClick={handleMicClick}
               style={{
-                width: "60px",
-                height: "60px",
+                width: "40px",
+                height: "40px",
                 borderRadius: "50%",
                 backgroundColor: isRecording ? "#f44336" : "#fff",
                 border: "1px solid #ccc",
@@ -130,7 +130,7 @@ const RecorderComponent: React.FC = () => {
               <i
                 className="fa fa-microphone"
                 style={{
-                  fontSize: "24px",
+                  fontSize: "16px",
                   color: isRecording ? "#fff" : "#333",
                 }}
               />

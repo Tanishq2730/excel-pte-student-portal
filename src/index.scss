@@ -37,8 +37,8 @@ a {
 
 //ant datatable pagination
 .ant-pagination-item.ant-pagination-item-1.ant-pagination-item-active {
-  background: #3d5ee1;
-  border-color: #3d5ee1;
+  background: #33b9c7;
+  border-color: #33b9c7;
   color: #fff;
 }
 
@@ -51,7 +51,7 @@ h4,
 // date range picker
 .daterangepicker td.active,
 .daterangepicker td.active:hover {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
   color: #fff;
 }
 
@@ -61,8 +61,8 @@ h4,
 
 .applyBtn.btn.btn-sm.btn-primary {
   color: #fff;
-  background-color: #3d5ee1;
-  border: 1px solid #3d5ee1;
+  background-color: #33b9c7;
+  border: 1px solid #33b9c7;
 }
 
 // react-select plugin
@@ -246,12 +246,12 @@ span.form-icon {
 }
 
 .select__control {
-  background-color: #3d5ee1 !important;
-  border-color: #3d5ee1 !important;
+  background-color: #33b9c7 !important;
+  border-color: #33b9c7 !important;
 }
 
 .select__control:hover {
-  border-color: #3d5ee1 !important;
+  border-color: #33b9c7 !important;
 }
 
 // .slick-slide {
@@ -414,35 +414,35 @@ div.popover {
 
 div.rc-slider-track,
 .rc-slider-tracks {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
 }
 
 div.rc-slider-handle {
-  border: solid 2px #3d5ee1;
+  border: solid 2px #33b9c7;
 }
 
 span.rc-slider-dot-active {
-  border-color: #3d5ee1;
+  border-color: #33b9c7;
 }
 
 div.rc-slider-handle:active {
-  border-color: #3d5ee1;
-  box-shadow: 0 0 5px #3d5ee1;
+  border-color: #33b9c7;
+  box-shadow: 0 0 5px #33b9c7;
   cursor: grabbing;
 }
 
 .rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
-  border-color: #3d5ee1;
-  box-shadow: 0 0 0 5px #3d5ee1;
+  border-color: #33b9c7;
+  box-shadow: 0 0 0 5px #33b9c7;
 }
 
 div.rc-slider-handle:hover {
-  border-color: #3d5ee1;
+  border-color: #33b9c7;
 }
 
 div.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-dragging {
-  border-color: #3d5ee1;
-  box-shadow: 0 0 0 5px #3d5ee1;
+  border-color: #33b9c7;
+  box-shadow: 0 0 0 5px #33b9c7;
 }
 
 [data-theme="dark"] {
@@ -580,12 +580,12 @@ div.rc-slider-handle-dragging.rc-slider-handle-dragging.rc-slider-handle-draggin
 }
 
 div.css-b62m3t-container .react-select__option--is-focused {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
   color: #fff;
 }
 
 div.css-b62m3t-container .react-select__option--is-selected {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
   color: #fff;
 }
 
@@ -767,7 +767,7 @@ div.sidebar-themesettings
     }
 
     table td.p-datepicker-today > span {
-      background-color: #3d5ee1;
+      background-color: #33b9c7;
       color: #fff;
     }
   }
@@ -926,7 +926,7 @@ div.sidebar-themesettings
 }
 
 .theme-layout.active .layout-img img {
-  border: 1px solid #3d5ee1;
+  border: 1px solid #33b9c7;
   border-radius: 5px;
 }
 
@@ -938,7 +938,7 @@ div.sidebar-themesettings
 .theme-layout.active .layout-type:after {
   content: "\f058";
   font-family: "Fontawesome";
-  color: #3d5ee1;
+  color: #33b9c7;
   font-weight: 700;
   font-size: 12px;
   display: flex;
@@ -956,11 +956,11 @@ div.sidebar-themesettings
 }
 
 .theme-colorselect.active label {
-  outline: 1px solid #3d5ee1;
+  outline: 1px solid #33b9c7;
 }
 
 .theme-colorselect.active label.primary-topbar {
-  background: #3d5ee1;
+  background: #33b9c7;
 }
 
 .theme-colorselect.active label.primary-topbar:after,
@@ -971,7 +971,7 @@ div.sidebar-themesettings
 .theme-colorselect.active label:after {
   content: "\f058";
   font-family: "Fontawesome";
-  color: #3d5ee1;
+  color: #33b9c7;
   font-weight: 700;
   font-size: 12px;
   display: flex;
@@ -988,11 +988,11 @@ div.sidebar-themesettings
 }
 
 .theme-mode.active label {
-  border: 1px solid #3d5ee1;
+  border: 1px solid #33b9c7;
 }
 
 .theme-mode.active label .avatar {
-  color: #3d5ee1;
+  color: #33b9c7;
   background-color: #f2f5ff;
 }
 
@@ -1001,14 +1001,14 @@ div.sidebar-themesettings
 }
 
 .theme-sidebarcolor.active label {
-  border-color: #3d5ee1 !important;
+  border-color: #33b9c7 !important;
   position: relative;
 }
 
 .theme-sidebarcolor.active label:after {
   content: "\f058";
   font-family: "Fontawesome";
-  color: #3d5ee1;
+  color: #33b9c7;
   font-weight: 700;
   font-size: 12px;
   display: flex;
@@ -1029,7 +1029,7 @@ div.sidebar-themesettings
 }
 
 .theme-sidebarbg.active label img {
-  border-color: #3d5ee1 !important;
+  border-color: #33b9c7 !important;
 }
 
 .theme-colorsset.active label:after {
@@ -1135,8 +1135,8 @@ div.sidebar-themesettings
 }
 
 .fc .fc-customButton-button.fc-button.fc-button-primary {
-  background-color: #3d5ee1;
-  border-color: #3d5ee1;
+  background-color: #33b9c7;
+  border-color: #33b9c7;
   color: #fff;
   font-size: 15px;
   font-weight: 500;
@@ -1455,12 +1455,12 @@ div.ant-picker-date-panel {
 }
 
 div.css-b62m3t-container .react-select__option--is-focused {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
   color: #fff;
 }
 
 div.css-b62m3t-container .react-select__option--is-selected {
-  background-color: #3d5ee1;
+  background-color: #33b9c7;
   color: #fff;
 }
 
@@ -1636,72 +1636,72 @@ body.app-chat {
   }
 }
 
-// .studyplantab {
-//   .nav {
-//     .one {
-//       background-color: #fde9ed !important;
-//     }
-//     .two {
-//       background-color: #e8fcff !important;
-//     }
-//     .three {
-//       background-color: #fef8ea !important;
-//     }
-//     .four {
-//       background-color: #e8f9e8 !important;
-//     }
-//   }
+.studyplantab {
+  .nav {
+    .one {
+      background-color: #fde9ed !important;
+    }
+    .two {
+      background-color: #e8fcff !important;
+    }
+    .three {
+      background-color: #fef8ea !important;
+    }
+    .four {
+      background-color: #e8f9e8 !important;
+    }
+  }
 
-//   .nav-item .active {
-//     color: #232323 !important;
-//     border: 1px solid #d6d6d6 !important;
-//   }
-//   .nav-link {
-//     display: flex;
-//     flex-direction: column;
-//     align-items: center;
-//     padding: 1em;
-//     width: 6em;
-//     height: 6em;
-//     font-size: 14px;
-//     color: #232323;
-//     border-radius: 100px;
-//     justify-content: center;
-//     i {
-//       font-size: 20px;
-//       color: #232323;
-//     }
-//   }
-//   .studycontent {
-//     .head {
-//       display: flex;
-//       align-items: center;
-//       .icon {
-//         background-color: #fff;
-//         padding: 10px;
-//         border-radius: 100px;
-//         margin-right: 10px;
-//         width: 3em;
-//         height: 3em;
-//         display: flex;
-//         justify-content: center;
-//         align-items: center;
-//         .one {
-//           color: #e82646 !important;
-//         }
-//         .two {
-//           color: #6fccd8 !important;
-//         }
-//         .three {
-//           color: #eab300 !important;
-//         }
-//         .four {
-//           color: #1abe17 !important;
-//         }
-//       }
-//     }
-//   }
-// }
+  .nav-item .active {
+    color: #232323 !important;
+    border: 1px solid #d6d6d6 !important;
+  }
+  .nav-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1em;
+    // width: 6em;
+    // height: 6em;
+    font-size: 14px;
+    color: #232323;
+    border-radius: 100px;
+    justify-content: center;
+    i {
+      font-size: 20px;
+      color: #232323;
+    }
+  }
+  .studycontent {
+    .head {
+      display: flex;
+      align-items: center;
+      .icon {
+        background-color: #fff;
+        padding: 10px;
+        border-radius: 100px;
+        margin-right: 10px;
+        width: 3em;
+        height: 3em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        .one {
+          color: #e82646 !important;
+        }
+        .two {
+          color: #6fccd8 !important;
+        }
+        .three {
+          color: #eab300 !important;
+        }
+        .four {
+          color: #1abe17 !important;
+        }
+      }
+    }
+  }
+}
 
 .bar {
   .bardetail {
@@ -1735,4 +1735,10 @@ body.app-chat {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 1.5em;
+}
+
+.p-datepicker table th {
+  padding: 0.5rem;
+  text-align: center !important;
 }

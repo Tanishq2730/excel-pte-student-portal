@@ -1,10 +1,9 @@
 import React, { useState } from "react";
-import ReactApexChart from "react-apexcharts";
 import { Link } from "react-router-dom";
 import CountUp from "react-countup";
 import { Calendar } from "primereact/calendar";
 import { Nullable } from "primereact/ts-helpers";
-import "bootstrap-daterangepicker/daterangepicker.css";
+// import "bootstrap-daterangepicker/daterangepicker.css";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { all_routes } from "../../router/all_routes";
 import Slider from "react-slick";
@@ -164,120 +163,8 @@ const AdminDashboard = () => {
             <div className="row">
               <div className="col-md-6">
                 <div className="row">
-                  {/* Total Students */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
-                    <div className="card flex-fill animate-card border-0">
-                      <div className="card-body">
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
-                            <i className="ion-mic-c"></i>
-                          </div>
-                          <div className="overflow-hidden flex-fill">
-                            <p className="mb-0">Speaking</p>
-                            <div className="d-flex align-items-center justify-content-between">
-                              <h2 className="counter">
-                                <CountUp end={39} />
-                                <span className="attempt">Attempted</span>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
-                          <p className="mb-0">
-                            Total Quest :{" "}
-                            <span className="text-dark fw-semibold">2706</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Total Students */}
-                  {/* Total Teachers */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
-                    <div className="card flex-fill animate-card border-0">
-                      <div className="card-body">
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-xl me-2 bg-secondary-transparent p-1">
-                            <i className="ion-edit"></i>
-                          </div>
-                          <div className="overflow-hidden flex-fill">
-                            <p className="mb-0">Writing</p>
-                            <div className="d-flex align-items-center justify-content-between">
-                              <h2 className="counter">
-                                <CountUp end={284} />
-                                <span className="attempt">Attempted</span>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
-                          <p className="mb-0">
-                            Total Quest :{" "}
-                            <span className="text-dark fw-semibold">2706</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Total Teachers */}
-                  {/* Total Staff */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
-                    <div className="card flex-fill animate-card border-0">
-                      <div className="card-body">
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-xl me-2 bg-warning-transparent p-1">
-                            <i className="ion-ios7-bookmarks"></i>
-                          </div>
-                          <div className="overflow-hidden flex-fill">
-                            <p className="mb-0">Reading</p>
-                            <div className="d-flex align-items-center justify-content-between">
-                              <h2 className="counter">
-                                <CountUp end={96} />
-                                <span className="attempt">Attempted</span>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
-                          <p className="mb-0">
-                            Total Quest :{" "}
-                            <span className="text-dark fw-semibold">2706</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Total Staff */}
-                  {/* Total Subjects */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
-                    <div className="card flex-fill animate-card border-0">
-                      <div className="card-body">
-                        <div className="d-flex align-items-center">
-                          <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
-                            <i className="ion-headphone"></i>
-                          </div>
-                          <div className="overflow-hidden flex-fill">
-                            <p className="mb-0">Listening</p>
-                            <div className="d-flex align-items-center justify-content-between">
-                              <h2 className="counter">
-                                <CountUp end={2} />
-                                <span className="attempt">Attempted</span>
-                              </h2>
-                            </div>
-                          </div>
-                        </div>
-                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
-                          <p className="mb-0">
-                            Total Quest :{" "}
-                            <span className="text-dark fw-semibold">2706</span>
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* /Total Subjects */}
-                  <div className="col-xxl-12 col-xl-12 col-md-12">
-                    <div className="d-flex rounded overflow-hidden shadow w-100 max-w-xl">
+                <div className="col-xxl-12 col-xl-12 col-md-12">
+                    <div className="d-flex rounded overflow-hidden w-100 max-w-xl">
                       {/* Left Box */}
                       <div
                         className="bg-primary text-white d-flex flex-column align-items-center justify-content-center px-4 py-3 position-relative"
@@ -478,6 +365,119 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </div>
+                  {/* Total Students */}
+                  <div className="col-xxl-6 col-sm-6 d-flex">
+                    <div className="card flex-fill animate-card border-0">
+                      <div className="card-body">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
+                            <i className="ion-mic-c"></i>
+                          </div>
+                          <div className="overflow-hidden flex-fill">
+                            <p className="mb-0">Speaking</p>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <h2 className="counter">
+                                <CountUp end={39} />
+                                <span className="attempt">Attempted</span>
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
+                          <p className="mb-0">
+                            Total Quest :{" "}
+                            <span className="text-dark fw-semibold">2706</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* /Total Students */}
+                  {/* Total Teachers */}
+                  <div className="col-xxl-6 col-sm-6 d-flex">
+                    <div className="card flex-fill animate-card border-0">
+                      <div className="card-body">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-2 bg-secondary-transparent p-1">
+                            <i className="ion-edit"></i>
+                          </div>
+                          <div className="overflow-hidden flex-fill">
+                            <p className="mb-0">Writing</p>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <h2 className="counter">
+                                <CountUp end={284} />
+                                <span className="attempt">Attempted</span>
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
+                          <p className="mb-0">
+                            Total Quest :{" "}
+                            <span className="text-dark fw-semibold">2706</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* /Total Teachers */}
+                  {/* Total Staff */}
+                  <div className="col-xxl-6 col-sm-6 d-flex">
+                    <div className="card flex-fill animate-card border-0">
+                      <div className="card-body">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-2 bg-warning-transparent p-1">
+                            <i className="ion-ios7-bookmarks"></i>
+                          </div>
+                          <div className="overflow-hidden flex-fill">
+                            <p className="mb-0">Reading</p>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <h2 className="counter">
+                                <CountUp end={96} />
+                                <span className="attempt">Attempted</span>
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
+                          <p className="mb-0">
+                            Total Quest :{" "}
+                            <span className="text-dark fw-semibold">2706</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* /Total Staff */}
+                  {/* Total Subjects */}
+                  <div className="col-xxl-6 col-sm-6 d-flex">
+                    <div className="card flex-fill animate-card border-0">
+                      <div className="card-body">
+                        <div className="d-flex align-items-center">
+                          <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
+                            <i className="ion-headphone"></i>
+                          </div>
+                          <div className="overflow-hidden flex-fill">
+                            <p className="mb-0">Listening</p>
+                            <div className="d-flex align-items-center justify-content-between">
+                              <h2 className="counter">
+                                <CountUp end={2} />
+                                <span className="attempt">Attempted</span>
+                              </h2>
+                            </div>
+                          </div>
+                        </div>
+                        <div className="d-flex align-items-center justify-content-between border-top mt-3 pt-3">
+                          <p className="mb-0">
+                            Total Quest :{" "}
+                            <span className="text-dark fw-semibold">2706</span>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  {/* /Total Subjects */}
+                  
                 </div>
               </div>
               <div className="col-md-6">

@@ -1,14 +1,5 @@
 import {  Route } from "react-router";
 import { all_routes } from "./all_routes";
-import Countries from "../content/location/countries";
-import BlankPage from "../pages/blankPage";
-import Calendar from "../mainMenu/apps/calendar";
-import DataTable from "../tables/dataTable";
-import BasicTable from "../tables/basicTable";
-import DeleteRequest from "../userManagement/deleteRequest";
-import Membershipplan from "../membership/membershipplan";
-import MembershipAddon from "../membership/membershipaddon";
-import Notes from "../application/notes";
 import ComingSoon from "../pages/comingSoon";
 import Login from "../auth/login/login";
 import Register from "../auth/register/register";
@@ -16,34 +7,8 @@ import TwoStepVerification from "../auth/twoStepVerification/twoStepVerification
 import EmailVerification from "../auth/emailVerification/emailVerification";
 import ResetPassword from "../auth/resetPassword/resetPassword";
 import ForgotPassword from "../auth/forgotPassword/forgotPassword";
-import Accordion from "../uiInterface/base-ui/accordion";
-import Avatar from "../uiInterface/base-ui/avatar";
-import Borders from "../uiInterface/base-ui/borders";
-import Breadcrumb from "../uiInterface/base-ui/breadcrumb";
-import Buttons from "../uiInterface/base-ui/buttons";
-import ButtonsGroup from "../uiInterface/base-ui/buttonsgroup";
-import Cards from "../uiInterface/base-ui/cards";
-import Carousel from "../uiInterface/base-ui/carousel";
-import Colors from "../uiInterface/base-ui/colors";
-import Dropdowns from "../uiInterface/base-ui/dropdowns";
-import Grid from "../uiInterface/base-ui/grid";
-import Images from "../uiInterface/base-ui/images";
-import Lightboxes from "../uiInterface/base-ui/lightbox";
-import Media from "../uiInterface/base-ui/media";
-import Modals from "../uiInterface/base-ui/modals";
-import NavTabs from "../uiInterface/base-ui/navtabs";
-import Offcanvas from "../uiInterface/base-ui/offcanvas";
-import Pagination from "../uiInterface/base-ui/pagination";
-import Popovers from "../uiInterface/base-ui/popover";
-import RangeSlides from "../uiInterface/base-ui/rangeslider";
-import Progress from "../uiInterface/base-ui/progress";
-import Spinner from "../uiInterface/base-ui/spinner";
-import Toasts from "../uiInterface/base-ui/toasts";
-import Typography from "../uiInterface/base-ui/typography";
-import Video from "../uiInterface/base-ui/video";
 import Error404 from "../pages/error/error-404";
 import Error500 from "../pages/error/error-500";
-import Preference from "../settings/websiteSettings/preference";
 import UnderMaintenance from "../pages/underMaintenance";
 import Login2 from "../auth/login/login-2";
 import Login3 from "../auth/login/login-3";
@@ -63,6 +28,12 @@ import EmailVerification2 from "../auth/emailVerification/emailVerification-2";
 import EmailVerification3 from "../auth/emailVerification/emailVerification-3";
 import ReadAloud from "../practice/speaking/readAloud";
 import AdminDashboard from "../mainMenu/adminDashboard";
+import RepeatSentence from "../practice/speaking/repeatSentence";
+import DescribeImage from "../practice/speaking/describeImage";
+import ReTellLecture from "../practice/speaking/reTellLecture";
+import AnswerShortQuestion from "../practice/speaking/answerShortQuestipn";
+import SummarizeSpokenText from "../practice/writing/summarizeSpokenText";
+import WriteEssay from "../practice/writing/writeEssay";
 
 const routes = all_routes;
 
@@ -80,6 +51,36 @@ export const myRoutes = [
     element: <ReadAloud />,
     route: Route,
   },
+  {
+    path: routes.repeatSentence,
+    element: <RepeatSentence />,
+    route: Route,
+  },
+  {
+    path: routes.describeImage,
+    element: <DescribeImage />,
+    route: Route,
+  },
+  {
+    path: routes.reTellLecture,
+    element: <ReTellLecture />,
+    route: Route,
+  },
+  {
+    path: routes.answerShortQuestion,
+    element: <AnswerShortQuestion />,
+    route: Route,
+  },
+  {
+    path: routes.summarizeSpokenText,
+    element: <SummarizeSpokenText />,
+    route: Route,
+  },
+  {
+    path: routes.writeEssay,
+    element: <WriteEssay />,
+    route: Route,
+  },
 ]
 
 export const authRoutes = [
@@ -88,11 +89,6 @@ export const authRoutes = [
     element: <ComingSoon />,
     route: Route,
   },
-  // {
-  //   path: routes.readAloud,
-  //   element: <ReadAloud />,
-  //   route: Route,
-  // },
   {
     path: routes.login,
     element: <Login />,

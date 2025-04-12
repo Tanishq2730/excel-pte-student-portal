@@ -135,7 +135,7 @@ const Header = () => {
               <nav className="navbars">
                 <ul className="nav-list">
                   <li className="nav-item">
-                    <span className="nav-link">Dashboard</span>
+                    <Link to={routes.adminDashboard}><span className="nav-link">Dashboard</span></Link>
                   </li>
                   <li
                     className="nav-item mega-menu-parent"
@@ -189,31 +189,31 @@ const Header = () => {
                                       Read Aloud{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
+                                    <Link to={routes.repeatSentence}>
                                       Repeat Sentence{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
+                                    <Link to={routes.describeImage}>
                                       Describe Image{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
-                                      Respond to a situation{" "}
+                                    <Link to={routes.reTellLecture}>
+                                      Re-Tell Lecture {" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
+                                    <Link to={routes.answerShortQuestion}>
                                       Answer Short Question{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
                                   </div>
                                   <div className="mega-column">
                                     <h6>Writing</h6>
-                                    <Link to="#">
+                                    <Link to={routes.summarizeSpokenText}>
                                       Summarize Written Text{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
-                                      Write Email{" "}
+                                    <Link to={routes.writeEssay}>
+                                      Write Essay{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
                                   </div>

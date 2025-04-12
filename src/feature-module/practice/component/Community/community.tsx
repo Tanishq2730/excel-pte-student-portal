@@ -1,6 +1,5 @@
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
-import PracticeCard from "./practiceData";
 import PracticeData from "./practiceData";
 import Score from "./score";
 
@@ -31,10 +30,94 @@ const Community: React.FC = () => {
           </ul>
           <div className="tab-content">
             <div className="tab-pane show active" id="solid-rounded-tab1">
-              <PracticeData/>
+              <PracticeData />
             </div>
             <div className="tab-pane" id="solid-rounded-tab2">
-              <Score/>
+              <div className="card-body">
+                <ul
+                  className="nav nav-pills justify-content-start nav-style-3 mb-3"
+                  role="tablist"
+                >
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link active"
+                      data-bs-toggle="tab"
+                      role="tab"
+                      aria-current="page"
+                      to="#home-right"
+                      aria-selected="true"
+                    >
+                      All Score
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      data-bs-toggle="tab"
+                      role="tab"
+                      aria-current="page"
+                      to="#about-right"
+                      aria-selected="true"
+                    >
+                      79
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      data-bs-toggle="tab"
+                      role="tab"
+                      aria-current="page"
+                      to="#services-right"
+                      aria-selected="true"
+                    >
+                      50
+                    </Link>
+                  </li>
+                  <li className="nav-item">
+                    <Link
+                      className="nav-link"
+                      data-bs-toggle="tab"
+                      role="tab"
+                      aria-current="page"
+                      to="#contacts-right"
+                      aria-selected="true"
+                    >
+                      35
+                    </Link>
+                  </li>
+                </ul>
+                <div className="tab-content">
+                  <div
+                    className="tab-pane text-muted"
+                    id="home-right"
+                    role="tabpanel"
+                  >
+                    <Score/>
+                  </div>
+                  <div
+                    className="tab-pane show active text-muted"
+                    id="about-right"
+                    role="tabpanel"
+                  >
+                    <Score/>
+                  </div>
+                  <div
+                    className="tab-pane text-muted"
+                    id="services-right"
+                    role="tabpanel"
+                  >
+                    <Score/>
+                  </div>
+                  <div
+                    className="tab-pane text-muted"
+                    id="contacts-right"
+                    role="tabpanel"
+                  >
+                    <Score/> 
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>

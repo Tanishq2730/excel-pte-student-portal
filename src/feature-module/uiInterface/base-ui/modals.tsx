@@ -94,7 +94,7 @@ const Modals = () => {
                     Launch Demo Modal
                   </button>
                 </div>
-              </div>
+              </div>  
             </div>
           </div>
           {/* /Basic Modal */}

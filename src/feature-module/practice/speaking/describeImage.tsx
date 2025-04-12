@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
 
-const ReadAloud = () => {
+const DescribeImage = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
@@ -46,19 +46,19 @@ const ReadAloud = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="innercontent">
-                    <p>
-                      Tissues are grouped together in the body to form organs.
-                      These include the brain, heart, lungs, kidneys, and liver.
-                      Each body organ has a specific shape and is made up of
-                      different types of tissue that work together. For example,
-                      the heart consists mainly of a specialized type of muscle
-                      tissue, which contracts rhythmically to provide the
-                      heart's pumping action.
-                    </p>
-                  </div>
-                  <div className="micSection">
-                    <RecorderComponent />
+                  <div className="row">
+                    <div className="col-md-6">
+                      <div className="innercontent m-0">
+                        <div className="mainImg">
+                          <img src="/assets/img/discribe.png" />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="col-md-6 m-auto">
+                      <div className="micSection">
+                        <RecorderComponent />
+                      </div>
+                    </div>
                   </div>
                   {showAnswer && (
                     <div
@@ -129,4 +129,4 @@ const ReadAloud = () => {
   );
 };
 
-export default ReadAloud;
+export default DescribeImage;
