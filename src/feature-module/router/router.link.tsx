@@ -32,8 +32,19 @@ import RepeatSentence from "../practice/speaking/repeatSentence";
 import DescribeImage from "../practice/speaking/describeImage";
 import ReTellLecture from "../practice/speaking/reTellLecture";
 import AnswerShortQuestion from "../practice/speaking/answerShortQuestipn";
-import SummarizeSpokenText from "../practice/writing/summarizeSpokenText";
 import WriteEssay from "../practice/writing/writeEssay";
+import ReadingWritngFillBlank from "../practice/reading/readingWritingFillBlank";
+import MultipleChooseAnswer from "../practice/reading/multipleChooseAnswer";
+import MultipleChooseSingleAnswer from "../practice/reading/multipleChooseSingleAnswer";
+import SummarizeWritinText from "../practice/writing/summarizeWritinText";
+import SummarizeSpokenText from "../practice/listening/summarizeSpokenText";
+import MultipleChooseAnswerListen from "../practice/listening/multipleChooseAnswer";
+import FillInTheBlanks from "../practice/listening/fillIntheBlanks";
+import HighlightCorrectSummary from "../practice/listening/highlightCorrectSummary";
+import MultipleChooseSingleAnswerListen from "../practice/listening/multipleChooseSingleAnswerListen";
+import SelectMissingWord from "../practice/listening/selectMissingWord";
+import HighlightIncorrectWord from "../practice/listening/highlightIncorreectWord";
+import WriteFromDictation from "../practice/listening/writefromDictation";
 
 const routes = all_routes;
 
@@ -72,13 +83,68 @@ export const myRoutes = [
     route: Route,
   },
   {
-    path: routes.summarizeSpokenText,
-    element: <SummarizeSpokenText />,
+    path: routes.summarizeWritinText,
+    element: <SummarizeWritinText />,
     route: Route,
   },
   {
     path: routes.writeEssay,
     element: <WriteEssay />,
+    route: Route,
+  },
+  {
+    path: routes.readingWritngFillBlank,
+    element: <ReadingWritngFillBlank />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseAnswer,
+    element: <MultipleChooseAnswer />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseSingleAnswer,
+    element: <MultipleChooseSingleAnswer />,
+    route: Route,
+  },
+  {
+    path: routes.summarizeSpokenText,
+    element: <SummarizeSpokenText />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseAnswerListen,
+    element: <MultipleChooseAnswerListen />,
+    route: Route,
+  },
+  {
+    path: routes.fillInTheBlanks,
+    element: <FillInTheBlanks />,
+    route: Route,
+  },
+  {
+    path: routes.highlightCorrectSummary,
+    element: <HighlightCorrectSummary />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseSingleAnswerListen,
+    element: <MultipleChooseSingleAnswerListen />,
+    route: Route,
+  },
+  {
+    path: routes.selectMissingWord,
+    element: <SelectMissingWord />,
+    route: Route,
+  },
+  {
+    path: routes.highlightIncorrectWord,
+    element: <HighlightIncorrectWord />,
+    route: Route,
+  },
+  {
+    path: routes.writeFromDictation,
+    element: <WriteFromDictation />,
     route: Route,
   },
 ]

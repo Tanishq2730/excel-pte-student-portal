@@ -3,7 +3,7 @@ import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
 
-const SummarizeSpokenText = () => {
+const ReadingWritngFillBlank = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
@@ -15,11 +15,8 @@ const SummarizeSpokenText = () => {
         <div className="container">
           <div className="practiceLayout">
             <p className="my-3">
-              Read the passage below and summarize it using one sentence. Type
-              your response in the box at the bottom of the screen. You have 10
-              minutes to finish this task. Your response will be judged on the
-              quality of your writing and on how well your response presents the
-              key points in the passage.
+              There are some words missing in the following text. Please select
+              the correct word in the drop-down box.
             </p>
             <div className="card">
               <div className="card-header">
@@ -30,6 +27,10 @@ const SummarizeSpokenText = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
+                    <span className="text-danger">
+                      Submit your response before time finishes! Otherwise your
+                      response won`t be saved and scored.
+                    </span>
                     <span className="text-danger">Prepare: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
@@ -51,46 +52,28 @@ const SummarizeSpokenText = () => {
                   </div>
                   <div className="innercontent">
                     <p>
-                      The ways of life Upper Paleolithic people are known
-                      through the remains of meals scattered around their
-                      hearths, together with many tools and weapons and the
-                      debris left over from their making. The people were
-                      hunter-gathers who lived exclusively from what they could
-                      find in nature without practicing either agriculture or
-                      herding. They hunted the bigger herbivores, while berries,
-                      leaves, roots, wild fruit and mushrooms probably played a
-                      major role in their diet. Their hunting was
-                      indiscriminate; perhaps because so many animals were about
-                      they did not need to spare pregnant females or the young.
-                      In the cave of Enlene, for example, many bones of reindeer
-                      and bison fetuses were found. Apparently, upper
-                      Paleolithic people hunted like other predators and killed
-                      the weakest prey first. They did, however, sometimes
-                      concentrate on salmon suns and migrating herds of
-                      reindeer. Contrary to popular beliefs about cave man,
-                      upper Paleolithic people did not live deep inside caves.
-                      They rather close the foot of cliffs, especially when an
-                      overhang provided good shelter. On the plains and in the
-                      valleys, they used tents made from hides of the animals
-                      they killed. At time, on the great Russian plains, they
-                      built huts with huge bones and tusks collected from
-                      skeletons of mammals. Men hunted mostly with spears, the
-                      bow and arrow were probably not invented until the
-                      Magdalenian period that came at the end of the Upper
-                      Paleolithic.
+                      The discovery of a set of what look like ancient hominin
+                      footprints on the island of Crete could throw our
+                      understanding of human evolution into disarray. Received
+                      wisdom is that after from the chimp lineage, our hominin
+                      ancestors were confined to Africa until around 1.5 million
+                      years ago. The prints found in Crete, however, to a
+                      creature that appears to have lived 5.7 million years ago
+                      — suggesting a more complex story. More research is needed
+                      to confirm what kind of animal made them. However, the
+                      prints seem to have been by a creature that walked
+                      upright, on the soles of clawless feet (rather than on its
+                      toes), with a big toe positioned like our own, rather than
+                      sticking out sideways like an ape's. It may yet turn out
+                      to have been a unknown non-hominin that had evolved with a
+                      human-like foot; but the explanatory paper, in the
+                      Proceedings of the Geologists' Association, is not the
+                      first to suggest that hominins could have originated in
+                      Europe. A few months ago, a team put forward evidence,
+                      gleaned from fossils found in Greece and Bulgaria that a
+                      7.2 million-year old ape known as Graecopithecus was in
+                      fact a hominin.
                     </p>
-                  </div>
-                  <div className="card">
-                    <div className="card-header bg-white">
-                      <div className="card-title"><h5>Total Word Count: 0</h5></div>
-                    </div>
-                    <div className="card-body">
-                      <textarea
-                        className="form-control"
-                        rows={4}
-                        placeholder="Write a Summary..."
-                      ></textarea>
-                    </div>
                   </div>
                   {showAnswer && (
                     <div
@@ -161,4 +144,4 @@ const SummarizeSpokenText = () => {
   );
 };
 
-export default SummarizeSpokenText;
+export default ReadingWritngFillBlank;

@@ -1,10 +1,76 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
+import AudioPlayer from "../component/audioPlayer";
 
-const WriteEssay = () => {
+const SummarizeSpokenText = () => {
   const [showAnswer, setShowAnswer] = useState(false);
+  const audioRef = useRef<HTMLAudioElement>(null);
+  const progressRef = useRef<HTMLInputElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const [volume, setVolume] = useState(1);
+  const [playbackRate, setPlaybackRate] = useState(1);
+
+  const togglePlay = () => {
+    if (!audioRef.current) return;
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  const formatTime = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60)
+      .toString()
+      .padStart(2, "0");
+    return `${minutes}:${seconds}`;
+  };
+
+  useEffect(() => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    const updateTime = () => setCurrentTime(audio.currentTime);
+    const updateDuration = () => setDuration(audio.duration);
+
+    audio.addEventListener("timeupdate", updateTime);
+    audio.addEventListener("loadedmetadata", updateDuration);
+
+    return () => {
+      audio.removeEventListener("timeupdate", updateTime);
+      audio.removeEventListener("loadedmetadata", updateDuration);
+    };
+  }, []);
+
+  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newTime = Number(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.currentTime = newTime;
+      setCurrentTime(newTime);
+    }
+  };
+
+  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newVolume = Number(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.volume = newVolume;
+      setVolume(newVolume);
+    }
+  };
+
+  const handleSpeedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const newSpeed = Number(e.target.value);
+    if (audioRef.current) {
+      audioRef.current.playbackRate = newSpeed;
+      setPlaybackRate(newSpeed);
+    }
+  };
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
@@ -15,11 +81,10 @@ const WriteEssay = () => {
         <div className="container">
           <div className="practiceLayout">
             <p className="my-3">
-              Read the passage below and summarize it using one sentence. Type
-              your response in the box at the bottom of the screen. You have 10
-              minutes to finish this task. Your response will be judged on the
-              quality of your writing and on how well your response presents the
-              key points in the passage.
+              Look at the text below. In 40 seconds, you must read this text
+              aloud as naturally and clearly as possible. You have 40 seconds to
+              read aloud. Speak within 3 seconds otherwise the microphone will
+              close and you will lose the marks.
             </p>
             <div className="card">
               <div className="card-header">
@@ -30,10 +95,6 @@ const WriteEssay = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
                     <span className="text-danger">Prepare: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
@@ -54,23 +115,22 @@ const WriteEssay = () => {
                     </div>
                   </div>
                   <div className="innercontent">
-                    <p>
-                      Do you agree that genetically modified foods are safe for
-                      consumption?
-                    </p>
+                  <AudioPlayer/>
                   </div>
-                  <div className="card">
-                    <div className="card-header bg-white">
-                      <div className="card-title">
-                        <h5>Total Word Count: 0</h5>
+                  <div className="micSection">
+                    <div className="card">
+                      <div className="card-header bg-white">
+                        <div className="card-title">
+                          <h5>Total Word Count: 0</h5>
+                        </div>
                       </div>
-                    </div>
-                    <div className="card-body">
-                      <textarea
-                        className="form-control"
-                        rows={4}
-                        placeholder="Write a Essay..."
-                      ></textarea>
+                      <div className="card-body">
+                        <textarea
+                          className="form-control"
+                          rows={4}
+                          placeholder="Write a Summary..."
+                        ></textarea>
+                      </div>
                     </div>
                   </div>
                   {showAnswer && (
@@ -142,4 +202,4 @@ const WriteEssay = () => {
   );
 };
 
-export default WriteEssay;
+export default SummarizeSpokenText;

@@ -2,8 +2,18 @@ import React, { useState } from "react";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
+import AudioPlayer from "../component/audioPlayer";
 
-const WriteEssay = () => {
+const options = [
+  { id: "A", text: "they began using a material that much stronger" },
+  { id: "B", text: "they found a way to strengthen the statues internally" },
+  {
+    id: "C",
+    text: "the aesthetic tastes of the public had changed over time",
+  },
+  { id: "D", text: "the cannonballs added too much weight to the statues" },
+];
+const HighlightIncorrectWord = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
@@ -15,11 +25,8 @@ const WriteEssay = () => {
         <div className="container">
           <div className="practiceLayout">
             <p className="my-3">
-              Read the passage below and summarize it using one sentence. Type
-              your response in the box at the bottom of the screen. You have 10
-              minutes to finish this task. Your response will be judged on the
-              quality of your writing and on how well your response presents the
-              key points in the passage.
+              There are some words missing in the following text. Please select
+              the correct word in the drop-down box.
             </p>
             <div className="card">
               <div className="card-header">
@@ -30,11 +37,7 @@ const WriteEssay = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
-                    <span className="text-danger">Prepare: 00:40</span>
+                    <span className="text-danger">Time: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
                         Easy
@@ -53,25 +56,33 @@ const WriteEssay = () => {
                       </button>
                     </div>
                   </div>
+                  <div className="mb-3">
+                    <AudioPlayer />
+                  </div>
                   <div className="innercontent">
                     <p>
-                      Do you agree that genetically modified foods are safe for
-                      consumption?
+                      The discovery of a set of what look like ancient hominin
+                      footprints on the island of Crete could throw our
+                      understanding of human evolution into disarray. Received
+                      wisdom is that after from the chimp lineage, our hominin
+                      ancestors were confined to Africa until around 1.5 million
+                      years ago. The prints found in Crete, however, to a
+                      creature that appears to have lived 5.7 million years ago
+                      — suggesting a more complex story. More research is needed
+                      to confirm what kind of animal made them. However, the
+                      prints seem to have been by a creature that walked
+                      upright, on the soles of clawless feet (rather than on its
+                      toes), with a big toe positioned like our own, rather than
+                      sticking out sideways like an ape's. It may yet turn out
+                      to have been a unknown non-hominin that had evolved with a
+                      human-like foot; but the explanatory paper, in the
+                      Proceedings of the Geologists' Association, is not the
+                      first to suggest that hominins could have originated in
+                      Europe. A few months ago, a team put forward evidence,
+                      gleaned from fossils found in Greece and Bulgaria that a
+                      7.2 million-year old ape known as Graecopithecus was in
+                      fact a hominin.
                     </p>
-                  </div>
-                  <div className="card">
-                    <div className="card-header bg-white">
-                      <div className="card-title">
-                        <h5>Total Word Count: 0</h5>
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      <textarea
-                        className="form-control"
-                        rows={4}
-                        placeholder="Write a Essay..."
-                      ></textarea>
-                    </div>
                   </div>
                   {showAnswer && (
                     <div
@@ -142,4 +153,4 @@ const WriteEssay = () => {
   );
 };
 
-export default WriteEssay;
+export default HighlightIncorrectWord;

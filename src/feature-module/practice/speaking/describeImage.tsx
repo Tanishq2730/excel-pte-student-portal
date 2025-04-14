@@ -27,7 +27,7 @@ const DescribeImage = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">Prepare: 00:40</span>
+                    <span className="text-danger" style={{visibility:'hidden'}}>Prepare: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
                         Easy
@@ -56,6 +56,7 @@ const DescribeImage = () => {
                     </div>
                     <div className="col-md-6 m-auto">
                       <div className="micSection">
+                      <p className="text-danger text-center my-2">Prepare: 00:40</p>
                         <RecorderComponent />
                       </div>
                     </div>

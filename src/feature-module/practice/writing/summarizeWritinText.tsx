@@ -3,7 +3,7 @@ import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
 
-const WriteEssay = () => {
+const SummarizeWritinText = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
@@ -30,10 +30,6 @@ const WriteEssay = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
                     <span className="text-danger">Prepare: 00:40</span>
                     <div className="cardBtns">
                       <button className="btn btn-outline-secondary  py-1 rounded-pill">
@@ -55,21 +51,44 @@ const WriteEssay = () => {
                   </div>
                   <div className="innercontent">
                     <p>
-                      Do you agree that genetically modified foods are safe for
-                      consumption?
+                      The ways of life Upper Paleolithic people are known
+                      through the remains of meals scattered around their
+                      hearths, together with many tools and weapons and the
+                      debris left over from their making. The people were
+                      hunter-gathers who lived exclusively from what they could
+                      find in nature without practicing either agriculture or
+                      herding. They hunted the bigger herbivores, while berries,
+                      leaves, roots, wild fruit and mushrooms probably played a
+                      major role in their diet. Their hunting was
+                      indiscriminate; perhaps because so many animals were about
+                      they did not need to spare pregnant females or the young.
+                      In the cave of Enlene, for example, many bones of reindeer
+                      and bison fetuses were found. Apparently, upper
+                      Paleolithic people hunted like other predators and killed
+                      the weakest prey first. They did, however, sometimes
+                      concentrate on salmon suns and migrating herds of
+                      reindeer. Contrary to popular beliefs about cave man,
+                      upper Paleolithic people did not live deep inside caves.
+                      They rather close the foot of cliffs, especially when an
+                      overhang provided good shelter. On the plains and in the
+                      valleys, they used tents made from hides of the animals
+                      they killed. At time, on the great Russian plains, they
+                      built huts with huge bones and tusks collected from
+                      skeletons of mammals. Men hunted mostly with spears, the
+                      bow and arrow were probably not invented until the
+                      Magdalenian period that came at the end of the Upper
+                      Paleolithic.
                     </p>
                   </div>
                   <div className="card">
                     <div className="card-header bg-white">
-                      <div className="card-title">
-                        <h5>Total Word Count: 0</h5>
-                      </div>
+                      <div className="card-title"><h5>Total Word Count: 0</h5></div>
                     </div>
                     <div className="card-body">
                       <textarea
                         className="form-control"
                         rows={4}
-                        placeholder="Write a Essay..."
+                        placeholder="Write a Summary..."
                       ></textarea>
                     </div>
                   </div>
@@ -142,4 +161,4 @@ const WriteEssay = () => {
   );
 };
 
-export default WriteEssay;
+export default SummarizeWritinText;

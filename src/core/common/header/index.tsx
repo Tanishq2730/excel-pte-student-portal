@@ -208,7 +208,7 @@ const Header = () => {
                                   </div>
                                   <div className="mega-column">
                                     <h6>Writing</h6>
-                                    <Link to={routes.summarizeSpokenText}>
+                                    <Link to={routes.summarizeWritinText}>
                                       Summarize Written Text{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
@@ -219,30 +219,33 @@ const Header = () => {
                                   </div>
                                   <div className="mega-column">
                                     <h6>Reading</h6>
-                                    <Link to="#">
+                                    <Link to={routes.readingWritngFillBlank}>
                                       Reading & Writing: Fill in the blanks
                                     </Link>
-                                    <Link to="#">
+                                    <Link to={routes.multipleChooseAnswer}>
                                       Multiple Choice (Multiple)
                                     </Link>
                                     <Link to="#">Re-order Paragraphs</Link>
                                     <Link to="#">
                                       Reading: Fill in the Blanks
                                     </Link>
-                                    <Link to="#">Multiple Choice (Single)</Link>
+                                    <Link to={routes.multipleChooseSingleAnswer}>Multiple Choice (Single)</Link>
                                   </div>
                                   <div className="mega-column">
                                     <h6>Listening</h6>
-                                    <Link to="#">
+                                    <Link to={routes.summarizeSpokenText}>
                                       Summarize Spoken Text{" "}
                                       <span className="ai-score">AI Score</span>
                                     </Link>
-                                    <Link to="#">
+                                    <Link to={routes.multipleChooseAnswerListen}>
                                       Multiple Choice (Multiple)
                                     </Link>
-                                    <Link to="#">Fill in the Blanks</Link>
-                                    <Link to="#">Select Missing Word</Link>
-                                    <Link to="#">Write From Dictation</Link>
+                                    <Link to={routes.fillInTheBlanks}>Fill in the Blanks</Link>
+                                    <Link to={routes.highlightCorrectSummary}>Highlight Correct Summary</Link>
+                                    <Link to={routes.multipleChooseSingleAnswerListen}>Multiple Choose (Single)</Link>
+                                    <Link to={routes.selectMissingWord}>Select Missing Word</Link>
+                                    <Link to={routes.highlightIncorrectWord}>Highlight Incorrect Words</Link>
+                                    <Link to={routes.writeFromDictation}>Write From Dictation</Link>
                                   </div>
                                 </div>
                               </div>
