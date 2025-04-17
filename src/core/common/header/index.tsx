@@ -12,6 +12,8 @@ import {
 } from "../../data/redux/sidebarSlice";
 import { useState } from "react";
 import { all_routes } from "../../../feature-module/router/all_routes";
+import { logout } from "../../data/redux/authSlice";
+import { useNavigate } from "react-router-dom";
 
 const Header = () => {
   const routes = all_routes;
@@ -20,6 +22,7 @@ const Header = () => {
   const dataLayout = useSelector((state: any) => state.themeSetting.dataLayout);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
+  const navigate = useNavigate();
 
   const mobileSidebar = useSelector(
     (state: any) => state.sidebarSlice.mobileSidebar
@@ -73,6 +76,11 @@ const Header = () => {
         setIsFullscreen(false);
       }
     }
+  };
+
+  const handleLogout = () => {
+    dispatch(logout()); // Clear token from Redux & storage
+    navigate("/"); // Redirect to login page
   };
 
   return (
@@ -611,13 +619,13 @@ const Header = () => {
                       Settings
                     </Link>
                     <hr className="m-0" />
-                    <Link
+                    <button
                       className="dropdown-item d-inline-flex align-items-center p-2"
-                      to={routes.login}
+                      onClick={handleLogout}
                     >
                       <i className="ti ti-login me-2" />
                       Logout
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

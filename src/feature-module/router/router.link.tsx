@@ -48,238 +48,56 @@ import WriteFromDictation from "../practice/listening/writefromDictation";
 
 const routes = all_routes;
 
-export const publicRoutes = [
-  {
-    path: routes.adminDashboard,
-    element: <AdminDashboard />,
-    route: Route,
-  },
-  
+export const authRoutes = [
+  { path: routes.adminDashboard, element: <AdminDashboard />, route: Route},  
 ];
-export const myRoutes = [
-  {
-    path: routes.readAloud,
-    element: <ReadAloud />,
-    route: Route,
-  },
-  {
-    path: routes.repeatSentence,
-    element: <RepeatSentence />,
-    route: Route,
-  },
-  {
-    path: routes.describeImage,
-    element: <DescribeImage />,
-    route: Route,
-  },
-  {
-    path: routes.reTellLecture,
-    element: <ReTellLecture />,
-    route: Route,
-  },
-  {
-    path: routes.answerShortQuestion,
-    element: <AnswerShortQuestion />,
-    route: Route,
-  },
-  {
-    path: routes.summarizeWritinText,
-    element: <SummarizeWritinText />,
-    route: Route,
-  },
-  {
-    path: routes.writeEssay,
-    element: <WriteEssay />,
-    route: Route,
-  },
-  {
-    path: routes.readingWritngFillBlank,
-    element: <ReadingWritngFillBlank />,
-    route: Route,
-  },
-  {
-    path: routes.multipleChooseAnswer,
-    element: <MultipleChooseAnswer />,
-    route: Route,
-  },
-  {
-    path: routes.multipleChooseSingleAnswer,
-    element: <MultipleChooseSingleAnswer />,
-    route: Route,
-  },
-  {
-    path: routes.summarizeSpokenText,
-    element: <SummarizeSpokenText />,
-    route: Route,
-  },
-  {
-    path: routes.multipleChooseAnswerListen,
-    element: <MultipleChooseAnswerListen />,
-    route: Route,
-  },
-  {
-    path: routes.fillInTheBlanks,
-    element: <FillInTheBlanks />,
-    route: Route,
-  },
-  {
-    path: routes.highlightCorrectSummary,
-    element: <HighlightCorrectSummary />,
-    route: Route,
-  },
-  {
-    path: routes.multipleChooseSingleAnswerListen,
-    element: <MultipleChooseSingleAnswerListen />,
-    route: Route,
-  },
-  {
-    path: routes.selectMissingWord,
-    element: <SelectMissingWord />,
-    route: Route,
-  },
-  {
-    path: routes.highlightIncorrectWord,
-    element: <HighlightIncorrectWord />,
-    route: Route,
-  },
-  {
-    path: routes.writeFromDictation,
-    element: <WriteFromDictation />,
-    route: Route,
-  },
+export const myPracticeRoutes = [
+  { path: routes.readAloud, element: <ReadAloud />, route: Route},
+  { path: routes.repeatSentence, element: <RepeatSentence />, route: Route },
+  { path: routes.describeImage, element: <DescribeImage />, route: Route },
+  { path: routes.reTellLecture, element: <ReTellLecture />, route: Route },
+  { path: routes.answerShortQuestion, element: <AnswerShortQuestion />, route: Route },
+  { path: routes.summarizeWritinText, element: <SummarizeWritinText />, route: Route },
+  { path: routes.writeEssay, element: <WriteEssay />, route: Route },
+  { path: routes.readingWritngFillBlank, element: <ReadingWritngFillBlank />, route: Route },
+  { path: routes.multipleChooseAnswer, element: <MultipleChooseAnswer />, route: Route },
+  { path: routes.multipleChooseSingleAnswer, element: <MultipleChooseSingleAnswer />, route: Route },
+  { path: routes.summarizeSpokenText, element: <SummarizeSpokenText />, route: Route },
+  { path: routes.multipleChooseAnswerListen, element: <MultipleChooseAnswerListen />, route: Route },
+  { path: routes.fillInTheBlanks, element: <FillInTheBlanks />, route: Route },
+  { path: routes.highlightCorrectSummary, element: <HighlightCorrectSummary />, route: Route },
+  { path: routes.multipleChooseSingleAnswerListen, element: <MultipleChooseSingleAnswerListen />, route: Route },
+  { path: routes.selectMissingWord, element: <SelectMissingWord />, route: Route },
+  { path: routes.highlightIncorrectWord, element: <HighlightIncorrectWord />, route: Route },
+  { path: routes.writeFromDictation, element: <WriteFromDictation />, route: Route },
 ]
 
-export const authRoutes = [
-  {
-    path: routes.comingSoon,
-    element: <ComingSoon />,
-    route: Route,
-  },
-  {
-    path: routes.login,
-    element: <Login />,
-    route: Route,
-  },
-  {
-    path: routes.login2,
-    element: <Login2 />,
-    route: Route,
-  },
-  {
-    path: routes.login3,
-    element: <Login3 />,
-    route: Route,
-  },
-  {
-    path: routes.register,
-    element: <Register />,
-    route: Route,
-  },
-  {
-    path: routes.twoStepVerification,
-    element: <TwoStepVerification />,
-    route: Route,
-  },
-  {
-    path: routes.twoStepVerification2,
-    element: <TwoStepVerification2 />,
-    route: Route,
-  },
-  {
-    path: routes.twoStepVerification3,
-    element: <TwoStepVerification3 />,
-    route: Route,
-  },
-  {
-    path: routes.emailVerification,
-    element: <EmailVerification />,
-    route: Route,
-  },
-  {
-    path: routes.emailVerification2,
-    element: <EmailVerification2 />,
-    route: Route,
-  },
-  {
-    path: routes.emailVerification3,
-    element: <EmailVerification3 />,
-    route: Route,
-  },
-  {
-    path: routes.register,
-    element: <Register />,
-    route: Route,
-  },
-  {
-    path: routes.register2,
-    element: <Register2 />,
-    route: Route,
-  },
-  {
-    path: routes.register3,
-    element: <Register3 />,
-    route: Route,
-  },
-  {
-    path: routes.resetPassword,
-    element: <ResetPassword />,
-    route: Route,
-  },
-  {
-    path: routes.resetPassword2,
-    element: <ResetPassword2 />,
-    route: Route,
-  },
-  {
-    path: routes.resetPassword3,
-    element: <ResetPassword3 />,
-    route: Route,
-  },
-  {
-    path: routes.forgotPassword,
-    element: <ForgotPassword />,
-    route: Route,
-  },
-  {
-    path: routes.forgotPassword2,
-    element: <ForgotPassword2 />,
-    route: Route,
-  },
-  {
-    path: routes.forgotPassword3,
-    element: <ForgotPassword3 />,
-    route: Route,
-  },
-  {
-    path: routes.error404,
-    element: <Error404 />,
-    route: Route,
-  },
-  {
-    path: routes.error500,
-    element: <Error500 />,
-    route: Route,
-  },
-  {
-    path: routes.underMaintenance,
-    element: <UnderMaintenance />,
-    route: Route,
-  },
-  {
-    path: routes.lockScreen,
-    element: <LockScreen />,
-  },
-  {
-    path: routes.resetPasswordSuccess,
-    element: <ResetPasswordSuccess />,
-  },
-  {
-    path: routes.resetPasswordSuccess2,
-    element: <ResetPasswordSuccess2 />,
-  },
-  {
-    path: routes.resetPasswordSuccess3,
-    element: <ResetPasswordSuccess3 />,
-  },
+export const publicRoutes = [
+  { path: routes.comingSoon, element: <ComingSoon />, route: Route },
+  { path: routes.login, element: <Login />, route: Route },
+  { path: routes.login2, element: <Login2 />, route: Route },
+  { path: routes.login3, element: <Login3 />, route: Route },
+  { path: routes.register, element: <Register />, route: Route },
+  { path: routes.twoStepVerification, element: <TwoStepVerification />, route: Route },
+  { path: routes.twoStepVerification2, element: <TwoStepVerification2 />, route: Route },
+  { path: routes.twoStepVerification3, element: <TwoStepVerification3 />, route: Route },
+  { path: routes.emailVerification, element: <EmailVerification />, route: Route },
+  { path: routes.emailVerification2, element: <EmailVerification2 />, route: Route },
+  { path: routes.emailVerification3, element: <EmailVerification3 />, route: Route },
+  { path: routes.register2, element: <Register2 />, route: Route },
+  { path: routes.register3, element: <Register3 />, route: Route },
+  { path: routes.resetPassword, element: <ResetPassword />, route: Route },
+  { path: routes.resetPassword2, element: <ResetPassword2 />, route: Route },
+  { path: routes.resetPassword3, element: <ResetPassword3 />, route: Route },
+  { path: routes.forgotPassword, element: <ForgotPassword />, route: Route },
+  { path: routes.forgotPassword2, element: <ForgotPassword2 />, route: Route },
+  { path: routes.forgotPassword3, element: <ForgotPassword3 />, route: Route },
+  { path: routes.error404, element: <Error404 />, route: Route },
+  { path: routes.error500, element: <Error500 />, route: Route },
+  { path: routes.underMaintenance, element: <UnderMaintenance />, route: Route },
+  { path: routes.lockScreen, element: <LockScreen /> },
+  { path: routes.resetPasswordSuccess, element: <ResetPasswordSuccess /> },
+  { path: routes.resetPasswordSuccess2, element: <ResetPasswordSuccess2 /> },
+  { path: routes.resetPasswordSuccess3, element: <ResetPasswordSuccess3 /> },
   
 ];

@@ -2,6 +2,9 @@ import React, { useEffect, useState } from "react";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../../core/data/redux/authSlice';
+import { AppDispatch, RootState } from '../../../core/data/redux/store';
 
 const Login = () => {
   const routes = all_routes;
@@ -15,6 +18,17 @@ const Login = () => {
   }, []);
   const date = () => {
     return new Date().getFullYear();
+  };
+
+
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const dispatch = useDispatch<AppDispatch>();
+  const { isLoading, error } = useSelector((state: RootState) => state.auth);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    dispatch(loginUser({ email, password }));
   };
 
   return (
@@ -96,7 +110,7 @@ const Login = () => {
           <div className="col-lg-6 col-md-12 col-sm-12">
             <div className="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap ">
               <div className="col-md-8 mx-auto p-4">
-                <form>
+                <form onSubmit={handleSubmit}>
                   <div>
                     <div className=" mx-auto mb-5 text-center">
                       <ImageWithBasePath
@@ -156,6 +170,7 @@ const Login = () => {
                         <div className="login-or">
                           <span className="span-or">Or</span>
                         </div>
+                        <p style={{color:"red",textAlign:"center"}}>{error ? error : ""}</p>
                         <div className="mb-3 ">
                           <label className="form-label">Email Address</label>
                           <div className="input-icon mb-3 position-relative">
@@ -163,15 +178,22 @@ const Login = () => {
                               <i className="ti ti-mail" />
                             </span>
                             <input
-                              type="text"
-                              defaultValue=""
+                              type="email"
+                              placeholder="Email"
+                              value={email}
+                              onChange={(e) => setEmail(e.target.value)}
+                              required
                               className="form-control"
                             />
                           </div>
                           <label className="form-label">Password</label>
                           <div className="pass-group">
-                            <input
+                          <input
                               type={isPasswordVisible ? "text" : "password"}
+                              placeholder="Password"
+                              value={password}
+                              onChange={(e) => setPassword(e.target.value)}
+                              required
                               className="pass-input form-control"
                             />
                             <span
@@ -201,12 +223,9 @@ const Login = () => {
                       </div>
                       <div className="p-4 pt-0">
                         <div className="mb-3">
-                          <Link
-                            to={routes.adminDashboard}
-                            className="btn btn-primary w-100"
-                          >
-                            Sign In
-                          </Link>
+                        <button type="submit" className="btn btn-primary w-100" disabled={isLoading}>
+                            {isLoading ? 'Signing in...' : 'Sign In'}
+                          </button>
                         </div>
                         <div className="text-center">
                           <h6 className="fw-normal text-dark mb-0">
