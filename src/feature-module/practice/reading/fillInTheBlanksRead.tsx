@@ -2,24 +2,36 @@ import React, { useState } from "react";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
+import Mcq from "../component/mcq";
 
-const WriteEssay = () => {
+const FillInTheBlanksRead = () => {
   const [showAnswer, setShowAnswer] = useState(false);
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
   };
+
+  const options = [
+    { id: "A", text: "fear" },
+    { id: "B", text: "should" },
+    {
+      id: "C",
+      text: "arises",
+    },
+    { id: "D", text: "all" },
+    { id: "E", text: "it" },
+    { id: "F", text: "find" },
+    { id: "G", text: "never" },
+  ];
+
   return (
     <div className="page-wrappers">
       <div className="content">
         <div className="container">
           <div className="practiceLayout">
             <p className="my-3">
-              Read the passage below and summarize it using one sentence. Type
-              your response in the box at the bottom of the screen. You have 10
-              minutes to finish this task. Your response will be judged on the
-              quality of your writing and on how well your response presents the
-              key points in the passage.
+              Read the text and answer the question by selecting all the correct
+              responses. More than one response is correct.
             </p>
             <div className="card">
               <div className="card-header">
@@ -30,16 +42,16 @@ const WriteEssay = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
-                    <span className="text-danger">Prepare: 00:40</span>
+                    <div>
+                      <div>
+                        <span className="text-danger">Time: 00:40</span>
+                      </div>
+                    </div>
                     <div className="cardBtns">
-                      <button className="btn btn-outline-secondary  py-1 rounded-pill">
+                      <button className="btn btn-outline-secondary py-1 rounded-pill">
                         Easy
                       </button>
-                      <button className="btn btn-outline-danger  py-1 rounded-pill">
+                      <button className="btn btn-outline-danger py-1 rounded-pill">
                         New
                       </button>
                       <button className="btn btn-outline-info py-1 rounded-pill">
@@ -53,26 +65,53 @@ const WriteEssay = () => {
                       </button>
                     </div>
                   </div>
-                  <div className="innercontent">
+
+                  <div className="innercontent mt-0">
                     <p>
-                      Do you agree that genetically modified foods are safe for
-                      consumption?
+                      Sensitivity to physical laws is thus an important
+                      consideration for the maker of applied-art objects. It is
+                      often taken for granted that this is also true for the
+                      maker of fine-art objects. This assumption misses a
+                      significant difference between the two disciplines.
+                      Fine-art objects are not constrained by the laws of
+                      physics in the same way that applied-art objects are.
+                      Because their primary purpose is not functional, they are
+                      only limited in terms of the materials used to make them.
+                      Sculptures must, for example, be stable, which requires an
+                      understanding of the properties of mass, weight
+                      distribution, and stress. Paintings must have rigid
+                      stretchers so that the canvas will be taut, and the paint
+                      must not deteriorate, crack, or discolor. These are
+                      problems that must be overcome by the artist because they
+                      tend to intrude upon his or her conception of the work.
+                      For example, in the early Italian Renaissance, bronze
+                      statues of horses with a raised foreleg usually had a
+                      cannonball under that hoof. This was done because the
+                      cannonball was needed to support the weight of the leg. In
+                      other words, the demands of the laws of physics, not the
+                      sculptor's aesthetic intentions, placed the ball there.
+                      That this device was a necessary structural compromise is
+                      clear from the fact that the cannonball quickly
+                      disappeared when sculptors learned how to strengthen the
+                      internal structure of a statue with iron braces (iron
+                      being much stronger than bronze).
                     </p>
                   </div>
-                  <div className="card">
-                    <div className="card-header bg-white">
-                      <div className="card-title">
-                        <h5>Total Word Count: 0</h5>
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      <textarea
-                        className="form-control"
-                        rows={8}
-                        placeholder="Write a Essay..."
-                      ></textarea>
+
+                  {/* ✅ Options rendered here */}
+                  <div className="innercontent">
+                    <div className="selectableBtn d-flex flex-wrap gap-2">
+                      {options.map((option) => (
+                        <button
+                          key={option.id}
+                          className="btn btn-soft-secondary rounded-pill"
+                        >
+                          {option.text}
+                        </button>
+                      ))}
                     </div>
                   </div>
+
                   {showAnswer && (
                     <div
                       className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
@@ -96,6 +135,7 @@ const WriteEssay = () => {
                       </div>
                     </div>
                   )}
+
                   <div className="bottomBtn mt-3">
                     <div className="row">
                       <div className="col-md-6">
@@ -142,4 +182,4 @@ const WriteEssay = () => {
   );
 };
 
-export default WriteEssay;
+export default FillInTheBlanksRead;

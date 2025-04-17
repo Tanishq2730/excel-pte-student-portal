@@ -136,6 +136,10 @@ export const all_routes = {
   selectMissingWord:"/select-missing-word",
   highlightIncorrectWord:"/highlight-incorrect-word",
   writeFromDictation:"/write-from-dictation",
+  reorderParagraph:"/reorder-paragraph",
+  fillInTheBlanksRead:"/reading-fib",
+  fullMocktest:"/full-mocktest",
+  mockTest:"/mocktest",
   // pages routes
   error404: "/error-404",
   error500: "/error-500",

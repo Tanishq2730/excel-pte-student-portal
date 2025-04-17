@@ -233,8 +233,8 @@ const Header = () => {
                                     <Link to={routes.multipleChooseAnswer}>
                                       Multiple Choice (Multiple)
                                     </Link>
-                                    <Link to="#">Re-order Paragraphs</Link>
-                                    <Link to="#">
+                                    <Link to={routes.reorderParagraph}>Re-order Paragraphs</Link>
+                                    <Link to={routes.fillInTheBlanksRead}>
                                       Reading: Fill in the Blanks
                                     </Link>
                                     <Link to={routes.multipleChooseSingleAnswer}>Multiple Choice (Single)</Link>
@@ -282,6 +282,9 @@ const Header = () => {
                   </li>
                   <li className="nav-item">
                     <span className="nav-link">Community</span>
+                  </li>
+                  <li className="nav-item">
+                    <span className="nav-link">Study Tools</span>
                   </li>
                   <li className="nav-item">
                     <span className="nav-link">Subscription</span>

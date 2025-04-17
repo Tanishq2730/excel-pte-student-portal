@@ -2,7 +2,6 @@ import { all_routes } from "../../../feature-module/router/all_routes";
 const routes = all_routes;
 
 export const SidebarData = [
-  
   {
     label: "Dashboard",
     submenuOpen: true,
@@ -18,7 +17,7 @@ export const SidebarData = [
         submenu: false,
       },
       {
-        label: "Grammer Practice",
+        label: "Grammar Practice",
         link: routes.events,
         icon: "ion-clipboard",
         showSubRoute: false,
@@ -56,7 +55,7 @@ export const SidebarData = [
     submenuItems: [
       {
         label: "Full Mocktest",
-        // link: routes.adminDashboard,
+        link: routes.fullMocktest,
         icon: "ion-monitor",
         showSubRoute: false,
         submenu: false,
@@ -84,56 +83,54 @@ export const SidebarData = [
       },
     ],
   },
-  {
-    label: "Study Tools",
-    submenuOpen: true,
-    submenuHdr: "Study Tools",
-    submenu: false,
-    showSubRoute: false,
-    submenuItems: [
-      {
-        label: "class Recording",
-        // link: routes.adminDashboard,
-        icon: "ion-videocamera",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Template",
-        // link: routes.adminDashboard,
-        icon: "ion-laptop",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Grammar",
-        // link: routes.adminDashboard,
-        icon: "ti ti-clipboard-data",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Prediction File",
-        // link: routes.adminDashboard,
-        icon: "ion-folder",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Class Link",
-        // link: routes.adminDashboard,
-        icon: "ion-link",
-        showSubRoute: false,
-        submenu: false,
-      },
-      {
-        label: "Timetable",
-        // link: routes.adminDashboard,
-        icon: "ion-calendar",
-        showSubRoute: false,
-        submenu: false,
-      },
-    ],
-  },
-  
+  // {
+  //   label: "Study Tools",
+  //   submenuOpen: true,
+  //   submenuHdr: "Study Tools",
+  //   submenu: false,
+  //   showSubRoute: false,
+  //   submenuItems: [
+  //     {
+  //       label: "class Recording",
+
+  //       icon: "ion-videocamera",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Template",
+
+  //       icon: "ion-laptop",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Grammar",
+
+  //       icon: "ti ti-clipboard-data",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Prediction File",
+
+  //       icon: "ion-folder",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Class Link",
+
+  //       icon: "ion-link",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //     {
+  //       label: "Timetable",
+  //       icon: "ion-calendar",
+  //       showSubRoute: false,
+  //       submenu: false,
+  //     },
+  //   ],
+  // },
 ];

@@ -45,6 +45,11 @@ import MultipleChooseSingleAnswerListen from "../practice/listening/multipleChoo
 import SelectMissingWord from "../practice/listening/selectMissingWord";
 import HighlightIncorrectWord from "../practice/listening/highlightIncorreectWord";
 import WriteFromDictation from "../practice/listening/writefromDictation";
+import ReorderParagraph from "../practice/reading/reOrderParagraph";
+import FillInTheBlanksRead from "../practice/reading/fillInTheBlanksRead";
+import FullMocktest from "../mockTest/pages/fullMocktest";
+import MockTest from "../mockTest/pages/mockTest";
+
 
 const routes = all_routes;
 
@@ -100,4 +105,8 @@ export const publicRoutes = [
   { path: routes.resetPasswordSuccess2, element: <ResetPasswordSuccess2 /> },
   { path: routes.resetPasswordSuccess3, element: <ResetPasswordSuccess3 /> },
   
+];
+
+export const mockRoutes = [
+  {path: routes.mockTest,element: <MockTest />,route: Route,},
 ];

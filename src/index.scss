@@ -1742,3 +1742,69 @@ body.app-chat {
   padding: 0.5rem;
   text-align: center !important;
 }
+
+.redorder-btn {
+  padding-left: 0 !important;
+  span {
+    background-color: #33b9c7 !important;
+    padding: 10px !important;
+    margin-right: 1em;
+    border-radius: 5px;
+    color: #fff;
+    height: 100%;
+  }
+}
+
+.loginimg {
+  img {
+    width: 70%;
+  }
+}
+
+// mocktest card css
+
+.mock-test-card {
+  background-color: #e6ffff;
+  padding: 20px;
+  border-radius: 16px;
+  text-align: center;
+  font-family: sans-serif;
+  box-shadow: 0 0 0 1px #d0f0f0;
+}
+
+.mock-test-card h2 {
+  margin: 0 0 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.mock-test-card .time,
+.mock-test-card .attempted {
+  margin: 5px 0;
+  font-size: 16px;
+  color: #333;
+}
+
+.mock-test-card .start-btn {
+  padding: 10px 20px;
+  font-size: 16px;
+  background-color: white;
+  border: 1px solid #000;
+  border-radius: 30px;
+  /* cursor: pointer; */
+  display: inline-flex;
+  align-items: center;
+  /* gap: 8px; */
+  transition: background-color 0.3s;
+  width: 10em;
+  justify-content: space-around;
+  margin: 1em auto auto auto;
+}
+
+.mock-test-card .start-btn:hover {
+  background-color: #f2f2f2;
+}
+
+.mock-test-card .arrow {
+  font-size: 18px;
+}

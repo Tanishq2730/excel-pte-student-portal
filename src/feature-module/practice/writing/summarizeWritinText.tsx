@@ -87,7 +87,7 @@ const SummarizeWritinText = () => {
                     <div className="card-body">
                       <textarea
                         className="form-control"
-                        rows={4}
+                        rows={8}
                         placeholder="Write a Summary..."
                       ></textarea>
                     </div>

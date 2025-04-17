@@ -482,6 +482,11 @@ const AdminDashboard = () => {
               </div>
               <div className="col-md-6">
                 <div className="card">
+                  <div className="card-header">
+                      <div className="card-title">
+                        Study Plan
+                      </div>
+                  </div>
                   <div className="card-body">
                     <div className="studyPlan">
                       <div className="calendar">
