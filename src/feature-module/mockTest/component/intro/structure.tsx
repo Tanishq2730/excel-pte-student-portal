@@ -14,7 +14,8 @@ const Structure: React.FC = () => {
 //   }, []);
 
   return (
-    <div className="container mt-25px">
+    <div className="container">
+      <div className="mockInfoContent">
       <p className="font-weight-bold">The test is approximately 2 hours</p>
       <table className="table table-bordered" style={{ width: "auto" }}>
         <thead>
@@ -50,6 +51,7 @@ const Structure: React.FC = () => {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
   );
 };

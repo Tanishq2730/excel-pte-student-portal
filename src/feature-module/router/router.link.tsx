@@ -55,6 +55,7 @@ const routes = all_routes;
 
 export const authRoutes = [
   { path: routes.adminDashboard, element: <AdminDashboard />, route: Route},  
+  
 ];
 export const myPracticeRoutes = [
   { path: routes.readAloud, element: <ReadAloud />, route: Route},
@@ -70,11 +71,15 @@ export const myPracticeRoutes = [
   { path: routes.summarizeSpokenText, element: <SummarizeSpokenText />, route: Route },
   { path: routes.multipleChooseAnswerListen, element: <MultipleChooseAnswerListen />, route: Route },
   { path: routes.fillInTheBlanks, element: <FillInTheBlanks />, route: Route },
+  { path: routes.fillInTheBlanksRead, element: <FillInTheBlanksRead />, route: Route },
+  { path: routes.reorderParagraph, element: <ReorderParagraph />, route: Route },
   { path: routes.highlightCorrectSummary, element: <HighlightCorrectSummary />, route: Route },
   { path: routes.multipleChooseSingleAnswerListen, element: <MultipleChooseSingleAnswerListen />, route: Route },
   { path: routes.selectMissingWord, element: <SelectMissingWord />, route: Route },
   { path: routes.highlightIncorrectWord, element: <HighlightIncorrectWord />, route: Route },
   { path: routes.writeFromDictation, element: <WriteFromDictation />, route: Route },
+  { path: routes.fullMocktest, element: <FullMocktest />, route: Route },
+  
 ]
 
 export const publicRoutes = [
@@ -104,6 +109,7 @@ export const publicRoutes = [
   { path: routes.resetPasswordSuccess, element: <ResetPasswordSuccess /> },
   { path: routes.resetPasswordSuccess2, element: <ResetPasswordSuccess2 /> },
   { path: routes.resetPasswordSuccess3, element: <ResetPasswordSuccess3 /> },
+  
   
 ];
 
