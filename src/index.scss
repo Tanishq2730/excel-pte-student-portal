@@ -1808,3 +1808,73 @@ body.app-chat {
 .mock-test-card .arrow {
   font-size: 18px;
 }
+
+.mockHeader {
+  .navbar {
+    padding: 20px;
+    background-color: #33b9c7;
+    color: #fff;
+    h5 {
+      color: #fff;
+    }
+  }
+}
+
+.languageCard .container {
+  background-color: #f9f9f9;
+  border: 1px solid #0d95ad;
+  border-radius: 20px;
+  box-shadow: 0 4px 6px #0000001a;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+  width: 400px;
+}
+.languageCard .icon {
+  color: #0af;
+  font-size: 40px;
+  margin-bottom: 10px;
+}
+.languageCard .title {
+  color: #333;
+  font-size: 18px;
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+.languageCard .options {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+.languageCard .option.active,
+.languageCard .option:hover {
+  background-color: #ff6b6b;
+  color: #fff;
+}
+.languageCard .option {
+  border: 2px solid #ddd;
+  border-radius: 30px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px 20px;
+  position: relative;
+  transition: all .3s ease;
+}
+.languageCard .option input {
+  display: none;
+}
+.languageCard{
+  margin-top: 4em;
+}
+
+.mocktest-session{
+  .mockmainbtn{
+    position: absolute;
+    right: 5%;
+    bottom: 5%;
+  }
+}
+
+.mockInfoContent{
+  margin-top: 2em;
+}
