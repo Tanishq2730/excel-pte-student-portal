@@ -1,10 +1,14 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { all_routes } from "../../router/all_routes";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
+import { fetchAllCountries, fetchStatesByCountryCode } from "../../../api/commonAPI";
+import { register } from "../../../api/authAPI";
+import AlertComponent from "../../../core/common/AlertComponent";
 type PasswordField = "password" | "confirmPassword";
 
 const Register = () => {
+  
   const routes = all_routes;
   const navigation = useNavigate();
 
@@ -22,9 +26,154 @@ const Register = () => {
       [field]: !prevState[field],
     }));
   };
+
+  const [formData, setFormData] = useState<{
+    name: string;
+    email: string;
+    mobileNo: string;
+    country_id: number | null;
+    state_id: string;
+    country_code: string;
+    password?: string;
+    confirmPassword?: string;
+  }>({
+    name: "",
+    email: "",
+    mobileNo: "",
+    country_id: null,
+    state_id: "",
+    country_code: "",
+    password: "",
+    confirmPassword: "",
+  });
+
+  const [countries, setCountries] = useState<{ id: number; name: string; cca2: string; code: string }[]>([]);
+  const [states, setStates] = useState<{ id: number; name: string }[]>([]);
+  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [passwordError, setPasswordError] = useState("");
+
+  useEffect(() => {
+    loadCountries();
+  }, []);
+
+  const loadCountries = async () => {
+    try {
+      const response = await fetchAllCountries();
+      if (response.success) {
+        setCountries(response.data);
+      } else {
+        setAlert({ type: "danger", message: "Failed to fetch countries" });
+      }
+    } catch (error) {
+      setAlert({ type: "danger", message: "An error occurred while fetching countries." });
+    }
+  };
+
+    // ✅ Fetch states when a country is selected
+    const loadStates = async (countryCode: string) => {
+      try {
+        const response = await fetchStatesByCountryCode(countryCode);
+        if (response.success && Array.isArray(response.data)) {
+          setStates(response.data);
+        } else {
+          setStates([]);
+          setAlert({ type: "danger", message: response.message || "No states found for this country." });
+        }
+      } catch (error) {
+        setStates([]);
+        setAlert({ type: "danger", message: "An error occurred while fetching states." });
+      }
+    };
+
+    const handleChange = (
+      e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+      const { name, value } = e.target;
+    
+      setFormData((prevFormData) => {
+        let updatedForm = { ...prevFormData, [name]: value };
+    
+        // ✅ If country is changed, fetch its states and reset state_id
+        if (name === "country_id") {
+          const selectedCountry = countries.find((c) => c.id.toString() === value);
+          if (selectedCountry) {
+            loadStates(selectedCountry.cca2);
+            updatedForm = {
+              ...updatedForm,
+              country_id: selectedCountry.id,
+              state_id: "",
+            };
+          }
+        }
+    
+        // ✅ Validate password and confirmPassword match
+        if (
+          (name === "password" || name === "confirmPassword") &&
+          updatedForm.password &&
+          updatedForm.confirmPassword
+        ) {
+          if (updatedForm.password !== updatedForm.confirmPassword) {
+            setPasswordError("Passwords do not match");
+          } else {
+            setPasswordError("");
+          }
+        }
+    
+        return updatedForm;
+      });
+    };
+    
+    const handleSubmit = async (e: React.FormEvent) => {
+      e.preventDefault();
+  
+  
+      try {
+        const { confirmPassword, ...dataToSubmit } = formData; 
+
+        const submissionData = {
+          ...dataToSubmit,
+          country_id: Number(formData.country_id), // ✅ ensure correct type
+        };
+        
+        const response = await register(submissionData); // ✅ Call API       
+  
+        if (!response.success) {
+          if (response.errors) {
+            const errorMessage = Array.isArray(response.errors)
+              ? response.errors.join(", ")
+              : response.errors; // ✅ fallback to single string
+        
+            setAlert({ type: "danger", message: errorMessage });
+          } else {
+            setAlert({
+              type: "danger",
+              message: response.error || "Failed to add user",
+            });
+          }
+          return;
+        }
+  
+        setAlert({ type: "success", message: "User added successfully!" });
+        setFormData({
+          name: "",
+          email: "",
+          mobileNo: "",
+          country_id: 0, // or 0 if number
+          state_id: "",
+          country_code: "",
+          password: "",
+          confirmPassword: "",
+        });
+        setTimeout(() => navigation(routes.login), 2000);
+      } catch (error) {
+        setAlert({ type: "danger", message: "An error occurred while adding the user." });
+      }
+    };
+
   return (
     <>
       <div className="container-fuild">
+      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
         <div className="login-wrapper w-100 overflow-hidden position-relative flex-wrap d-block vh-100">
           <div className="row">
             <div className="col-lg-6">
@@ -104,7 +253,7 @@ const Register = () => {
             <div className="col-lg-6 col-md-12 col-sm-12">
               <div className="row justify-content-center align-items-center vh-100 overflow-auto flex-wrap ">
                 <div className="col-md-8 mx-auto p-4">
-                  <form>
+                  <form onSubmit={handleSubmit}>
                     <div>
                       <div className=" mx-auto mb-5 text-center">
                         <ImageWithBasePath
@@ -169,17 +318,71 @@ const Register = () => {
                                 <span className="input-icon-addon">
                                   <i className="ti ti-user" />
                                 </span>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" name="name" value={formData.name} onChange={handleChange} required />
                               </div>
                               <label className="form-label">
                                 Email Address
-                              </label>
+                              </label>                              
                               <div className="input-icon mb-3 position-relative">
                                 <span className="input-icon-addon">
                                   <i className="ti ti-mail" />
                                 </span>
-                                <input type="text" className="form-control" />
+                                <input type="text" className="form-control" name="email" value={formData.email} onChange={handleChange} required />
                               </div>
+                              <label className="form-label">Country Code</label>
+                              <div className="input-icon mb-3 position-relative">
+                                <span className="input-icon-addon">
+                                  <i className="ti ti-flag" />
+                                </span>
+                                <select className="form-control" name="country_code" value={formData.country_code} onChange={handleChange} required >
+                                <option value="">Select Country Code</option>
+                                  {countries.map((country) => (
+                                    <option key={country.id} value={country.code}>
+                                      {country.name} (+{country.code})
+                                    </option>
+                                  ))}
+                                  {/* Add more as needed */}
+                                </select>
+                              </div>
+                              <label className="form-label">
+                                Phone Number
+                              </label>
+                              <div className="input-icon mb-3 position-relative">
+                                <span className="input-icon-addon">
+                                  <i className="ti ti-phone" />
+                                </span>
+                                <input type="text" className="form-control" name="mobileNo" value={formData.mobileNo} onChange={handleChange} required />
+                              </div>
+                              <label className="form-label">Country</label>
+                              <div className="input-icon mb-3 position-relative">
+                                <span className="input-icon-addon">
+                                  <i className="ti ti-world" />
+                                </span>
+                                <select className="form-control" name="country_id" value={formData.country_id ?? ""} onChange={handleChange} required >
+                                <option value="">Select Country</option>
+                                  {countries.map((country) => (
+                                    <option key={country.id} value={country.id}>
+                                      {country.name}
+                                    </option>
+                                  ))}
+                                  {/* Populate dynamically if needed */}
+                                </select>
+                              </div>
+                              <label className="form-label">State</label>
+                                <div className="input-icon mb-3 position-relative">
+                                  <span className="input-icon-addon">
+                                    <i className="ti ti-map" />
+                                  </span>
+                                  <select className="form-control" name="state_id" value={formData.state_id} onChange={handleChange} required >
+                                  <option value="">Select State</option>
+                                  {states.map((state) => (
+                                    <option key={state.id} value={state.id}>
+                                      {state.name}
+                                    </option>
+                                  ))}
+                                    {/* Populate dynamically based on selected country */}
+                                  </select>
+                                </div>
                               <label className="form-label">Password</label>
                               <div className="pass-group mb-3">
                                 <input
@@ -189,6 +392,7 @@ const Register = () => {
                                       : "password"
                                   }
                                   className="pass-input form-control"
+                                  name="password" value={formData.password} onChange={handleChange} required
                                 />
                                 <span
                                   className={`ti toggle-passwords ${
@@ -212,6 +416,7 @@ const Register = () => {
                                       : "password"
                                   }
                                   className="pass-input form-control"
+                                  name="confirmPassword" value={formData.confirmPassword} onChange={handleChange} required
                                 />
                                 <span
                                   className={`ti toggle-passwords ${
@@ -223,6 +428,11 @@ const Register = () => {
                                     togglePasswordVisibility("confirmPassword")
                                   }
                                 ></span>
+                                {passwordError && (
+                                  <div className="text-danger mt-1" style={{ fontSize: "0.875rem" }}>
+                                    {passwordError}
+                                  </div>
+                                )}
                               </div>
                             </div>
                             <div className="form-wrap form-wrap-checkbox mb-3">
@@ -244,8 +454,7 @@ const Register = () => {
                             </div>
                           </div>
                           <div className="mb-3">
-                            <button
-                              onClick={navigationPath}
+                            <button                              
                               type="submit"
                               className="btn btn-primary w-100"
                             >
