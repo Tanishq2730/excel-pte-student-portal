@@ -26,8 +26,8 @@ const MockTestCard: React.FC<MockTestCardProps> = ({
         </div>
         <p className="time">Approx Time: {time}</p>
         <p className="attempted">Attempted * {attempted}</p>
-        <Link to={routes.mockTest} className="start-btn">
-          Start Test <span className="arrow">➤</span>
+        <Link to={routes.mockTest} className="btn btn-primary rounded-pill w-100 mt-3">
+          Start Test
         </Link>
       </div>
     </div>

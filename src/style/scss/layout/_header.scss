@@ -113,6 +113,7 @@
     background: $white;
     padding: 0 15px;
     @include transition(all 0.5s ease);
+    border-bottom: 1px solid $light-900;
     border-right: 1px solid $light-900;
     .logo {
       display: inline-block;

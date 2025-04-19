@@ -140,6 +140,11 @@ export const all_routes = {
   fillInTheBlanksRead:"/reading-fib",
   fullMocktest:"/full-mocktest",
   mockTest:"/mocktest",
+  sectionalMocktest:"/sectional-mocktest",
+  mockTestResult:"/mocktest-result",
+  result:"/result",
+  pendingMocktest:"/pending-mocktest",
+
   // pages routes
   error404: "/error-404",
   error500: "/error-500",

@@ -49,6 +49,10 @@ import ReorderParagraph from "../practice/reading/reOrderParagraph";
 import FillInTheBlanksRead from "../practice/reading/fillInTheBlanksRead";
 import FullMocktest from "../mockTest/pages/fullMocktest";
 import MockTest from "../mockTest/pages/mockTest";
+import SectionalMocktest from "../mockTest/pages/sectionalMocktest";
+import MockTestResult from "../mockTest/pages/mockTestResult";
+import Result from "../mockTest/pages/result";
+import PendingMocktest from "../mockTest/pages/pendingMocktest";
 
 
 const routes = all_routes;
@@ -79,6 +83,10 @@ export const myPracticeRoutes = [
   { path: routes.highlightIncorrectWord, element: <HighlightIncorrectWord />, route: Route },
   { path: routes.writeFromDictation, element: <WriteFromDictation />, route: Route },
   { path: routes.fullMocktest, element: <FullMocktest />, route: Route },
+  { path: routes.sectionalMocktest, element: <SectionalMocktest />, route: Route },
+  { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
+  { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
+  
   
 ]
 
@@ -115,4 +123,5 @@ export const publicRoutes = [
 
 export const mockRoutes = [
   {path: routes.mockTest,element: <MockTest />,route: Route,},
+  {path: routes.result, element: <Result />, route: Route },
 ];
