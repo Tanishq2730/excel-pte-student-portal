@@ -2042,3 +2042,17 @@ body.app-chat {
   padding: 2em !important;
   border-radius: 100px !important;
 }
+
+.custom-card {
+  border-radius: 20px;
+  transition: transform 0.2s ease-in-out;
+}
+
+.custom-card:hover {
+  transform: scale(1.03);
+}
+
+.icon {
+  font-size: 40px;
+  color: #2bc1d4;
+}

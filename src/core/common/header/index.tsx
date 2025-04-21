@@ -144,20 +144,24 @@ const Header = () => {
               <nav className="navbars">
                 <ul className="nav-list">
                   <li className="nav-item">
-                    <Link to={routes.adminDashboard}><span className="nav-link">Dashboard</span></Link>
+                    <Link to={routes.adminDashboard}>
+                      <span className="nav-link">Dashboard</span>
+                    </Link>
                   </li>
                   <li
                     className="nav-item mega-menu-parent"
                     onMouseEnter={() => setShowMegaMenu(true)}
                     onMouseLeave={() => setShowMegaMenu(false)}
                   >
-                   <PracticeHeader showMegaMenu={showMegaMenu} />                                        
+                    <PracticeHeader showMegaMenu={showMegaMenu} />
                   </li>
                   <li className="nav-item">
                     <span className="nav-link">Community</span>
                   </li>
                   <li className="nav-item">
-                    <span className="nav-link">Study Tools</span>
+                    <Link to={routes.studyTool}>
+                      <span className="nav-link">Study Tools</span>
+                    </Link>
                   </li>
                   <li className="nav-item">
                     <span className="nav-link">Subscription</span>
@@ -198,6 +202,14 @@ const Header = () => {
                   </Link>
                 </div>
               </div> */}
+              <div className="search">
+                <Link
+                  to="#"
+                  className="btn btn-outline-light bg-white btn-icon d-flex justify-content-center align-items-center me-1 p-2"
+                >
+                  <i className="fa fa-search"></i>
+                </Link>
+              </div>
               <div className="pe-1 ms-1">
                 <div className="dropdown">
                   <Link

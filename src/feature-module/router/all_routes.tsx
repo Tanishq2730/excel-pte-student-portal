@@ -145,6 +145,7 @@ export const all_routes = {
   mockTestResult:"/mocktest-result",
   result:"/result",
   pendingMocktest:"/pending-mocktest",
+  studyTool:"/study-tool",
 
   // pages routes
   error404: "/error-404",

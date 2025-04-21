@@ -54,6 +54,7 @@ import SectionalMocktest from "../mockTest/pages/sectionalMocktest";
 import MockTestResult from "../mockTest/pages/mockTestResult";
 import Result from "../mockTest/pages/result";
 import PendingMocktest from "../mockTest/pages/pendingMocktest";
+import StudyTool from "../studyTool/StudyTool";
 
 
 const routes = all_routes;
@@ -88,8 +89,7 @@ export const myPracticeRoutes = [
   { path: routes.sectionalMocktest, element: <SectionalMocktest />, route: Route },
   { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
   { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
-  
-  
+  {path: routes.studyTool, element: <StudyTool />, route: Route },
 ]
 
 export const publicRoutes = [
@@ -126,4 +126,5 @@ export const publicRoutes = [
 export const mockRoutes = [
   {path: routes.mockTest,element: <MockTest />,route: Route,},
   {path: routes.result, element: <Result />, route: Route },
+  
 ];
