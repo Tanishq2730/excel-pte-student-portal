@@ -111,7 +111,7 @@ const ReTellLecture = () => {
   
     const handlePrevious = () => {
       if (questionData?.previousQuestionId) {
-        navigate(`/read-aloud/${subtype_id}/${questionData?.nextQuestionId}`);
+        navigate(`/read-aloud/${subtype_id}/${questionData?.previousQuestionId}`);
       }
     };
 
@@ -289,7 +289,7 @@ const ReTellLecture = () => {
             </div>
           </div>
           <div className="community">
-            <Community />
+              <Community questionData={questionData} />
           </div>
         </div>
       </div>

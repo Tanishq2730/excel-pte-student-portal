@@ -108,7 +108,7 @@ const DescribeImage = () => {
   
     const handlePrevious = () => {
       if (questionData?.previousQuestionId) {
-        navigate(`/describe-image/${subtype_id}/${questionData?.nextQuestionId}`);
+        navigate(`/describe-image/${subtype_id}/${questionData?.previousQuestionId}`);
       }
     };
 
@@ -185,7 +185,7 @@ const DescribeImage = () => {
             </div>
           </div>
           <div className="community">
-            <Community />
+          <Community questionData={questionData} />
           </div>
         </div>
       </div>

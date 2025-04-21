@@ -1,15 +1,104 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
-import Mcq from "../component/mcq";
+import { fetchQuestionData } from "../../../api/practiceAPI";
+import { QuestionData } from "../../../core/data/interface";
+import { all_routes } from "../../router/all_routes";
+import CardButton from "../component/cardButton";
+import QuestionNavigation from "../component/questionNavigation";
 
 const MultipleChooseAnswer = () => {
-  const [showAnswer, setShowAnswer] = useState(false);
-
-  const handleAnswerClick = () => {
-    setShowAnswer((prev) => !prev);
-  };
+  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+    const navigate = useNavigate();
+  
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [questionData, setQuestionData] = useState<QuestionData | null>(null);
+    const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
+    const [timerActive, setTimerActive] = useState<boolean>(false);
+  
+    useEffect(() => {
+      const getData = async () => {
+        try {
+          const subtypeIdNum = Number(subtype_id);
+          const questionIdNum = question_id ? Number(question_id) : 0;
+  
+          const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
+  
+          if (!res.success || !res.data) {
+            // Redirect back if no data found
+            navigate(all_routes.adminDashboard); // Goes back to the previous page
+            return;
+          }
+  
+          setQuestionData(res.data);
+        } catch (err) {
+          console.error("Error fetching question data:", err);
+          navigate(-1); // Redirect on fetch error as well
+        }
+      };
+  
+      if (subtype_id) {
+        getData();
+      }
+    }, [subtype_id, question_id, navigate]);
+  
+    useEffect(() => {
+      if (questionData?.Subtype?.preparation_time) {
+        const preparationTimeInSeconds = parseInt(questionData.Subtype.preparation_time, 10);
+        setCountdown(preparationTimeInSeconds);
+        setTimerActive(true);
+      }
+    }, [questionData]);
+  
+    useEffect(() => {
+      let intervalId: number;
+  
+      if (timerActive && countdown > 0) {
+        intervalId = setInterval(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+      } else if (timerActive && countdown <= 0) {
+        setTimerActive(false);
+      }
+  
+      return () => clearInterval(intervalId);
+    }, [countdown, timerActive]);
+  
+    const formatTime = (time: number) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    };
+  
+  
+    // Handling navigation to next and previous questions
+    const handleNext = () => {
+      if (questionData?.nextQuestionId) {
+        navigate(`/multiple-choose-answer/${subtype_id}/${questionData?.nextQuestionId}`);
+      }
+    };
+  
+    const handlePrevious = () => {
+      if (questionData?.previousQuestionId) {
+        navigate(`/multiple-choose-answer/${subtype_id}/${questionData?.previousQuestionId}`);
+      }
+    };
+  
+    const handleRestart = () => {
+      // Reset countdown to the initial preparation time
+      const preparationTimeInSeconds = parseInt(questionData?.Subtype.preparation_time || "0", 10);
+      setCountdown(preparationTimeInSeconds);
+      setTimerActive(true); // Restart the countdown
+  
+      setShowAnswer(false); // Optionally reset the answer view
+      
+    };
+  
+    const handleAnswerClick = () => {
+      setShowAnswer((prev) => !prev);
+    };
 
   const options = [
     { id: "A", text: "they began using a material that much stronger" },
@@ -31,69 +120,18 @@ const MultipleChooseAnswer = () => {
             </p>
             <div className="card">
               <div className="card-header">
-                <div className="card-title text-white">
-                  <CardHeading />
-                </div>
+              <div className="card-title text-white">{questionData?.question_name}</div>
               </div>
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <div>
-                      <div>
-                        <span className="text-danger">Time: 00:40</span>
-                      </div>
-                    </div>
-                    <div className="cardBtns">
-                      <button className="btn btn-outline-secondary  py-1 rounded-pill">
-                        Easy
-                      </button>
-                      <button className="btn btn-outline-danger  py-1 rounded-pill">
-                        New
-                      </button>
-                      <button className="btn btn-outline-info py-1 rounded-pill">
-                        Prediction
-                      </button>
-                      <button className="btn btn-outline-success py-1 rounded-pill">
-                        Attempted
-                      </button>
-                      <button className="btn btn-outline-light py-1 rounded-pill">
-                        <i className="fa fa-bookmark"></i>
-                      </button>
-                    </div>
+                  <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                  <CardButton questionData={questionData} />
                   </div>
                   <div className="row">
                     <div className="col-md-6">
                       <div className="innercontent mt-0">
-                        <p>
-                          Sensitivity to physical laws is thus an important
-                          consideration for the maker of applied-art objects. It
-                          is often taken for granted that this is also true for
-                          the maker of fine-art objects. This assumption misses
-                          a significant difference between the two disciplines.
-                          Fine-art objects are not constrained by the laws of
-                          physics in the same way that applied-art objects are.
-                          Because their primary purpose is not functional, they
-                          are only limited in terms of the materials used to
-                          make them. Sculptures must, for example, be stable,
-                          which requires an understanding of the properties of
-                          mass, weight distribution, and stress. Paintings must
-                          have rigid stretchers so that the canvas will be taut,
-                          and the paint must not deteriorate, crack, or
-                          discolor. These are problems that must be overcome by
-                          the artist because they tend to intrude upon his or
-                          her conception of the work. For example, in the early
-                          Italian Renaissance, bronze statues of horses with a
-                          raised foreleg usually had a cannonball under that
-                          hoof. This was done because the cannonball was needed
-                          to support the weight of the leg. In other words, the
-                          demands of the laws of physics, not the sculptor's
-                          aesthetic intentions, placed the ball there. That this
-                          device was a necessary structural compromise is clear
-                          from the fact that the cannonball quickly disappeared
-                          when sculptors learned how to strengthen the internal
-                          structure of a statue with iron braces (iron being
-                          much stronger than bronze).
-                        </p>
+                      <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />
                       </div>
                     </div>
                     <div className="col-md-6">
@@ -170,44 +208,20 @@ const MultipleChooseAnswer = () => {
                     </div>
                   )}
                   <div className="bottomBtn mt-3">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="btnBottom">
-                          <button className="btn btn-outline-secondary">
-                            Submit
-                          </button>
-                          <button
-                            className="btn btn-outline-secondary mx-3"
-                            onClick={handleAnswerClick}
-                          >
-                            Answer
-                          </button>
-                          <button className="btn btn-outline-secondary">
-                            Re-Start
-                          </button>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="btnBottom text-end">
-                          <button
-                            className="btn btn-outline-secondary mx-3"
-                            disabled
-                          >
-                            Previous
-                          </button>
-                          <button className="btn btn-outline-secondary">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  <QuestionNavigation
+                        questionData={questionData}
+                        onAnswerClick={handleAnswerClick}
+                        onRestart={handleRestart}
+                        onNext={handleNext}
+                        onPrevious={handlePrevious}
+                      />
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="community">
-            <Community />
+          <Community questionData={questionData} />
           </div>
         </div>
       </div>

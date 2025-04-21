@@ -1,7 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
+import { fetchQuestionData } from "../../../api/practiceAPI";
+import { QuestionData } from "../../../core/data/interface";
+import { all_routes } from "../../router/all_routes";
+import CardButton from "../component/cardButton";
+import QuestionNavigation from "../component/questionNavigation";
 import AudioPlayer from "../component/audioPlayer";
 
 const options = [
@@ -14,11 +20,107 @@ const options = [
   { id: "D", text: "the cannonballs added too much weight to the statues" },
 ];
 const HighlightIncorrectWord = () => {
-  const [showAnswer, setShowAnswer] = useState(false);
-
-  const handleAnswerClick = () => {
-    setShowAnswer((prev) => !prev);
-  };
+  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+    const navigate = useNavigate();
+  
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [questionData, setQuestionData] = useState<QuestionData | null>(null);
+    const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
+    const [timerActive, setTimerActive] = useState<boolean>(false);
+    const [resetRecording, setResetRecording] = useState<boolean>(false); // Add reset state
+  
+    useEffect(() => {
+        const getData = async () => {
+          try {
+            const subtypeIdNum = Number(subtype_id);
+            const questionIdNum = question_id ? Number(question_id) : 0;
+    
+            const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
+    
+            if (!res.success || !res.data) {
+              // Redirect back if no data found
+              navigate(all_routes.adminDashboard); // Goes back to the previous page
+              return;
+            }
+    
+            setQuestionData(res.data);
+          } catch (err) {
+            console.error("Error fetching question data:", err);
+            navigate(-1); // Redirect on fetch error as well
+          }
+        };
+    
+        if (subtype_id) {
+          getData();
+        }
+      }, [subtype_id, question_id, navigate]);
+  
+    useEffect(() => {
+      if (questionData?.Subtype?.preparation_time) {
+        const preparationTimeInSeconds = parseInt(questionData.Subtype.preparation_time, 10); 
+        setCountdown(preparationTimeInSeconds);
+        setTimerActive(true);
+      }
+    }, [questionData]);
+  
+    const startRecordingCallback = useCallback(() => {
+      if (questionData && questionData.Subtype.preparation_time === "0") {
+        document.getElementById("startRecordingButton")?.click();
+      }
+    }, [questionData]);
+  
+    useEffect(() => {
+      let intervalId: number;
+    
+      if (timerActive && countdown > 0) {
+        intervalId = setInterval(() => {
+          setCountdown((prev) => prev - 1);
+        }, 1000);
+      } else if (timerActive && countdown <= 0) {
+        setTimerActive(false);
+        startRecordingCallback(); // Start recording after countdown ends
+      }
+    
+      return () => clearInterval(intervalId);
+    }, [countdown, timerActive, startRecordingCallback]);
+  
+    const formatTime = (time: number) => {
+      const minutes = Math.floor(time / 60);
+      const seconds = time % 60;
+      return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    };
+  
+    const handleAnswerClick = () => {
+      setShowAnswer((prev) => !prev);
+    };
+  
+    const handleRestart = () => {
+      // Reset countdown to the initial preparation time
+      const preparationTimeInSeconds = parseInt(questionData?.Subtype.preparation_time || "0", 10);
+      setCountdown(preparationTimeInSeconds);
+      setTimerActive(true); // Restart the countdown
+  
+      setShowAnswer(false); // Optionally reset the answer view
+  
+      // Trigger reset for recording
+      setResetRecording(true); // Set reset state to true
+      setTimeout(() => setResetRecording(false), 100); // Reset state after a short delay
+    };
+  
+   
+  
+    // Handling navigation to next and previous questions
+    const handleNext = () => {
+      if (questionData?.nextQuestionId) {      
+        navigate(`/highlight-incorrect-word/${subtype_id}/${questionData?.nextQuestionId}`);
+      }
+    };
+  
+    const handlePrevious = () => {
+      if (questionData?.previousQuestionId) {
+        navigate(`/highlight-incorrect-word/${subtype_id}/${questionData?.previousQuestionId}`);
+      }
+    };
   return (
     <div className="page-wrappers">
       <div className="content">
@@ -30,59 +132,19 @@ const HighlightIncorrectWord = () => {
             </p>
             <div className="card">
               <div className="card-header">
-                <div className="card-title text-white">
-                  <CardHeading />
-                </div>
+              <div className="card-title text-white">{questionData?.question_name}</div>
               </div>
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">Time: 00:40</span>
-                    <div className="cardBtns">
-                      <button className="btn btn-outline-secondary  py-1 rounded-pill">
-                        Easy
-                      </button>
-                      <button className="btn btn-outline-danger  py-1 rounded-pill">
-                        New
-                      </button>
-                      <button className="btn btn-outline-info py-1 rounded-pill">
-                        Prediction
-                      </button>
-                      <button className="btn btn-outline-success py-1 rounded-pill">
-                        Attempted
-                      </button>
-                      <button className="btn btn-outline-light py-1 rounded-pill">
-                        <i className="fa fa-bookmark"></i>
-                      </button>
-                    </div>
+                  <span className="text-danger">Time: {formatTime(countdown)}</span>
+                  <CardButton questionData={questionData} />
                   </div>
                   <div className="mb-3">
                     <AudioPlayer />
                   </div>
                   <div className="innercontent">
-                    <p>
-                      The discovery of a set of what look like ancient hominin
-                      footprints on the island of Crete could throw our
-                      understanding of human evolution into disarray. Received
-                      wisdom is that after from the chimp lineage, our hominin
-                      ancestors were confined to Africa until around 1.5 million
-                      years ago. The prints found in Crete, however, to a
-                      creature that appears to have lived 5.7 million years ago
-                      — suggesting a more complex story. More research is needed
-                      to confirm what kind of animal made them. However, the
-                      prints seem to have been by a creature that walked
-                      upright, on the soles of clawless feet (rather than on its
-                      toes), with a big toe positioned like our own, rather than
-                      sticking out sideways like an ape's. It may yet turn out
-                      to have been a unknown non-hominin that had evolved with a
-                      human-like foot; but the explanatory paper, in the
-                      Proceedings of the Geologists' Association, is not the
-                      first to suggest that hominins could have originated in
-                      Europe. A few months ago, a team put forward evidence,
-                      gleaned from fossils found in Greece and Bulgaria that a
-                      7.2 million-year old ape known as Graecopithecus was in
-                      fact a hominin.
-                    </p>
+                  <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />
                   </div>
                   {showAnswer && (
                     <div
@@ -108,44 +170,20 @@ const HighlightIncorrectWord = () => {
                     </div>
                   )}
                   <div className="bottomBtn mt-3">
-                    <div className="row">
-                      <div className="col-md-6">
-                        <div className="btnBottom">
-                          <button className="btn btn-outline-secondary">
-                            Submit
-                          </button>
-                          <button
-                            className="btn btn-outline-secondary mx-3"
-                            onClick={handleAnswerClick}
-                          >
-                            Answer
-                          </button>
-                          <button className="btn btn-outline-secondary">
-                            Re-Start
-                          </button>
-                        </div>
-                      </div>
-                      <div className="col-md-6">
-                        <div className="btnBottom text-end">
-                          <button
-                            className="btn btn-outline-secondary mx-3"
-                            disabled
-                          >
-                            Previous
-                          </button>
-                          <button className="btn btn-outline-secondary">
-                            Next
-                          </button>
-                        </div>
-                      </div>
-                    </div>
+                  <QuestionNavigation
+                      questionData={questionData}
+                      onAnswerClick={handleAnswerClick}
+                      onRestart={handleRestart}
+                      onNext={handleNext}
+                      onPrevious={handlePrevious}
+                    />
                   </div>
                 </div>
               </div>
             </div>
           </div>
           <div className="community">
-            <Community />
+            <Community questionData={questionData} />
           </div>
         </div>
       </div>

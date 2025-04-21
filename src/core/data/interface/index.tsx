@@ -337,6 +337,9 @@ export interface AppState {
 
 export interface Subtype {
   preparation_time: string;
+  recording_time: string;
+  remaining_time: string;
+  beginning_in: string;
 }
 
 export interface QuestionData {

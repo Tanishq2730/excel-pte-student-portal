@@ -113,7 +113,7 @@ const AnswerShortQuestion = () => {
   
     const handlePrevious = () => {
       if (questionData?.previousQuestionId) {
-        navigate(`/answer-short-question/${subtype_id}/${questionData?.nextQuestionId}`);
+        navigate(`/answer-short-question/${subtype_id}/${questionData?.previousQuestionId}`);
       }
     };
 
@@ -291,7 +291,7 @@ const AnswerShortQuestion = () => {
             </div>
           </div>
           <div className="community">
-            <Community />
+            <Community questionData={questionData} />
           </div>
         </div>
       </div>

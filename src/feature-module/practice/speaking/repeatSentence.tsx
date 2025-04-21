@@ -172,7 +172,7 @@ const RepeatSentence = () => {
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/repeat-sentence/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(`/repeat-sentence/${subtype_id}/${questionData?.previousQuestionId}`);
     }
   };
 
@@ -288,7 +288,7 @@ const RepeatSentence = () => {
             </div>
           </div>
           <div className="community">
-            <Community />
+          <Community questionData={questionData} />
           </div>
         </div>
       </div>
