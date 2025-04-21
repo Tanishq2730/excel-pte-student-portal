@@ -2052,7 +2052,15 @@ body.app-chat {
   transform: scale(1.03);
 }
 
-.icon {
-  font-size: 40px;
-  color: #2bc1d4;
+.text-info {
+  svg{
+    color: #33b9c7;
+  }
+}
+
+
+.studySection{
+  .card:hover{
+    border: 1px solid #33b9c7;
+  }
 }
