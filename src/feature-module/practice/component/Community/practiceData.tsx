@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchPracticeLogs } from "../../../../api/practiceAPI";
 import moment from "moment";
+import CommunityModal from "../communityModal";
 
 // Define prop types
 interface PracticeDataProps {
@@ -79,6 +80,8 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             <div className="d-flex align-items-center">
               <button
                 className="popbtn border rounded-pill px-2 py-1 me-3"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalLg"
                 style={{
                   backgroundColor: "#f0f0f0",
                   borderColor: "#00c6b5",
@@ -98,6 +101,32 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             <button className="btn btn-danger btn-sm ms-3 rounded-circle">
               <i className="fa fa-trash"></i>
             </button>
+            <div
+              className="modal fade"
+              id="exampleModalLg"
+              tabIndex={-1}
+              aria-labelledby="exampleModalLgLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-lg">
+                <div className="modal-content">
+                  <div className="modal-header">
+                    <h4 className="modal-title" id="exampleModalLgLabel">
+                    AI Score (Partial credit to : Speaking & Reading)
+                    </h4>
+                    <button
+                      type="button"
+                      className="btn-close"
+                      data-bs-dismiss="modal"
+                      aria-label="Close"
+                    />
+                  </div>
+                  <div className="modal-body">
+                    <CommunityModal/>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         ))
       )}

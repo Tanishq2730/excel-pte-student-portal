@@ -2034,3 +2034,11 @@ body.app-chat {
   width: 2px;
   background-color: #111;
 }
+
+.questionBtn{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 2em !important;
+  border-radius: 100px !important;
+}

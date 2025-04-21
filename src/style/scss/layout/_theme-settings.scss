@@ -16,8 +16,8 @@
     text-align: center;
     cursor: pointer;
     background: $primary;
-    top: 225px;
-    right: 350px;
+    top: 400px;
+    right: 340px;
     padding: 6px;
     height: 35px;
     color: $white;
@@ -95,7 +95,7 @@
       display: none;
 
       &:checked {
-        ~label {
+        ~ label {
           .checkboxs-theme {
             &:after {
               background-color: $purple;
@@ -286,14 +286,59 @@
 }
 
 .sidebar-themesettings.offcanvas.offcanvas-end {
-  width: 400px !important;
+  width: 75% !important;
 }
 .theme-colorselect label.bg-darkblack {
-  background: #39435F;
+  background: #39435f;
 }
 .theme-colorselect label.bg-darkblue {
-  background: #07396D;
+  background: #07396d;
 }
 .theme-colorselect label.grey-topbar {
-  background: #E6E8EB;
+  background: #e6e8eb;
+}
+
+.right-chevron-btn {
+  position: absolute;
+  left: -25px;
+  top: 400px;
+  border-radius: 100px !important;
+  padding: 2em !important;
+  width: 35px !important;
+  height: 35px !important;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  z-index: 9345;
+}
+
+.questionSearch {
+  .searchinputs {
+    padding: 0;
+    position: relative;
+    input {
+      width: 284px;
+      height: 42px;
+      border: 1px solid #e9edf4;
+      background: #fff;
+      padding: 5px 10px;
+      padding-right: 45px;
+      border-radius: 5px;
+      color: #202c4b;
+    }
+  }
+  .responsive-search {
+    display: none;
+    color: #fff;
+    font-size: 20px;
+    height: 60px;
+    line-height: 60px;
+    padding: 0 15px;
+  }
+}
+
+.tabHead{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
