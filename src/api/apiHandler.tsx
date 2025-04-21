@@ -34,7 +34,6 @@ export interface ApiResponse<T = any> {
       });
   
       const result = await response.json();
-      console.log("Result:", result);
       if (result.status === false) {
         if (result.errors || Array.isArray(result.errors)) {
           // ✅ Format validation errors into a single string
@@ -43,7 +42,7 @@ export interface ApiResponse<T = any> {
         throw new Error(result.message || "Something went wrong");
       } 
   
-      return { success: true, data: result.data ? result.data : [] , message: result.message };
+      return { success: true, data: result.data ? result.data : [] , message: result.message ?? "Data Fetch Successfully" };
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Unknown error';
       return { success: false, error: errorMessage };

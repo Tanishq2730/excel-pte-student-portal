@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from "react";
 import WaveSurfer from "wavesurfer.js";
 
-const RecorderComponent: React.FC = () => {
+interface RecorderProps {
+  resetRecording: boolean;
+  startRecording: () => void;
+}
+
+const RecorderComponent: React.FC<RecorderProps> = ({ resetRecording, startRecording }) => {
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
   const waveformRef = useRef<HTMLDivElement | null>(null);
-  const waveSurferRef = useRef<ReturnType<typeof WaveSurfer.create> | null>(null); // ✅
+  const waveSurferRef = useRef<ReturnType<typeof WaveSurfer.create> | null>(null);
 
-
-  const startRecording = async () => {
+  // Start recording handler
+  const startRecordingHandler = async () => {
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     const mediaRecorder = new MediaRecorder(stream);
     mediaRecorderRef.current = mediaRecorder;
@@ -27,73 +32,83 @@ const RecorderComponent: React.FC = () => {
     setIsRecording(true);
   };
 
+  // Stop recording handler
   const stopRecording = () => {
     if (mediaRecorderRef.current) {
       mediaRecorderRef.current.onstop = () => {
         const blob = new Blob(audioChunks.current, { type: "audio/webm" });
-
         if (blob.size > 0) {
           setAudioBlob(blob);
-        } else {
-          console.warn("Empty audio blob — recording might have been too short.");
         }
       };
 
       setTimeout(() => {
         mediaRecorderRef.current?.stop();
         setIsRecording(false);
-      }, 200); // Delay to ensure data is flushed
+      }, 200);
     }
   };
 
+  // Handle mic click (start/stop recording)
   const handleMicClick = () => {
-    isRecording ? stopRecording() : startRecording();
+    isRecording ? stopRecording() : startRecordingHandler();
   };
 
+  useEffect(() => {
+    startRecording(); // Trigger start recording when the parent component calls this function
+  }, [startRecording]);
+
+  // Reset recording on `resetRecording` prop change
+  useEffect(() => {
+    if (resetRecording) {
+      setIsRecording(false); // Reset recording state
+      setAudioBlob(null); // Clear audioBlob
+      if (waveSurferRef.current) {
+        waveSurferRef.current.destroy(); // Destroy old WaveSurfer instance
+        waveSurferRef.current = null;
+      }
+    }
+  }, [resetRecording]);
+
+  // Initialize WaveSurfer when audioBlob is set
   useEffect(() => {
     if (audioBlob && waveformRef.current) {
-      const url = URL.createObjectURL(audioBlob);
+      const audioURL = URL.createObjectURL(audioBlob);
 
-      // Cleanup old instance
-      if (waveSurferRef.current) {
-        waveSurferRef.current.destroy();
+      // Only initialize WaveSurfer if the audioBlob URL is valid
+      if (audioURL) {
+        const waveSurfer = WaveSurfer.create({
+          container: waveformRef.current,
+          waveColor: "#ddd",
+          progressColor: "#00aaff",
+          height: 100,
+          barWidth: 2,
+          responsive: true, // Ensures the waveform is resized properly
+        });
+
+        // Load audio and ensure the waveform is rendered after a slight delay to avoid rendering issues
+        waveSurfer.load(audioURL);
+
+        // Store reference to the WaveSurfer instance
+        waveSurferRef.current = waveSurfer;
+
+        // Wait for the waveform to render before enabling play/pause button
+        waveSurfer.on("ready", () => {
+          setIsPlaying(false); // Ensure play/pause works only after the waveform is ready
+        });
+
+        return () => {
+          // Cleanup WaveSurfer instance when the component unmounts or audioBlob changes
+          waveSurfer.destroy();
+        };
       }
-
-      const waveSurfer = WaveSurfer.create({
-        container: waveformRef.current!,
-        waveColor: "#6c6c6c",
-        progressColor: "#2e2e2e",
-        cursorColor: "#333",
-        barWidth: 2,
-        height: 100,
-      });
-
-      waveSurfer.load(url).catch((err: any) => {
-        console.error("WaveSurfer load error:", err);
-      });
-      
-
-      waveSurfer.on("finish", () => setIsPlaying(false));
-      waveSurferRef.current = waveSurfer;
     }
-  }, [audioBlob]);
-
-  // Handle resizing: retrigger waveform by setting blob again
-  useEffect(() => {
-    const handleResize = () => {
-      if (audioBlob) {
-        setAudioBlob(audioBlob);
-      }
-    };
-
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
   }, [audioBlob]);
 
   const togglePlay = () => {
     if (waveSurferRef.current) {
       waveSurferRef.current.playPause();
-      setIsPlaying((prev) => !prev);
+      setIsPlaying((prev) => !prev); // Toggle the playing state
     }
   };
 

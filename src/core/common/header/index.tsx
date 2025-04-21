@@ -14,6 +14,7 @@ import { useState } from "react";
 import { all_routes } from "../../../feature-module/router/all_routes";
 import { logout } from "../../data/redux/authSlice";
 import { useNavigate } from "react-router-dom";
+import PracticeHeader from "./practiceHeader";
 
 const Header = () => {
   const routes = all_routes;
@@ -150,135 +151,7 @@ const Header = () => {
                     onMouseEnter={() => setShowMegaMenu(true)}
                     onMouseLeave={() => setShowMegaMenu(false)}
                   >
-                    <span className="nav-link">Practice <i className="ion-chevron-down"></i></span>
-                    {showMegaMenu && (
-                      <div className="mega-menu">
-                        <div className="innermegamenu">
-                          <div className="card-body">
-                            <ul
-                              className="nav nav-pills justify-content-start mx-0 nav-style-2 mb-3"
-                              role="tablist"
-                            >
-                              <li className="nav-item">
-                                <Link
-                                  className="nav-link active"
-                                  data-bs-toggle="tab"
-                                  role="tab"
-                                  aria-current="page"
-                                  to="#home-center"
-                                  aria-selected="true"
-                                >
-                                  PTE Core
-                                </Link>
-                              </li>
-                              <li className="nav-item">
-                                <Link
-                                  className="nav-link"
-                                  data-bs-toggle="tab"
-                                  role="tab"
-                                  aria-current="page"
-                                  to="#about-center"
-                                  aria-selected="false"
-                                >
-                                  PTE Academic / UKVI
-                                </Link>
-                              </li>
-                            </ul>
-                            <div className="tab-content">
-                              <div
-                                className="tab-pane show active text-muted"
-                                id="home-center"
-                                role="tabpanel"
-                              >
-                                <div className="tabinnerasection">
-                                  <div className="mega-column">
-                                    <h6>Speaking</h6>
-                                    <Link to={routes.readAloud}>
-                                      Read Aloud{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.repeatSentence}>
-                                      Repeat Sentence{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.describeImage}>
-                                      Describe Image{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.reTellLecture}>
-                                      Re-Tell Lecture {" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.answerShortQuestion}>
-                                      Answer Short Question{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                  </div>
-                                  <div className="mega-column">
-                                    <h6>Writing</h6>
-                                    <Link to={routes.summarizeWritinText}>
-                                      Summarize Written Text{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.writeEssay}>
-                                      Write Essay{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                  </div>
-                                  <div className="mega-column">
-                                    <h6>Reading</h6>
-                                    <Link to={routes.readingWritngFillBlank}>
-                                      Reading & Writing: Fill in the blanks
-                                    </Link>
-                                    <Link to={routes.multipleChooseAnswer}>
-                                      Multiple Choice (Multiple)
-                                    </Link>
-                                    <Link to={routes.reorderParagraph}>Re-order Paragraphs</Link>
-                                    <Link to={routes.fillInTheBlanksRead}>
-                                      Reading: Fill in the Blanks
-                                    </Link>
-                                    <Link to={routes.multipleChooseSingleAnswer}>Multiple Choice (Single)</Link>
-                                  </div>
-                                  <div className="mega-column">
-                                    <h6>Listening</h6>
-                                    <Link to={routes.summarizeSpokenText}>
-                                      Summarize Spoken Text{" "}
-                                      <span className="ai-score">AI Score</span>
-                                    </Link>
-                                    <Link to={routes.multipleChooseAnswerListen}>
-                                      Multiple Choice (Multiple)
-                                    </Link>
-                                    <Link to={routes.fillInTheBlanks}>Fill in the Blanks</Link>
-                                    <Link to={routes.highlightCorrectSummary}>Highlight Correct Summary</Link>
-                                    <Link to={routes.multipleChooseSingleAnswerListen}>Multiple Choose (Single)</Link>
-                                    <Link to={routes.selectMissingWord}>Select Missing Word</Link>
-                                    <Link to={routes.highlightIncorrectWord}>Highlight Incorrect Words</Link>
-                                    <Link to={routes.writeFromDictation}>Write From Dictation</Link>
-                                  </div>
-                                </div>
-                              </div>
-                              <div
-                                className="tab-pane text-muted"
-                                id="about-center"
-                                role="tabpanel"
-                              >
-                                How hotel deals can help you live a better life.{" "}
-                                <b>How celebrity cruises</b>
-                                aren&apos;t as bad as you think. How cultural
-                                solutions can help you predict the future. How
-                                to cheat at dog friendly hotels and get away
-                                with it. 17 problems with summer activities. How
-                                to cheat at travel agents and get away with it.
-                                How not knowing family trip ideas makes you a
-                                rookie. What everyone is saying about daily
-                                deals. How twitter can teach you about carnival
-                                cruises. How to start using cultural solutions.
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    )}
+                   <PracticeHeader showMegaMenu={showMegaMenu} />                                        
                   </li>
                   <li className="nav-item">
                     <span className="nav-link">Community</span>

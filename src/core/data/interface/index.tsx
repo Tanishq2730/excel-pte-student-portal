@@ -334,3 +334,21 @@ export interface DeleteRequestInterface {
 export interface AppState {
   mouseOverSidebar: string;
 }
+
+export interface Subtype {
+  preparation_time: string;
+}
+
+export interface QuestionData {
+  id:number;
+  difficulties: string;
+  new_question: boolean;
+  weekly: boolean;
+  attemptedCount: number;
+  bookmarked: boolean;
+  question: string;
+  nextQuestionId: number;
+  previousQuestionId: number;
+  question_name:string;
+  Subtype: Subtype; // Add the Subtype field here
+}
