@@ -13,3 +13,7 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
   export const fetchPracticeLogs = async (question_id: number) => {
     return await apiHandler(`${api_url}v1/practice/logs/${question_id}`, "GET");
   };
+
+  export const savePractice = async (type:any,formData: any) => {
+      return await apiHandler(`${api_url}v1/savePractice`, "POST",formData,type && true);
+  };

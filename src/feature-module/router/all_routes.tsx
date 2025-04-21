@@ -125,6 +125,7 @@ export const all_routes = {
   answerShortQuestion:"/answer-short-question/:subtype_id/:question_id?",
   summarizeWritinText:"/summarize-written-text/:subtype_id/:question_id?",
   writeEssay:"/write-essay/:subtype_id/:question_id?",
+  writeEmail:"/write-email/:subtype_id/:question_id?",
   readingWritngFillBlank:"/reading-&-writng-fb/:subtype_id/:question_id?",
   multipleChooseAnswer:"/multiple-choose-answer/:subtype_id/:question_id?",
   multipleChooseSingleAnswer:"/multiple-choose-Single-answer/:subtype_id/:question_id?",

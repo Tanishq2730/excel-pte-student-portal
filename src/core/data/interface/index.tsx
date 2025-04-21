@@ -353,5 +353,7 @@ export interface QuestionData {
   nextQuestionId: number;
   previousQuestionId: number;
   question_name:string;
+  answer_american:string;
+  answer_british:string;
   Subtype: Subtype; // Add the Subtype field here
 }

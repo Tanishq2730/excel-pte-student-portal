@@ -14,6 +14,7 @@ interface QuestionNavigationProps {
   onRestart: () => void;
   onNext: () => void;
   onPrevious: () => void;
+  onSubmit?: () => void; // Optional
 }
 
 const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
@@ -22,12 +23,17 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
   onRestart,
   onNext,
   onPrevious,
+  onSubmit,
 }) => {
   return (
     <div className="row">
       <div className="col-md-6">
         <div className="btnBottom">
-          <button className="btn btn-outline-secondary">Submit</button>
+          {onSubmit && (
+            <button className="btn btn-outline-secondary" onClick={onSubmit}>
+              Submit
+            </button>
+          )}
           <button className="btn btn-outline-secondary mx-3" onClick={onAnswerClick}>
             Answer
           </button>

@@ -33,6 +33,7 @@ import DescribeImage from "../practice/speaking/describeImage";
 import ReTellLecture from "../practice/speaking/reTellLecture";
 import AnswerShortQuestion from "../practice/speaking/answerShortQuestipn";
 import WriteEssay from "../practice/writing/writeEssay";
+import WriteEmail from "../practice/writing/writeEmail";
 import ReadingWritngFillBlank from "../practice/reading/readingWritingFillBlank";
 import MultipleChooseAnswer from "../practice/reading/multipleChooseAnswer";
 import MultipleChooseSingleAnswer from "../practice/reading/multipleChooseSingleAnswer";
@@ -69,6 +70,7 @@ export const myPracticeRoutes = [
   { path: routes.answerShortQuestion, element: <AnswerShortQuestion />, route: Route },
   { path: routes.summarizeWritinText, element: <SummarizeWritinText />, route: Route },
   { path: routes.writeEssay, element: <WriteEssay />, route: Route },
+  { path: routes.writeEmail, element: <WriteEmail />, route: Route },  
   { path: routes.readingWritngFillBlank, element: <ReadingWritngFillBlank />, route: Route },
   { path: routes.multipleChooseAnswer, element: <MultipleChooseAnswer />, route: Route },
   { path: routes.multipleChooseSingleAnswer, element: <MultipleChooseSingleAnswer />, route: Route },

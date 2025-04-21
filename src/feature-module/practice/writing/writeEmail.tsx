@@ -10,7 +10,7 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 
-const SummarizeWritinText = () => {
+const WriteEmail = () => {
   const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
   const navigate = useNavigate();
 
@@ -99,17 +99,13 @@ const SummarizeWritinText = () => {
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/summarize-written-text/${subtype_id}/${questionData?.nextQuestionId}`);
-      setTimeSpent(0);
-      setSummaryText("");
+      navigate(`/write-email/${subtype_id}/${questionData?.nextQuestionId}`);
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/summarize-written-text/${subtype_id}/${questionData?.previousQuestionId}`);
-      setTimeSpent(0);
-      setSummaryText("");
+      navigate(`/write-email/${subtype_id}/${questionData?.previousQuestionId}`);
     }
   };
 
@@ -118,16 +114,14 @@ const SummarizeWritinText = () => {
     const preparationTimeInSeconds = parseInt(questionData?.Subtype.remaining_time || "0", 10);
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
-    setTimeSpent(0);
+
     setShowAnswer(false); // Optionally reset the answer view
-    setSummaryText("");
 
   };
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
   };
-
 
   const handleSubmitPractice = async () => {
     if (!questionData?.id || !subtype_id) return;
@@ -162,6 +156,7 @@ const SummarizeWritinText = () => {
       setAlert({ type: "danger", message: "Something went wrong." });
     }
   };
+
   return (
     <div className="page-wrappers">
       {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
@@ -182,7 +177,11 @@ const SummarizeWritinText = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                    <span className="text-danger">
+                      Submit your response before time finishes! Otherwise your
+                      response won`t be saved and scored.
+                    </span>
+                    <span className="text-danger">Time: {formatTime(countdown)}</span>
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
@@ -190,7 +189,9 @@ const SummarizeWritinText = () => {
                   </div>
                   <div className="card">
                     <div className="card-header bg-white">
-                      <div className="card-title"><h5>Total Word Count: {wordCount}</h5></div>
+                      <div className="card-title">
+                        <h5>Total Word Count: {wordCount}</h5>
+                      </div>
                     </div>
                     <div className="card-body">
                       <textarea
@@ -211,10 +212,6 @@ const SummarizeWritinText = () => {
                         className="audio-inner p-4 rounded-3"
                         style={{ background: "#ffe4e4" }}
                       >
-                        <h3 className="fw-semibold mb-2">Answer:</h3>
-                        <hr />
-                        <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
-                        <hr />
                         <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                         <hr />
                         <div className="rounded-pill">
@@ -252,4 +249,4 @@ const SummarizeWritinText = () => {
   );
 };
 
-export default SummarizeWritinText;
+export default WriteEmail;

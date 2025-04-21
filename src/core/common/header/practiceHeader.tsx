@@ -31,6 +31,7 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
     "Answer Short Question": "answerShortQuestion",
     "Summarize Written Text": "summarizeWritinText",
     "Write Essay": "writeEssay",
+    "Write Email": "writeEmail",
     "Reading and Writing Fill in the Blanks": "readingWritngFillBlank",
     "MC, Choose Multiple Answer": "multipleChooseAnswer",
     "MC, Choose Single Answer": "multipleChooseSingleAnswer",
