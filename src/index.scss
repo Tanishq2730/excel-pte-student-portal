@@ -1770,6 +1770,7 @@ body.app-chat {
   text-align: center;
   font-family: sans-serif;
   box-shadow: 0 0 0 1px #d0f0f0;
+  border: 1px solid #d0f0f0;
 }
 
 .mock-test-card h2 {
@@ -2063,4 +2064,13 @@ body.app-chat {
   .card:hover{
     border: 1px solid #33b9c7;
   }
+}
+
+.mock-test-card:hover{
+  border: 1px solid #33b9c7;
+  transition: 0.4s ease-in-out;
+}
+
+.mock-test-card{
+  transition: 0.4s ease-in-out;
 }
