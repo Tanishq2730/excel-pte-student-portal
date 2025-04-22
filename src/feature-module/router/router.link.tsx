@@ -55,6 +55,13 @@ import MockTestResult from "../mockTest/pages/mockTestResult";
 import Result from "../mockTest/pages/result";
 import PendingMocktest from "../mockTest/pages/pendingMocktest";
 import StudyTool from "../studyTool/StudyTool";
+import ClassRecording from "../classRecording/ClassRecording";
+import PredictionFile from "../predictionFile/predictionFile";
+import TimeTable from "../timeTable/timeTable";
+import ClassLink from "../classLink/ClassLink";
+import Template from "../template/template";
+import TemplateDetail from "../template/templateDetail";
+import SubscriptionPlan from "../subscription/subscriptionPlan";
 
 
 const routes = all_routes;
@@ -89,7 +96,7 @@ export const myPracticeRoutes = [
   { path: routes.sectionalMocktest, element: <SectionalMocktest />, route: Route },
   { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
   { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
-  {path: routes.studyTool, element: <StudyTool />, route: Route },
+  
 ]
 
 export const publicRoutes = [
@@ -127,4 +134,14 @@ export const mockRoutes = [
   {path: routes.mockTest,element: <MockTest />,route: Route,},
   {path: routes.result, element: <Result />, route: Route },
   
+];
+export const commonRoutes = [
+  {path: routes.studyTool, element: <StudyTool />, route: Route },
+  {path: routes.classRecording, element: <ClassRecording />, route: Route },
+  {path: routes.predictionFile, element: <PredictionFile />, route: Route },
+  {path: routes.timeTable, element: <TimeTable />, route: Route },
+  {path: routes.classLink, element: <ClassLink />, route: Route },
+  {path: routes.template, element: <Template />, route: Route },
+  {path: routes.templateDetail, element: <TemplateDetail />, route: Route },
+  {path: routes.subscriptionPlan, element: <SubscriptionPlan />, route: Route },
 ];

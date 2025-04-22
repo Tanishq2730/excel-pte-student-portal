@@ -146,6 +146,13 @@ export const all_routes = {
   result:"/result",
   pendingMocktest:"/pending-mocktest",
   studyTool:"/study-tool",
+  classRecording:"/class-recording",
+  predictionFile:"/prediction-file",
+  timeTable:"/time-table",
+  classLink:"/class-link",
+  template:"/template",
+  templateDetail:"/template-detail",
+  subscriptionPlan:"/subscription-plan",
 
   // pages routes
   error404: "/error-404",

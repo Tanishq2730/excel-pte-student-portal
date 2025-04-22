@@ -1,6 +1,6 @@
 import React from "react";
 import {  Route, Routes,Navigate } from "react-router";
-import { authRoutes, publicRoutes,myPracticeRoutes,mockRoutes } from "./router.link";
+import { authRoutes, publicRoutes,myPracticeRoutes,mockRoutes,commonRoutes } from "./router.link";
 import Feature from "../feature";
 import AuthFeature from "../authFeature";
 import Login from "../auth/login/login";
@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { RootState } from "../../core/data/redux/store";
 import MockFeature from "../mockFeature";
+import Common from "../common";
 
 const ALLRoutes: React.FC = () => {
   const token = useSelector((state: RootState) => state.auth.token);
@@ -42,6 +43,11 @@ const ALLRoutes: React.FC = () => {
         </Route>
         <Route element={<MockFeature />}>
           {mockRoutes.map((route, idx) => (
+            <Route path={route.path} element={route.element} key={idx} />
+          ))}
+        </Route>
+        <Route element={<Common />}>
+          {commonRoutes.map((route, idx) => (
             <Route path={route.path} element={route.element} key={idx} />
           ))}
         </Route>

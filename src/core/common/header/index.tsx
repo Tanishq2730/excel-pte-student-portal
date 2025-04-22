@@ -164,7 +164,9 @@ const Header = () => {
                     </Link>
                   </li>
                   <li className="nav-item">
-                    <span className="nav-link">Subscription</span>
+                    <Link to={routes.subscriptionPlan}>
+                      <span className="nav-link">Subscription</span>
+                    </Link>
                   </li>
                 </ul>
               </nav>
