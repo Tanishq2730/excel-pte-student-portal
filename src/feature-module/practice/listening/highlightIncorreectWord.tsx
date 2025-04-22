@@ -10,15 +10,6 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AudioPlayer from "../component/audioPlayer";
 
-const options = [
-  { id: "A", text: "they began using a material that much stronger" },
-  { id: "B", text: "they found a way to strengthen the statues internally" },
-  {
-    id: "C",
-    text: "the aesthetic tastes of the public had changed over time",
-  },
-  { id: "D", text: "the cannonballs added too much weight to the statues" },
-];
 const HighlightIncorrectWord = () => {
   const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
     const navigate = useNavigate();
@@ -56,15 +47,15 @@ const HighlightIncorrectWord = () => {
       }, [subtype_id, question_id, navigate]);
   
     useEffect(() => {
-      if (questionData?.Subtype?.preparation_time) {
-        const preparationTimeInSeconds = parseInt(questionData.Subtype.preparation_time, 10); 
+      if (questionData?.Subtype?.beginning_in) {
+        const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10); 
         setCountdown(preparationTimeInSeconds);
         setTimerActive(true);
       }
     }, [questionData]);
   
     const startRecordingCallback = useCallback(() => {
-      if (questionData && questionData.Subtype.preparation_time === "0") {
+      if (questionData && questionData.Subtype.beginning_in === "0") {
         document.getElementById("startRecordingButton")?.click();
       }
     }, [questionData]);
@@ -96,7 +87,7 @@ const HighlightIncorrectWord = () => {
   
     const handleRestart = () => {
       // Reset countdown to the initial preparation time
-      const preparationTimeInSeconds = parseInt(questionData?.Subtype.preparation_time || "0", 10);
+      const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true); // Restart the countdown
   
@@ -141,7 +132,7 @@ const HighlightIncorrectWord = () => {
                   <CardButton questionData={questionData} />
                   </div>
                   <div className="mb-3">
-                    <AudioPlayer />
+                  <AudioPlayer questionData={questionData} />
                   </div>
                   <div className="innercontent">
                   <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />

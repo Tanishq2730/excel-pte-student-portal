@@ -13,6 +13,7 @@ interface PracticeLog {
   score: number;
   createdAt: string;
   late_speak: boolean;
+  total_score:number;
   user: {
     name: string;
     profile_image: string | null;
@@ -89,7 +90,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                   fontSize: "0.9rem",
                 }}
               >
-                My Score <strong>{log.score.toFixed(2)} / 100</strong>
+                My Score <strong>{log.score} / {log.total_score}</strong>
               </button>
               <div className="text-danger" style={{ fontSize: "0.9rem" }}>
                 {log.late_speak

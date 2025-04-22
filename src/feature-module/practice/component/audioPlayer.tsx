@@ -1,6 +1,14 @@
 import React, { useState, useRef, useEffect } from "react";
+import { image_url } from "../../../environment";
 
-const AudioPlayer: React.FC = () => {
+interface QuestionData {
+  speak_audio_file: string;
+}
+interface AudioPlayerProps {
+  questionData?:  QuestionData | null;
+}
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
+  const url = `${image_url}${questionData?.speak_audio_file}`;
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
   const [currentTime, setCurrentTime] = useState(0);
@@ -108,7 +116,7 @@ const AudioPlayer: React.FC = () => {
           <option value={2}>2x</option>
         </select>
 
-        <audio ref={audioRef} src="/your-audio.mp3" preload="metadata" />
+        <audio ref={audioRef} src={url} preload="metadata" />
       </div>
     </div>
   );

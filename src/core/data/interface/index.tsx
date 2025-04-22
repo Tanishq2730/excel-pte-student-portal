@@ -355,5 +355,11 @@ export interface QuestionData {
   question_name:string;
   answer_american:string;
   answer_british:string;
+  option_one:string;
+  option_two:string;
+  option_three:string;
+  option_four:string;
+  option_five:string;
+  speak_audio_file:string;
   Subtype: Subtype; // Add the Subtype field here
 }

@@ -38,10 +38,10 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
     "Reading Fill in the Blanks":"fillInTheBlanksRead",
     "Re-order Paragraphs":"reorderParagraph",
     "Summarize Spoken Text": "summarizeSpokenText",
-    "MC, Choose Multiple Answer listen": "multipleChooseAnswerListen",
+    "MC, Select Multiple Answer": "multipleChooseAnswerListen",
     "Fill in the Blanks": "fillInTheBlanks",
     "Highlight Correct Summary": "highlightCorrectSummary",
-    "MC, Choose Single Answer listen": "multipleChooseSingleAnswerListen",
+    "MC, Select Single Answer": "multipleChooseSingleAnswerListen",
     "Select Missing Word": "selectMissingWord",
     "Highlight Incorrect Words": "highlightIncorrectWord",
     "Write from Dictation": "writeFromDictation",
@@ -65,6 +65,10 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
     const getRoutePath = (name: string): string => {
         const routeKey = routeNameMap[name];
         if (!routeKey) console.warn(`No route matched for: ${name}`);
+
+        console.log(name,"name");
+        console.log(routeKey,"key");
+        
         return routeKey ? all_routes[routeKey] : "#";
     };
 
