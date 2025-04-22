@@ -737,7 +737,7 @@ const AdminDashboard = () => {
                         <div className="bg-light-400 rounded p-2">
                           <img
                             className="classImg"
-                            src="/assets/img/media/slider1.png"
+                            src="assets/img/slider1.png"
                           />
                           <p className="text-dark mt-1">Speaking</p>
                         </div>
@@ -746,7 +746,7 @@ const AdminDashboard = () => {
                         <div className="bg-light-400 rounded p-2">
                           <img
                             className="classImg"
-                            src="/assets/img/media/slider2.png"
+                            src="assets/img/slider2.png"
                           />
                           <p className="text-dark mt-1">Writing</p>
                         </div>
@@ -755,7 +755,7 @@ const AdminDashboard = () => {
                         <div className="bg-light-400 rounded p-2">
                           <img
                             className="classImg"
-                            src="/assets/img/media/slider1.png"
+                            src="assets/img/slider1.png"
                           />
                           <p className="text-dark mt-1">Reading</p>
                         </div>
@@ -764,7 +764,7 @@ const AdminDashboard = () => {
                         <div className="bg-light-400 rounded p-2">
                           <img
                             className="classImg"
-                            src="/assets/img/media/slider2.png"
+                            src="assets/img/slider1.png"
                           />
                           <p className="text-dark mt-1">Listening</p>
                         </div>
