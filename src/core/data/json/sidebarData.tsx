@@ -18,14 +18,14 @@ export const SidebarData = [
       },
       {
         label: "Grammar Practice",
-        link: routes.events,
+        link: routes.grammerPractice,
         icon: "ion-clipboard",
         showSubRoute: false,
         submenu: false,
       },
       {
         label: "Study Plan",
-        link: routes.events,
+        link: routes.studyPlan,
         icon: "ion-calendar",
         showSubRoute: false,
         submenu: false,

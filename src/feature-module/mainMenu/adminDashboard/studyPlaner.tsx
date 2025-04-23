@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 
-const StudyPlan: React.FC = () => {
+const StudyPlaner: React.FC = () => {
   return (
     <div className="studyplantab">
       <div className="card-body p-0">
@@ -171,4 +171,4 @@ const StudyPlan: React.FC = () => {
   );
 };
 
-export default StudyPlan;
+export default StudyPlaner;

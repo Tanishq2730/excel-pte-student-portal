@@ -10,7 +10,7 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AdminDashboardModal from "./adminDashboardModal";
-import StudyPlan from "./studyPlan";
+import StudyPlaner from "./studyPlaner";
 
 const AdminDashboard = () => {
   const routes = all_routes;
@@ -497,7 +497,7 @@ const AdminDashboard = () => {
                           inline
                           style={{ width: "100% !important" }}
                         />
-                        <StudyPlan />
+                        <StudyPlaner />
                       </div>
                     </div>
                   </div>

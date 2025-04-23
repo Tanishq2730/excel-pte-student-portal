@@ -2164,3 +2164,108 @@ body.app-chat {
     border: 1px solid #0d95ad;
   }
 }
+
+.communitycard{
+  background-color: rgb(232, 247, 255);
+}
+
+.bottomfooter{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.personicon{
+  width: 3em;
+  height: 3em;
+  border-radius: 100px;
+  box-shadow: 0px 0px 22px -3px #ccc;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-right: 1em;
+}
+
+.innercomment{
+  border: 1px solid #0af;
+  border-radius: 10px;
+  padding: 1em;
+}
+
+.marquee-container {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+  direction: rtl; /* Right-to-left direction */
+  background: #ffffff;
+  padding: 15px 0 0;
+  position: relative;
+}
+
+.marquee-content {
+  display: inline-block;
+  animation: marqueeRTL 10s linear infinite;
+}
+
+@keyframes marqueeRTL {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+
+.innerattempt{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0px 10px;
+}
+
+.attemptedicon{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.practiceCard{
+  background-color: #ffc1c1;
+  border-radius: 5px;
+  padding: 5px 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 5px 0;
+  p{
+    color: #292929;
+  }
+  .count{
+    background-color: #fff;
+    width: 3em;
+    height: 3em;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
+.acBtn{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  .count{
+    background-color: #fff;
+    width: 3em;
+    height: 3em;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #696969;
+    border: 1px solid #696969;
+  }
+}

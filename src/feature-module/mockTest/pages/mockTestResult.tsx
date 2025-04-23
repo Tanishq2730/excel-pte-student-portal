@@ -9,7 +9,7 @@ const MockTestResult: React.FC = () => {
     { testNumber: 43, time: "1 hour", attempted: 90 },
   ];
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
           <div className="row">

@@ -153,6 +153,9 @@ export const all_routes = {
   template:"/template",
   templateDetail:"/template-detail",
   subscriptionPlan:"/subscription-plan",
+  community:"/community",
+  studyPlan:"/study-plan",
+  grammerPractice:"/grammer-practice",
 
   // pages routes
   error404: "/error-404",

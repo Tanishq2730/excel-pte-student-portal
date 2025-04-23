@@ -156,7 +156,9 @@ const Header = () => {
                     <PracticeHeader showMegaMenu={showMegaMenu} />
                   </li>
                   <li className="nav-item">
-                    <span className="nav-link">Community</span>
+                    <Link to={routes.community}>
+                      <span className="nav-link">Community</span>
+                    </Link>
                   </li>
                   <li className="nav-item">
                     <Link to={routes.studyTool}>

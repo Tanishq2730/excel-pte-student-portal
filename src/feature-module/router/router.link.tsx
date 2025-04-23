@@ -1,4 +1,4 @@
-import {  Route } from "react-router";
+import { Route } from "react-router";
 import { all_routes } from "./all_routes";
 import ComingSoon from "../pages/comingSoon";
 import Login from "../auth/login/login";
@@ -62,42 +62,104 @@ import ClassLink from "../classLink/ClassLink";
 import Template from "../template/template";
 import TemplateDetail from "../template/templateDetail";
 import SubscriptionPlan from "../subscription/subscriptionPlan";
-
+import Community from "../community/community";
+import StudyPlan from "../studyPlan/studyPlan";
+import GrammerPractice from "../grammerPractice/grammerPractice";
 
 const routes = all_routes;
 
 export const authRoutes = [
-  { path: routes.adminDashboard, element: <AdminDashboard />, route: Route},  
+  { path: routes.adminDashboard, element: <AdminDashboard />, route: Route },
+  { path: routes.fullMocktest, element: <FullMocktest />, route: Route },
+  {
+    path: routes.sectionalMocktest,
+    element: <SectionalMocktest />,
+    route: Route,
+  },
+  { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
+  { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
+  { path: routes.studyPlan, element: <StudyPlan />, route: Route },
   
 ];
 export const myPracticeRoutes = [
-  { path: routes.readAloud, element: <ReadAloud />, route: Route},
+  { path: routes.readAloud, element: <ReadAloud />, route: Route },
   { path: routes.repeatSentence, element: <RepeatSentence />, route: Route },
   { path: routes.describeImage, element: <DescribeImage />, route: Route },
   { path: routes.reTellLecture, element: <ReTellLecture />, route: Route },
-  { path: routes.answerShortQuestion, element: <AnswerShortQuestion />, route: Route },
-  { path: routes.summarizeWritinText, element: <SummarizeWritinText />, route: Route },
+  {
+    path: routes.answerShortQuestion,
+    element: <AnswerShortQuestion />,
+    route: Route,
+  },
+  {
+    path: routes.summarizeWritinText,
+    element: <SummarizeWritinText />,
+    route: Route,
+  },
   { path: routes.writeEssay, element: <WriteEssay />, route: Route },
-  { path: routes.writeEmail, element: <WriteEmail />, route: Route },  
-  { path: routes.readingWritngFillBlank, element: <ReadingWritngFillBlank />, route: Route },
-  { path: routes.multipleChooseAnswer, element: <MultipleChooseAnswer />, route: Route },
-  { path: routes.multipleChooseSingleAnswer, element: <MultipleChooseSingleAnswer />, route: Route },
-  { path: routes.summarizeSpokenText, element: <SummarizeSpokenText />, route: Route },
-  { path: routes.multipleChooseAnswerListen, element: <MultipleChooseAnswerListen />, route: Route },
+  { path: routes.writeEmail, element: <WriteEmail />, route: Route },
+  {
+    path: routes.readingWritngFillBlank,
+    element: <ReadingWritngFillBlank />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseAnswer,
+    element: <MultipleChooseAnswer />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseSingleAnswer,
+    element: <MultipleChooseSingleAnswer />,
+    route: Route,
+  },
+  {
+    path: routes.summarizeSpokenText,
+    element: <SummarizeSpokenText />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseAnswerListen,
+    element: <MultipleChooseAnswerListen />,
+    route: Route,
+  },
   { path: routes.fillInTheBlanks, element: <FillInTheBlanks />, route: Route },
-  { path: routes.fillInTheBlanksRead, element: <FillInTheBlanksRead />, route: Route },
-  { path: routes.reorderParagraph, element: <ReorderParagraph />, route: Route },
-  { path: routes.highlightCorrectSummary, element: <HighlightCorrectSummary />, route: Route },
-  { path: routes.multipleChooseSingleAnswerListen, element: <MultipleChooseSingleAnswerListen />, route: Route },
-  { path: routes.selectMissingWord, element: <SelectMissingWord />, route: Route },
-  { path: routes.highlightIncorrectWord, element: <HighlightIncorrectWord />, route: Route },
-  { path: routes.writeFromDictation, element: <WriteFromDictation />, route: Route },
-  { path: routes.fullMocktest, element: <FullMocktest />, route: Route },
-  { path: routes.sectionalMocktest, element: <SectionalMocktest />, route: Route },
-  { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
-  { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
-  
-]
+  {
+    path: routes.fillInTheBlanksRead,
+    element: <FillInTheBlanksRead />,
+    route: Route,
+  },
+  {
+    path: routes.reorderParagraph,
+    element: <ReorderParagraph />,
+    route: Route,
+  },
+  {
+    path: routes.highlightCorrectSummary,
+    element: <HighlightCorrectSummary />,
+    route: Route,
+  },
+  {
+    path: routes.multipleChooseSingleAnswerListen,
+    element: <MultipleChooseSingleAnswerListen />,
+    route: Route,
+  },
+  {
+    path: routes.selectMissingWord,
+    element: <SelectMissingWord />,
+    route: Route,
+  },
+  {
+    path: routes.highlightIncorrectWord,
+    element: <HighlightIncorrectWord />,
+    route: Route,
+  },
+  {
+    path: routes.writeFromDictation,
+    element: <WriteFromDictation />,
+    route: Route,
+  },
+];
 
 export const publicRoutes = [
   { path: routes.comingSoon, element: <ComingSoon />, route: Route },
@@ -105,12 +167,36 @@ export const publicRoutes = [
   { path: routes.login2, element: <Login2 />, route: Route },
   { path: routes.login3, element: <Login3 />, route: Route },
   { path: routes.register, element: <Register />, route: Route },
-  { path: routes.twoStepVerification, element: <TwoStepVerification />, route: Route },
-  { path: routes.twoStepVerification2, element: <TwoStepVerification2 />, route: Route },
-  { path: routes.twoStepVerification3, element: <TwoStepVerification3 />, route: Route },
-  { path: routes.emailVerification, element: <EmailVerification />, route: Route },
-  { path: routes.emailVerification2, element: <EmailVerification2 />, route: Route },
-  { path: routes.emailVerification3, element: <EmailVerification3 />, route: Route },
+  {
+    path: routes.twoStepVerification,
+    element: <TwoStepVerification />,
+    route: Route,
+  },
+  {
+    path: routes.twoStepVerification2,
+    element: <TwoStepVerification2 />,
+    route: Route,
+  },
+  {
+    path: routes.twoStepVerification3,
+    element: <TwoStepVerification3 />,
+    route: Route,
+  },
+  {
+    path: routes.emailVerification,
+    element: <EmailVerification />,
+    route: Route,
+  },
+  {
+    path: routes.emailVerification2,
+    element: <EmailVerification2 />,
+    route: Route,
+  },
+  {
+    path: routes.emailVerification3,
+    element: <EmailVerification3 />,
+    route: Route,
+  },
   { path: routes.register2, element: <Register2 />, route: Route },
   { path: routes.register3, element: <Register3 />, route: Route },
   { path: routes.resetPassword, element: <ResetPassword />, route: Route },
@@ -121,27 +207,34 @@ export const publicRoutes = [
   { path: routes.forgotPassword3, element: <ForgotPassword3 />, route: Route },
   { path: routes.error404, element: <Error404 />, route: Route },
   { path: routes.error500, element: <Error500 />, route: Route },
-  { path: routes.underMaintenance, element: <UnderMaintenance />, route: Route },
+  {
+    path: routes.underMaintenance,
+    element: <UnderMaintenance />,
+    route: Route,
+  },
   { path: routes.lockScreen, element: <LockScreen /> },
   { path: routes.resetPasswordSuccess, element: <ResetPasswordSuccess /> },
   { path: routes.resetPasswordSuccess2, element: <ResetPasswordSuccess2 /> },
   { path: routes.resetPasswordSuccess3, element: <ResetPasswordSuccess3 /> },
-  
-  
 ];
 
 export const mockRoutes = [
-  {path: routes.mockTest,element: <MockTest />,route: Route,},
-  {path: routes.result, element: <Result />, route: Route },
-  
+  { path: routes.mockTest, element: <MockTest />, route: Route },
+  { path: routes.result, element: <Result />, route: Route },
 ];
 export const commonRoutes = [
-  {path: routes.studyTool, element: <StudyTool />, route: Route },
-  {path: routes.classRecording, element: <ClassRecording />, route: Route },
-  {path: routes.predictionFile, element: <PredictionFile />, route: Route },
-  {path: routes.timeTable, element: <TimeTable />, route: Route },
-  {path: routes.classLink, element: <ClassLink />, route: Route },
-  {path: routes.template, element: <Template />, route: Route },
-  {path: routes.templateDetail, element: <TemplateDetail />, route: Route },
-  {path: routes.subscriptionPlan, element: <SubscriptionPlan />, route: Route },
+  { path: routes.studyTool, element: <StudyTool />, route: Route },
+  { path: routes.classRecording, element: <ClassRecording />, route: Route },
+  { path: routes.predictionFile, element: <PredictionFile />, route: Route },
+  { path: routes.timeTable, element: <TimeTable />, route: Route },
+  { path: routes.classLink, element: <ClassLink />, route: Route },
+  { path: routes.template, element: <Template />, route: Route },
+  { path: routes.templateDetail, element: <TemplateDetail />, route: Route },
+  {
+    path: routes.subscriptionPlan,
+    element: <SubscriptionPlan />,
+    route: Route,
+  },
+  { path: routes.community, element: <Community />, route: Route },
+  { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
 ];
