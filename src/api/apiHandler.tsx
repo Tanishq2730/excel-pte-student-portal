@@ -1,4 +1,3 @@
-// src/utils/api.ts
 
 export interface ApiResponse<T = any> {
     success: boolean;
@@ -13,12 +12,15 @@ export interface ApiResponse<T = any> {
     return localStorage.getItem('token'); // Adjust key if needed
   };
   
+ 
   export const apiHandler = async <T = any>(
     endpoint: string,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE',
     body?: any,
     isMultipart: boolean = false
   ): Promise<ApiResponse<T>> => {
+
+    
     try {
       const token = getAuthToken();
   
@@ -34,6 +36,13 @@ export interface ApiResponse<T = any> {
       });
   
       const result = await response.json();
+
+      if (result.message === 'Session expired. Please log in again.') {
+        localStorage.removeItem('token'); // optional: clear token
+        return { success: false, error: result.message };
+      }
+
+
       if (result.status === false) {
         if (result.errors || Array.isArray(result.errors)) {
           // ✅ Format validation errors into a single string

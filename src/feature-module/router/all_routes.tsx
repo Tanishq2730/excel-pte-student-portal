@@ -118,6 +118,7 @@ export const all_routes = {
   uiCarousel: "/ui-carousel",
   uiColor: "/ui-color",
   uiDropdowns: "ui-dropdowns",
+  drag_drop: "drag-drop",
   readAloud:"/read-aloud/:subtype_id/:question_id?",
   repeatSentence:"/repeat-sentence/:subtype_id/:question_id?",
   describeImage:"/describe-image/:subtype_id/:question_id?",

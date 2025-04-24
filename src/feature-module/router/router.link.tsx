@@ -66,6 +66,7 @@ import Community from "../community/community";
 import StudyPlan from "../studyPlan/studyPlan";
 import GrammerPractice from "../grammerPractice/grammerPractice";
 import Performance from "../myPerformance/performance";
+import TestDnd from "../practice/reading/testDND";
 
 const routes = all_routes;
 
@@ -83,7 +84,8 @@ export const authRoutes = [
   
 ];
 export const myPracticeRoutes = [
-  { path: routes.readAloud, element: <ReadAloud />, route: Route },
+  { path: routes.drag_drop, element: <TestDnd />, route: Route},
+  { path: routes.readAloud, element: <ReadAloud />, route: Route},
   { path: routes.repeatSentence, element: <RepeatSentence />, route: Route },
   { path: routes.describeImage, element: <DescribeImage />, route: Route },
   { path: routes.reTellLecture, element: <ReTellLecture />, route: Route },

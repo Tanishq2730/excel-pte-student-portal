@@ -361,5 +361,6 @@ export interface QuestionData {
   option_four:string;
   option_five:string;
   speak_audio_file:string;
+  drag_drop:string;
   Subtype: Subtype; // Add the Subtype field here
 }

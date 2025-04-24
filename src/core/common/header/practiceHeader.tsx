@@ -65,9 +65,6 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
     const getRoutePath = (name: string): string => {
         const routeKey = routeNameMap[name];
         if (!routeKey) console.warn(`No route matched for: ${name}`);
-
-        console.log(name,"name");
-        console.log(routeKey,"key");
         
         return routeKey ? all_routes[routeKey] : "#";
     };
