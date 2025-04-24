@@ -2142,11 +2142,11 @@ body.app-chat {
   }
 }
 
-.speaking-card{
-  .card{
+.speaking-card {
+  .card {
     padding: 1.5em;
     text-align: center;
-    .cardIcon{
+    .cardIcon {
       margin: auto;
       border: 1px solid #0d95ad;
       width: 6em;
@@ -2154,28 +2154,28 @@ body.app-chat {
       border-radius: 100px;
       padding: 10px;
       margin-bottom: 1em;
-      img{
+      img {
         width: 100%;
         padding: 10px;
       }
     }
   }
-  .card:hover{
+  .card:hover {
     border: 1px solid #0d95ad;
   }
 }
 
-.communitycard{
+.communitycard {
   background-color: rgb(232, 247, 255);
 }
 
-.bottomfooter{
+.bottomfooter {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
-.personicon{
+.personicon {
   width: 3em;
   height: 3em;
   border-radius: 100px;
@@ -2186,7 +2186,7 @@ body.app-chat {
   margin-right: 1em;
 }
 
-.innercomment{
+.innercomment {
   border: 1px solid #0af;
   border-radius: 10px;
   padding: 1em;
@@ -2216,21 +2216,20 @@ body.app-chat {
   }
 }
 
-
-.innerattempt{
+.innerattempt {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0px 10px;
 }
 
-.attemptedicon{
+.attemptedicon {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.practiceCard{
+.practiceCard {
   background-color: #ffc1c1;
   border-radius: 5px;
   padding: 5px 10px;
@@ -2238,10 +2237,10 @@ body.app-chat {
   justify-content: space-between;
   align-items: center;
   margin: 5px 0;
-  p{
+  p {
     color: #292929;
   }
-  .count{
+  .count {
     background-color: #fff;
     width: 3em;
     height: 3em;
@@ -2252,12 +2251,12 @@ body.app-chat {
   }
 }
 
-.acBtn{
+.acBtn {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 90%;
-  .count{
+  .count {
     background-color: #fff;
     width: 3em;
     height: 3em;
@@ -2268,19 +2267,6 @@ body.app-chat {
     color: #696969;
     border: 1px solid #696969;
   }
-.droppable {
-  min-width: 80px;
-  display: inline-block;
-  text-align: center;
-}
-
-.draggable {
-  margin: 10px;
-  padding: 8px;
-  background: #f0f0f0;
-  border-radius: 4px;
-  cursor: grab;
-}
 }
 
 .timeicon{
@@ -2293,5 +2279,36 @@ body.app-chat {
   align-items: center;
   i{
     font-size: 25px !important;
+  }
+}
+
+.acBtn {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 90%;
+  .count {
+    background-color: #fff;
+    width: 3em;
+    height: 3em;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #696969;
+    border: 1px solid #696969;
+  }
+  .droppable {
+    min-width: 80px;
+    display: inline-block;
+    text-align: center;
+  }
+
+  .draggable {
+    margin: 10px;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    cursor: grab;
   }
 }
