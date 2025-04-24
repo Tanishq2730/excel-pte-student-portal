@@ -57,7 +57,7 @@ const StudyPlaner: React.FC = () => {
             <div className="card-body bg-gray rounded-3">
               <div className="studycontent">
                 <div className="head">
-                  <div className="icon">
+                  <div className="icon bg-danger-transparent">
                     <i className="ion-mic-c one"></i>
                   </div>
                   <h3>Speaking</h3>
@@ -85,8 +85,8 @@ const StudyPlaner: React.FC = () => {
             <div className="card-body bg-gray rounded-3">
               <div className="studycontent">
                 <div className="head">
-                  <div className="icon">
-                    <i className="ion-mic-c two"></i>
+                  <div className="icon bg-secondary-transparent">
+                  <i className="ion-ios7-bookmarks"></i>
                   </div>
                   <h3>Reading</h3>
                 </div>
@@ -113,8 +113,8 @@ const StudyPlaner: React.FC = () => {
             <div className="card-body bg-gray rounded-3">
               <div className="studycontent">
                 <div className="head">
-                  <div className="icon">
-                    <i className="ion-mic-c three"></i>
+                  <div className="icon bg-warning-transparent">
+                  <i className="ion-edit"></i>
                   </div>
                   <h3>Writing</h3>
                 </div>
@@ -141,8 +141,8 @@ const StudyPlaner: React.FC = () => {
           <div className="card-body bg-gray rounded-3">
               <div className="studycontent">
                 <div className="head">
-                  <div className="icon">
-                    <i className="ion-mic-c four"></i>
+                  <div className="icon bg-success-transparent">
+                  <i className="ion-headphone"></i>
                   </div>
                   <h3>Listening</h3>
                 </div>

@@ -2282,3 +2282,16 @@ body.app-chat {
   cursor: grab;
 }
 }
+
+.timeicon{
+  width: 4em;
+  height: 4em;
+  margin: auto;
+  border-radius: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  i{
+    font-size: 25px !important;
+  }
+}
