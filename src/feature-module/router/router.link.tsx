@@ -65,6 +65,7 @@ import SubscriptionPlan from "../subscription/subscriptionPlan";
 import Community from "../community/community";
 import StudyPlan from "../studyPlan/studyPlan";
 import GrammerPractice from "../grammerPractice/grammerPractice";
+import Performance from "../myPerformance/performance";
 
 const routes = all_routes;
 
@@ -237,4 +238,5 @@ export const commonRoutes = [
   },
   { path: routes.community, element: <Community />, route: Route },
   { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
+  { path: routes.performance, element: <Performance />, route: Route },
 ];

@@ -1,40 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
-const questions = [
-  {
-    question: "The movie was _____ entertaining; I loved it.",
-    options: ["extremely", "extreme", "extremity", "more extreme"],
-    correctAnswer: "extremely",
-    description: "'Extremely' is the correct adverb modifying 'entertaining'."
-  },
-  {
-    question: "She sings _____ than her sister.",
-    options: ["good", "better", "best", "well"],
-    correctAnswer: "better",
-    description: "'Better' is the comparative form of 'well'."
-  },
-  {
-    question: "I will call you when he _____ here.",
-    options: ["will come", "comes", "came", "coming"],
-    correctAnswer: "comes",
-    description: "In time clauses with 'when', use the present simple to refer to the future."
-  },
-  {
-    question: "This is the place _____ we met.",
-    options: ["where", "which", "that", "what"],
-    correctAnswer: "where",
-    description: "'Where' is used to refer to places."
-  },
-  {
-    question: "He is the man _____ car was stolen.",
-    options: ["which", "whose", "who", "whom"],
-    correctAnswer: "whose",
-    description: "'Whose' is the possessive form used for people."
-  },
-];
+interface Question {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  description: string;
+}
 
-const Quiz = () => {
+interface QuizProps {
+  questions: Question[];
+  onComplete: () => void;
+  onStepChange: (index: number, correct: boolean) => void;
+  onRestart: () => void;
+  goToStep: number | null;
+  setGoToStep: (index: number | null) => void;
+}
+
+const Quiz: React.FC<QuizProps> = ({ questions, onComplete, onStepChange, onRestart, goToStep, setGoToStep }) => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState('');
   const [isAnswered, setIsAnswered] = useState(false);
@@ -52,10 +35,21 @@ const Quiz = () => {
     return () => clearInterval(interval);
   }, [timer, isAnswered]);
 
+  useEffect(() => {
+    if (goToStep !== null) {
+      setCurrentQuestionIndex(goToStep - 1);
+      setSelectedOption('');
+      setIsAnswered(false);
+      setTimer(30);
+      setGoToStep(null);
+    }
+  }, [goToStep]);
+
   const handleOptionClick = (option: string) => {
     if (!isAnswered) {
       setSelectedOption(option);
       setIsAnswered(true);
+      onStepChange(currentQuestionIndex + 1, option === currentQuestion.correctAnswer);
     }
   };
 
@@ -63,11 +57,16 @@ const Quiz = () => {
     setSelectedOption('');
     setIsAnswered(false);
     setTimer(30);
-    setCurrentQuestionIndex((prev) => prev + 1);
+
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
+      onComplete();
+    }
   };
 
   return (
-    <div className="container mt-5">
+    <div className="containers">
       <div className="d-flex justify-content-between align-items-center">
         <h5>Question {currentQuestionIndex + 1}</h5>
         <div className="timer">Time: {timer} sec</div>
@@ -78,8 +77,7 @@ const Quiz = () => {
           let className = 'list-group-item text-start';
           if (isAnswered) {
             if (option === selectedOption) {
-              className +=
-                option === currentQuestion.correctAnswer ? ' bg-success text-white' : ' bg-danger text-white';
+              className += option === currentQuestion.correctAnswer ? ' bg-success text-white' : ' bg-danger text-white';
             }
           }
           return (
@@ -100,21 +98,17 @@ const Quiz = () => {
       </div>
 
       {isAnswered && (
-        <div className="card mt-3">
-          <div className="card-body">
-            <p>{currentQuestion.description}</p>
+        <>
+          <div className="card mt-3">
+            <div className="card-body">
+              <p>{currentQuestion.description}</p>
+            </div>
           </div>
-        </div>
-      )}
 
-      {isAnswered && currentQuestionIndex < questions.length - 1 && (
-        <button className="btn btn-primary mt-3" onClick={handleNext}>
-          Next Question
-        </button>
-      )}
-
-      {isAnswered && currentQuestionIndex === questions.length - 1 && (
-        <div className="alert alert-success mt-3">Quiz Complete!</div>
+          <button className="btn btn-primary mt-2" onClick={handleNext}>
+            {currentQuestionIndex === questions.length - 1 ? "Finish Quiz" : "Next Question"}
+          </button>
+        </>
       )}
     </div>
   );

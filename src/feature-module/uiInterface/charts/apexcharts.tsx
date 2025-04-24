@@ -48,7 +48,7 @@ const Apexchart = () => {
         "Sep",
       ],
     },
-  })
+  });
   const [sLineArea] = useState<any>({
     chart: {
       height: 350,
@@ -96,7 +96,7 @@ const Apexchart = () => {
         format: "dd/MM/yy HH:mm",
       },
     },
-  })
+  });
   const [sCol] = useState<any>({
     chart: {
       height: 350,
@@ -155,12 +155,12 @@ const Apexchart = () => {
     },
     tooltip: {
       y: {
-        formatter: function (val:any) {
+        formatter: function (val: any) {
           return "$ " + val + " thousands";
         },
       },
     },
-  })
+  });
   const [sColStacked] = useState<any>({
     chart: {
       height: 350,
@@ -224,7 +224,7 @@ const Apexchart = () => {
     fill: {
       opacity: 1,
     },
-  })
+  });
   const [sBar] = useState<any>({
     chart: {
       height: 350,
@@ -261,7 +261,7 @@ const Apexchart = () => {
         "Germany",
       ],
     },
-  })
+  });
   const [options] = useState<any>({
     chart: {
       height: 350,
@@ -318,7 +318,7 @@ const Apexchart = () => {
         },
       },
     ],
-  })
+  });
   const [donutChart] = useState<any>({
     chart: {
       height: 350,
@@ -341,7 +341,7 @@ const Apexchart = () => {
         },
       },
     ],
-  })
+  });
   const [radialChart] = useState<any>({
     chart: {
       height: 350,
@@ -371,7 +371,7 @@ const Apexchart = () => {
     },
     series: [44, 55, 67, 83],
     labels: ["Apples", "Oranges", "Bananas", "Berries"],
-  })
+  });
 
   return (
     <div className="page-wrapper">
@@ -383,8 +383,7 @@ const Apexchart = () => {
               <h3 className="page-title">Charts</h3>
               <ul className="breadcrumb">
                 <li className="breadcrumb-item">
-                  <Link to={routes.adminDashboard}
->Dashboard</Link>
+                  <Link to={routes.adminDashboard}>Dashboard</Link>
                 </li>
                 <li className="breadcrumb-item active">Charts</li>
               </ul>

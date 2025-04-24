@@ -156,6 +156,7 @@ export const all_routes = {
   community:"/community",
   studyPlan:"/study-plan",
   grammerPractice:"/grammer-practice",
+  performance:"/performance",
 
   // pages routes
   error404: "/error-404",

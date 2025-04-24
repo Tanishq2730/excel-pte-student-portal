@@ -32,7 +32,7 @@ export const SidebarData = [
       },
       {
         label: "My Performance",
-        link: routes.events,
+        link: routes.performance,
         icon: "ion-leaf",
         showSubRoute: false,
         submenu: false,

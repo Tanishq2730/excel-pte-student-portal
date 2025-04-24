@@ -23,6 +23,7 @@
     "apexcharts": "^3.54.1",
     "axios": "^1.8.4",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.9",
     "clipboard-copy": "^4.0.1",
     "dragula": "^3.7.3",
     "feather-icons-react": "^0.7.1",
