@@ -67,6 +67,7 @@ import StudyPlan from "../studyPlan/studyPlan";
 import GrammerPractice from "../grammerPractice/grammerPractice";
 import Performance from "../myPerformance/performance";
 import TestDnd from "../practice/reading/testDND";
+import Ptetestcard from "../ptetestFormate/ptetestcard";
 
 const routes = all_routes;
 
@@ -241,4 +242,5 @@ export const commonRoutes = [
   { path: routes.community, element: <Community />, route: Route },
   { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
   { path: routes.performance, element: <Performance />, route: Route },
+  { path: routes.ptetestcard, element: <Ptetestcard />, route: Route },
 ];

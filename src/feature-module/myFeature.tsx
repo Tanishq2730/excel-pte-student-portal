@@ -136,6 +136,7 @@ const MyFeature = () => {
             <Header />
             <Outlet />
             {!location.pathname.includes("layout") && <ThemeSettings />}
+            
           </div>
         </>
       )}

@@ -8,46 +8,53 @@ import { QuestionData } from "../../../core/data/interface";
 import { all_routes } from "../../router/all_routes";
 import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
+import MyNotes from "../component/myNotes";
 
 const ReadAloud = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
 
   const [showAnswer, setShowAnswer] = useState(false);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
-  const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
+  const [countdown, setCountdown] = useState<number>(0);
   const [timerActive, setTimerActive] = useState<boolean>(false);
-  const [resetRecording, setResetRecording] = useState<boolean>(false); // Add reset state
+  const [resetRecording, setResetRecording] = useState<boolean>(false);
+  const [showNotes, setShowNotes] = useState<boolean>(false); // ⭐ New State for MyNotes
 
   useEffect(() => {
-      const getData = async () => {
-        try {
-          const subtypeIdNum = Number(subtype_id);
-          const questionIdNum = question_id ? Number(question_id) : 0;
-  
-          const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
-  
-          if (!res.success || !res.data) {
-            // Redirect back if no data found
-            navigate(all_routes.adminDashboard); // Goes back to the previous page
-            return;
-          }
-  
-          setQuestionData(res.data);
-        } catch (err) {
-          console.error("Error fetching question data:", err);
-          navigate(-1); // Redirect on fetch error as well
+    const getData = async () => {
+      try {
+        const subtypeIdNum = Number(subtype_id);
+        const questionIdNum = question_id ? Number(question_id) : 0;
+
+        const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
+
+        if (!res.success || !res.data) {
+          navigate(all_routes.adminDashboard);
+          return;
         }
-      };
-  
-      if (subtype_id) {
-        getData();
+
+        setQuestionData(res.data);
+      } catch (err) {
+        console.error("Error fetching question data:", err);
+        navigate(-1);
       }
-    }, [subtype_id, question_id, navigate]);
+    };
+
+    if (subtype_id) {
+      getData();
+    }
+  }, [subtype_id, question_id, navigate]);
 
   useEffect(() => {
     if (questionData?.Subtype?.preparation_time) {
-      const preparationTimeInSeconds = parseInt(questionData.Subtype.preparation_time, 10); 
+      const preparationTimeInSeconds = parseInt(
+        questionData.Subtype.preparation_time,
+        10
+      );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
     }
@@ -61,23 +68,25 @@ const ReadAloud = () => {
 
   useEffect(() => {
     let intervalId: number;
-  
+
     if (timerActive && countdown > 0) {
       intervalId = setInterval(() => {
         setCountdown((prev) => prev - 1);
       }, 1000);
     } else if (timerActive && countdown <= 0) {
       setTimerActive(false);
-      startRecordingCallback(); // Start recording after countdown ends
+      startRecordingCallback();
     }
-  
+
     return () => clearInterval(intervalId);
   }, [countdown, timerActive, startRecordingCallback]);
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
   };
 
   const handleAnswerClick = () => {
@@ -85,23 +94,19 @@ const ReadAloud = () => {
   };
 
   const handleRestart = () => {
-    // Reset countdown to the initial preparation time
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.preparation_time || "0", 10);
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.preparation_time || "0",
+      10
+    );
     setCountdown(preparationTimeInSeconds);
-    setTimerActive(true); // Restart the countdown
-
-    setShowAnswer(false); // Optionally reset the answer view
-
-    // Trigger reset for recording
-    setResetRecording(true); // Set reset state to true
-    setTimeout(() => setResetRecording(false), 100); // Reset state after a short delay
+    setTimerActive(true);
+    setShowAnswer(false);
+    setResetRecording(true);
+    setTimeout(() => setResetRecording(false), 100);
   };
 
- 
-
-  // Handling navigation to next and previous questions
   const handleNext = () => {
-    if (questionData?.nextQuestionId) {      
+    if (questionData?.nextQuestionId) {
       navigate(`/read-aloud/${subtype_id}/${questionData?.nextQuestionId}`);
     }
   };
@@ -112,69 +117,102 @@ const ReadAloud = () => {
     }
   };
 
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
+
   return (
     <div className="page-wrappers">
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              Look at the text below. In 40 seconds, you must read this text
-              aloud as naturally and clearly as possible. You have 40 seconds to
-              read aloud. Speak within 3 seconds otherwise the microphone will
-              close and you will lose the marks.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="time">
-                  <div className="headBtn">
-                    <span className="text-danger">Prepare: {formatTime(countdown)}</span>
-                    <CardButton questionData={questionData} />
+          <div className="row">
+            {/* Button to open My Notes */}
+            <div className="col-12 mb-3">
+              <button className="btn btn-primary mynotesBtn" onClick={toggleNotes}>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <div className="practiceLayout">
+                <p className="my-3">
+                  Look at the text below. In 40 seconds, you must read this text
+                  aloud as naturally and clearly as possible...
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
+                    </div>
                   </div>
-                  <div className="innercontent">
-                    <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />
-                  </div>
-                  <div className="micSection">
-                    <RecorderComponent resetRecording={resetRecording} startRecording={startRecordingCallback} />
-                  </div>
-                  {showAnswer && (
-                    <div
-                      className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
-                    >
-                      <div
-                        className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
-                      >
-                        <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
+                  <div className="card-body">
+                    <div className="time">
+                      <div className="headBtn">
+                        <span className="text-danger">
+                          Prepare: {formatTime(countdown)}
+                        </span>
+                        <CardButton questionData={questionData} />
+                      </div>
+                      <div className="innercontent">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: questionData?.question || "",
+                          }}
+                        />
+                      </div>
+                      <div className="micSection">
+                        <RecorderComponent
+                          resetRecording={resetRecording}
+                          startRecording={startRecordingCallback}
+                        />
+                      </div>
+                      {showAnswer && (
+                        <div
+                          className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
+                          style={{ background: "#ffe4e4" }}
+                        >
+                          <div
+                            className="audio-inner p-4 rounded-3"
+                            style={{ background: "#ffe4e4" }}
+                          >
+                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <hr />
+                            <div className="rounded-pill">
+                              <audio controls className="w-100">
+                                <source
+                                  src="your-audio-file.mp3"
+                                  type="audio/mpeg"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          </div>
                         </div>
+                      )}
+                      <div className="bottomBtn mt-3">
+                        <QuestionNavigation
+                          questionData={questionData}
+                          onAnswerClick={handleAnswerClick}
+                          onRestart={handleRestart}
+                          onNext={handleNext}
+                          onPrevious={handlePrevious}
+                        />
                       </div>
                     </div>
-                  )}
-                  <div className="bottomBtn mt-3">
-                  <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                    />
                   </div>
                 </div>
               </div>
             </div>
+
+            {/* Notes Section */}
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
+
+          {/* Community Section */}
           <div className="community">
             <Community questionData={questionData} />
           </div>

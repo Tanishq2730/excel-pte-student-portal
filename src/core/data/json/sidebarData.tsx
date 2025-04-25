@@ -39,7 +39,7 @@ export const SidebarData = [
       },
       {
         label: "PTE Test Format",
-        link: routes.events,
+        link: routes.ptetestcard,
         icon: "ion-document-text",
         showSubRoute: false,
         submenu: false,

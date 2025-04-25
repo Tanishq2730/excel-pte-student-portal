@@ -30,24 +30,24 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
       <div className="col-md-6">
         <div className="btnBottom">
           {onSubmit && (
-            <button className="btn btn-outline-secondary" onClick={onSubmit}>
+            <button className="btn btn-info" onClick={onSubmit}>
               Submit
             </button>
           )}
-          <button className="btn btn-outline-secondary mx-3" onClick={onAnswerClick}>
+          <button className="btn btn-info mx-3" onClick={onAnswerClick}>
             Answer
           </button>
-          <button className="btn btn-outline-secondary" onClick={onRestart}>
+          <button className="btn btn-info" onClick={onRestart}>
             Re-Start
           </button>
         </div>
       </div>
       <div className="col-md-6">
         <div className="btnBottom text-end">
-          <button className="btn btn-outline-secondary mx-3" onClick={onPrevious}>
+          <button className="btn btn-info mx-3" onClick={onPrevious}>
             Previous
           </button>
-          <button className="btn btn-outline-secondary" onClick={onNext}>
+          <button className="btn btn-info" onClick={onNext}>
             Next
           </button>
         </div>

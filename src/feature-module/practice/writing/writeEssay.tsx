@@ -177,10 +177,7 @@ const WriteEssay = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
+                    
                     <span className="text-danger">Time: {formatTime(countdown)}</span>
                     <CardButton questionData={questionData} />
                   </div>

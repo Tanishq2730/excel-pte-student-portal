@@ -158,6 +158,7 @@ export const all_routes = {
   studyPlan:"/study-plan",
   grammerPractice:"/grammer-practice",
   performance:"/performance",
+  ptetestcard:"/pte-test-formate",
 
   // pages routes
   error404: "/error-404",
