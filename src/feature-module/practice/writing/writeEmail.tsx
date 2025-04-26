@@ -9,12 +9,14 @@ import { all_routes } from "../../router/all_routes";
 import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
+import WriteEmailScoring from "../component/scoring/WriteEmailScoring";
 
 const WriteEmail = () => {
   const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
   const navigate = useNavigate();
 
   const [showAnswer, setShowAnswer] = useState(false);
+  const [selectedLanguage, setSelectedLanguage] = useState('American');
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
@@ -127,28 +129,44 @@ const WriteEmail = () => {
     if (!questionData?.id || !subtype_id) return;
 
     try {
-      const payload = {
-        questionId: questionData.id,
-        totalscore: 0, // You can adjust this if you calculate it
-        lateSpeak: 1,
-        timeSpent: timeSpent,
-        score: 12,
-        score_data: 15,
-        answer: summaryText,
-      };
+      const id = questionData.id;
+      const question = questionData.question;
+      const session_id = Math.random() * 1000;
+      const answerText = summaryText;
+      const wordCounts = wordCount;
+      const scoringData = { id, session_id, question, answerText, wordCount };
 
-      const response = await savePractice(false, payload);
+      const result = await WriteEmailScoring(scoringData, questionData, selectedLanguage);
 
-      if (response.success) {
-        getData();
-        const preparationTimeInSeconds = parseInt(questionData?.Subtype.remaining_time || "0", 10);
-        setCountdown(preparationTimeInSeconds);
-        setTimerActive(true); // Restart the countdown
-        setTimeSpent(0);
-        setShowAnswer(false); // Optionally reset the answer view
-        setSummaryText("");
-        setAlert({ type: "success", message: "Your Answer Saved!" });
-      } else {
+      if (result) {
+        const { score, totalscore, user_answer, score_data } = result;
+
+        // Now you can safely use score, totalScore, userAnswerText, scoredText
+        const payload = {
+          questionId: questionData.id,
+          totalscore: totalscore, // You can adjust this if you calculate it
+          lateSpeak: 1,
+          timeSpent: timeSpent,
+          score: score,
+          score_data: score_data,
+          answer: user_answer,
+        };
+        const response = await savePractice(false, payload);
+
+        if (response.success) {
+          getData();
+          const preparationTimeInSeconds = parseInt(questionData?.Subtype.remaining_time || "0", 10);
+          setCountdown(preparationTimeInSeconds);
+          setTimerActive(true); // Restart the countdown
+          setTimeSpent(0);
+          setShowAnswer(false); // Optionally reset the answer view
+          setSummaryText("");
+          setWordCount(0);
+          setAlert({ type: "success", message: "Your Answer Saved!" });
+        } else {
+          setAlert({ type: "danger", message: "Failed to save practice" });
+        }
+      }else {
         setAlert({ type: "danger", message: "Failed to save practice" });
       }
     } catch (error) {

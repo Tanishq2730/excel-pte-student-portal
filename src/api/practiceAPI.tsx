@@ -1,5 +1,5 @@
 import { apiHandler } from './apiHandler';
-import { api_url } from '../environment';
+import { api_url,text_gear_url,text_gear_api_key } from '../environment';
 import axios from "axios";
 // ✅ Fetch All Topics
 export const fetchQuestionData = async (subtype_id: number, question_id?: number) => {
@@ -47,3 +47,41 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
         throw error;
     }
 }
+
+export async function fetchSpellCheck(data: string, type: string,lang='British') {
+   
+    const language = lang === "American" ? "en-US" : "en-GB";
+    const ai = "1";
+  
+    const endpoint = type === "grammar" ? "grammar" : "spelling";
+    const url = `${text_gear_url}/${endpoint}?key=${text_gear_api_key}&language=${language}&ai=${ai}&text=${encodeURIComponent(
+      data
+    )}`;
+  
+    try {
+      const response = await axios.get(url);
+      if (response.status === 200) {
+        return response.data.response.errors;
+      } else {
+        throw new Error("Failed to fetch spell check data");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
+  
+  export async function fetchExceptions(limit = 10000, offset = 0) {
+       
+    const url = `${text_gear_url}/custom/listexceptions?limit=${limit}&offset=${offset}&key=${text_gear_api_key}`;
+  
+    try {
+      const response = await axios.get(url);
+      if (response.status === 200) {
+        return response.data.response.exceptions;
+      } else {
+        throw new Error("Failed to fetch exceptions data");
+      }
+    } catch (error) {
+      throw error;
+    }
+  }
