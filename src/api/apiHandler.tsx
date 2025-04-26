@@ -36,8 +36,9 @@ export interface ApiResponse<T = any> {
       });
   
       const result = await response.json();
-
-      if (result.message === 'Session expired. Please log in again.') {
+      console.log(result);
+      
+      if (result.message === 'Session expired. Please log in again.' || result.message === 'Invalid token' || result.message === 'Access Denied') {
         localStorage.removeItem('token'); // optional: clear token
         return { success: false, error: result.message };
       }

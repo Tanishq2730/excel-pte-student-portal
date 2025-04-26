@@ -1,33 +1,71 @@
-import React, { useState } from "react";
-import "bootstrap/dist/css/bootstrap.min.css";
+import React, { useState, useEffect } from "react";
 
 interface ButtonItem {
   id: number;
   text: string;
-  order:string;
+  order: string;
 }
 
-const initialLeftButtons: ButtonItem[] = [
-  { id: 1, text: "Paragraph 1", order:"A" },
-  { id: 2, text: "Paragraph 2", order:"B" },
-  { id: 3, text: "Paragraph 3", order:"C" },
-  { id: 4, text: "Paragraph 4", order:"D" },
-];
+interface QuestionData {
+  answer_american: string;
+  answer_british: string;
+  option_one: string;
+  option_two: string;
+  option_three: string;
+  option_four: string;
+}
 
-const ParaReorder: React.FC = () => {
-  const [leftOrder, setLeftOrder] = useState<number[]>([1, 2, 3, 4]);
+interface ParaReorderProps {
+  questionData: QuestionData | null;
+  onAnswerChange: (ans: string[]) => void;
+  resetTrigger: boolean;
+}
+
+const ParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReorderProps) => {
+  const [leftButtons, setLeftButtons] = useState<ButtonItem[]>([]);
   const [rightButtons, setRightButtons] = useState<ButtonItem[]>([]);
   const [draggedItem, setDraggedItem] = useState<{
     id: number;
     from: "left" | "right";
   } | null>(null);
 
-  const visibleLeftOrder = leftOrder.filter(
-    (id) => !rightButtons.some((btn) => btn.id === id)
-  );
+  const [initialLeftButtons, setInitialLeftButtons] = useState<ButtonItem[]>([]); // <-- New state to hold initial options
 
-  const getItemById = (id: number): ButtonItem =>
-    initialLeftButtons.find((item) => item.id === id)!;
+  const initializeButtons = (data: QuestionData) => {
+    const options = [
+      { id: 1, text: data.option_one, order: "1" },
+      { id: 2, text: data.option_two, order: "2" },
+      { id: 3, text: data.option_three, order: "3" },
+      { id: 4, text: data.option_four, order: "4" },
+    ];
+
+    const order = data.answer_american.split(",").map((str) => parseInt(str, 10));
+    const reorderedButtons = order.map((id) =>
+      options.find((option) => option.id === id)
+    ) as ButtonItem[];
+
+    // Set the left buttons and store the initial left buttons for reset
+    setLeftButtons(reorderedButtons);
+    setInitialLeftButtons(options); // <-- Store the initial state
+  };
+
+  useEffect(() => {
+    if (questionData) {
+      initializeButtons(questionData);
+    }
+  }, [questionData]);
+
+  useEffect(() => {
+    if (resetTrigger) {
+      setLeftButtons([...initialLeftButtons]); // Reset to initial state (ensure to create a fresh copy)
+      setRightButtons([]);
+      setDraggedItem(null);
+    }
+  }, [resetTrigger, initialLeftButtons]);
+
+  useEffect(() => {
+    onAnswerChange(rightButtons.map((btn) => btn.order));
+  }, [rightButtons]);
 
   const handleDragStart = (id: number, from: "left" | "right") => {
     setDraggedItem({ id, from });
@@ -38,73 +76,96 @@ const ParaReorder: React.FC = () => {
   };
 
   const handleDropLeft = (dropId: number) => {
-    if (!draggedItem || draggedItem.from !== "left") return;
-
-    const currentOrder = [...leftOrder];
-    const dragIndex = currentOrder.indexOf(draggedItem.id);
-    const dropIndex = currentOrder.indexOf(dropId);
-
-    if (dragIndex === -1 || dropIndex === -1 || dragIndex === dropIndex) return;
-
-    currentOrder.splice(dragIndex, 1);
-    currentOrder.splice(dropIndex, 0, draggedItem.id);
-
-    setLeftOrder(currentOrder);
+    if (!draggedItem) return;
+  
+    const currentOrder = [...leftButtons];
+  
+    if (draggedItem.from === "right") {
+      const updatedRight = rightButtons.filter((btn) => btn.id !== draggedItem.id);
+      setRightButtons(updatedRight);
+  
+      const draggedButton = rightButtons.find((btn) => btn.id === draggedItem.id);
+      if (!draggedButton) return;
+  
+      const dropIndex = currentOrder.findIndex((btn) => btn.id === dropId);
+      if (dropIndex === -1) {
+        currentOrder.push(draggedButton);
+      } else {
+        currentOrder.splice(dropIndex, 0, draggedButton);
+      }
+    } else if (draggedItem.from === "left") {
+      const dragIndex = currentOrder.findIndex((btn) => btn.id === draggedItem.id);
+      const dropIndex = currentOrder.findIndex((btn) => btn.id === dropId);
+  
+      const draggedButton = currentOrder.find((btn) => btn.id === draggedItem.id);
+      if (!draggedButton) return;
+  
+      currentOrder.splice(dragIndex, 1);
+      currentOrder.splice(dropIndex, 0, draggedButton);
+    }
+  
+    setLeftButtons(currentOrder);
     setDraggedItem(null);
   };
-
+  
   const handleDropRight = (dropId: number | null) => {
     if (!draggedItem) return;
-
-    const item = getItemById(draggedItem.id);
-    const isInRight = rightButtons.find((btn) => btn.id === item.id);
+  
     const newRight = [...rightButtons];
-
-    if (draggedItem.from === "left" && !isInRight) {
-      const dropIndex =
-        dropId !== null ? newRight.findIndex((btn) => btn.id === dropId) : -1;
-      if (dropIndex === -1) {
-        newRight.push(item);
-      } else {
-        newRight.splice(dropIndex, 0, item);
+  
+    if (draggedItem.from === "left") {
+      const item = leftButtons.find((btn) => btn.id === draggedItem.id);
+      if (!item) return;
+  
+      const newLeft = leftButtons.filter((btn) => btn.id !== draggedItem.id);
+      setLeftButtons(newLeft);
+  
+      const isInRight = newRight.find((btn) => btn.id === item.id);
+      if (!isInRight) {
+        const dropIndex =
+          dropId !== null ? newRight.findIndex((btn) => btn.id === dropId) : -1;
+        if (dropIndex === -1) {
+          newRight.push(item);
+        } else {
+          newRight.splice(dropIndex, 0, item);
+        }
       }
     } else if (draggedItem.from === "right") {
       const dragIndex = newRight.findIndex((btn) => btn.id === draggedItem.id);
       const dropIndex =
         dropId !== null ? newRight.findIndex((btn) => btn.id === dropId) : -1;
-
-      if (dragIndex !== -1 && dropIndex !== -1 && dragIndex !== dropIndex) {
-        const updated = [...newRight];
-        const dragged = updated.splice(dragIndex, 1)[0];
-        updated.splice(dropIndex, 0, dragged);
-        setRightButtons(updated);
-        setDraggedItem(null);
-        return;
+  
+      if (dragIndex === -1) return;
+  
+      const draggedItemObj = newRight.splice(dragIndex, 1)[0];
+  
+      if (dropIndex === -1 || dragIndex === dropIndex) {
+        newRight.push(draggedItemObj);
+      } else {
+        newRight.splice(dropIndex, 0, draggedItemObj);
       }
     }
-
+  
     setRightButtons(newRight);
     setDraggedItem(null);
   };
 
   const renderLeftButtons = () =>
-    visibleLeftOrder.map((id) => {
-      const item = getItemById(id);
-      return (
-        <div
-          key={item.id}
-          className="mb-2"
-          draggable
-          onDragStart={() => handleDragStart(item.id, "left")}
-          onDragOver={handleDragOver}
-          onDrop={() => handleDropLeft(item.id)}
-        >
-          <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-            <span>{item.order}</span>{item.text}
-          </button>
-        </div>
-      );
-    });
+    leftButtons.map((item) => (
+      <div
+        key={item.id}
+        className="mb-2"
+        draggable
+        onDragStart={() => handleDragStart(item.id, "left")}
+        onDragOver={handleDragOver}
+        onDrop={() => handleDropLeft(item.id)}
+      >
+        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
+          <span>{item.order} </span>
+          {item.text}
+        </button>
+      </div>
+    ));
 
   const renderRightButtons = () =>
     rightButtons.map((item) => (
@@ -116,22 +177,21 @@ const ParaReorder: React.FC = () => {
         onDragOver={handleDragOver}
         onDrop={() => handleDropRight(item.id)}
       >
-        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-            <span>{item.order}</span>{item.text}
-          </button>
+        <button className="btn btn-outline-success w-100 text-start redorder-btn">
+          <span>{item.order} </span>
+          {item.text}
+        </button>
       </div>
     ));
 
   return (
-    <div className="container">
+    <div className="container mt-4">
       <div className="row">
         {/* LEFT CARD */}
         <div className="col-md-6">
           <div className="card" onDragOver={handleDragOver}>
-            <div className="card-header">
-              <div className="card-title">
-                <h5 className="text-white">Source</h5>
-              </div>
+            <div className="card-header bg-primary">
+              <h5 className="text-white m-0">Source</h5>
             </div>
             <div className="card-body">{renderLeftButtons()}</div>
           </div>
@@ -141,13 +201,11 @@ const ParaReorder: React.FC = () => {
         <div
           className="col-md-6"
           onDragOver={handleDragOver}
-          onDrop={() => handleDropRight(null)} // drop on empty area
+          onDrop={() => handleDropRight(null)}
         >
           <div className="card">
-            <div className="card-header">
-              <div className="card-title">
-                <h5 className="text-white">Target</h5>
-              </div>
+            <div className="card-header bg-success">
+              <h5 className="text-white m-0">Target</h5>
             </div>
             <div className="card-body">{renderRightButtons()}</div>
           </div>
