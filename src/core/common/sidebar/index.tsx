@@ -333,8 +333,17 @@ const Sidebar = () => {
                 ))}
               </ul>
             </div>
+            <div className="scannerDetail">
+                <div className="head">
+                  <h4>Download to Scan</h4>
+                </div>
+                <div className="barcode">
+                  <img src="assets/img/barcode.png"/>
+                </div>
+            </div>
           </div>
         </Scrollbars>
+        
       </div>
     </>
   );

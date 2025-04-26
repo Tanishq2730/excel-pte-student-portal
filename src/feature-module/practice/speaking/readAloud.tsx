@@ -128,7 +128,8 @@ const ReadAloud = () => {
           <div className="row">
             {/* Button to open My Notes */}
             <div className="col-12 mb-3">
-              <button className="btn btn-primary mynotesBtn" onClick={toggleNotes}>
+              <button className="btn btn-primary mynotesBtn" style={{display:'flex',flexDirection:'column'}} onClick={toggleNotes}>
+                <i className="fa fa-book"></i>
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>

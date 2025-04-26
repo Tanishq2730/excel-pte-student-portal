@@ -31,7 +31,7 @@ const MyNotes: React.FC = () => {
       <div className="card-body">
         <textarea
           className="form-control"
-          style={{ height: "200px", backgroundColor: "#fff8dc" }}
+          style={{ height: "320px", backgroundColor: "#fff8dc" }}
           value={savedText || text}
           onChange={(e) => setText(e.target.value)}
         />

@@ -1,55 +1,57 @@
 .nav-item {
-    margin-inline-end: 0.5rem;
-    &:last-child {
-      margin-inline-end: 0;
-    }
+  margin-inline-end: 0.5rem;
+  &:last-child {
+    margin-inline-end: 0;
   }
-  .nav-link {
-    color: $text-color;
-    border-radius: $border-radius;
-    &.active {
-      background-color: rgba($primary,0.1);
-      color: $primary;
-    }
+}
+.nav-link {
+  color: $text-color;
+  border-radius: $border-radius;
+  &.active {
+    background-color: rgba($primary, 0.1);
+    color: $primary;
   }
-  .navbar-brand {
+}
+.navbar-brand {
+  color: $text-color;
+  &:focus,
+  &:hover {
     color: $text-color;
-    &:focus ,&:hover {
-      color: $text-color;
-      opacity: 0.9;
+    opacity: 0.9;
+  }
+}
+.navbar-nav .nav-link.active,
+.navbar-nav .show > .nav-link {
+  color: $primary;
+}
+.nav-link.disabled {
+  color: $text-color;
+  opacity: 0.3;
+}
+.nav-tabs .nav-link.disabled,
+.nav-tabs .nav-link:disabled {
+  color: rgba($dark, 0.5);
+}
+.navbar-text {
+  color: $text-color;
+}
+.navbar-dark {
+  &.bg-dark {
+    .nav-link,
+    .navbar-brand {
+      color: $white;
     }
   }
   .navbar-nav .nav-link.active,
   .navbar-nav .show > .nav-link {
-    color: $primary;
-  }
-  .nav-link.disabled {
-    color: $text-color;
-    opacity: 0.3;
-  }
-  .nav-tabs .nav-link.disabled, .nav-tabs .nav-link:disabled {
-    color: rgba($dark,0.5);
-  }
-  .navbar-text {
-    color: $text-color;
-  }
-  .navbar-dark {
-    &.bg-dark {
-      .nav-link,
-      .navbar-brand {
-        color: $white;
-      }
-    }
-    .navbar-nav .nav-link.active,
-    .navbar-nav .show > .nav-link {
-      color: $white;
-    }
-  }
-  .nav-pills .nav-link.active,
-  .nav-pills .show > .nav-link {
     color: $white;
-    background-color: $primary;
   }
+}
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  color: $white;
+  background-color: $primary;
+}
 
 .nav.nav-style-1 {
   border: 0;
@@ -61,15 +63,15 @@
   }
   .nav-link {
     &.active {
-        background-color: rgba($primary, 0.1);
-        color: $primary;
-        &:hover {        
-          background: rgba($primary, 0.1);
-        }
+      background-color: rgba($primary, 0.1);
+      color: $primary;
+      &:hover {
+        background: rgba($primary, 0.1);
+      }
     }
-    &:hover {        
-        background: transparent;
-        color: $primary;
+    &:hover {
+      background: transparent;
+      color: $primary;
     }
   }
 }
@@ -114,8 +116,8 @@
       border: 0;
     }
     &:hover {
-        background-color: $light;
-        color: $text-color;   
+      background-color: $light;
+      color: $text-color;
     }
   }
 }
@@ -168,11 +170,12 @@
         color: $primary;
         border: 1px solid transparent;
       }
-      &:hover,&:focus {
+      &:hover,
+      &:focus {
         border: 1px solid transparent;
         background-color: transparent;
         color: $primary;
-      } 
+      }
     }
   }
 }
@@ -193,11 +196,12 @@
         color: $white;
         border: 1px solid $primary;
       }
-      &:hover,&:focus {
+      &:hover,
+      &:focus {
         border: 1px solid $primary;
         background-color: transparent;
-         color: $primary;
-      } 
+        color: $primary;
+      }
     }
   }
 }
@@ -275,19 +279,27 @@
         &:hover {
           background: $primary;
           border: 1px solid $primary;
-          color: $white;          
+          color: $white;
         }
         i {
           background: $white;
           color: $primary;
         }
       }
-      &:hover,&:focus {
+      &:hover,
+      &:focus {
         border: 1px solid $primary;
         color: $primary;
-          background: transparent;
+        background: transparent;
       }
     }
+  }
+}
+.studyplantab {
+  .nav-link{
+    width: 3em;
+    height: 3em;
+    border-radius: 100px !important;
   }
 }
 .nav.tab-style-1 {
@@ -301,27 +313,36 @@
     &:last-child {
       margin-inline-end: 0;
     }
+    
   }
   .nav-link {
     border-radius: 7px;
     padding: 0.35rem 1rem;
+
+
     &.active {
       background-color: $primary !important;
       color: $white !important;
       box-shadow: $box-shadow;
       transition: color 0.15s ease-in;
+
+      i {
+        color: #fff !important;
+      }
+    }
+
+    i {
+      color: #000;
     }
   }
 }
 .nav-tabs.tab-style-1 {
-    .nav-link {
-        &:hover {
-        background: transparent;
-        color: $primary;
-      }  
-
+  .nav-link {
+    &:hover {
+      background: transparent;
+      color: $primary;
     }
-
+  }
 }
 .tab-style-2 {
   border-block-end: 0;
@@ -332,7 +353,7 @@
     }
     .nav-link {
       border: 0;
-      i { 
+      i {
         width: 1.875rem;
         height: 1.875rem;
         padding: 0.4rem;
@@ -346,7 +367,7 @@
         background: transparent;
         color: $primary;
         i {
-          color: $primary;          
+          color: $primary;
         }
       }
       &.active {
@@ -354,7 +375,7 @@
         position: relative;
         border: 0;
         color: $primary;
-        i { 
+        i {
           background-color: rgba($primary, 0.1);
           color: $primary;
         }
@@ -494,7 +515,7 @@
   background-color: $primary;
   color: $white;
   padding: 16px;
-    border-radius: 7px;
+  border-radius: 7px;
 }
 .tab-style-5 {
   .nav-item {
@@ -536,7 +557,7 @@
         background-color: $primary;
         color: $white;
         border: 0;
-        box-shadow: 0px 3px 10px 0px rgba(var(--dark-rgb),0.05);
+        box-shadow: 0px 3px 10px 0px rgba(var(--dark-rgb), 0.05);
       }
       &:hover,
       &:focus {
@@ -574,203 +595,206 @@
     }
   }
 }
-@media screen and (max-width:400px) {
+@media screen and (max-width: 400px) {
   .tab-style-4 {
-    .nav-link{
+    .nav-link {
       padding-inline: 0.5rem;
     }
   }
 }
 
 .nav-tabs {
-    border-bottom: 0;
-    &.nav-tabs-bottom {
-        li {
-            margin-bottom: -1px;
-        }
+  border-bottom: 0;
+  &.nav-tabs-bottom {
+    li {
+      margin-bottom: -1px;
     }
-    .nav-link {
-        margin-bottom: -1px;
-        background: 0 0;
-        border: 1px solid transparent;
-        border-top-left-radius: 0.25rem;
-        border-top-right-radius: 0.25rem;
-        &.active {
-          border-color: $gray-300;
-        }
+  }
+  .nav-link {
+    margin-bottom: -1px;
+    background: 0 0;
+    border: 1px solid transparent;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    &.active {
+      border-color: $gray-300;
     }
-    li{
-        a{
-            color: $gray-900;
-            border-bottom-width: 2px;
-            &.active{
-                border-color: transparent;
-                border-bottom-color: $primary;
-                background-color: transparent;
-                @include transition(all 0.2s ease);
-                color: $primary;
-            }
-        }
+  }
+  li {
+    a {
+      color: $gray-900;
+      border-bottom-width: 2px;
+      &.active {
+        border-color: transparent;
+        border-bottom-color: $primary;
+        background-color: transparent;
+        @include transition(all 0.2s ease);
+        color: $primary;
+      }
     }
+  }
 }
-.nav-tabs{
-    .nav-tabs-solid {
-        background-color: $white;
-        border: 0;
-        .active{
+.nav-tabs {
+  .nav-tabs-solid {
+    background-color: $white;
+    border: 0;
+    .active {
+      background-color: $primary;
+      border-color: $primary;
+      color: $white;
+    }
+  }
+}
+.nav-tabs {
+  .nav-link {
+    &:hover {
+      border-color: transparent;
+      color: $primary;
+    }
+  }
+  &.nav-tabs-top {
+    li {
+      a {
+        border-width: 2px 0 0 0;
+        &.active {
+          border-top-color: $primary;
+          @include rounded(0);
+        }
+        &:hover {
+          border-top-color: $primary;
+          background-color: transparent;
+          @include rounded(0);
+        }
+      }
+    }
+  }
+  &.nav-tabs-bottom {
+    li {
+      a {
+        border-width: 0 0 2px 0;
+        &.active,
+        &:hover {
+          border-bottom-color: $primary;
+          background: transparent;
+          @include rounded(0);
+          color: $primary;
+        }
+      }
+    }
+  }
+  &.nav-tabs-solid {
+    background-color: $white;
+    border: 0;
+    &.nav-tabs-rounded {
+      li {
+        a {
+          &.active {
             background-color: $primary;
             border-color: $primary;
             color: $white;
+            @include rounded(50px);
+          }
         }
+      }
     }
+    &.nav-tabs-rounded-fill {
+      li {
+        a {
+          border-color: $light-900;
+          &.active {
+            background-color: $primary;
+            border-color: $primary;
+            color: $white;
+            @include rounded(50px);
+          }
+        }
+      }
+    }
+    li {
+      a {
+        &.active {
+          background-color: $primary;
+          border-color: $primary;
+          color: $white;
+          @include rounded(0);
+        }
+      }
+    }
+  }
 }
-.nav-tabs{
-    .nav-link{
-        &:hover{
-            border-color: transparent;
-            color: $primary;
-        }
+.nav-link {
+  &:hover {
+    color: $primary;
+  }
+}
+.page-menu {
+  .nav-tabs {
+    li {
+      a {
+        font-size: $font-size-16;
+      }
     }
-    &.nav-tabs-top{
-        li{
-            a{
-                border-width: 2px 0 0 0;
-                &.active{
-                    border-top-color: $primary;                    
-                    @include rounded(0);
-                }
-                &:hover {
-                    border-top-color: $primary;  
-                    background-color: transparent;                    
-                    @include rounded(0);
-                }
-            }
-        }
-    }
-    &.nav-tabs-bottom{
-        li{
-            a{
-                border-width:0 0 2px  0;
-                &.active, &:hover {
-                    border-bottom-color: $primary;
-                    background: transparent;
-                    @include rounded(0);
-                    color: $primary;
-                }
-            }
-        }
-    }
-    &.nav-tabs-solid{
-        background-color: $white;
+  }
+}
+.tabs-set {
+  .nav-tabs {
+    border-bottom: 0;
+    margin-bottom: 20px;
+    .nav-link {
+      color: $secondary;
+      padding: 8px 15px;
+      font-size: $font-size-16;
+      font-weight: $font-weight-bold;
+      border: 0;
+      min-width: 120px;
+      margin-right: 10px;
+      border-radius: 8px;
+      background: var(--Stroke, rgba(145, 158, 171, 0.3));
+      &:focus {
+        border-color: transparent;
+      }
+      &:hover {
+        border-color: transparent;
+      }
+      &.active {
         border: 0;
-        &.nav-tabs-rounded{
-            li{
-                a{
-                    &.active {
-                        background-color: $primary;
-                        border-color: $primary;
-                        color: $white;
-                        @include rounded(50px);
-                    }
-                }
-            }  
-        }
-        &.nav-tabs-rounded-fill {
-          li{
-            a{
-              border-color: $light-900;
-                &.active {
-                    background-color: $primary;
-                    border-color: $primary;
-                    color: $white;
-                    @include rounded(50px);
-                }
-            }
-        }  
-        }
-        li{
-            a{
-                &.active{
-                    background-color: $primary;
-                    border-color: $primary;
-                    color: $white;
-                    @include rounded(0);
-                }
-            }
-        }   
+        border-bottom: 2px solid $primary;
+        background: $primary;
+        color: $white;
+      }
     }
+  }
 }
-.nav-link{
-    &:hover{
-        color: $primary;
+.tabs-sets {
+  .nav-tabs {
+    border-bottom: 0;
+    margin: 0 0 40px;
+    .nav-link {
+      color: $black;
+      font-size: $font-size-base;
+      font-weight: $font-weight-bold;
+      border: 0;
+      background: $gray-300;
+      margin-right: 10px;
+      padding: 8px 15px;
+      @include rounded(8px);
+      @include transition(all 0.5s ease);
+      &:focus,
+      &:hover,
+      &.active {
+        background: $primary;
+        color: $white;
+      }
     }
-}
-.page-menu{
-    .nav-tabs {
-        li{
-            a{
-                font-size: $font-size-16;
-            }
-        }
-    }
-}
-.tabs-set{
-    .nav-tabs {
-        border-bottom: 0;
-        margin-bottom: 20px;
-        .nav-link{
-            color: $secondary;
-            padding:  8px 15px;
-            font-size: $font-size-16;
-            font-weight: $font-weight-bold;
-            border: 0;
-            min-width: 120px;
-            margin-right: 10px;
-            border-radius: 8px;
-            background: var(--Stroke, rgba(145, 158, 171, 0.30));
-            &:focus{
-                border-color: transparent;
-            }
-            &:hover{
-                border-color: transparent;
-            }
-            &.active{
-                border:0;
-                border-bottom:2px solid $primary;
-                background: $primary;
-                color: $white;
-            }
-        }
-    }
-}
-.tabs-sets{
-    .nav-tabs {
-        border-bottom: 0;
-        margin: 0 0 40px;
-        .nav-link{
-            color: $black;;
-            font-size: $font-size-base;
-            font-weight: $font-weight-bold;
-            border: 0;
-            background: $gray-300;
-            margin-right:10px;
-            padding:  8px 15px;
-            @include rounded(8px);
-            @include transition(all 0.5s ease);
-            &:focus, &:hover, &.active{
-                background: $primary;
-                color: $white;
-            }
-        }
-    }
+  }
 }
 @include respond-below(md) {
-    .nav-tabs {
-        border-bottom: 0;
-        position: relative;
-        background-color: $white;
-        border: 1px solid $light-300;
-        padding:  5px 0;
-        @include rounded(3px);
-    }
+  .nav-tabs {
+    border-bottom: 0;
+    position: relative;
+    background-color: $white;
+    border: 1px solid $light-300;
+    padding: 5px 0;
+    @include rounded(3px);
+  }
 }

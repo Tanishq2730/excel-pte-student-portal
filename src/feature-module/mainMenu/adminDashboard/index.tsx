@@ -11,6 +11,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import AdminDashboardModal from "./adminDashboardModal";
 import StudyPlaner from "./studyPlaner";
+import ReactApexChart from "react-apexcharts";
 
 const AdminDashboard = () => {
   const routes = all_routes;
@@ -19,7 +20,7 @@ const AdminDashboard = () => {
   const [modalSource, setModalSource] = useState("left");
   function SampleNextArrow(props: any) {
     const { style, onClick } = props;
-    
+
     return (
       <div
         className="slick-nav slick-nav-next class-slides"
@@ -44,10 +45,10 @@ const AdminDashboard = () => {
   }
 
   const [countdown, setCountdown] = useState({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
+    days: 22,
+    hours: 48,
+    minutes: 54,
+    seconds: 33,
   });
 
   const today = 0;
@@ -101,6 +102,178 @@ const AdminDashboard = () => {
       },
     ],
   };
+  const bannerslides = {
+    dots: false,
+    autoplay: true,
+    slidesToShow: 1,
+    margin: 24,
+    speed: 500,
+    responsive: [
+      {
+        breakpoint: 1500,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 1400,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 992,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 800,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 776,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+      {
+        breakpoint: 567,
+        settings: {
+          slidesToShow: 1,
+        },
+      },
+    ],
+  };
+  const student = {
+    dots: false,
+    autoplay: false,
+    slidesToShow: 1,
+    speed: 500,
+    // nextArrow: <SampleNextArrow />,
+    // prevArrow: <SamplePrevArrow />,
+  };
+  const [studentDonutChart] = useState<any>({
+    chart: {
+      height: 218,
+      width: 218,
+      type: "donut",
+      toolbar: {
+        show: false,
+      },
+    },
+    legend: {
+      show: false,
+    },
+    colors: ["#3D5EE1", "#6FCCD8"],
+    series: [3610, 44],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 180,
+          },
+        },
+      },
+    ],
+  });
+
+  const [classDonutChart] = useState<any>({
+    chart: {
+      height: 218,
+      width: 218,
+      type: "donut",
+      toolbar: {
+        show: false,
+      },
+    },
+    labels: ["Good", "Average", "Below Average"],
+    legend: { show: false },
+    dataLabels: {
+      enabled: false,
+    },
+    yaxis: {
+      tickAmount: 3,
+      labels: {
+        offsetX: -15,
+      },
+    },
+    grid: {
+      padding: {
+        left: -8,
+      },
+    },
+    colors: ["#3D5EE1", "#EAB300", "#E82646"],
+    series: [45, 11, 2],
+    responsive: [
+      {
+        breakpoint: 480,
+        options: {
+          chart: {
+            width: 180,
+          },
+        },
+      },
+    ],
+  });
+
+  const [sline] = useState<any>({
+    chart: {
+      height: 350,
+      type: "area",
+      toolbar: {
+        show: false,
+      },
+    },
+    dataLabels: {
+      enabled: false,
+    },
+    stroke: {
+      curve: "smooth",
+    },
+    // title: {
+    //   text: "Product Trends by Month",
+    //   align: "left",
+    // },
+    series: [
+      {
+        name: "Speaking",
+        data: [31, 40, 28, 51, 42, 109, 100],
+      },
+      {
+        name: "Writing",
+        data: [11, 32, 45, 32, 34, 52, 41],
+      },
+      {
+        name: "Reading",
+        data: [31, 40, 28, 51, 42, 109, 100],
+      },
+      {
+        name: "Listening",
+        data: [11, 32, 45, 32, 34, 52, 41],
+      },
+    ],
+    xaxis: {
+      type: "datetime",
+      categories: [
+        "2018-09-19T00:00:00",
+        "2018-09-19T01:30:00",
+        "2018-09-19T02:30:00",
+        "2018-09-19T03:30:00",
+        "2018-09-19T04:30:00",
+        "2018-09-19T05:30:00",
+        "2018-09-19T06:30:00",
+      ],
+    },
+    tooltip: {
+      x: {
+        format: "dd/MM/yy HH:mm",
+      },
+    },
+  });
 
   return (
     <>
@@ -109,7 +282,7 @@ const AdminDashboard = () => {
         <div className="content">
           <>
             <div className="row">
-              <div className="col-md-12">
+              <div className="col-md-6">
                 <div className="card bg-dark">
                   <div className="overlay-img">
                     <ImageWithBasePath
@@ -140,233 +313,75 @@ const AdminDashboard = () => {
                           <h1 className="text-white me-2">
                             Welcome Back, Mr. Herald
                           </h1>
-                          <Link
-                            to="profile"
-                            className="avatar avatar-sm img-rounded bg-gray-800 dark-hover"
-                          >
-                            <i className="ti ti-edit text-white" />
-                          </Link>
                         </div>
-                        <p className="text-white">Have a Good day at work</p>
+                        <div className="examCount">
+                          <div className="text-left fw-semibold h5 mb-1 mt-2 text-white">
+                            Exam Countdown
+                          </div>
+                          <div className="d-flex justify-content-start text-center mt-3">
+                            <div className="countdown">
+                              <div className="h5 fw-semibold text-white">
+                                {countdown.days}
+                              </div>
+                              <div className="small text-white">Days</div>
+                            </div>
+                            <div className="countdown">
+                              <div className="h5 fw-semibold text-white">
+                                {countdown.hours}
+                              </div>
+                              <div className="small text-white">Hours</div>
+                            </div>
+                            <div className="countdown">
+                              <div className="h5 fw-semibold text-white">
+                                {countdown.minutes}
+                              </div>
+                              <div className="small text-white">Minutes</div>
+                            </div>
+                            <div className="countdown">
+                              <div className="h5 fw-semibold text-white">
+                                {countdown.seconds}
+                              </div>
+                              <div className="small text-white">Seconds</div>
+                            </div>
+                          </div>
+                        </div>
                       </div>
-                      <p className="text-white custom-text-white">
-                        <i className="ti ti-refresh me-1" />
-                        Updated Recently on 15 Jun 2024
-                      </p>
                     </div>
                   </div>
                 </div>
                 {/* /Dashboard Content */}
               </div>
+              <div className="col-md-6">
+                <div className="bannerSlider">
+                  <Slider
+                    {...bannerslides}
+                    className="owl-carousel owl-theme task-slider"
+                  >
+                    <div className="item">
+                      <div className="bg-light-400 rounded">
+                        <img
+                          className="classImg"
+                          src="assets/img/banner1.png"
+                        />
+                      </div>
+                    </div>
+                    <div className="item">
+                      <div className="bg-light-400 rounded">
+                        <img
+                          className="classImg"
+                          src="assets/img/banner2.png"
+                        />
+                      </div>
+                    </div>
+                  </Slider>
+                </div>
+              </div>
             </div>
 
             <div className="row">
-              <div className="col-md-6">
+              <div className="col-md-12">
                 <div className="row">
-                <div className="col-xxl-12 col-xl-12 col-md-12">
-                    <div className="d-flex rounded overflow-hidden w-100 max-w-xl">
-                      {/* Left Box */}
-                      <div
-                        className="bg-primary text-white d-flex flex-column align-items-center justify-content-center px-4 py-3 position-relative"
-                        style={{ minWidth: "120px" }}
-                      >
-                        <button
-                          type="button"
-                          className="btn btn-link position-absolute top-0 end-0 text-white p-2"
-                          data-bs-toggle="modal"
-                          data-bs-target="#standard-modal"
-                          onClick={() => setModalSource("left")}
-                        >
-                          <i className="ion-gear-b" />
-                        </button>
-                        <div className="h3 fw-bold text-white">{target}+</div>
-                        <div className="small">Your Target</div>
-                      </div>
-
-                      {/* Right Box */}
-                      <div className="bg-light flex-grow-1 p-3 position-relative">
-                        <button
-                          type="button"
-                          className="btn btn-link position-absolute top-0 end-0 text-secondary p-2"
-                          data-bs-toggle="modal"
-                          data-bs-target="#standard-modal"
-                          onClick={() => setModalSource("right")}
-                        >
-                          <i className="ion-gear-b" />
-                        </button>
-                        <div className="text-center fw-semibold h5 mb-3">
-                          Exam Countdown
-                        </div>
-                        <div className="d-flex justify-content-around text-center">
-                          <div>
-                            <div className="h5 fw-semibold">
-                              {countdown.days}
-                            </div>
-                            <div className="small">Days</div>
-                          </div>
-                          <div>
-                            <div className="h5 fw-semibold">
-                              {countdown.hours}
-                            </div>
-                            <div className="small">Hours</div>
-                          </div>
-                          <div>
-                            <div className="h5 fw-semibold">
-                              {countdown.minutes}
-                            </div>
-                            <div className="small">Minutes</div>
-                          </div>
-                          <div>
-                            <div className="h5 fw-semibold">
-                              {countdown.seconds}
-                            </div>
-                            <div className="small">Seconds</div>
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Modal */}
-                      <div
-                        id="standard-modal"
-                        className="modal fade"
-                        tabIndex={-1}
-                        role="dialog"
-                        aria-labelledby="standard-modalLabel"
-                        aria-hidden="true"
-                      >
-                        <div className="modal-dialog">
-                          <div className="modal-content">
-                            <div className="modal-header">
-                              <h4
-                                className="modal-title"
-                                id="standard-modalLabel"
-                              >
-                                {modalSource === "left"
-                                  ? "Select Target"
-                                  : "Select Exam Date"}
-                              </h4>
-                              <button
-                                type="button"
-                                className="btn-close"
-                                data-bs-dismiss="modal"
-                                aria-label="Close"
-                              />
-                            </div>
-                            <div className="modal-body">
-                              {modalSource === "left" ? (
-                                <div className="tagetbutton">
-                                  <button
-                                    className="btn btn-soft-primary rounded-pill"
-                                    onClick={() => setTarget(50)}
-                                  >
-                                    50
-                                  </button>
-                                  <button
-                                    className="btn btn-soft-primary rounded-pill mx-4"
-                                    onClick={() => setTarget(65)}
-                                  >
-                                    65
-                                  </button>
-                                  <button
-                                    className="btn btn-soft-primary rounded-pill"
-                                    onClick={() => setTarget(79)}
-                                  >
-                                    79
-                                  </button>
-                                </div>
-                              ) : (
-                                <div>
-                                  <Calendar
-                                    className="datepickers mb-4"
-                                    value={date}
-                                    onChange={(e) => setDate(e.value)}
-                                    inline
-                                  />
-                                  {/* You can add a date picker or input here too */}
-                                </div>
-                              )}
-                            </div>
-                            <div className="modal-footer">
-                              <button
-                                type="button"
-                                className="btn btn-cancel"
-                                data-bs-dismiss="modal"
-                              >
-                                Close
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Modal End */}
-                    </div>
-                  </div>
-                  <div className="col-xxl-12 col-xl-12 xol-md-12">
-                    <div
-                      className="card shadow-sm p-3 my-4"
-                      style={{
-                        backgroundColor: "rgb(255 226 226) !important",
-                        borderRadius: "5px",
-                        background: "rgb(255 226 226)",
-                        border:'none'
-                      }}
-                    >
-                      <div className="d-flex justify-content-between align-items-start mb-2">
-                        <h5 className="mb-0 fw-semibold">Practice History</h5>
-                      </div>  
-
-                      {/* Progress bars */}
-                      <div className="d-flex gap-3">
-                        <div className="progBar flex-grow-1">
-                          <div className="head">
-                            <h5>{today} Today</h5>
-                          </div>
-                          <div className="progress progress-xs ">
-                            <div
-                              className="progress-bar bg-success rounded"
-                              role="progressbar"
-                              style={{ width: "80%" }}
-                              aria-valuenow={30}
-                              aria-valuemin={0}
-                              aria-valuemax={100}
-                            />
-                          </div>
-                        </div>
-                        <div className="progBar flex-grow-1">
-                          <div className="head">
-                            <h5>{total} Today</h5>
-                          </div>
-                          <div className="progress progress-xs ">
-                            <div
-                              className="progress-bar bg-success rounded"
-                              role="progressbar"
-                              style={{ width: "80%" }}
-                              aria-valuenow={30}
-                              aria-valuemin={0}
-                              aria-valuemax={100}
-                            />
-                          </div>
-                        </div>
-                        <div className="progBar flex-grow-1">
-                          <div className="head">
-                            <h5>{days} Today</h5>
-                          </div>
-                          <div className="progress progress-xs ">
-                            <div
-                              className="progress-bar bg-success rounded"
-                              role="progressbar"
-                              style={{ width: "80%" }}
-                              aria-valuenow={30}
-                              aria-valuemin={0}
-                              aria-valuemax={100}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  {/* Total Students */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
+                  <div className="col-md-3 d-flex">
                     <div className="card flex-fill animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
@@ -394,7 +409,7 @@ const AdminDashboard = () => {
                   </div>
                   {/* /Total Students */}
                   {/* Total Teachers */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
+                  <div className="col-md-3 d-flex">
                     <div className="card flex-fill animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
@@ -422,7 +437,7 @@ const AdminDashboard = () => {
                   </div>
                   {/* /Total Teachers */}
                   {/* Total Staff */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
+                  <div className="col-md-3 d-flex">
                     <div className="card flex-fill animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
@@ -450,7 +465,7 @@ const AdminDashboard = () => {
                   </div>
                   {/* /Total Staff */}
                   {/* Total Subjects */}
-                  <div className="col-xxl-6 col-sm-6 d-flex">
+                  <div className="col-md-3 d-flex">
                     <div className="card flex-fill animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
@@ -477,17 +492,14 @@ const AdminDashboard = () => {
                     </div>
                   </div>
                   {/* /Total Subjects */}
-                  
                 </div>
               </div>
-              <div className="col-md-6">
+              <div className="col-md-4">
                 <div className="card">
                   <div className="card-header">
-                      <div className="card-title">
-                        Study Plan
-                      </div>
+                    <div className="card-title">Study Plan</div>
                   </div>
-                  <div className="card-body">
+                  <div className="card-body dashboardstudy">
                     <div className="studyPlan">
                       <div className="calendar">
                         <Calendar
@@ -500,6 +512,419 @@ const AdminDashboard = () => {
                         <StudyPlaner />
                       </div>
                     </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4">
+                <div className="card">
+                  <div className="card-header">
+                    <h4 className="card-title">Mock Test Progress</h4>
+                  </div>
+                  <div className="card-body">
+                    <div className="list-tab mb-4">
+                      <ul className="nav">
+                        <li>
+                          <Link
+                            to="#"
+                            className="active"
+                            data-bs-toggle="tab"
+                            data-bs-target="#students"
+                          >
+                            Full Mock Test
+                          </Link>
+                        </li>
+                        <li>
+                          <Link
+                            to="#"
+                            data-bs-toggle="tab"
+                            data-bs-target="#teachers"
+                          >
+                            Sectional Mock Test
+                          </Link>
+                        </li>
+                      </ul>
+                    </div>
+                    <div className="tab-content">
+                      <div className="tab-pane fade active show" id="students">
+                        <div className="text-center">
+                          <ReactApexChart
+                            id="student-chart"
+                            className="mb-4"
+                            options={studentDonutChart}
+                            series={studentDonutChart.series}
+                            type="donut"
+                            height={210}
+                          />
+                        </div>
+                      </div>
+                      <div className="tab-pane fade" id="teachers">
+                        <div className="text-center">
+                          <ReactApexChart
+                            id="student-chart"
+                            className="mb-4"
+                            options={studentDonutChart}
+                            series={studentDonutChart.series}
+                            type="donut"
+                            height={210}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* <div className="row flex-fill">
+                  <div className="col-sm-6 d-flex flex-column">
+                    <div className="bg-success-800 p-3 br-5 text-center flex-fill mb-4 pb-0  owl-height bg-01">
+                      <Slider
+                        {...student}
+                        className="owl-carousel student-slider h-100"
+                      >
+                        <div className="item h-100">
+                          <div className="d-flex justify-content-between flex-column h-100">
+                            <div>
+                              <h5 className="mb-3 text-white">
+                                Best Performer
+                              </h5>
+                              <h4 className="mb-1 text-white">Rubell</h4>
+                              <p className="text-light">Physics Teacher</p>
+                            </div>
+                            <ImageWithBasePath
+                              src="assets/img/performer/performer-01.png"
+                              alt="img"
+                            />
+                          </div>
+                        </div>
+                        <div className="item h-100">
+                          <div className="d-flex justify-content-between flex-column h-100">
+                            <div>
+                              <h5 className="mb-3 text-white">
+                                Best Performer
+                              </h5>
+                              <h4 className="mb-1 text-white">George Odell</h4>
+                              <p className="text-light">English Teacher</p>
+                            </div>
+                            <ImageWithBasePath
+                              src="assets/img/performer/performer-02.png"
+                              alt="img"
+                            />
+                          </div>
+                        </div>
+                      </Slider>
+                    </div>
+                  </div>
+                </div> */}
+                <div className="card flex-fill">
+                  <div className="card-header d-flex align-items-center justify-content-between">
+                    <h4 className="card-title">Performance</h4>
+                  </div>
+                  <div className="card-body">
+                    <div className="d-md-flex align-items-center justify-content-between">
+                      <div className="me-md-3 mb-3 mb-md-0 w-100">
+                        <div className="border border-dashed p-3 rounded d-flex align-items-center justify-content-between mb-1">
+                          <p className="mb-0 me-2">
+                            <i className="ti ti-arrow-badge-down-filled me-2 text-primary" />
+                            Speaking
+                          </p>
+                          <h5>45%</h5>
+                        </div>
+                        <div className="border border-dashed p-3 rounde d-flex align-items-center justify-content-between mb-1">
+                          <p className="mb-0 me-2">
+                            <i className="ti ti-arrow-badge-down-filled me-2 text-warning" />
+                            Writing
+                          </p>
+                          <h5>11%</h5>
+                        </div>
+                        <div className="border border-dashed p-3 rounded d-flex align-items-center justify-content-between mb-0">
+                          <p className="mb-0 me-2">
+                            <i className="ti ti-arrow-badge-down-filled me-2 text-danger" />
+                            Reading
+                          </p>
+                          <h5>42%</h5>
+                        </div>
+                        <div className="border border-dashed p-3 rounded d-flex align-items-center justify-content-between mb-0">
+                          <p className="mb-0 me-2">
+                            <i className="ti ti-arrow-badge-down-filled me-2 text-danger" />
+                            Listening
+                          </p>
+                          <h5>20%</h5>
+                        </div>
+                      </div>
+                      {/* <div id="class-chart" className="text-center text-md-left" /> */}
+                      <ReactApexChart
+                        id="class-chart"
+                        className="text-center text-md-left"
+                        options={classDonutChart}
+                        series={classDonutChart.series}
+                        type="donut"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-4 d-flex flex-column">
+                {/* Quick Links */}
+                <div className="card flex-fill">
+                  <div className="card-header d-flex align-items-center justify-content-between">
+                    <h4 className="card-title">Quick Links</h4>
+                  </div>
+                  <div className="card-body p-3">
+                    <div className="row">
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.template}
+                          className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
+                              <i className="ti ti-calendar" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Template</p>
+                        </Link>
+                      </div>
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.classLink}
+                          className="d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
+                              <i className="ti ti-license" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Class Link</p>
+                        </Link>
+                      </div>
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.predictionFile}
+                          className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-primary rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
+                              <i className="ti ti-hexagonal-prism" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Prediction</p>
+                        </Link>
+                      </div>
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.classHomeWork}
+                          className="d-block bg-danger-transparent ronded p-2 text-center mb-0 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-danger rounded-circle">
+                              <i className="ti ti-report-money" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Grammer</p>
+                        </Link>
+                      </div>
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.studentAttendance}
+                          className="d-block bg-warning-transparent ronded p-2 text-center class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">
+                              <i className="ti ti-calendar-share" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Practice History</p>
+                        </Link>
+                      </div>
+                      <div className="col-md-4">
+                        <Link
+                          to={routes.timeTable}
+                          className="d-block bg-skyblue-transparent ronded p-2 text-center mb-0 class-hover"
+                        >
+                          <div className="avatar avatar-lg border p-1 border-skyblue rounded-circle mb-2">
+                            <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-pending rounded-circle">
+                              <i className="ti ti-file-pencil" />
+                            </span>
+                          </div>
+                          <p className="text-dark">Timetable</p>
+                        </Link>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* /Quick Links */}
+                {/* Class Routine */}
+                <div className="card flex-fill">
+                  <div className="card-header d-flex align-items-center justify-content-between">
+                    <h4 className="card-title">Recent Mock Score</h4>
+                    <p>Total Score: 63</p>
+                  </div>
+                  <div className="card-body p-3">
+                    <div className="d-flex align-items-center rounded border p-2 mb-3">
+                      <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
+                        <ImageWithBasePath
+                          src="assets/img/teachers/teacher-01.jpg"
+                          className="rounded"
+                          alt="Profile"
+                        />
+                      </span>
+                      <div className="w-100">
+                        <div className="d-flex justify-content-between">
+                          <p className="mb-1">Speaking</p>
+                          <span>23</span>
+                        </div>
+                        <div className="progress progress-xs  flex-grow-1 mb-1">
+                          <div
+                            className="progress-bar progress-bar-striped progress-bar-animated bg-primary rounded"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow={80}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center rounded border p-2 mb-3">
+                      <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
+                        <ImageWithBasePath
+                          src="assets/img/teachers/teacher-02.jpg"
+                          className="rounded"
+                          alt="Profile"
+                        />
+                      </span>
+                      <div className="w-100">
+                        <div className="d-flex justify-content-between">
+                          <p className="mb-1">Writng</p>
+                          <span>45</span>
+                        </div>
+                        <div className="progress progress-xs  flex-grow-1 mb-1">
+                          <div
+                            className="progress-bar progress-bar-striped progress-bar-animated bg-warning rounded"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow={80}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center rounded border p-2 mb-3">
+                      <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
+                        <ImageWithBasePath
+                          src="assets/img/teachers/teacher-03.jpg"
+                          className="rounded"
+                          alt="Profile"
+                        />
+                      </span>
+                      <div className="w-100">
+                        <div className="d-flex justify-content-between">
+                          <p className="mb-1">Reading</p>
+                          <span>74</span>
+                        </div>
+                        <div className="progress progress-xs  flex-grow-1 mb-1">
+                          <div
+                            className="progress-bar progress-bar-striped progress-bar-animated bg-success rounded"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow={80}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                    <div className="d-flex align-items-center rounded border p-2 mb-0">
+                      <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
+                        <ImageWithBasePath
+                          src="assets/img/teachers/teacher-03.jpg"
+                          className="rounded"
+                          alt="Profile"
+                        />
+                      </span>
+                      <div className="w-100">
+                        <div className="d-flex justify-content-between">
+                          <p className="mb-1">Listening</p>
+                          <span>68</span>
+                        </div>
+                        <div className="progress progress-xs  flex-grow-1 mb-1">
+                          <div
+                            className="progress-bar progress-bar-striped progress-bar-animated bg-info rounded"
+                            role="progressbar"
+                            style={{ width: "80%" }}
+                            aria-valuenow={80}
+                            aria-valuemin={0}
+                            aria-valuemax={100}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                {/* /Class Routine */}
+                {/* Class Wise Performance */}
+
+                {/* /Class Wise Performance */}
+              </div>
+              <div className="col-md-9">
+                <div className="card flex-fill">
+                  <div className="card-header  d-flex align-items-center justify-content-between">
+                    <h4 className="card-title">Study Plan Progress</h4>
+                  </div>
+                  <div className="card-body pb-0">
+                    <ReactApexChart
+                      options={sline}
+                      series={sline.series}
+                      type="area"
+                      height={350}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="col-md-3 d-flex flex-column">
+                <div className="row flex-fill">
+                  <div className="bg-info p-3 br-5 text-center flex-fill mb-4 pb-0 owl-height bg-02">
+                    <h2 className="text-white mb-5">Testimonial</h2>
+                    <Slider
+                      {...student}
+                      className="owl-carousel student-slider h-100"
+                    >
+                      <div className="item h-100">
+                        <div className="d-flex justify-content-between flex-column h-100">
+                          <div>
+                            <h4 className="mb-3 text-white">Mujtaba Sayed</h4>{" "}
+                            <p className="text-light">
+                              The training program and teaching methods by the
+                              instructor (Yasmeen) are exceptional. Yasmeen as a
+                              person is so humble and patient that you would
+                              simply enjoy all the sessions. She understands
+                              each person's pain points and work accordingly to
+                              fix them with rigours training and feedback. I
+                              haven't attempted PTE prior, but the scores I
+                              achieved are mere hard work of my humble trainer
+                              (Yasmeen S).
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                      <div className="item h-100">
+                        <div className="d-flex justify-content-between flex-column h-100">
+                          <div>
+                            <h4 className="mb-3 text-white">Mujtaba Sayed</h4>{" "}
+                            <p className="text-light">
+                              The training program and teaching methods by the
+                              instructor (Yasmeen) are exceptional. Yasmeen as a
+                              person is so humble and patient that you would
+                              simply enjoy all the sessions. She understands
+                              each person's pain points and work accordingly to
+                              fix them with rigours training and feedback. I
+                              haven't attempted PTE prior, but the scores I
+                              achieved are mere hard work of my humble trainer
+                              (Yasmeen S).
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+                    </Slider>
                   </div>
                 </div>
               </div>
@@ -780,7 +1205,7 @@ const AdminDashboard = () => {
                   className="card p-4 shadow-sm"
                   style={{
                     borderRadius: "10px",
-                    backgroundColor: "#f0f9ef",
+                    backgroundColor: "rgb(239 241 249)",
                     maxWidth: "100%",
                   }}
                 >
@@ -849,43 +1274,35 @@ const AdminDashboard = () => {
                   to="#"
                   className="d-block bg-success-transparent ronded p-3 text-center mb-3 class-hover w-100"
                 >
-                  <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
+                  <div
+                    className="avatar avatar-lg border p-1 border-success rounded-circle mb-2"
+                    title="Click the Mic Button to Speak"
+                  >
                     <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
                       <i className="ion-mic-c"></i>
                     </span>
                   </div>
                   <p className="text-dark mb-2">Speech Test</p>
-                  <p>Click the Mic Button to Speak</p>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="Your response"
-                    placeholder="Your Response"
-                  ></input>
                   <button className="btn btn-soft-success rounded-pill mt-2 w-100">
                     Refresh
                   </button>
                 </Link>
               </div>
+
               <div className="col-xxl-4 col-xl-6 col-md-12 d-flex">
                 <Link
                   to={routes.feesGroup}
                   className="d-block bg-secondary-transparent ronded p-3 text-center mb-3 class-hover w-100"
                 >
-                  <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
+                  <div
+                    className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2"
+                    title="Click the Headphone Button to Listen"
+                  >
                     <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
                       <i className="ion-headphone" />
                     </span>
                   </div>
                   <p className="text-dark mb-2">Listening Test</p>
-                  <p>Click the Headphone Button to Listen</p>
-                  <input
-                    className="form-control"
-                    type="text"
-                    name="Your response"
-                    placeholder="Your Response"
-                    style={{ visibility: "hidden" }}
-                  ></input>
                   <button className="btn btn-soft-secondary rounded-pill mt-2 w-100">
                     Click to listen
                   </button>
@@ -896,18 +1313,17 @@ const AdminDashboard = () => {
                   to={routes.classHomeWork}
                   className="d-block bg-danger-transparent ronded p-3 w-100 text-center mb-3 class-hover"
                 >
-                  <div className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2">
+                  <div
+                    className="avatar avatar-lg border p-1 border-danger rounded-circle mb-2"
+                    title="To identify and develop your reading skills we’ve put together some information."
+                  >
                     <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-danger rounded-circle">
                       <i className="ion-edit" />
                     </span>
                   </div>
-                  <p className="text-dark mb-2">Vocab Bank</p>
-                  <p>
-                    To identify and develop your reading skills we’ve put
-                    together some information.
-                  </p>
+                  <p className="text-dark mb-2">Grammer</p>
 
-                  <button className="btn btn-soft-danger rounded-pill mt-4 w-100">
+                  <button className="btn btn-soft-danger rounded-pill mt-2 w-100">
                     Click here to Learn
                   </button>
                 </Link>
