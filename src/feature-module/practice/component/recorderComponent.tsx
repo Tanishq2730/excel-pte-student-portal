@@ -1,5 +1,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import WaveSurfer from "wavesurfer.js";
+import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+
+// 👇 Create a custom Type
+type WaveSurferType = ReturnType<typeof WaveSurfer>;
 
 interface RecorderProps {
   resetRecording: boolean;
@@ -10,107 +14,90 @@ const RecorderComponent: React.FC<RecorderProps> = ({ resetRecording, startRecor
   const [isRecording, setIsRecording] = useState(false);
   const [audioBlob, setAudioBlob] = useState<Blob | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+
+  const waveformRef = useRef<HTMLDivElement>(null);
+  const waveSurferRef = useRef<WaveSurferType | null>(null);
+
+  const { transcript, resetTranscript } = useSpeechRecognition();
+  
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
-  const waveformRef = useRef<HTMLDivElement | null>(null);
-  const waveSurferRef = useRef<ReturnType<typeof WaveSurfer.create> | null>(null);
 
-  // Start recording handler
-  const startRecordingHandler = async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    const mediaRecorder = new MediaRecorder(stream);
-    mediaRecorderRef.current = mediaRecorder;
-    audioChunks.current = [];
-
-    mediaRecorder.ondataavailable = (e) => {
-      if (e.data.size > 0) {
-        audioChunks.current.push(e.data);
-      }
-    };
-
-    mediaRecorder.start();
-    setIsRecording(true);
-  };
-
-  // Stop recording handler
-  const stopRecording = () => {
-    if (mediaRecorderRef.current) {
-      mediaRecorderRef.current.onstop = () => {
-        const blob = new Blob(audioChunks.current, { type: "audio/webm" });
-        if (blob.size > 0) {
-          setAudioBlob(blob);
-        }
-      };
-
-      setTimeout(() => {
-        mediaRecorderRef.current?.stop();
-        setIsRecording(false);
-      }, 200);
-    }
-  };
-
-  // Handle mic click (start/stop recording)
   const handleMicClick = () => {
-    isRecording ? stopRecording() : startRecordingHandler();
+    if (isRecording) {
+      stopRecording();
+    } else {
+      startRecordingHandler();
+    }
   };
 
-  useEffect(() => {
-    startRecording(); // Trigger start recording when the parent component calls this function
-  }, [startRecording]);
+  const startRecordingHandler = async () => {
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      const mediaRecorder = new MediaRecorder(stream);
+      mediaRecorderRef.current = mediaRecorder;
+      audioChunks.current = [];
 
-  // Reset recording on `resetRecording` prop change
-  useEffect(() => {
-    if (resetRecording) {
-      setIsRecording(false); // Reset recording state
-      setAudioBlob(null); // Clear audioBlob
-      if (waveSurferRef.current) {
-        waveSurferRef.current.destroy(); // Destroy old WaveSurfer instance
-        waveSurferRef.current = null;
-      }
+      mediaRecorder.addEventListener("dataavailable", (event) => {
+        audioChunks.current.push(event.data);
+      });
+
+      mediaRecorder.addEventListener("stop", () => {
+        const audioBlob = new Blob(audioChunks.current, { type: "audio/webm" });
+        setAudioBlob(audioBlob);
+      });
+
+      mediaRecorder.start();
+      setIsRecording(true);
+      resetTranscript();
+    } catch (error) {
+      console.error("Error accessing microphone:", error);
     }
-  }, [resetRecording]);
+  };
 
-  // Initialize WaveSurfer when audioBlob is set
-  useEffect(() => {
-    if (audioBlob && waveformRef.current) {
-      const audioURL = URL.createObjectURL(audioBlob);
-
-      // Only initialize WaveSurfer if the audioBlob URL is valid
-      if (audioURL) {
-        const waveSurfer = WaveSurfer.create({
-          container: waveformRef.current,
-          waveColor: "#ddd",
-          progressColor: "#00aaff",
-          height: 100,
-          barWidth: 2,
-          responsive: true, // Ensures the waveform is resized properly
-        });
-
-        // Load audio and ensure the waveform is rendered after a slight delay to avoid rendering issues
-        waveSurfer.load(audioURL);
-
-        // Store reference to the WaveSurfer instance
-        waveSurferRef.current = waveSurfer;
-
-        // Wait for the waveform to render before enabling play/pause button
-        waveSurfer.on("ready", () => {
-          setIsPlaying(false); // Ensure play/pause works only after the waveform is ready
-        });
-
-        return () => {
-          // Cleanup WaveSurfer instance when the component unmounts or audioBlob changes
-          waveSurfer.destroy();
-        };
-      }
-    }
-  }, [audioBlob]);
+  const stopRecording = () => {
+    mediaRecorderRef.current?.stop();
+    setIsRecording(false);
+  };
 
   const togglePlay = () => {
     if (waveSurferRef.current) {
-      waveSurferRef.current.playPause();
-      setIsPlaying((prev) => !prev); // Toggle the playing state
+      if (isPlaying) {
+        waveSurferRef.current.pause();
+      } else {
+        waveSurferRef.current.play();
+      }
+      setIsPlaying(!isPlaying);
     }
   };
+
+  useEffect(() => {
+    if (audioBlob && waveformRef.current) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        if (reader.result && typeof reader.result === "string") {
+          if (waveSurferRef.current) {
+            waveSurferRef.current.destroy();
+          }
+
+          const waveSurfer = WaveSurfer.create({
+            container: waveformRef.current!,
+            waveColor: "#97A3B9",
+            progressColor: "#4F46E5",
+            cursorColor: "#4F46E5",
+            barWidth: 2,
+            barRadius: 2,
+            responsive: true,
+            height: 100,
+          });
+
+          waveSurfer.load(reader.result);
+          waveSurferRef.current = waveSurfer;
+        }
+      };
+      reader.readAsDataURL(audioBlob);
+    }
+  }, [audioBlob]);
 
   return (
     <div
@@ -121,9 +108,7 @@ const RecorderComponent: React.FC<RecorderProps> = ({ resetRecording, startRecor
         {!audioBlob && (
           <div className="micCard">
             <div className="text" style={{ marginBottom: "10px" }}>
-              {isRecording
-                ? "Recording... Click to Stop"
-                : "Click to Start Recording"}
+              {isRecording ? "Recording... Click to Stop" : "Click to Start Recording"}
             </div>
 
             <div

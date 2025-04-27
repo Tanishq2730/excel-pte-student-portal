@@ -54,6 +54,7 @@
     "react-select": "^5.10.0",
     "react-simple-wysiwyg": "^3.2.0",
     "react-slick": "^0.30.3",
+    "react-speech-recognition": "^4.0.0",
     "react-tag-input": "^6.10.6",
     "react-tag-input-component": "^2.0.2",
     "react-time-picker": "^6.6.0",
@@ -106,12 +107,15 @@
     "@types/react-router-dom": "^5.3.3",
     "@types/react-select": "^5.0.1",
     "@types/react-slick": "^0.23.13",
+    "@types/react-speech-recognition": "^3.9.6",
+    "@types/string-similarity": "^4.0.2",
     "@types/wavesurfer.js": "^6.0.12",
     "css-loader": "^7.1.2",
     "html-react-parser": "^5.2.3",
     "postcss-loader": "^8.1.1",
     "resolve-url-loader": "^5.0.0",
     "sass": "^1.85.0",
-    "sass-loader": "^16.0.5"
+    "sass-loader": "^16.0.5",
+    "string-similarity": "^4.0.4"
   }
 }
