@@ -240,12 +240,12 @@ const ReadAloud = () => {
     }
   };
 
-  const toggleNotes = () => {
-    setShowNotes((prev) => !prev);
-  };
+    const toggleNotes = () => {
+      setShowNotes((prev) => !prev);
+    };
 
-  // Calculate pause duration
-const calculatePauseDuration = (currentIndex: number): number => {
+    // Calculate pause duration
+  const calculatePauseDuration = (currentIndex: number): number => {
   if (
     !transcriptTimestamps ||
     transcriptTimestamps.length <= currentIndex ||
@@ -557,7 +557,7 @@ const handleSubmitPractice = async () => {
                             style={{ background: "#ffe4e4" }}
                           >
                             
-                             <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
+                            <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
                             <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                             <hr />
                             <div className="rounded-pill">

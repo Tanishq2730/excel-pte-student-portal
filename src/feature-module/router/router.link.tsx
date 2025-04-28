@@ -31,6 +31,7 @@ import AdminDashboard from "../mainMenu/adminDashboard";
 import RepeatSentence from "../practice/speaking/repeatSentence";
 import DescribeImage from "../practice/speaking/describeImage";
 import ReTellLecture from "../practice/speaking/reTellLecture";
+import RespondSituation from "../practice/speaking/respondSituation";
 import AnswerShortQuestion from "../practice/speaking/answerShortQuestipn";
 import WriteEssay from "../practice/writing/writeEssay";
 import WriteEmail from "../practice/writing/writeEmail";
@@ -90,6 +91,8 @@ export const myPracticeRoutes = [
   { path: routes.repeatSentence, element: <RepeatSentence />, route: Route },
   { path: routes.describeImage, element: <DescribeImage />, route: Route },
   { path: routes.reTellLecture, element: <ReTellLecture />, route: Route },
+  { path: routes.respondSituation, element: <RespondSituation />, route: Route },
+  
   {
     path: routes.answerShortQuestion,
     element: <AnswerShortQuestion />,

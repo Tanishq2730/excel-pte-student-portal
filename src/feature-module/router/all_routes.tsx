@@ -123,6 +123,7 @@ export const all_routes = {
   repeatSentence:"/repeat-sentence/:subtype_id/:question_id?",
   describeImage:"/describe-image/:subtype_id/:question_id?",
   reTellLecture:"/retell-lecture/:subtype_id/:question_id?",
+  respondSituation:"/respond-situation/:subtype_id/:question_id?",
   answerShortQuestion:"/answer-short-question/:subtype_id/:question_id?",
   summarizeWritinText:"/summarize-written-text/:subtype_id/:question_id?",
   writeEssay:"/write-essay/:subtype_id/:question_id?",

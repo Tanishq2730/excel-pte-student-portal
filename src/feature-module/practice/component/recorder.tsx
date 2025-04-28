@@ -17,9 +17,6 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
   const waveformContainerRef = useRef<HTMLDivElement | null>(null);
   const { transcript, resetTranscript } = useSpeechRecognition();
 
-  // Log the transcript to check
-  console.log(transcript, 'transcript');
-
   useEffect(() => {
     if (audioUrl && waveformContainerRef.current) {
       if (waveSurferRef.current) {

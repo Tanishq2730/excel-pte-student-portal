@@ -23,7 +23,7 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const ReTellLecture = () => {
+const RespondSituation = () => {
   const audioRef = useRef<HTMLAudioElement>(null);
   const progressRef = useRef<HTMLInputElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -179,14 +179,14 @@ const ReTellLecture = () => {
     // Handling navigation to next and previous questions
     const handleNext = () => {
       if (questionData?.nextQuestionId) {      
-        navigate(`/retell-lecture/${subtype_id}/${questionData?.nextQuestionId}`);
+        navigate(`/respond-situation/${subtype_id}/${questionData?.nextQuestionId}`);
         handleStopRecording();
       }
     };
   
     const handlePrevious = () => {
       if (questionData?.previousQuestionId) {
-        navigate(`/retell-lecture/${subtype_id}/${questionData?.previousQuestionId}`);
+        navigate(`/respond-situation/${subtype_id}/${questionData?.previousQuestionId}`);
         handleStopRecording();
       }
     };
@@ -446,19 +446,6 @@ const ReTellLecture = () => {
       if (contentScoreOutOf90 < 0) {
         contentScoreOutOf90 = 0;
       }
-
-      // console.log("///////////////////////////////////////////////////////");
-      // console.log("transcript: ", transcript);
-      // console.log("spokenWordsLowercase: ", spokenWordsLowercase);
-      // console.log("correctWordsLowercase: ", correctWordsLowercase);
-      // console.log("goodCount2: ", goodCount2);
-      // console.log("totalWordsInCorrectText: ", totalWordsInCorrectText);
-      // console.log("contentScoreOutOf90: ", contentScoreOutOf90);
-      // console.log("///////////////////////////////////////////////////////");
-
-      ///////////////////////////////////////////////////////////////
-      // Calculate the fluency score out of 90
-      ///////////////////////////////////////////////////////////////
 
       // 0 - 60 score meter
       const fluencyScoreMeter = 40; // 35 previous
@@ -730,4 +717,4 @@ const ReTellLecture = () => {
   );
 };
 
-export default ReTellLecture;
+export default RespondSituation;
