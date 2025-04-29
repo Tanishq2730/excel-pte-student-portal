@@ -2,6 +2,8 @@ import { useEffect, useState, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { all_routes } from "../../../feature-module/router/all_routes";
 import { fetchAllTypes } from "../../../api/commonAPI";
+import { useDispatch } from 'react-redux';
+import { setSubtypeValue } from "../../data/redux/practiceSlice";
 
 interface PracticeHeaderProps {
     showMegaMenu: boolean;
@@ -50,6 +52,7 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
 
 const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
     const [practiceTypes, setPracticeTypes] = useState<PracticeType[]>([]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         const getTypes = async () => {
@@ -133,7 +136,11 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                                                 <div className="mega-column" key={type.id}>
                                                 <h6>{type.name}</h6>
                                                 {type.Subtypes.sort((a, b) => a.order - b.order).map((sub) => (
-                                                    <Link key={sub.id} to={getLinkPath(getRoutePath(sub.sub_name), sub.id, null)}>
+                                                   <Link
+                                                   key={sub.id}
+                                                   to={getLinkPath(getRoutePath(sub.sub_name), sub.id, null)}
+                                                   onClick={() => localStorage.setItem("subtypeId", sub.id.toString())}
+                                                 >
                                                         {sub.sub_name}
                                                         {sub.ai_score ? (
                                                             <span className="ai-score">AI Score</span>

@@ -18,6 +18,18 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
       return await apiHandler(`${api_url}v1/savePractice`, "POST",formData,type && true);
   };
 
+  export const fetchQuestions = async (subtype_id: number, params: any) => {
+    return await apiHandler(
+      `${api_url}v1/get-questions/${subtype_id}`,
+      "GET",
+      { params }  // Axios expects query parameters to be passed this way
+    );
+  };
+
+  export const saveBookmark = async (formData: any) => {
+      return await apiHandler(`${api_url}v1/bookmarks`, "POST",formData);
+  };
+
   export async function fetchWfdCheck(CorrectText: string, UserText: string, lang: string) {
     const headersList = {
         "Content-Type": "application/json",

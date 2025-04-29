@@ -29,14 +29,19 @@ export interface ApiResponse<T = any> {
         ...(token ? { Authorization: `Bearer ${token}` } : {}), // Auto-add token if exists
       };
   
-      const response = await fetch(endpoint, {
+      let url = endpoint;
+      if (method === 'GET' && body && typeof body === 'object') {
+        const params = new URLSearchParams(body).toString();
+        url += `?${params}`;
+      }
+
+      const response = await fetch(url, {
         method,
         headers,
-        body: isMultipart ? body : JSON.stringify(body),
+        body: method === 'GET' ? undefined : (isMultipart ? body : JSON.stringify(body)),
       });
   
       const result = await response.json();
-      console.log(result);
       
       if (result.message === 'Session expired. Please log in again.' || result.message === 'Invalid token' || result.message === 'Access Denied') {
         localStorage.removeItem('token'); // optional: clear token

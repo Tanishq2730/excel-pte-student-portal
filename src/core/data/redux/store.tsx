@@ -1,7 +1,8 @@
 import { configureStore } from '@reduxjs/toolkit';
 import themeSettingSlice from './themeSettingSlice';
 import sidebarSlice from './sidebarSlice';
-import authReducer from './authSlice'
+import authReducer from './authSlice';
+import practiceSlice from './practiceSlice';
 
 
 const store = configureStore({
@@ -9,6 +10,7 @@ const store = configureStore({
     themeSetting: themeSettingSlice,
     sidebarSlice: sidebarSlice,
     auth: authReducer,
+    subType: practiceSlice,
   },
 });
 
