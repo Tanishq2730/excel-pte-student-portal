@@ -72,7 +72,7 @@ const SpeakingScoreModal: React.FC<SpeakingScoreModalProps> = ({ logDetail }) =>
             <div className="p-3 rounded shadow-sm" style={{ backgroundColor: '#fef9f7', border: '1px solid #f1e1dc' }}>
               <div className="d-flex justify-content-between fw-semibold">
                 <span>{item.label}</span>
-                <span>{item.score} / {logDetail.total_score}</span>
+                <span>{item.score.toFixed(2)} / {logDetail.total_score}</span>
               </div>
               <div className="mt-2 mb-1" style={{ backgroundColor: '#e0e0e0', height: '8px', borderRadius: '4px' }}>
                 <div

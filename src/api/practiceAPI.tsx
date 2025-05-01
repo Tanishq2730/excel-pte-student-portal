@@ -10,8 +10,9 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
     return await apiHandler(url, "GET");
   };
 
-  export const fetchPracticeLogs = async (question_id: number) => {
-    return await apiHandler(`${api_url}v1/practice/logs/${question_id}`, "GET");
+  export const fetchPracticeLogs = async (question_id: number, type?: string) => {
+    const query = type ? `?type=${type}` : '';
+    return await apiHandler(`${api_url}v1/practice/logs/${question_id}${query}`, "GET");
   };
 
   export const fetchPracticeLog = async (id: number) => {
@@ -20,6 +21,22 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
 
   export const savePractice = async (type:any,formData: any) => {
       return await apiHandler(`${api_url}v1/savePractice`, "POST",formData,type && true);
+  };
+
+  export const addComments = async (formData: any) => {
+      return await apiHandler(`${api_url}v1/community_score/comments`, "POST",formData);
+  };
+
+  export const removeComments = async (id:number) => {
+    return await apiHandler(`${api_url}v1/community_score/comments/${id}`, "DELETE");
+  };
+
+  export const addLikes = async (formData: any) => {
+    return await apiHandler(`${api_url}v1/community_score/likes`, "POST", formData);
+  };
+
+  export const removeLikes = async (formData: any) => {
+    return await apiHandler(`${api_url}v1/community_score/likes`, "DELETE", formData);
   };
 
   export const fetchQuestions = async (subtype_id: number, params: any) => {

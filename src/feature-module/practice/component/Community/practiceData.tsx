@@ -62,7 +62,6 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
       setSelectedLogDetails(null);
     }
   };
-console.log(selectedLogDetails, 'selectedLogDetails');
 
   return (
     <>
