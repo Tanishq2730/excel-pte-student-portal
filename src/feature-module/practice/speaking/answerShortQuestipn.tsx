@@ -476,23 +476,28 @@ console.log(possibleAnswers, "possibleAnswers");
   
         let score_data = {
           content: contentScoreOutOf90,          
-          transcript: transcript,
+          transcript: questionData?.transcription,
           scored_transcript: combinedTranscriptHTML,
         };      
   
-        const payload = {
-          questionId: questionData.id,
-          totalscore: totalscore, // You can adjust this if you calculate it
-          lateSpeak: lateSpeak,
-          timeSpent: timeSpent,
-          score: targetScoreOutOf90,
-          score_data: JSON.stringify(score_data)
-        };
+        const questionId = questionData?.id;
+        const formData = new FormData();
+        formData.append("questionId", questionId.toString());
+        formData.append("totalscore", totalscore.toString());
+        formData.append("lateSpeak", lateSpeak.toString());
+        formData.append("timeSpent", timeSpent.toString());
+        formData.append("score", targetScoreOutOf90.toString());
+        formData.append("score_data", JSON.stringify(score_data));
+        
+        if (recordedAudioBlob) {
+          const audioFile = new File([recordedAudioBlob], "answer.wav", { type: "audio/wav" });
+          formData.append("answer", audioFile);
+        }
   
   
         // Send to backend
         try {
-          const response = await savePractice(false, payload);
+          const response = await savePractice(true, formData);
   
           
           if (response.success) {

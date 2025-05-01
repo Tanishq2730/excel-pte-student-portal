@@ -149,7 +149,7 @@ const WriteEssay = () => {
           lateSpeak: 1,
           timeSpent: timeSpent,
           score: score,
-          score_data: score_data,
+          score_data: JSON.stringify(score_data),
           answer: user_answer,
         };
         const response = await savePractice(false, payload);

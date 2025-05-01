@@ -363,5 +363,6 @@ export interface QuestionData {
   speak_audio_file:string;
   drag_drop:string;
   describe_image:string;
+  transcription:string;
   Subtype: Subtype; // Add the Subtype field here
 }

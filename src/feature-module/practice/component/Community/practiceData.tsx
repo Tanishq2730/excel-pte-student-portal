@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { fetchPracticeLogs } from "../../../../api/practiceAPI";
+import { fetchPracticeLogs, fetchPracticeLog } from "../../../../api/practiceAPI";
 import moment from "moment";
-import CommunityModal from "../communityModal";
+import SpeakingScoreModal from "../speakingScoreModal";
+import WritingScoreModal from "../writingScoreModal"; 
+import ReadingScoreModal from "../readingScoreModal";
+import ListeningScoreModal from "../listeningScoreModal";
 
 // Define prop types
 interface PracticeDataProps {
@@ -22,6 +25,9 @@ interface PracticeLog {
 
 const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
   const [practiceLogs, setPracticeLogs] = useState<PracticeLog[]>([]);
+  const [selectedLogId, setSelectedLogId] = useState<number | null>(null);
+  const [selectedLogDetails, setSelectedLogDetails] = useState<any>(null);
+
 
   useEffect(() => {
     const getData = async () => {
@@ -42,6 +48,21 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
       getData();
     }
   }, [questionData]);
+
+  const handleScoreClick = async (id: number) => {
+    setSelectedLogId(id);
+    try {
+      const res = await fetchPracticeLog(id);
+      if (res.success) {
+        const parsedScoreData = JSON.parse(res.data.score_data || "{}");
+        setSelectedLogDetails({ ...res.data, score_data: parsedScoreData });
+      }
+    } catch (err) {
+      console.error("Error fetching log detail:", err);
+      setSelectedLogDetails(null);
+    }
+  };
+console.log(selectedLogDetails, 'selectedLogDetails');
 
   return (
     <>
@@ -79,19 +100,20 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             </div>
 
             <div className="d-flex align-items-center">
-              <button
-                className="popbtn border rounded-pill px-2 py-1 me-3"
-                data-bs-toggle="modal"
-                data-bs-target="#exampleModalLg"
-                style={{
-                  backgroundColor: "#f0f0f0",
-                  borderColor: "#00c6b5",
-                  color: "black",
-                  fontSize: "0.9rem",
-                }}
-              >
-                My Score <strong>{log.score} / {log.total_score}</strong>
-              </button>
+            <button
+              className="popbtn border rounded-pill px-2 py-1 me-3"
+              data-bs-toggle="modal"
+              data-bs-target="#exampleModalLg"
+              onClick={() => handleScoreClick(log.id)}
+              style={{
+                backgroundColor: "#f0f0f0",
+                borderColor: "#00c6b5",
+                color: "black",
+                fontSize: "0.9rem",
+              }}
+            >
+              My Score <strong>{log.score} / {log.total_score}</strong>
+            </button>
               <div className="text-danger" style={{ fontSize: "0.9rem" }}>
                 {log.late_speak
                   ? "Good job! Keep practicing."
@@ -123,7 +145,19 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                     />
                   </div>
                   <div className="modal-body">
-                    <CommunityModal/>
+                    {questionData?.Type?.name === 'Speaking' && (
+                      <SpeakingScoreModal logDetail={selectedLogDetails} />
+                    )}
+                    {questionData?.Type?.name === 'Writing' && (
+                      <WritingScoreModal logDetail={selectedLogDetails} />
+                    )}
+                    {questionData?.Type?.name === 'Reading' && (
+                      <ReadingScoreModal logDetail={selectedLogDetails} />
+                    )}
+                    {questionData?.Type?.name === 'Listning' && (
+                      <ListeningScoreModal logDetail={selectedLogDetails} />
+                    )}
+                    
                   </div>
                 </div>
               </div>
