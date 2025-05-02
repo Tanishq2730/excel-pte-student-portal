@@ -760,7 +760,7 @@ const AdminDashboard = () => {
                   <div className="card-body p-3">
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <i className="ion-mic-c"></i>
+                        <i className="ion-mic-c text-danger"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
@@ -781,11 +781,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <ImageWithBasePath
-                          src="assets/img/teachers/teacher-02.jpg"
-                          className="rounded"
-                          alt="Profile"
-                        />
+                        <i className="ion-edit text-primary"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
@@ -806,11 +802,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <ImageWithBasePath
-                          src="assets/img/teachers/teacher-03.jpg"
-                          className="rounded"
-                          alt="Profile"
-                        />
+                      <i className="ion-ios7-bookmarks text-green"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
@@ -831,11 +823,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="d-flex align-items-center rounded border p-2 mb-0">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <ImageWithBasePath
-                          src="assets/img/teachers/teacher-03.jpg"
-                          className="rounded"
-                          alt="Profile"
-                        />
+                      <i className="ion-headphone text-warning"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">

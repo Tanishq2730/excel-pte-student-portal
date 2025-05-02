@@ -10,11 +10,18 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import ParaReorder from "../component/paraReorder";
 import AlertComponent from "../../../core/common/AlertComponent";
+import MyNotes from "../component/myNotes";
 
 const ReOrderParagraph = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
-  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [answers, setAnswers] = useState<string[]>([]);
   const [resetParaReorder, setResetParaReorder] = useState(false);
@@ -23,8 +30,12 @@ const ReOrderParagraph = () => {
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const startTime = useRef(Date.now());
+  const [showNotes, setShowNotes] = useState<boolean>(false);
 
   const timeSpentRef = useRef(0);
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -51,13 +62,15 @@ const ReOrderParagraph = () => {
   };
 
   useEffect(() => {
-
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
   useEffect(() => {
     if (questionData?.Subtype?.beginning_in) {
-      const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10);
+      const preparationTimeInSeconds = parseInt(
+        questionData.Subtype.beginning_in,
+        10
+      );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
     }
@@ -80,31 +93,38 @@ const ReOrderParagraph = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
   };
-
 
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/reorder-paragraph/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(
+        `/reorder-paragraph/${subtype_id}/${questionData?.nextQuestionId}`
+      );
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/reorder-paragraph/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(
+        `/reorder-paragraph/${subtype_id}/${questionData?.previousQuestionId}`
+      );
     }
   };
 
   const handleRestart = () => {
     // Reset countdown to the initial preparation time
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.beginning_in || "0",
+      10
+    );
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
-    setResetParaReorder(true); 
+    setResetParaReorder(true);
     setShowAnswer(false); // Optionally reset the answer view
-
   };
 
   const handleAnswerClick = () => {
@@ -131,11 +151,9 @@ const ReOrderParagraph = () => {
       });
       const totalscore = correctAnswers.length - 1;
 
-     
-      const user_answer = userAnswerStr.trim();     
+      const user_answer = userAnswerStr.trim();
       let user_answer_arr = user_answer.split(",");
 
-     
       let matchingPairs = 0;
 
       for (let i = 0; i < totalscore; i++) {
@@ -176,10 +194,6 @@ const ReOrderParagraph = () => {
         answer: correctAnswers,
       };
 
-
-
-
-
       const payload = {
         questionId: questionData.id,
         totalscore: totalscore, // You can adjust this if you calculate it
@@ -190,24 +204,25 @@ const ReOrderParagraph = () => {
         answer: userAnswerStr,
       };
 
-
       // Send to backend
       try {
         const response = await savePractice(false, payload);
 
-
         if (response.success) {
           getData();
-          const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+          const preparationTimeInSeconds = parseInt(
+            questionData?.Subtype.beginning_in || "0",
+            10
+          );
           setCountdown(preparationTimeInSeconds);
           setTimerActive(true); // Restart the countdown
           setTimeSpent(0);
-          setShowAnswer(false); // Optionally reset the answer view   
+          setShowAnswer(false); // Optionally reset the answer view
           setResetParaReorder(true); // Trigger reset
 
           setTimeout(() => {
             setResetParaReorder(false); // Allow reset to be triggered again in the future
-          }, 100); // Small delay to avoid state issues         
+          }, 100); // Small delay to avoid state issues
           setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
@@ -215,74 +230,104 @@ const ReOrderParagraph = () => {
       } catch (error) {
         console.error("Submission Error:", error);
       }
-
     } catch (error) {
       console.error("Error saving practice:", error);
       setAlert({ type: "danger", message: "Something went wrong." });
     }
   };
 
-
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              There are some words missing in the following text. Please select
-              the correct word in the drop-down box.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="time">
-                  <div className="headBtn">
-
-                    <span className="text-danger">Prepare: {formatTime(countdown)}</span>
-                    <CardButton questionData={questionData} />
+          <div className="row">
+            <div className="col-12 mb-3">
+              <button
+                className="btn btn-primary mynotesBtn"
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={toggleNotes}
+              >
+                <i className="fa fa-book"></i>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <div className="practiceLayout">
+                <p className="my-3">
+                  There are some words missing in the following text. Please
+                  select the correct word in the drop-down box.
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
+                    </div>
                   </div>
-                  <div className="reorderSection">
-                    <ParaReorder questionData={questionData} onAnswerChange={setAnswers}  resetTrigger={resetParaReorder} />
-                  </div>
-                  {showAnswer && (
-                    <div
-                      className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
-                    >
-                      <div
-                        className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
-                      >
-                        <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
+                  <div className="card-body">
+                    <div className="time">
+                      <div className="headBtn">
+                        <span className="text-danger">
+                          Prepare: {formatTime(countdown)}
+                        </span>
+                        <CardButton questionData={questionData} />
+                      </div>
+                      <div className="reorderSection">
+                        <ParaReorder
+                          questionData={questionData}
+                          onAnswerChange={setAnswers}
+                          resetTrigger={resetParaReorder}
+                        />
+                      </div>
+                      {showAnswer && (
+                        <div
+                          className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
+                          style={{ background: "#ffe4e4" }}
+                        >
+                          <div
+                            className="audio-inner p-4 rounded-3"
+                            style={{ background: "#ffe4e4" }}
+                          >
+                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <hr />
+                            <div className="rounded-pill">
+                              <audio controls className="w-100">
+                                <source
+                                  src="your-audio-file.mp3"
+                                  type="audio/mpeg"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          </div>
                         </div>
+                      )}
+                      <div className="bottomBtn mt-3">
+                        <QuestionNavigation
+                          questionData={questionData}
+                          onAnswerClick={handleAnswerClick}
+                          onRestart={handleRestart}
+                          onNext={handleNext}
+                          onPrevious={handlePrevious}
+                          onSubmit={handleSubmitPractice}
+                        />
                       </div>
                     </div>
-                  )}
-                  <div className="bottomBtn mt-3">
-                    <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onSubmit={handleSubmitPractice}
-                    />
                   </div>
                 </div>
               </div>
             </div>
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
           <div className="community">
             <Community questionData={questionData} />

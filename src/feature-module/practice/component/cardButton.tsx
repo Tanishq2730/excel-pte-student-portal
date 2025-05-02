@@ -17,32 +17,38 @@ const CardButton: React.FC<CardButtonProps> = ({ questionData }) => {
     <div className="cardBtns">
       {questionData && (
         <>
-          <button className="btn btn-outline-secondary py-1 rounded-pill">
+          <button className="btn btn-group py-1" style={{background:'#ffbb8a47',color:'#000'}}>
             {questionData.difficulties.charAt(0).toUpperCase() +
               questionData.difficulties.slice(1)}
           </button>
 
           {questionData.new_question && (
-            <button className="btn btn-outline-danger py-1 rounded-pill">
+            <button
+              className="btn btn-group py-1"
+              style={{ background: "#ff838333", color: "#000" }}
+            >
               New
             </button>
           )}
 
           {questionData.weekly && (
-            <button className="btn btn-outline-info py-1 rounded-pill">
+            <button
+              className="btn btn-group py-1"
+              style={{ background: "#8ad9ff4d", color: "#000" }}
+            >
               Prediction
             </button>
           )}
 
-          <button className="btn btn-outline-success py-1 rounded-pill">
+          <button className="btn btn-group py-1" style={{background:'#6bff9133',color:'#000'}}>
             Attempted {questionData.attemptedCount}
           </button>
 
-          <button className="btn btn-outline-light py-1 rounded-pill">
+          <button className="btn btn-group py-1" style={{background:'ff838333',color:"#000"}}>
             {questionData.bookmarked ? (
-              <i className="fa fa-bookmark"></i>
+              <i className="fe fe-bookmark"></i>
             ) : (
-              <i className="fa fa-bookmark-o"></i>
+              <i className="fa fa-bookmark"></i>
             )}
           </button>
         </>

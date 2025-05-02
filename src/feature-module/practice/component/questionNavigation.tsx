@@ -54,6 +54,7 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
               id="flexSwitchCheckChecked"
               checked={isAnswerVisible}
               onChange={handleToggleChange}
+              style={{width:'3em',height:'1.5em',marginTop:'0em'}}
             />
             <label
               className="form-check-label ms-2"

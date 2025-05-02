@@ -2316,7 +2316,8 @@ body.app-chat {
 
 .MsoNormal {
   font-size: 18px;
-  line-height: 32px;
+  // line-height: 32px;
+  line-height: 2.2;
 }
 
 .mynotesBtn {
@@ -2406,4 +2407,36 @@ body.app-chat {
   justify-content: center;
   align-items: center;
   margin: auto;
+}
+
+.mainFilter{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.questionSearch{
+  padding: 10px 20px;
+  border-radius: 20px;
+  border: 1px solid #ccc;
+}
+
+.onhovercard:hover{
+  border: 1px solid #1b507a !important;
+}
+
+.templatebg:after{
+  background-attachment: fixed;
+  background-image: url(../public/assets/img/templateBg.png);
+  background-position: 50%;
+  background-repeat: no-repeat;
+  background-size: 20%;
+  content: "";
+  height: 100%;
+  left: 50%;
+  opacity: .1;
+  position: absolute;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
 }

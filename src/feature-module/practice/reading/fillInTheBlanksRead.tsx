@@ -1,4 +1,4 @@
-import React, { useState, useEffect,useRef } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
@@ -10,11 +10,18 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import parse, { DOMNode, Element } from "html-react-parser";
 import AlertComponent from "../../../core/common/AlertComponent";
+import MyNotes from "../component/myNotes";
 
 const FillInTheBlanksRead = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
-  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [countdown, setCountdown] = useState<number>(0);
   const [timerActive, setTimerActive] = useState<boolean>(false);
@@ -23,6 +30,7 @@ const FillInTheBlanksRead = () => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const startTime = useRef(Date.now());
+  const [showNotes, setShowNotes] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -49,8 +57,7 @@ const FillInTheBlanksRead = () => {
     }
   };
 
-  useEffect(() => {  
-
+  useEffect(() => {
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
@@ -75,7 +82,9 @@ const FillInTheBlanksRead = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`;
+    return `${minutes < 10 ? "0" + minutes : minutes}:${
+      seconds < 10 ? "0" + seconds : seconds
+    }`;
   };
 
   const handleNext = () => {
@@ -89,8 +98,11 @@ const FillInTheBlanksRead = () => {
   };
 
   const handleRestart = () => {
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
-    setCountdown(preparationTimeInSeconds); 
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.beginning_in || "0",
+      10
+    );
+    setCountdown(preparationTimeInSeconds);
     setTimerActive(true);
     setShowAnswer(false);
     setAnswers({});
@@ -105,7 +117,10 @@ const FillInTheBlanksRead = () => {
     ? questionData.drag_drop.split(",").map((text) => text.trim())
     : [];
 
-  const handleDragStart = (e: React.DragEvent<HTMLDivElement | HTMLSpanElement>, word: string) => {
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement | HTMLSpanElement>,
+    word: string
+  ) => {
     e.dataTransfer.setData("text/plain", word);
   };
 
@@ -123,7 +138,9 @@ const FillInTheBlanksRead = () => {
 
         // Remove old word from usedWords if present
         if (existingWord) {
-          setUsedWords((prevUsed) => prevUsed.filter((w) => w !== existingWord));
+          setUsedWords((prevUsed) =>
+            prevUsed.filter((w) => w !== existingWord)
+          );
         }
 
         // Add new word to usedWords if not already present
@@ -187,8 +204,8 @@ const FillInTheBlanksRead = () => {
               backgroundColor: isCorrect
                 ? "#d4edda" // ✅ Green for correct answer
                 : isFilled && showAnswer
-                  ? "#f8d7da" // ❌ Light red for incorrect (optional)
-                  : "#fff",
+                ? "#f8d7da" // ❌ Light red for incorrect (optional)
+                : "#fff",
               display: "inline-block",
               cursor: "pointer",
             }}
@@ -200,8 +217,9 @@ const FillInTheBlanksRead = () => {
     },
   };
 
-  const availableWords = dragDropOptions.filter((word) => !usedWords.includes(word));
-
+  const availableWords = dragDropOptions.filter(
+    (word) => !usedWords.includes(word)
+  );
 
   const handleSubmitPractice = async () => {
     if (!questionData?.id || !subtype_id) return;
@@ -227,7 +245,6 @@ const FillInTheBlanksRead = () => {
         score: score,
       };
 
-
       const payload = {
         questionId: questionData.id,
         totalscore: totalscore, // You can adjust this if you calculate it
@@ -238,19 +255,20 @@ const FillInTheBlanksRead = () => {
         answer: userAnswerStr,
       };
 
-
       // Send to backend
       try {
         const response = await savePractice(false, payload);
 
-        
         if (response.success) {
           getData();
-          const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+          const preparationTimeInSeconds = parseInt(
+            questionData?.Subtype.beginning_in || "0",
+            10
+          );
           setCountdown(preparationTimeInSeconds);
           setTimerActive(true); // Restart the countdown
           setTimeSpent(0);
-          setShowAnswer(false); // Optionally reset the answer view 
+          setShowAnswer(false); // Optionally reset the answer view
           setAnswers({});
           setUsedWords([]);
           setAlert({ type: "success", message: "Your Answer Saved!" });
@@ -260,83 +278,124 @@ const FillInTheBlanksRead = () => {
       } catch (error) {
         console.error("Submission Error:", error);
       }
-
     } catch (error) {
       console.error("Error saving practice:", error);
       setAlert({ type: "danger", message: "Something went wrong." });
     }
   };
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              Read the text and answer the question by selecting all the correct
-              responses. More than one response is correct.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="headBtn mb-3 d-flex justify-content-between">
-                  <span className="text-danger">Prepare: {formatTime(countdown)}</span>
-                  <CardButton questionData={questionData} />
-                </div>
+          <div className="row">
+            <div className="col-12 mb-3">
+              <button
+                className="btn btn-primary mynotesBtn"
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={toggleNotes}
+              >
+                <i className="fa fa-book"></i>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <div className="practiceLayout">
+                <p className="my-3">
+                  Read the text and answer the question by selecting all the
+                  correct responses. More than one response is correct.
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
+                    </div>
+                  </div>
+                  <div className="card-body">
+                    <div className="headBtn mb-3 d-flex justify-content-between">
+                      <span className="text-danger">
+                        Prepare: {formatTime(countdown)}
+                      </span>
+                      <CardButton questionData={questionData} />
+                    </div>
 
-                <div className="p-4 space-y-4" style={{ fontSize: "1.25rem" }}>
-                  {parse(questionData?.question || "", customParseOptions)}
+                    <div
+                      className="p-4 space-y-4"
+                      style={{ fontSize: "1.25rem" }}
+                    >
+                      {parse(questionData?.question || "", customParseOptions)}
 
-                  <div
-                    className="innercontent mt-4"
-                    onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
-                    onDragOver={handleDragOver}        // Allow drop
-                  >
-                    <div className="selectableBtn d-flex flex-wrap gap-2">
-                      {availableWords.map((word, idx) => (
-                        <div
-                          key={idx}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, word)}
-                          className="btn btn-soft-secondary rounded-pill"
-                        >
-                          {word}
+                      <div
+                        className="innercontent mt-4"
+                        onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
+                        onDragOver={handleDragOver} // Allow drop
+                      >
+                        <div className="selectableBtn d-flex flex-wrap gap-2">
+                          {availableWords.map((word, idx) => (
+                            <div
+                              key={idx}
+                              draggable
+                              onDragStart={(e) => handleDragStart(e, word)}
+                              className="btn btn-soft-secondary rounded-pill"
+                            >
+                              {word}
+                            </div>
+                          ))}
                         </div>
-                      ))}
+                      </div>
                     </div>
-                  </div>
-                </div>
 
-                {showAnswer && (
-                  <div className="py-4 audio-card answerCard rounded-3" style={{ background: "#ffe4e4" }}>
-                    <div className="audio-inner p-4 rounded-3">
-                      <p><b>Correct Answers : </b> {questionData?.answer_american}</p>
-                      <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                      <hr />
-                      <audio controls className="w-100">
-                        <source src="your-audio-file.mp3" type="audio/mpeg" />
-                        Your browser does not support the audio element.
-                      </audio>
+                    <div className="bottomBtn mt-3">
+                      <QuestionNavigation
+                        questionData={questionData}
+                        onAnswerClick={handleAnswerClick}
+                        onRestart={handleRestart}
+                        onNext={handleNext}
+                        onPrevious={handlePrevious}
+                        onSubmit={handleSubmitPractice}
+                      />
                     </div>
+                    {showAnswer && (
+                      <div
+                        className="py-4 mt-3 audio-card answerCard rounded-3"
+                        style={{ background: "#ffe4e4" }}
+                      >
+                        <div className="audio-inner p-4 rounded-3">
+                          <p>
+                            <b>Correct Answers : </b>{" "}
+                            {questionData?.answer_american}
+                          </p>
+                          <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                          <hr />
+                          <audio controls className="w-100">
+                            <source
+                              src="your-audio-file.mp3"
+                              type="audio/mpeg"
+                            />
+                            Your browser does not support the audio element.
+                          </audio>
+                        </div>
+                      </div>
+                    )}
                   </div>
-                )}
-
-                <div className="bottomBtn mt-3">
-                  <QuestionNavigation
-                    questionData={questionData}
-                    onAnswerClick={handleAnswerClick}
-                    onRestart={handleRestart}
-                    onNext={handleNext}
-                    onPrevious={handlePrevious}
-                    onSubmit={handleSubmitPractice}
-                  />
                 </div>
               </div>
             </div>
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
-
           <div className="community">
             <Community questionData={questionData} />
           </div>

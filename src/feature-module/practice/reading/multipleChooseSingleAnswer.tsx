@@ -9,10 +9,13 @@ import { all_routes } from "../../router/all_routes";
 import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
-
+import MyNotes from "../component/myNotes";
 
 const MultipleChooseSingleAnswer = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
 
   const [showAnswer, setShowAnswer] = useState(false);
@@ -20,11 +23,15 @@ const MultipleChooseSingleAnswer = () => {
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
 
-  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [correctAnswer, setCorrectAnswer] = useState<string>("");
   const [checkedOptions, setCheckedOptions] = useState<string | null>(null);
   const [timeSpent, setTimeSpent] = useState(0);
   const startTime = useRef(Date.now());
+  const [showNotes, setShowNotes] = useState<boolean>(false);
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -65,7 +72,10 @@ const MultipleChooseSingleAnswer = () => {
 
   useEffect(() => {
     if (questionData?.Subtype?.beginning_in) {
-      const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10);
+      const preparationTimeInSeconds = parseInt(
+        questionData.Subtype.beginning_in,
+        10
+      );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
     }
@@ -88,31 +98,38 @@ const MultipleChooseSingleAnswer = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
   };
-
 
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/multiple-choose-Single-answer/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(
+        `/multiple-choose-Single-answer/${subtype_id}/${questionData?.nextQuestionId}`
+      );
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/multiple-choose-Single-answer/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(
+        `/multiple-choose-Single-answer/${subtype_id}/${questionData?.previousQuestionId}`
+      );
     }
   };
 
   const handleRestart = () => {
     // Reset countdown to the initial preparation time
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.beginning_in || "0",
+      10
+    );
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
 
     setShowAnswer(false); // Optionally reset the answer view
-
   };
 
   const handleAnswerClick = () => {
@@ -129,25 +146,25 @@ const MultipleChooseSingleAnswer = () => {
     { id: "C", text: questionData?.option_three },
     { id: "D", text: questionData?.option_four },
     { id: "E", text: questionData?.option_five },
-  ].filter(option => option.text?.trim() !== "");
-
+  ].filter((option) => option.text?.trim() !== "");
 
   const handleSubmitPractice = async () => {
     if (!questionData?.id || !subtype_id) return;
-    if (!checkedOptions) { setAlert({ type: "danger", message: "Please Select any from options" }); return false; }
+    if (!checkedOptions) {
+      setAlert({ type: "danger", message: "Please Select any from options" });
+      return false;
+    }
     try {
-
       const ans = correctAnswer.split(",");
       const isCorrect = ans.includes(checkedOptions);
       const score = isCorrect ? 1 : 0;
       const totalscore = ans.length;
-      
+
       const score_data = {
         user_answer: checkedOptions,
         correct_answer: ans,
         score: score,
       };
-
 
       const payload = {
         questionId: questionData.id,
@@ -163,11 +180,14 @@ const MultipleChooseSingleAnswer = () => {
 
       if (response.success) {
         getData();
-        const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+        const preparationTimeInSeconds = parseInt(
+          questionData?.Subtype.beginning_in || "0",
+          10
+        );
         setCountdown(preparationTimeInSeconds);
         setTimerActive(true); // Restart the countdown
         setTimeSpent(0);
-        setShowAnswer(false); // Optionally reset the answer view 
+        setShowAnswer(false); // Optionally reset the answer view
         setCheckedOptions("");
         setAlert({ type: "success", message: "Your Answer Saved!" });
       } else {
@@ -179,127 +199,175 @@ const MultipleChooseSingleAnswer = () => {
     }
   };
 
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
+
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              Read the text and answer the question by selecting all the correct
-              responses. More than one response is correct.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="time">
-                  <div className="headBtn">
-                    <span className="text-danger">Prepare: {formatTime(countdown)}</span>
-                    <CardButton questionData={questionData} />
-                  </div>
-                  <div className="row">
-                    <div className="col-md-6">
-                      <div className="innercontent mt-0">
-                        <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />
-                      </div>
+          <div className="row">
+            <div className="col-12 mb-3">
+              <button
+                className="btn btn-primary mynotesBtn"
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={toggleNotes}
+              >
+                <i className="fa fa-book"></i>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <div className="practiceLayout">
+                <p className="my-3">
+                  Read the text and answer the question by selecting all the
+                  correct responses. More than one response is correct.
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
                     </div>
-                    <div className="col-md-6">
-                      <div className="chooseSection">
-                        <div className="">
-                          <div className="card shadow-sm">
-                            <div className="card-header bg-white">
-                              <h5 className="mb-0">
-                                According to paragraph, sculptors in the Italian
-                                Renaissance stopped using cannonballs in bronze
-                                statues of horses because
-                              </h5>
-                            </div>
-                            <div className="card-body">
-                              <div className="row g-3">
-                                {options.map((option) => (
-                                  <div
-                                    key={option.id}
-                                    className="col-12 col-md-12"
-                                  >
-                                    <div
-                                      className={`d-flex align-items-center border rounded p-3 h-100 ${checkedOptions === option.id
-                                          ? "border-primary"
-                                          : ""
-                                        }`}
-                                    >
-                                      <input
-                                        type="radio"
-                                        name="mcq-option"
-                                        className="form-check-input m-auto me-3"
-                                        id={`option-${option.id}`}
-                                        checked={checkedOptions === option.id}
-                                        onChange={() => handleChange(option.id)}
-                                      />
-                                      <label
-                                        htmlFor={`option-${option.id}`}
-                                        className="d-flex align-items-center w-100"
+                  </div>
+                  <div className="card-body">
+                    <div className="time">
+                      <div className="headBtn">
+                        <span className="text-danger">
+                          Prepare: {formatTime(countdown)}
+                        </span>
+                        <CardButton questionData={questionData} />
+                      </div>
+                      <div className="row">
+                        <div className="col-md-6">
+                          <div className="innercontent mt-0">
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: questionData?.question || "",
+                              }}
+                            />
+                          </div>
+                        </div>
+                        <div className="col-md-6">
+                          <div className="chooseSection">
+                            <div className="">
+                              <div className="card shadow-sm">
+                                <div className="card-header bg-white">
+                                  <h5 className="mb-0">
+                                    According to paragraph, sculptors in the
+                                    Italian Renaissance stopped using
+                                    cannonballs in bronze statues of horses
+                                    because
+                                  </h5>
+                                </div>
+                                <div className="card-body">
+                                  <div className="row g-3">
+                                    {options.map((option) => (
+                                      <div
+                                        key={option.id}
+                                        className="col-12 col-md-12"
                                       >
                                         <div
-                                          className="me-3 d-flex justify-content-center align-items-center bg-primary text-white fw-bold rounded"
-                                          style={{
-                                            width: "30px",
-                                            height: "30px",
-                                            minWidth: "30px",
-                                          }}
+                                          className={`d-flex align-items-center border rounded p-3 h-100 ${
+                                            checkedOptions === option.id
+                                              ? "border-primary"
+                                              : ""
+                                          }`}
                                         >
-                                          {option.id}
+                                          <input
+                                            type="radio"
+                                            name="mcq-option"
+                                            className="form-check-input m-auto me-3"
+                                            id={`option-${option.id}`}
+                                            checked={
+                                              checkedOptions === option.id
+                                            }
+                                            onChange={() =>
+                                              handleChange(option.id)
+                                            }
+                                          />
+                                          <label
+                                            htmlFor={`option-${option.id}`}
+                                            className="d-flex align-items-center w-100"
+                                          >
+                                            <div
+                                              className="me-3 d-flex justify-content-center align-items-center bg-primary text-white fw-bold rounded"
+                                              style={{
+                                                width: "30px",
+                                                height: "30px",
+                                                minWidth: "30px",
+                                              }}
+                                            >
+                                              {option.id}
+                                            </div>
+                                            <span>{option.text}</span>
+                                          </label>
                                         </div>
-                                        <span>{option.text}</span>
-                                      </label>
-                                    </div>
+                                      </div>
+                                    ))}
                                   </div>
-                                ))}
+                                </div>
                               </div>
                             </div>
                           </div>
                         </div>
                       </div>
-                    </div>
-                  </div>
-                  {showAnswer && (
-                    <div
-                      className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
-                    >
-                      <div
-                        className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
-                      >
-                        <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
-                        <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
-                        </div>
+
+                      <div className="bottomBtn mt-3">
+                        <QuestionNavigation
+                          questionData={questionData}
+                          onAnswerClick={handleAnswerClick}
+                          onRestart={handleRestart}
+                          onNext={handleNext}
+                          onPrevious={handlePrevious}
+                          onSubmit={handleSubmitPractice}
+                        />
                       </div>
+                      {showAnswer && (
+                        <div
+                          className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
+                          style={{ background: "#ffe4e4" }}
+                        >
+                          <div
+                            className="audio-inner p-4 rounded-3"
+                            style={{ background: "#ffe4e4" }}
+                          >
+                            <p
+                              dangerouslySetInnerHTML={{
+                                __html: questionData?.answer_american || "",
+                              }}
+                            />
+                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <hr />
+                            <div className="rounded-pill">
+                              <audio controls className="w-100">
+                                <source
+                                  src="your-audio-file.mp3"
+                                  type="audio/mpeg"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
-                  <div className="bottomBtn mt-3">
-                    <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onSubmit={handleSubmitPractice}
-                    />
                   </div>
                 </div>
               </div>
             </div>
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
           <div className="community">
             <Community questionData={questionData} />

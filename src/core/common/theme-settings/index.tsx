@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../data/redux/store";
-import { fetchQuestions,saveBookmark } from "../../../api/practiceAPI";
+import { fetchQuestions, saveBookmark } from "../../../api/practiceAPI";
 
 interface Subtype {
   id: number;
@@ -56,7 +56,7 @@ const ThemeSettings = () => {
       setTab("all");
     }
   }, [questionData]);
-  
+
   useEffect(() => {
     setCurrentPage(1);
   }, [difficulty, practiceStatus, searchTerm, tab]);
@@ -70,7 +70,11 @@ const ThemeSettings = () => {
       if (practiceStatus === "done" && !q.practiced) return false;
       if (practiceStatus === "pending" && q.practiced) return false;
 
-      if (searchTerm && !q.question_name.toLowerCase().includes(searchTerm.toLowerCase())) return false;
+      if (
+        searchTerm &&
+        !q.question_name.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+        return false;
 
       return true;
     });
@@ -85,7 +89,7 @@ const ThemeSettings = () => {
     try {
       const res = await saveBookmark({ question_id: questionId });
       // Optional: refetch questions if status changes on backend
-      const updatedQuestions = questionData.map(q =>
+      const updatedQuestions = questionData.map((q) =>
         q.id === questionId ? { ...q, bookmarked: !q.bookmarked } : q
       );
       setQuestionData(updatedQuestions);
@@ -106,19 +110,67 @@ const ThemeSettings = () => {
         </div>
       </div>
 
-      <div className="sidebar-themesettings offcanvas offcanvas-end" id="theme-setting">
-        <button className="btn btn-primary right-chevron-btn" data-bs-dismiss="offcanvas">
+      <div
+        className="sidebar-themesettings offcanvas offcanvas-end"
+        id="theme-setting"
+      >
+        <button
+          className="btn btn-primary right-chevron-btn"
+          data-bs-dismiss="offcanvas"
+        >
           <i className="fa fa-chevron-right" />
         </button>
 
         <div className="offcanvas-header d-flex align-items-center justify-content-between bg-light-500">
-          <div>
+          <div className="d-flex align-items-center">
             <h4 className="mb-1">{questionData[0]?.Subtype[0]?.sub_name}</h4>
+            <div className="mainFilter">
+              <div className="myfilter  mb-3" style={{ width: "40em" }}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <label htmlFor="difficulty" className="form-label fw-bold">
+                      Difficulty
+                    </label>
+                    <select
+                      id="difficulty"
+                      className="form-select"
+                      value={difficulty}
+                      onChange={(e) => setDifficulty(e.target.value)}
+                    >
+                      <option value="">All</option>
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                    </select>
+                  </div>
+
+                  <div className="col-md-6">
+                    <label
+                      htmlFor="practiceStatus"
+                      className="form-label fw-bold"
+                    >
+                      Practice Status
+                    </label>
+                    <select
+                      id="practiceStatus"
+                      className="form-select"
+                      value={practiceStatus}
+                      onChange={(e) => setPracticeStatus(e.target.value)}
+                    >
+                      <option value="all">All</option>
+                      <option value="done">Done</option>
+                      <option value="pending">Pending</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
           <div className="top-nav-search">
             <div className="searchinputs">
               <input
                 type="text"
+                className="questionSearch"
                 placeholder="Question Content / Number"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -129,45 +181,8 @@ const ThemeSettings = () => {
 
         <div className="themesettings-inner offcanvas-body">
           <div className="accordion" id="settingtheme">
-            <div className="myfilter mb-3">
-              <div className="row g-3">
-                <div className="col-md-6">
-                  <label htmlFor="difficulty" className="form-label fw-bold">
-                    Difficulty
-                  </label>
-                  <select
-                    id="difficulty"
-                    className="form-select"
-                    value={difficulty}
-                    onChange={(e) => setDifficulty(e.target.value)}
-                  >
-                    <option value="">All</option>
-                    <option value="easy">Easy</option>
-                    <option value="medium">Medium</option>
-                    <option value="hard">Hard</option>
-                  </select>
-                </div>
-
-                <div className="col-md-6">
-                  <label htmlFor="practiceStatus" className="form-label fw-bold">
-                    Practice Status
-                  </label>
-                  <select
-                    id="practiceStatus"
-                    className="form-select"
-                    value={practiceStatus}
-                    onChange={(e) => setPracticeStatus(e.target.value)}
-                  >
-                    <option value="all">All</option>
-                    <option value="done">Done</option>
-                    <option value="pending">Pending</option>
-                  </select>
-                </div>
-              </div>
-            </div>
-
             <div className="questionList">
-              <div className="card">
+              <div className="card" style={{ marginLeft: "2em" }}>
                 <div className="card-body">
                   <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3">
                     {["all", "weekly", "bookmarked"].map((t) => (
@@ -179,8 +194,8 @@ const ThemeSettings = () => {
                           {t === "all"
                             ? "All"
                             : t === "weekly"
-                              ? "Weekly Prediction"
-                              : "Bookmark"}
+                            ? "Weekly Prediction"
+                            : "Bookmark"}
                         </button>
                       </li>
                     ))}
@@ -190,7 +205,8 @@ const ThemeSettings = () => {
                     <div className="tab-pane show active">
                       <div className="tabHead d-flex justify-content-between align-items-center mb-3">
                         <h5>
-                          Done {questionData.filter((q) => q.practiced).length}, Found {filterQuestions().length} Questions
+                          Done {questionData.filter((q) => q.practiced).length},
+                          Found {filterQuestions().length} Questions
                         </h5>
                         <button className="btn btn-danger rounded-pill">
                           <i className="ion-refresh me-2" />
@@ -202,38 +218,94 @@ const ThemeSettings = () => {
                         {filterQuestions().map((item, index) => (
                           <div
                             key={item.id}
-                            className={`card mb-3 p-3 rounded-pill d-flex justify-content-between align-items-center ${activeIndex === index ? "border border-3" : ""
-                              }`}
+                            className={`card mb-3 p-3 d-flex justify-content-between onhovercard align-items-center ${
+                              activeIndex === index ? "border border-1" : ""
+                            }`}
                             style={{
-                              borderColor: activeIndex === index ? "red" : "#ccc",
+                              borderColor:
+                                activeIndex === index ? "#000" : "#ccc",
                               cursor: "pointer",
+                              borderRadius: "15px",
                             }}
                             onClick={() => setActiveIndex(index)}
                           >
                             <div className="d-flex align-items-center w-100">
                               <div className="flex-grow-1">
-                                <strong>{index + 1}. {item.question_name}</strong>
+                                <strong>
+                                  {index + 1}. {item.question_name}
+                                </strong>
                               </div>
                               <div className="d-flex gap-2 align-items-center flex-wrap">
                                 {item.new_question && (
-                                  <span className="btn btn-outline-danger py-1 rounded-pill">New</span>
+                                  <span
+                                    className="btn btn-group py-1"
+                                    style={{
+                                      background: "#ff838333",
+                                      color: "#000",
+                                    }}
+                                  >
+                                    New
+                                  </span>
                                 )}
-                                <span className="btn btn-outline-secondary py-1 rounded-pill">{item.difficulties}</span>
+                                <span
+                                  className="btn btn-group py-1"
+                                  style={{
+                                    background: "#ffbb8a47",
+                                    color: "#000",
+                                  }}
+                                >
+                                  {item.difficulties}
+                                </span>
                                 {item.weekly && (
-                                  <span className="btn btn-outline-info py-1 rounded-pill">Prediction</span>
+                                  <span
+                                    className="btn btn-group py-1"
+                                    style={{
+                                      background: "#8ad9ff4d",
+                                      color: "#000",
+                                    }}
+                                  >
+                                    Prediction
+                                  </span>
                                 )}
-                                <span className={`btn py-1 rounded-pill ${item.practiced ? "btn-outline-success" : "btn-soft-light"}`}>
+                                <span
+                                  className="btn btn-group py-1"
+                                  style={{
+                                    backgroundColor: item.practiced
+                                      ? "#6bff9133"
+                                      : "#6bff9133",
+                                    color: item.practiced ? "#0f5132" : "#000",
+                                  }}
+                                >
                                   {item.practiced ? "Practiced" : "Unattempted"}
                                 </span>
+
                                 <button
-                                  className={`btn btn-sm rounded-circle ${item.bookmarked ? "btn-danger" : "btn-outline-danger"}`}
+                                  className="btn btn-sm rounded-circle text-dark"
+                                  style={{
+                                    backgroundColor: item.bookmarked
+                                      ? "#f8d7da"
+                                      : "transparent",
+                                    border: "1px solid",
+                                    borderColor: "#dc3545",
+                                  }}
                                   onClick={(e) => {
-                                    e.stopPropagation(); // Prevent parent card click
+                                    e.stopPropagation();
                                     handleBookmarkToggle(item.id);
                                   }}
-                                  title={item.bookmarked ? "Remove Bookmark" : "Add Bookmark"}
+                                  title={
+                                    item.bookmarked
+                                      ? "Remove Bookmark"
+                                      : "Add Bookmark"
+                                  }
                                 >
-                                  <i className={`${item.bookmarked ? "fas" : "far"} fa-bookmark`} />
+                                  <i
+                                    className={`fa ${
+                                      item.bookmarked
+                                        ? "fa fa-bookmark"
+                                        : "fa fa-bookmark"
+                                    }`}
+                                    style={{ color: "#dc3545" }}
+                                  />
                                 </button>
                               </div>
                             </div>
@@ -245,10 +317,16 @@ const ThemeSettings = () => {
 
                   <nav className="mt-3" aria-label="Page navigation">
                     <ul className="pagination mb-0">
-                      <li className={`page-item ${currentPage === 1 ? "disabled" : ""}`}>
+                      <li
+                        className={`page-item ${
+                          currentPage === 1 ? "disabled" : ""
+                        }`}
+                      >
                         <button
                           className="page-link"
-                          onClick={() => setCurrentPage((prev) => Math.max(prev - 1, 1))}
+                          onClick={() =>
+                            setCurrentPage((prev) => Math.max(prev - 1, 1))
+                          }
                         >
                           <i className="fas fa-arrow-left-long me-2" />
                           Previous
@@ -256,24 +334,43 @@ const ThemeSettings = () => {
                       </li>
 
                       {Array.from({
-                        length: Math.ceil(filteredQuestions.length / itemsPerPage),
+                        length: Math.ceil(
+                          filteredQuestions.length / itemsPerPage
+                        ),
                       }).map((_, i) => (
-                        <li key={i + 1} className={`page-item ${currentPage === i + 1 ? "active" : ""}`}>
-                          <button className="page-link" onClick={() => setCurrentPage(i + 1)}>
+                        <li
+                          key={i + 1}
+                          className={`page-item ${
+                            currentPage === i + 1 ? "active" : ""
+                          }`}
+                        >
+                          <button
+                            className="page-link"
+                            onClick={() => setCurrentPage(i + 1)}
+                          >
                             {i + 1}
                           </button>
                         </li>
                       ))}
 
                       <li
-                        className={`page-item ${currentPage === Math.ceil(filteredQuestions.length / itemsPerPage) ? "disabled" : ""
-                          }`}
+                        className={`page-item ${
+                          currentPage ===
+                          Math.ceil(filteredQuestions.length / itemsPerPage)
+                            ? "disabled"
+                            : ""
+                        }`}
                       >
                         <button
                           className="page-link"
                           onClick={() =>
                             setCurrentPage((prev) =>
-                              Math.min(prev + 1, Math.ceil(filteredQuestions.length / itemsPerPage))
+                              Math.min(
+                                prev + 1,
+                                Math.ceil(
+                                  filteredQuestions.length / itemsPerPage
+                                )
+                              )
                             )
                           }
                         >
@@ -283,7 +380,6 @@ const ThemeSettings = () => {
                       </li>
                     </ul>
                   </nav>
-
                 </div>
               </div>
             </div>

@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useCallback, useMemo, useRef } from "react";
+import React, {
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  useRef,
+} from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
@@ -9,13 +15,15 @@ import { all_routes } from "../../router/all_routes";
 import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import MyNotes from "../component/myNotes";
-import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import Recorder from "../component/recorder";
 import stringSimilarity from "string-similarity";
 import parse from "html-react-parser";
 import spanHtml from "../component/spanHtml";
 import AlertComponent from "../../../core/common/AlertComponent";
-import ReactDOMServer from 'react-dom/server';
+import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
 
 interface Timestamp {
@@ -31,7 +39,10 @@ const RespondSituation = () => {
   const [duration, setDuration] = useState(0);
   const [volume, setVolume] = useState(1);
   const [playbackRate, setPlaybackRate] = useState(1);
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
 
   const [showAnswer, setShowAnswer] = useState(false);
@@ -39,25 +50,36 @@ const RespondSituation = () => {
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [resetRecording, setResetRecording] = useState<boolean>(false); // Add reset state
-   const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [showNotes, setShowNotes] = useState<boolean>(false); // ⭐ New State for MyNotes
   const { transcript, resetTranscript } = useSpeechRecognition();
   const [recordedAudioUrl, setRecordedAudioUrl] = useState<string | null>(null);
   const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
-  const [recordingStartTime, setRecordingStartTime] = useState<number>(Date.now());
+  const [recordingStartTime, setRecordingStartTime] = useState<number>(
+    Date.now()
+  );
   const [correctText, setCorrectText] = useState<string>("");
-  const [transcriptTimestamps, setTranscriptTimestamps] = useState<Timestamp[]>([]);
+  const [transcriptTimestamps, setTranscriptTimestamps] = useState<Timestamp[]>(
+    []
+  );
   const [goodWords, setGoodWords] = useState<number>(0);
   const [lateSpeak, setLateSpeak] = useState<number>(0);
-  const [totalWordsInCorrectText, settotalWordsInCorrectText] = useState<number>(0);
+  const [totalWordsInCorrectText, settotalWordsInCorrectText] =
+    useState<number>(0);
   const [contentScoreOutOf90, setContentScoreOutOf90] = useState<number>(0);
   const [fluencyScoreOutOf90, setFluencyScoreOutOf90] = useState<number>(0);
-  const [pronunciationScoreOutOf90, setPronunciationScoreOutOf90] = useState<number>(0);
+  const [pronunciationScoreOutOf90, setPronunciationScoreOutOf90] =
+    useState<number>(0);
   const [targetScoreOutOf90, setTargetScoreOutOf90] = useState<string>("0.00");
   const [badWords, setBadWords] = useState(0);
   const [avgWords, setAvgWords] = useState(0);
   const [pauseWords, setPauseWords] = useState(0);
-  const [transcriptWithPauses, setTranscriptWithPauses] = useState<{ word: string, isPauseWord: boolean, color: string }[]>([]);
+  const [transcriptWithPauses, setTranscriptWithPauses] = useState<
+    { word: string; isPauseWord: boolean; color: string }[]
+  >([]);
   const url = `${image_url}${questionData?.speak_audio_file}`;
 
   const [timeSpent, setTimeSpent] = useState(0);
@@ -78,118 +100,117 @@ const RespondSituation = () => {
     setRecordedAudioUrl(audioUrl);
   };
 
-  
-    const getData = async () => {
-      try {
-        const subtypeIdNum = Number(subtype_id);
-        const questionIdNum = question_id ? Number(question_id) : 0;
+  const getData = async () => {
+    try {
+      const subtypeIdNum = Number(subtype_id);
+      const questionIdNum = question_id ? Number(question_id) : 0;
 
-        const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
+      const res = await fetchQuestionData(subtypeIdNum, questionIdNum);
 
-        if (!res.success || !res.data) {
-          navigate(all_routes.adminDashboard);
-          return;
-        }
-
-        setQuestionData(res.data);
-        
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(
-          res.data.answer_american,
-          "text/html"
-        );
-        const questionText = doc.body.textContent || "";
-        setCorrectText(questionText);
-
-      } catch (err) {
-        console.error("Error fetching question data:", err);
-        navigate(-1);
+      if (!res.success || !res.data) {
+        navigate(all_routes.adminDashboard);
+        return;
       }
-    };
 
-    
+      setQuestionData(res.data);
 
-  useEffect(() => {  
-  
-      if (subtype_id) getData();
-    }, [subtype_id, question_id, navigate]);
-  
-    useEffect(() => {
-      if (questionData?.Subtype?.preparation_time) {
-        const preparationTimeInSeconds = parseInt(questionData.Subtype.preparation_time, 10); 
-        setCountdown(preparationTimeInSeconds);
-        setTimerActive(true);
-      }
-    }, [questionData]);
-  
-    const startRecordingCallback = useCallback(() => {
-      if (questionData && questionData.Subtype.preparation_time === "0") {
-        document.getElementById("startRecordingButton")?.click();
-      }
-    }, [questionData]);
-  
-    useEffect(() => {
-      let intervalId: number;
-    
-      if (timerActive && countdown > 0) {
-        intervalId = setInterval(() => {
-          setCountdown((prev) => prev - 1);
-        }, 1000);
-      } else if (timerActive && countdown <= 0) {
-        setTimerActive(false);
-        startRecordingCallback(); // Start recording after countdown ends
-      }
-    
-      return () => clearInterval(intervalId);
-    }, [countdown, timerActive, startRecordingCallback]);
-  
-    const formatTimePreapre = (time: number) => {
-      const minutes = Math.floor(time / 60);
-      const seconds = time % 60;
-      return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
-    };
-  
-    
-  
-    const handleStopRecording = () => {
+      const parser = new DOMParser();
+      const doc = parser.parseFromString(res.data.answer_american, "text/html");
+      const questionText = doc.body.textContent || "";
+      setCorrectText(questionText);
+    } catch (err) {
+      console.error("Error fetching question data:", err);
+      navigate(-1);
+    }
+  };
+
+  useEffect(() => {
+    if (subtype_id) getData();
+  }, [subtype_id, question_id, navigate]);
+
+  useEffect(() => {
+    if (questionData?.Subtype?.preparation_time) {
       const preparationTimeInSeconds = parseInt(
-        questionData?.Subtype.preparation_time || "0",
+        questionData.Subtype.preparation_time,
         10
       );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
-      setShowAnswer(false);
-      setResetRecording(true);
-      SpeechRecognition.stopListening();
-      resetTranscript();
-      setLateSpeak(0);
-      settotalWordsInCorrectText(0);
-      setContentScoreOutOf90(0);
-      setFluencyScoreOutOf90(0);
-      setPronunciationScoreOutOf90(0);
-      setTargetScoreOutOf90("0.00");
-      setGoodWords(0);
-      setTimeout(() => setResetRecording(false), 100);
-    };
-  
-    const handleRestart = () => {
+    }
+  }, [questionData]);
+
+  const startRecordingCallback = useCallback(() => {
+    if (questionData && questionData.Subtype.preparation_time === "0") {
+      document.getElementById("startRecordingButton")?.click();
+    }
+  }, [questionData]);
+
+  useEffect(() => {
+    let intervalId: number;
+
+    if (timerActive && countdown > 0) {
+      intervalId = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    } else if (timerActive && countdown <= 0) {
+      setTimerActive(false);
+      startRecordingCallback(); // Start recording after countdown ends
+    }
+
+    return () => clearInterval(intervalId);
+  }, [countdown, timerActive, startRecordingCallback]);
+
+  const formatTimePreapre = (time: number) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = time % 60;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
+  };
+
+  const handleStopRecording = () => {
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.preparation_time || "0",
+      10
+    );
+    setCountdown(preparationTimeInSeconds);
+    setTimerActive(true);
+    setShowAnswer(false);
+    setResetRecording(true);
+    SpeechRecognition.stopListening();
+    resetTranscript();
+    setLateSpeak(0);
+    settotalWordsInCorrectText(0);
+    setContentScoreOutOf90(0);
+    setFluencyScoreOutOf90(0);
+    setPronunciationScoreOutOf90(0);
+    setTargetScoreOutOf90("0.00");
+    setGoodWords(0);
+    setTimeout(() => setResetRecording(false), 100);
+  };
+
+  const handleRestart = () => {
+    handleStopRecording();
+  };
+
+  // Handling navigation to next and previous questions
+  const handleNext = () => {
+    if (questionData?.nextQuestionId) {
+      navigate(
+        `/respond-situation/${subtype_id}/${questionData?.nextQuestionId}`
+      );
       handleStopRecording();
-    };
-  
-    // Handling navigation to next and previous questions
-    const handleNext = () => {
-      if (questionData?.nextQuestionId) {      
-        navigate(`/respond-situation/${subtype_id}/${questionData?.nextQuestionId}`);
-        handleStopRecording();
-      }
-    };
-  
-    const handlePrevious = () => {
-      if (questionData?.previousQuestionId) {
-        navigate(`/respond-situation/${subtype_id}/${questionData?.previousQuestionId}`);
-        handleStopRecording();
-      }
-    };
+    }
+  };
+
+  const handlePrevious = () => {
+    if (questionData?.previousQuestionId) {
+      navigate(
+        `/respond-situation/${subtype_id}/${questionData?.previousQuestionId}`
+      );
+      handleStopRecording();
+    }
+  };
 
   const togglePlay = () => {
     if (!audioRef.current) return;
@@ -253,12 +274,11 @@ const RespondSituation = () => {
     setShowAnswer((prev) => !prev);
   };
 
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
 
-   const toggleNotes = () => {
-      setShowNotes((prev) => !prev);
-    };
-  
-    // Calculate pause duration
+  // Calculate pause duration
   const calculatePauseDuration = (currentIndex: number): number => {
     if (
       !transcriptTimestamps ||
@@ -267,46 +287,51 @@ const RespondSituation = () => {
     ) {
       return 0;
     }
-  
+
     const prevWordTimestamp = transcriptTimestamps[currentIndex - 1];
     const currentWordTimestamp = transcriptTimestamps[currentIndex];
     const currentWord = spokenWords2[currentIndex];
-  
+
     if (!prevWordTimestamp || !currentWordTimestamp) {
       return 0;
     }
-  
+
     if (currentWord.endsWith(".")) {
       return 1;
     }
-  
+
     const pauseDuration =
-      (currentWordTimestamp.timestamp.getTime() - prevWordTimestamp.timestamp.getTime()) / 1000;
-  
+      (currentWordTimestamp.timestamp.getTime() -
+        prevWordTimestamp.timestamp.getTime()) /
+      1000;
+
     return pauseDuration;
   };
-  
+
   // Calculate pronunciation score
-  const calculatePronunciationScore = (recognizedTranscript: string, correctText: string): number => {
+  const calculatePronunciationScore = (
+    recognizedTranscript: string,
+    correctText: string
+  ): number => {
     const recognizedLowercase = recognizedTranscript.toLowerCase();
     const correctLowercase = correctText.toLowerCase();
-  
+
     const similarity = stringSimilarity.compareTwoStrings(
       recognizedLowercase,
       correctLowercase
     );
-  
+
     const pronunciationScore = similarity * 90;
     return pronunciationScore;
   };
-  
+
   // Update transcript timestamps
   const updateTranscriptTimestamps = (index: number, word: string): void => {
     const newTimestamps = [...transcriptTimestamps];
     newTimestamps[index] = { word, timestamp: new Date() };
     setTranscriptTimestamps(newTimestamps);
   };
-  
+
   // Memoized spoken words
   const spokenWords2 = useMemo<string[]>(() => {
     return transcript
@@ -316,7 +341,7 @@ const RespondSituation = () => {
           .split(/\s+|(?<=\w)(?=\W)/)
       : [];
   }, [transcript]);
-  
+
   useEffect(() => {
     if (spokenWords2.length > 0) {
       updateTranscriptTimestamps(
@@ -325,21 +350,21 @@ const RespondSituation = () => {
       );
     }
   }, [spokenWords2]);
-  
+
   useEffect(() => {
     // Placeholder if you want to perform anything on transcriptTimestamps change
   }, [transcriptTimestamps]);
-  
+
   useEffect(() => {
     if (transcript && recordedAudioBlob) {
       let pauseDurationAccumulator = 0;
-  
+
       const spokenWords = transcript
         .toLowerCase()
         .trim()
-        .split(/\s+|(?<=\w)(?=\W)/);      
-        
-        const template =
+        .split(/\s+|(?<=\w)(?=\W)/);
+
+      const template =
         "The speaker was talking about recent developments that have revealed in his presentation. Firstly, he mentioned that keyword1. He then talked about keyword2. Moreover, he also discussed that keyword 3. Furthermore, the speaker described that keyword 4. In addition to this, the speaker also discussed the main idea of study that constitutes a relatively new area of the study which points that _____ keyword1. Furthermore, there are three to four major theoretical and conceptual frameworks discussed in the lecture. After defining the significant ideas to the discussion, the speaker has also explained the goals of the (topic name) and delivered several key contributions and interests. In conclusion, the speaker was talking about (Topic name).";
 
       const correctTextWithTemplate = correctText + template;
@@ -350,24 +375,30 @@ const RespondSituation = () => {
         .toLowerCase()
         .trim()
         .split(/\s+/);
-     
-      const goodCount = spokenWords.filter((word) => correctWords.includes(word)).length;
-      
+
+      const goodCount = spokenWords.filter((word) =>
+        correctWords.includes(word)
+      ).length;
+
       setGoodWords(goodCount);
-  
+
       let totalPauseWords = 0;
       let avgCount = 0;
       let badCount = 0;
-  
+
       const transcriptWithPauses = spokenWords2.map((word, index) => {
         const isEndOfSentence = word.endsWith(".");
         const pauseDuration = calculatePauseDuration(index);
         const isPauseWord = pauseDuration > 1;
-        const cleanWord = word.toLowerCase().replace(/[^\w\s]|_/g, "").replace(/\s+/g, " ");
-  
+        const cleanWord = word
+          .toLowerCase()
+          .replace(/[^\w\s]|_/g, "")
+          .replace(/\s+/g, " ");
+
         const isGood = correctWords.includes(cleanWord);
-        const isAverage = !isGood && correctWords.find((w) => w.includes(cleanWord));
-  
+        const isAverage =
+          !isGood && correctWords.find((w) => w.includes(cleanWord));
+
         let color = "";
         if (isGood) {
           color = "goodword";
@@ -380,24 +411,26 @@ const RespondSituation = () => {
           color = "badword";
           badCount++;
         }
-  
+
         pauseDurationAccumulator += pauseDuration;
         if (isPauseWord) {
           totalPauseWords++;
           pauseDurationAccumulator = 0;
         }
-  
+
         return { word, isPauseWord, color };
       });
-  
+
       const totalWords = spokenWords.length;
       const totalDuration = recordingStartTime
         ? (Date.now() - recordingStartTime) / 1000
         : 1;
-  
+
       const totalWordsInCorrectText = correctWords.length;
-      const goodCount2 = spokenWords.filter((word) => correctWords.includes(word)).length;
-  
+      const goodCount2 = spokenWords.filter((word) =>
+        correctWords.includes(word)
+      ).length;
+
       const avgscore = (avgCount * 90) / totalWordsInCorrectText;
       const badscore = (badCount * 90) / totalWordsInCorrectText;
       const pausescore = (totalPauseWords * 90) / totalWordsInCorrectText;
@@ -502,7 +535,7 @@ const RespondSituation = () => {
         contentScoreOutOf90 * 0.4 +
         pronunciationScoreOutOf90 * 0.3
       ).toFixed(2);
-  
+
       setLateSpeak(1);
       settotalWordsInCorrectText(totalWordsInCorrectText);
       setContentScoreOutOf90(contentScoreOutOf90);
@@ -515,84 +548,95 @@ const RespondSituation = () => {
       setTranscriptWithPauses(transcriptWithPauses);
     }
   }, [transcript, recordedAudioBlob]);
-  
-  
+
   const handleSubmitPractice = async () => {
-      if (!questionData?.id || !subtype_id) return;
-  
-      try {     
-  
-        const totalscore = 90;
-        const combinedTranscriptHTML = ReactDOMServer.renderToString(
-          <span>
-            {transcriptWithPauses.map((wordObj, index) => (
-              <span key={index} className={wordObj.color}>
-                {wordObj.word}{" "}
-              </span>
-            ))}
-          </span>
-        );
-  
-        let score_data = {
-          content: contentScoreOutOf90,
-          fluency: fluencyScoreOutOf90,
-          pronunciation: pronunciationScoreOutOf90,
-          transcript: questionData?.transcription,
-          scored_transcript: combinedTranscriptHTML,
-        };      
-  
-        const questionId = questionData?.id;
-        const formData = new FormData();
-        formData.append("questionId", questionId.toString());
-        formData.append("totalscore", totalscore.toString());
-        formData.append("lateSpeak", lateSpeak.toString());
-        formData.append("timeSpent", timeSpent.toString());
-        formData.append("score", targetScoreOutOf90.toString());
-        formData.append("score_data", JSON.stringify(score_data));
-        
-        // Attach audio blob as file
-        if (recordedAudioBlob) {
-          const audioFile = new File([recordedAudioBlob], "answer.wav", { type: "audio/wav" });
-          formData.append("answer", audioFile);
-        }
-  
-        // Send to backend
-        try {
-          const response = await savePractice(false, formData);
-  
-          
-          if (response.success) {
-            getData();
-            const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
-            setCountdown(preparationTimeInSeconds);
-            setTimerActive(true); // Restart the countdown
-            setTimeSpent(0);
-            setShowAnswer(false); // Optionally reset the answer view           
-            setAlert({ type: "success", message: "Your Answer Saved!" });
-          } else {
-            setAlert({ type: "danger", message: "Failed to save practice" });
-          }
-        } catch (error) {
-          console.error("Submission Error:", error);
-        }
-  
-      } catch (error) {
-        console.error("Error saving practice:", error);
-        setAlert({ type: "danger", message: "Something went wrong." });
+    if (!questionData?.id || !subtype_id) return;
+
+    try {
+      const totalscore = 90;
+      const combinedTranscriptHTML = ReactDOMServer.renderToString(
+        <span>
+          {transcriptWithPauses.map((wordObj, index) => (
+            <span key={index} className={wordObj.color}>
+              {wordObj.word}{" "}
+            </span>
+          ))}
+        </span>
+      );
+
+      let score_data = {
+        content: contentScoreOutOf90,
+        fluency: fluencyScoreOutOf90,
+        pronunciation: pronunciationScoreOutOf90,
+        transcript: questionData?.transcription,
+        scored_transcript: combinedTranscriptHTML,
+      };
+
+      const questionId = questionData?.id;
+      const formData = new FormData();
+      formData.append("questionId", questionId.toString());
+      formData.append("totalscore", totalscore.toString());
+      formData.append("lateSpeak", lateSpeak.toString());
+      formData.append("timeSpent", timeSpent.toString());
+      formData.append("score", targetScoreOutOf90.toString());
+      formData.append("score_data", JSON.stringify(score_data));
+
+      // Attach audio blob as file
+      if (recordedAudioBlob) {
+        const audioFile = new File([recordedAudioBlob], "answer.wav", {
+          type: "audio/wav",
+        });
+        formData.append("answer", audioFile);
       }
-    };
+
+      // Send to backend
+      try {
+        const response = await savePractice(false, formData);
+
+        if (response.success) {
+          getData();
+          const preparationTimeInSeconds = parseInt(
+            questionData?.Subtype.beginning_in || "0",
+            10
+          );
+          setCountdown(preparationTimeInSeconds);
+          setTimerActive(true); // Restart the countdown
+          setTimeSpent(0);
+          setShowAnswer(false); // Optionally reset the answer view
+          setAlert({ type: "success", message: "Your Answer Saved!" });
+        } else {
+          setAlert({ type: "danger", message: "Failed to save practice" });
+        }
+      } catch (error) {
+        console.error("Submission Error:", error);
+      }
+    } catch (error) {
+      console.error("Error saving practice:", error);
+      setAlert({ type: "danger", message: "Something went wrong." });
+    }
+  };
 
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-        <div className="col-12 mb-3">
-              <button className="btn btn-primary mynotesBtn" style={{display:'flex',flexDirection:'column'}} onClick={toggleNotes}>
-                <i className="fa fa-book"></i>
-                {showNotes ? "Close Notes" : "My Notes"}
-              </button>
-            </div>
+          <div className="col-12 mb-3">
+            <button
+              className="btn btn-primary mynotesBtn"
+              style={{ display: "flex", flexDirection: "column" }}
+              onClick={toggleNotes}
+            >
+              <i className="fa fa-book"></i>
+              {showNotes ? "Close Notes" : "My Notes"}
+            </button>
+          </div>
 
           <div className="practiceLayout">
             <p className="my-3">
@@ -603,13 +647,17 @@ const RespondSituation = () => {
             </p>
             <div className="card">
               <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
+                <div className="card-title text-white">
+                  {questionData?.question_name}
+                </div>
               </div>
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                  <span className="text-danger">Prepare: {formatTime(countdown)}</span>
-                  <CardButton questionData={questionData} />
+                    <span className="text-danger">
+                      Prepare: {formatTime(countdown)}
+                    </span>
+                    <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
                     <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
@@ -656,18 +704,15 @@ const RespondSituation = () => {
                         <option value={2}>2x</option>
                       </select>
 
-                      <audio
-                        ref={audioRef}
-                        src={url}
-                        preload="metadata"
-                      />
+                      <audio ref={audioRef} src={url} preload="metadata" />
                     </div>
                   </div>
                   <div className="micSection">
-                  <Recorder 
-                          onRecordingComplete={handleRecordingComplete} 
-                          onStopRecording={handleStopRecording} 
-                          resetRecording={resetRecording}  />
+                    <Recorder
+                      onRecordingComplete={handleRecordingComplete}
+                      onStopRecording={handleStopRecording}
+                      resetRecording={resetRecording}
+                    />
                   </div>
                   {showAnswer && (
                     <div
@@ -678,7 +723,11 @@ const RespondSituation = () => {
                         className="audio-inner p-4 rounded-3"
                         style={{ background: "#ffe4e4" }}
                       >
-                        <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: questionData?.answer_american || "",
+                          }}
+                        />
                         {/* <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                         <hr />
                         <div className="rounded-pill">
@@ -694,7 +743,7 @@ const RespondSituation = () => {
                     </div>
                   )}
                   <div className="bottomBtn mt-3">
-                  <QuestionNavigation
+                    <QuestionNavigation
                       questionData={questionData}
                       onAnswerClick={handleAnswerClick}
                       onRestart={handleRestart}
@@ -706,15 +755,15 @@ const RespondSituation = () => {
                 </div>
               </div>
             </div>
-             {/* Notes Section */}
-             {showNotes && (
+            {/* Notes Section */}
+            {showNotes && (
               <div className="col-md-3">
                 <MyNotes />
               </div>
             )}
           </div>
           <div className="community">
-              <Community questionData={questionData} />
+            <Community questionData={questionData} />
           </div>
         </div>
       </div>

@@ -54,7 +54,9 @@ const Speaking: React.FC = () => {
       {questions.map((question) => (
         <div key={question.id} className="card mb-4 shadow-sm">
           <div className="card-body">
-            <h2 className="card-title">{question.id}. {question.title}</h2>
+            <h2 className="card-title">
+              {question.id}. {question.title}
+            </h2>
             <p className="card-text">{question.text}</p>
             <p className="text-muted">Your Answer:</p>
             <div className="bg-light p-2 rounded mb-3">
@@ -63,18 +65,38 @@ const Speaking: React.FC = () => {
               </audio>
             </div>
             <div className="row text-center my-4">
-              <div className="col"><strong>Content:</strong> {question.contentScore} / {question.maxScore}</div>
-              <div className="col"><strong>Fluency:</strong> {question.fluencyScore} / {question.maxScore}</div>
-              <div className="col"><strong>Pronunciation:</strong> {question.pronunciationScore} / {question.maxScore}</div>
-              <div className="col"><strong>Max Score:</strong> {question.maxScore} / <strong>Your Score:</strong> {question.userScore}</div>
+              <div className="col">
+                <strong>Content:</strong> {question.contentScore} /{" "}
+                {question.maxScore}
+              </div>
+              <div className="col">
+                <strong>Fluency:</strong> {question.fluencyScore} /{" "}
+                {question.maxScore}
+              </div>
+              <div className="col">
+                <strong>Pronunciation:</strong> {question.pronunciationScore} /{" "}
+                {question.maxScore}
+              </div>
+              <div className="col">
+                <strong>Max Score:</strong> {question.maxScore} /{" "}
+                <strong>Your Score:</strong> {question.userScore}
+              </div>
             </div>
             {/* <p className="font-weight-bold mt-2">Max Score: {question.maxScore} | Your Score: {question.userScore}</p> */}
             <div className="d-flex align-items-center mb-2">
               <strong>AI Speech Recognition:</strong>
-              <span className="ms-3 text-success"><strong>&#9679; Accurate</strong></span>
-              <span className="ms-3 text-warning"><strong>&#9679; Average</strong></span>
-              <span className="ms-3 text-danger"><strong>&#9679; Inaccurate</strong></span>
-              <span className="ms-3 text-dark"><strong>/ Pause</strong></span>
+              <span className="ms-3 text-success">
+                <strong>&#9679; Accurate :30</strong>
+              </span>
+              <span className="ms-3 text-warning">
+                <strong>&#9679; Average :40</strong>
+              </span>
+              <span className="ms-3 text-danger">
+                <strong>&#9679; Inaccurate :89</strong>
+              </span>
+              <span className="ms-3 text-dark">
+                <strong>/ Pause</strong>
+              </span>
             </div>
             <div className="alert alert-success mt-2" role="alert">
               {question.recognition}

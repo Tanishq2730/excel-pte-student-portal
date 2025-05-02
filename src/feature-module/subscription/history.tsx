@@ -4,7 +4,7 @@ const historyData = [
   {
     id: 1,
     packageName: "1 Month",
-    packageType: "Practice Subscription",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 1 Month (03 Mar 2025 to 2025-04-01)",
     transactionDate: "03-03-2025",
     paymentStatus: "Pending",
@@ -12,7 +12,7 @@ const historyData = [
   {
     id: 2,
     packageName: "Bronze Package",
-    packageType: "One To One Class",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 1 Month (20 Feb 2025 to 2025-03-20)",
     transactionDate: "20-02-2025",
     paymentStatus: "Successful",
@@ -20,7 +20,7 @@ const historyData = [
   {
     id: 3,
     packageName: "1 Month",
-    packageType: "Practice Subscription",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 1 Month (17 Feb 2025 to 2025-03-18)",
     transactionDate: "17-02-2025",
     paymentStatus: "Pending",
@@ -28,7 +28,7 @@ const historyData = [
   {
     id: 4,
     packageName: "1 Month",
-    packageType: "Practice Subscription",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 1 Month (17 Feb 2025 to 2025-03-18)",
     transactionDate: "17-02-2025",
     paymentStatus: "Pending",
@@ -36,7 +36,7 @@ const historyData = [
   {
     id: 5,
     packageName: "1 Month",
-    packageType: "Practice Subscription",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 1 Month (13 Feb 2025 to 2025-03-14)",
     transactionDate: "13-02-2025",
     paymentStatus: "Pending",
@@ -44,7 +44,7 @@ const historyData = [
   {
     id: 6,
     packageName: "3 Day Free Trial",
-    packageType: "Practice Subscription",
+    transactionId: "83JD757578HH8HDS",
     duration: "VIP 3 Day (12 Feb 2025 to 2025-02-14)",
     transactionDate: "12-02-2025",
     paymentStatus: "Successful",
@@ -67,7 +67,7 @@ const History = () => {
                     <tr>
                       <th>S. No.</th>
                       <th>Package Name</th>
-                      <th>Package Type</th>
+                      <th>Transaction Id</th>
                       <th>Duration</th>
                       <th>Transaction Date</th>
                       <th>Payment Status</th>
@@ -78,7 +78,7 @@ const History = () => {
                       <tr key={entry.id}>
                         <td>{index + 1}</td>
                         <td>{entry.packageName}</td>
-                        <td>{entry.packageType}</td>
+                        <td>{entry.transactionId}</td>
                         <td>{entry.duration}</td>
                         <td>{entry.transactionDate}</td>
                         <td>{entry.paymentStatus}</td>

@@ -146,9 +146,9 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
           <div>
             <div ref={waveformContainerRef} className="mb-6"></div>
             <div className="flex gap-4">
-              <button onClick={playAudio} className="bg-blue-500 px-4 py-2 rounded">Play / Pause</button>
-              <a href={audioUrl} download="recording.webm" className="bg-gray-500 px-4 py-2 rounded">Download</a>
-              <button onClick={resetRecordingHandler} className="bg-gray-500 px-4 py-2 rounded">Record Again</button>
+              <button onClick={playAudio} className="btn btn-soft-secondary rounded">Play / Pause</button>
+              <a href={audioUrl} download="recording.webm" className="btn btn-soft-secondary rounded mx-2">Download</a>
+              <button onClick={resetRecordingHandler} className="btn btn-soft-secondary rounded">Record Again</button>
             </div>
           </div>
         )}

@@ -7,7 +7,10 @@ interface Props {
 const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
   return (
     <div className="card-body">
-      <div className="accordion accordion-border-secondary accordions-items-seperate" id="accordioninfoborderExample">
+      <div
+        className="accordion accordion-border-secondary accordions-items-seperate"
+        id="accordioninfoborderExample"
+      >
         {/* Adjective */}
         <div className="accordion-item">
           <h2 className="accordion-header" id="headingborderinfoOne">
@@ -22,19 +25,33 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             >
               <div className="acBtn">
                 <div>Adjective</div>
-                <div className="count"><p>10/10</p></div>
+                <div className="d-flex">
+                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
+                  <div className="count">
+                    <p>10/10</p>
+                  </div>
+                </div>
               </div>
             </button>
           </h2>
-          <div id="infoBorderOne" className="accordion-collapse collapse show" aria-labelledby="headingborderinfoOne" data-bs-parent="#accordioninfoborderExample">
+          <div
+            id="infoBorderOne"
+            className="accordion-collapse collapse show"
+            aria-labelledby="headingborderinfoOne"
+            data-bs-parent="#accordioninfoborderExample"
+          >
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
             </div>
           </div>
@@ -54,19 +71,33 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             >
               <div className="acBtn">
                 <div>Adverbs & Degree</div>
-                <div className="count"><p>10/10</p></div>
+                <div className="d-flex">
+                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
+                  <div className="count">
+                    <p>10/10</p>
+                  </div>
+                </div>
               </div>
             </button>
           </h2>
-          <div id="infoBorderTwo" className="accordion-collapse collapse" aria-labelledby="headingborderinfoTwo" data-bs-parent="#accordioninfoborderExample">
+          <div
+            id="infoBorderTwo"
+            className="accordion-collapse collapse"
+            aria-labelledby="headingborderinfoTwo"
+            data-bs-parent="#accordioninfoborderExample"
+          >
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
             </div>
           </div>
@@ -86,19 +117,33 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             >
               <div className="acBtn">
                 <div>Adverbs & Manner</div>
-                <div className="count"><p>10/10</p></div>
+                <div className="d-flex">
+                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
+                  <div className="count">
+                    <p>10/10</p>
+                  </div>
+                </div>
               </div>
             </button>
           </h2>
-          <div id="infoBorderThree" className="accordion-collapse collapse" aria-labelledby="headingborderinfoThree" data-bs-parent="#accordioninfoborderExample">
+          <div
+            id="infoBorderThree"
+            className="accordion-collapse collapse"
+            aria-labelledby="headingborderinfoThree"
+            data-bs-parent="#accordioninfoborderExample"
+          >
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
+                <div className="count">
+                  <p>10/10</p>
+                </div>
               </div>
             </div>
           </div>
