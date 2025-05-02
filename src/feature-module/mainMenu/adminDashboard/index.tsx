@@ -311,7 +311,7 @@ const AdminDashboard = () => {
                       <div className="mb-3 mb-xl-0">
                         <div className="d-flex align-items-center flex-wrap mb-2">
                           <h1 className="text-white me-2">
-                            Welcome Back, Mr. Herald
+                            Welcome, Mr. Herald
                           </h1>
                         </div>
                         <div className="examCount">
@@ -615,7 +615,7 @@ const AdminDashboard = () => {
                 </div> */}
                 <div className="card flex-fill">
                   <div className="card-header d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Performance</h4>
+                    <h4 className="card-title">Progress Overview</h4>
                   </div>
                   <div className="card-body">
                     <div className="d-md-flex align-items-center justify-content-between">
@@ -665,9 +665,9 @@ const AdminDashboard = () => {
                 {/* Quick Links */}
                 <div className="card flex-fill">
                   <div className="card-header d-flex align-items-center justify-content-between">
-                    <h4 className="card-title">Quick Links</h4>
+                    <h4 className="card-title">Study Tools</h4>
                   </div>
-                  <div className="card-body p-3">
+                  <div className="card-body p-3 studyStyle">
                     <div className="row">
                       <div className="col-md-4">
                         <Link
@@ -679,7 +679,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-calendar" />
                             </span>
                           </div>
-                          <p className="text-dark">Template</p>
+                          <p className="text-dark">Templates</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -718,7 +718,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-report-money" />
                             </span>
                           </div>
-                          <p className="text-dark">Grammer</p>
+                          <p className="text-dark">Grammar</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -731,7 +731,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-calendar-share" />
                             </span>
                           </div>
-                          <p className="text-dark">Practice History</p>
+                          <p className="text-dark">Prc. History</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -755,21 +755,17 @@ const AdminDashboard = () => {
                 <div className="card flex-fill">
                   <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-title">Recent Mock Score</h4>
-                    <p>Total Score: 63</p>
+                    <h5 className="text-danger">Total Score: 63</h5>
                   </div>
                   <div className="card-body p-3">
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <ImageWithBasePath
-                          src="assets/img/teachers/teacher-01.jpg"
-                          className="rounded"
-                          alt="Profile"
-                        />
+                        <i className="ion-mic-c"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
                           <p className="mb-1">Speaking</p>
-                          <span>23</span>
+                          <span>23/90</span>
                         </div>
                         <div className="progress progress-xs  flex-grow-1 mb-1">
                           <div
@@ -794,7 +790,7 @@ const AdminDashboard = () => {
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
                           <p className="mb-1">Writng</p>
-                          <span>45</span>
+                          <span>45/90</span>
                         </div>
                         <div className="progress progress-xs  flex-grow-1 mb-1">
                           <div
@@ -819,7 +815,7 @@ const AdminDashboard = () => {
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
                           <p className="mb-1">Reading</p>
-                          <span>74</span>
+                          <span>74/90</span>
                         </div>
                         <div className="progress progress-xs  flex-grow-1 mb-1">
                           <div
@@ -844,7 +840,7 @@ const AdminDashboard = () => {
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
                           <p className="mb-1">Listening</p>
-                          <span>68</span>
+                          <span>68/90</span>
                         </div>
                         <div className="progress progress-xs  flex-grow-1 mb-1">
                           <div
@@ -1321,7 +1317,7 @@ const AdminDashboard = () => {
                       <i className="ion-edit" />
                     </span>
                   </div>
-                  <p className="text-dark mb-2">Grammer</p>
+                  <p className="text-dark mb-2">Grammar</p>
 
                   <button className="btn btn-soft-danger rounded-pill mt-2 w-100">
                     Click here to Learn

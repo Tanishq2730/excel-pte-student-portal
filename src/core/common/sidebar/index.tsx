@@ -335,7 +335,7 @@ const Sidebar = () => {
             </div>
             <div className="scannerDetail">
                 <div className="head">
-                  <h4>Download to Scan</h4>
+                  <h4>Download Our App</h4>
                 </div>
                 <div className="barcode">
                   <img src="assets/img/barcode.png"/>

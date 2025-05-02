@@ -1585,14 +1585,14 @@ body.app-chat {
 }
 
 .innercontent {
-  border: 1px solid #5de1e6;
+  border: 1px solid #1b507a;
   border-radius: 10px;
   padding: 20px;
   margin: 10px 0;
 }
 
 .micCard {
-  background-color: #d8feff;
+  background-color: #d8f1ff;
   padding: 10px;
   border-radius: 10px;
 }
@@ -1605,7 +1605,7 @@ body.app-chat {
 }
 
 .practiceLayout .card-header {
-  background-color: #33b9c7;
+  background-color: #1b507a;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -2399,5 +2399,11 @@ body.app-chat {
   color: #f5a623;
   font-weight: 600;
   font-size: 1.2em;
-  margin-bottom: 0.5em;
+  margin-bottom: 0.5em;}
+
+.studyStyle{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: auto;
 }
