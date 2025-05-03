@@ -216,7 +216,7 @@ const SummarizeWritinText = () => {
                     <div className="card-body">
                       <textarea
                         className="form-control"
-                        rows={8}
+                        rows={16}
                         placeholder="Write a Summary..."
                         value={summaryText}
                         onChange={handleTextChange}

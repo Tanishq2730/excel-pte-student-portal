@@ -767,7 +767,7 @@ div.sidebar-themesettings
     }
 
     table td.p-datepicker-today > span {
-      background-color: #3d5ee1;
+      background-color: #1b507a;
       color: #fff;
     }
   }
@@ -1558,6 +1558,7 @@ body.app-chat {
 
 .attempt {
   font-size: 12px;
+  margin-left: 10px;
 }
 
 .navlinks {
@@ -2314,16 +2315,16 @@ body.app-chat {
   }
 }
 
-.MsoNormal {
+.innercontent p {
   font-size: 18px;
   // line-height: 32px;
   line-height: 2.2;
 }
 
 .mynotesBtn {
-  position: absolute;
+  position: fixed;
   right: 0;
-  top: 60%;
+  top: 23%;
   z-index: 8765;
 }
 
@@ -2378,54 +2379,55 @@ body.app-chat {
   overflow-y: scroll;
 }
 
-.scannerDetail{
+.scannerDetail {
   padding: 0 2em 2em 2em;
-  h4{
+  h4 {
     margin-bottom: 0.5em;
   }
 }
-.badword{
+.badword {
   color: #d32f2f;
   font-weight: 600;
   font-size: 1.2em;
   margin-bottom: 0.5em;
 }
-.goodword{
+.goodword {
   color: #4caf50;
   font-weight: 600;
   font-size: 1.2em;
   margin-bottom: 0.5em;
 }
-.avgword{
+.avgword {
   color: #f5a623;
   font-weight: 600;
   font-size: 1.2em;
-  margin-bottom: 0.5em;}
+  margin-bottom: 0.5em;
+}
 
-.studyStyle{
+.studyStyle {
   display: flex;
   justify-content: center;
   align-items: center;
   margin: auto;
 }
 
-.mainFilter{
+.mainFilter {
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-.questionSearch{
+.questionSearch {
   padding: 10px 20px;
   border-radius: 20px;
   border: 1px solid #ccc;
 }
 
-.onhovercard:hover{
+.onhovercard:hover {
   border: 1px solid #1b507a !important;
 }
 
-.templatebg:after{
+.templatebg:after {
   background-attachment: fixed;
   background-image: url(../public/assets/img/templateBg.png);
   background-position: 50%;
@@ -2434,9 +2436,44 @@ body.app-chat {
   content: "";
   height: 100%;
   left: 50%;
-  opacity: .1;
+  opacity: 0.1;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
   width: 100%;
+}
+
+.fillDropdown {
+  input {
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    margin-right: 5px;
+  }
+}
+
+.planinfo .card-header {
+  background-color: #1b507a;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.questionCard{
+  strong{
+    font-weight: 500 !important;
+  }
+}
+
+.questionList {
+  .nav-link{
+    font-weight: 700 !important;
+    color: #000;
+    font-size: 16px !important;
+  }
+}
+
+.innercontent{
+  select{
+    font-size: 16px !important;
+  }
 }

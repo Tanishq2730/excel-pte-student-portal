@@ -18,7 +18,7 @@ const StudyPlaner: React.FC = () => {
               aria-current="page"
               to="#orders"
             >
-              <i className="ion-mic-c one"></i>
+              <i className="fa fa-microphone"></i>
             </Link>
           </li>
           <li className="nav-item">
@@ -58,7 +58,7 @@ const StudyPlaner: React.FC = () => {
               <div className="studycontent">
                 <div className="head mb-3">
                   <div className="icon bg-danger-transparent">
-                    <i className="ion-mic-c one"></i>
+                    <i className="fa fa-microphone"></i>
                   </div>
                   <h3>Speaking</h3>
                 </div>

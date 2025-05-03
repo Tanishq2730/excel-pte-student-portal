@@ -160,6 +160,7 @@ export const all_routes = {
   grammerPractice:"/grammer-practice",
   performance:"/performance",
   ptetestcard:"/pte-test-formate",
+  planInfo:'plan-info',
 
   // pages routes
   error404: "/error-404",

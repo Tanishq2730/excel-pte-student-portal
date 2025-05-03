@@ -167,7 +167,7 @@ const AdminDashboard = () => {
     legend: {
       show: false,
     },
-    colors: ["#3D5EE1", "#6FCCD8"],
+    colors: ["#1b507a", "#6FCCD8"],
     series: [3610, 44],
     responsive: [
       {
@@ -206,7 +206,7 @@ const AdminDashboard = () => {
         left: -8,
       },
     },
-    colors: ["#3D5EE1", "#EAB300", "#E82646"],
+    colors: ["#1b507a", "#EAB300", "#E82646"],
     series: [45, 11, 2],
     responsive: [
       {
@@ -731,7 +731,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-calendar-share" />
                             </span>
                           </div>
-                          <p className="text-dark">Prc. History</p>
+                          <p className="text-dark">Prc. Hist.</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -760,7 +760,7 @@ const AdminDashboard = () => {
                   <div className="card-body p-3">
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                        <i className="ion-mic-c text-danger"></i>
+                        <i className="fa fa-microphone text-danger"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">

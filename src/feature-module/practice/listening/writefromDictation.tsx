@@ -223,7 +223,7 @@ const WriteFromDictation = () => {
                     <div className="card-body">
                       <textarea
                         className="form-control"
-                        rows={4}
+                        rows={16}
                         placeholder="Write a Summary..."
                         value={summaryText}
                         onChange={handleTextChange}

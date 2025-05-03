@@ -23,7 +23,7 @@ const StudyPlan: React.FC = () => {
                   />
                   <div className="attemptedicon">
                     <div className="innerattempt">
-                      Attempted{" "}
+                      Task Completed{" "}
                       <p
                         className="bg-success"
                         style={{
@@ -35,7 +35,7 @@ const StudyPlan: React.FC = () => {
                       ></p>
                     </div>
                     <div className="innerattempt">
-                      Not Attempted{" "}
+                      Task Not Completed{" "}
                       <p
                         className="bg-danger"
                         style={{

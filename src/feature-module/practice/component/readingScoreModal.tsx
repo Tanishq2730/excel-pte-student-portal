@@ -50,7 +50,7 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
       <div className="row mt-3">
         {scoreData.map((item, idx) => (
           <div className="col-md-6 mb-4" key={idx}>
-            <div className="p-3 rounded shadow-sm" style={{ backgroundColor: '#fef9f7', border: '1px solid #f1e1dc' }}>
+            <div className="p-3 rounded shadow-sm" style={{ backgroundColor: '#fef9f7'}}>
               <div className="d-flex justify-content-between fw-semibold">
                 <span>{item.label}</span>
                 <span>{item.score} / {item.totalscore}</span>

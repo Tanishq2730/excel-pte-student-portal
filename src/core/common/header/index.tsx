@@ -510,6 +510,13 @@ const Header = () => {
                       <i className="ti ti-settings me-2" />
                       Settings
                     </Link>
+                    <Link
+                      className="dropdown-item d-inline-flex align-items-center p-2"
+                      to={routes.planInfo}
+                    >
+                      <i className="ion-navigate me-2" />
+                      Plan Info 
+                    </Link>
                     <hr className="m-0" />
                     <button
                       className="dropdown-item d-inline-flex align-items-center p-2"

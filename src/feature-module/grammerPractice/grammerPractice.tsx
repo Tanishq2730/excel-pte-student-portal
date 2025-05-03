@@ -79,6 +79,9 @@ const GrammerPractice: React.FC = () => {
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-5">
+          <div className="heading">
+            <h2 className="mb-3">PTE Grammar Practice</h2>
+          </div>
           <div className="grammerSection">
             <div className="row">
               <div className="col-md-4">

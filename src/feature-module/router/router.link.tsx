@@ -69,6 +69,7 @@ import GrammerPractice from "../grammerPractice/grammerPractice";
 import Performance from "../myPerformance/performance";
 import TestDnd from "../practice/reading/testDND";
 import Ptetestcard from "../ptetestFormate/ptetestcard";
+import PlanInfo from "../planInfo/PlanInfo";
 
 const routes = all_routes;
 
@@ -83,6 +84,7 @@ export const authRoutes = [
   { path: routes.mockTestResult, element: <MockTestResult />, route: Route },
   { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
   { path: routes.studyPlan, element: <StudyPlan />, route: Route },
+  { path: routes.planInfo, element: <PlanInfo />, route: Route },
   
 ];
 export const myPracticeRoutes = [

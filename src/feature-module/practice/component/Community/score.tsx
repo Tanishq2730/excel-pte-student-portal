@@ -152,7 +152,7 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
       {communityLogs.map((log) => (
         <div
           key={log.id}
-          className="container-fluid bg-light py-3 mb-3"
+          className="container-fluid bg-light py-1 px-1 mb-3"
           style={{ borderRadius: "20px" }}
         >
           <div
@@ -174,19 +174,19 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
               </div>
             </div>
             <div className="d-flex align-items-center">
-              <button className="btn btn-soft-secondary me-2">
+              <button className="btn btn-soft-primary me-2">
                 Score {log.score}/{log.total_score}
               </button>
 
               <button
-                className="btn btn-soft-warning"
+                className="btn btn-soft-danger"
                 data-bs-toggle="modal"
                 data-bs-target="#exampleModalLg"
                 onClick={() => {
                   handleScoreClick(log.id);
                 }}
               >
-                AI Score
+                AI Score 
               </button>
 
             </div>

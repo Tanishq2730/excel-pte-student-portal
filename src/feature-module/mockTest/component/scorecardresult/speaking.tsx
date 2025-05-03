@@ -83,6 +83,10 @@ const Speaking: React.FC = () => {
               </div>
             </div>
             {/* <p className="font-weight-bold mt-2">Max Score: {question.maxScore} | Your Score: {question.userScore}</p> */}
+            
+            <div className="alert alert-success mt-2" role="alert">
+              {question.recognition}
+            </div>
             <div className="d-flex align-items-center mb-2">
               <strong>AI Speech Recognition:</strong>
               <span className="ms-3 text-success">
@@ -97,9 +101,6 @@ const Speaking: React.FC = () => {
               <span className="ms-3 text-dark">
                 <strong>/ Pause</strong>
               </span>
-            </div>
-            <div className="alert alert-success mt-2" role="alert">
-              {question.recognition}
             </div>
             <div className="card">
               <div className="remark p-3">

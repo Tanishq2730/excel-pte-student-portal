@@ -138,7 +138,7 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
                 marginBottom: "0px",
               }}
             >
-              <i className="fa fa-microphone" style={{ fontSize: "16px", color: recording ? "#fff" : "#333" }} />
+              <i className="fa fa-microphone" style={{ fontSize: "22px", color: recording ? "#fff" : "#333" }} />
             </div>
           </div>
         )}

@@ -27,9 +27,7 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
                 <div>Adjective</div>
                 <div className="d-flex">
                   <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  <div className="count">
-                    <p>10/10</p>
-                  </div>
+                  
                 </div>
               </div>
             </button>
@@ -73,9 +71,7 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
                 <div>Adverbs & Degree</div>
                 <div className="d-flex">
                   <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  <div className="count">
-                    <p>10/10</p>
-                  </div>
+                  
                 </div>
               </div>
             </button>
@@ -119,9 +115,7 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
                 <div>Adverbs & Manner</div>
                 <div className="d-flex">
                   <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  <div className="count">
-                    <p>10/10</p>
-                  </div>
+                  
                 </div>
               </div>
             </button>
