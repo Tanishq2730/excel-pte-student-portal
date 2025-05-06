@@ -217,6 +217,17 @@ const WriteEssay = () => {
                       ></textarea>
                     </div>
                   </div>
+                  
+                  <div className="bottomBtn mt-3">
+                    <QuestionNavigation
+                      questionData={questionData}
+                      onAnswerClick={handleAnswerClick}
+                      onRestart={handleRestart}
+                      onNext={handleNext}
+                      onPrevious={handlePrevious}
+                      onSubmit={handleSubmitPractice}
+                    />
+                  </div>
                   {showAnswer && (
                     <div
                       className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
@@ -224,7 +235,7 @@ const WriteEssay = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                         <hr />
@@ -240,16 +251,6 @@ const WriteEssay = () => {
                       </div>
                     </div>
                   )}
-                  <div className="bottomBtn mt-3">
-                    <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onSubmit={handleSubmitPractice}
-                    />
-                  </div>
                 </div>
               </div>
             </div>

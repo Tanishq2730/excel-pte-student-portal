@@ -9,7 +9,11 @@ const Performance: React.FC = () => {
   return (
     <div className="page-wrappers">
       <div className="content">
+        
         <div className="container my-5">
+        <div className="mainHead pb-3">
+            <h3>My Performance</h3>
+          </div>
           <div className="card-body">
             <ul
               className="nav nav-pills justify-content-start nav-style-2 mb-3"

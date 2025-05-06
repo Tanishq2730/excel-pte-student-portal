@@ -10,6 +10,9 @@ const StudyPlan: React.FC = () => {
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-2">
+          <div className="mainHead pb-3">
+            <h3>Study Plan</h3>
+          </div>
           <div className="studyPlan">
             <div className="row">
               <div className="col-md-6">

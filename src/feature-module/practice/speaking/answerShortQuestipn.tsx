@@ -657,7 +657,7 @@ const AnswerShortQuestion = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
                         {/* <h3 className="fw-semibold mb-2">Audio Answer:</h3>

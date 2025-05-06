@@ -329,7 +329,7 @@ const FillInTheBlanksRead = () => {
                     </div>
 
                     <div
-                      className="p-4 space-y-4"
+                      className="p-4 space-y-4 bottomborder"
                       style={{ fontSize: "1.25rem" }}
                     >
                       {parse(questionData?.question || "", customParseOptions)}
@@ -345,7 +345,7 @@ const FillInTheBlanksRead = () => {
                               key={idx}
                               draggable
                               onDragStart={(e) => handleDragStart(e, word)}
-                              className="btn btn-soft-secondary rounded-pill"
+                              className="btn btn-outline-dark rounded-pill"
                             >
                               {word}
                             </div>
@@ -367,7 +367,7 @@ const FillInTheBlanksRead = () => {
                     {showAnswer && (
                       <div
                         className="py-4 mt-3 audio-card answerCard rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                        style={{ background: "rgb(228 246 255)" }}
                       >
                         <div className="audio-inner p-4 rounded-3">
                           <p>
@@ -376,10 +376,11 @@ const FillInTheBlanksRead = () => {
                           </p>
                           <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                           <hr />
-                          <audio controls className="w-100">
+                          <audio controls className="w-100" style={{background:'#fff !important'}}>
                             <source
                               src="your-audio-file.mp3"
                               type="audio/mpeg"
+                              style={{background:'#fff !important'}}
                             />
                             Your browser does not support the audio element.
                           </audio>

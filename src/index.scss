@@ -1601,7 +1601,7 @@ body.app-chat {
 .page-wrappers {
   padding: 56px 0 0;
   .audio-inner {
-    background-color: #ffe4e4 !important;
+    background-color: rgb(228 246 255) !important;
   }
 }
 
@@ -2475,5 +2475,55 @@ body.app-chat {
 .innercontent{
   select{
     font-size: 16px !important;
+  }
+}
+
+.activecard{
+  background-color: rgb(255, 196, 196);
+  .count{
+    width: 4em;
+    height: 4em;
+    border-radius: 100px;
+    border: 2px solid #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 1em;
+  }
+  .activeplandetail{
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+  }
+}
+
+.advanceSearch{
+  width: 80%;
+  border: 2px solid #1b507a;
+  border-radius: 100px;
+  padding: 1em;
+  margin: auto;
+}
+
+/* Optional custom styles */
+.list-group-item {
+  padding: 0.75rem 1rem;
+  font-size: 0.95rem;
+}
+
+.card {
+  border-radius: 8px;
+  overflow: hidden;
+}
+.audio-card {
+  audio{
+    border: 2px solid #1b507a;
+    border-radius: 100px;
+  }
+}
+
+.bottomborder{
+  span{
+    border-bottom: none !important;
   }
 }

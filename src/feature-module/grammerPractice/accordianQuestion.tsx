@@ -8,7 +8,7 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
   return (
     <div className="card-body">
       <div
-        className="accordion accordion-border-secondary accordions-items-seperate"
+        className="accordion accordion-solid-primary accordions-items-seperate"
         id="accordioninfoborderExample"
       >
         {/* Adjective */}

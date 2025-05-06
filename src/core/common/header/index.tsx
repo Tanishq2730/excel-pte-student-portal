@@ -208,7 +208,15 @@ const Header = () => {
               </div> */}
               <div className="search">
                 <Link
-                  to="#"
+                  to=""
+                  className="btn btn-outline-light bg-white btn-icon d-flex justify-content-center align-items-center me-1 p-2 px-4"
+                >
+                  <span style={{fontWeight:'400'}}>Free</span>
+                </Link>
+              </div>
+              <div className="search">
+                <Link
+                  to={routes.search}
                   className="btn btn-outline-light bg-white btn-icon d-flex justify-content-center align-items-center me-1 p-2"
                 >
                   <i className="fa fa-search"></i>
@@ -509,6 +517,13 @@ const Header = () => {
                     >
                       <i className="ti ti-settings me-2" />
                       Settings
+                    </Link>
+                    <Link
+                      className="dropdown-item d-inline-flex align-items-center p-2"
+                      to={routes.profilesettings}
+                    >
+                      <i className="fe fe-whatsapp me-2" />
+                      Whatsapp
                     </Link>
                     <Link
                       className="dropdown-item d-inline-flex align-items-center p-2"

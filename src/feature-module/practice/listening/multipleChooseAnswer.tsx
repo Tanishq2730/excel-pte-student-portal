@@ -278,7 +278,7 @@ const MultipleChooseAnswerListen = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                         <hr />

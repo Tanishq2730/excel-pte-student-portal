@@ -607,11 +607,11 @@ const ReadAloud = () => {
                       {showAnswer && (
                         <div
                           className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                          style={{ background: "#ffe4e4" }}
+                          style={{ background: "rgb(228 246 255)" }}
                         >
                           <div
                             className="audio-inner p-4 rounded-3"
-                            style={{ background: "#ffe4e4" }}
+             
                           >
                             <p
                               dangerouslySetInnerHTML={{

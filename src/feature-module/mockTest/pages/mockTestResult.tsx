@@ -12,6 +12,9 @@ const MockTestResult: React.FC = () => {
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
+        <div className="mainHead pb-3">
+            <h3>Mocktest Result</h3>
+          </div>
           <div className="row">
             {mockTests.map((test, index) => (
               <div className="col-md-3">

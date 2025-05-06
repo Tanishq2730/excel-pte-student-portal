@@ -47,13 +47,25 @@ const PlanCard: React.FC<PlanCardProps> = ({ title, values }) => (
 const ActivePlanCard: React.FC = () => (
   <div className="card text-white text-center mt-4">
     <div className="card-header text-center">
-        <div className="card-title text-white">
-            Active Plan
-        </div>
+      <div className="card-title text-white">Active Plan</div>
     </div>
     <div className="card-body">
-      <div className="card w-60 m-auto" style={{width:"60%"}}>
-            <h3>Unlimited</h3>
+      <div className="card activecard p-3 w-60 m-auto" style={{ width: "50%" }}>
+        <div className="card-head text-left">
+          <h3 className="text-start text-white">Unlimited Plan</h3>
+        </div>
+        <div className="card-body p-0">
+          <div className="count">
+            <h4 className="text-white">53</h4>
+          </div>
+          <div className="activeplandetail">
+            <h4 className="text-white">Remaining Days</h4>
+            <div className="text-end">
+              <h4 className="text-white">Active</h4>
+              <p>(Expires on 34/2/2025)</p>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -68,7 +80,11 @@ const PlanInfo: React.FC = () => {
     { name: "Strategy Videos", premium: "✔️", free: "✔️" },
     { name: "Study-Plan", premium: "✔️", free: "❌" },
     { name: "Full Mock Tests", premium: "115 x Unlimited", free: "1 x Once" },
-    { name: "Sectional Mock Tests", premium: "262 x Unlimited", free: "4 x Once" },
+    {
+      name: "Sectional Mock Tests",
+      premium: "262 x Unlimited",
+      free: "4 x Once",
+    },
     // { name: "CYO Mock Tests", premium: "Unlimited", free: "❌" },
   ];
 
@@ -82,7 +98,9 @@ const PlanInfo: React.FC = () => {
         <div className="container planinfo">
           <div className="card">
             <div className="card-header text-center">
-              <div className="card-title text-white text-center">Premium Plan</div>
+              <div className="card-title text-white text-center">
+                Premium Plan
+              </div>
             </div>
             <div className="card-body">
               <div className="row">

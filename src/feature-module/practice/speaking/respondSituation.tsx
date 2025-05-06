@@ -721,7 +721,7 @@ const RespondSituation = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <p
                           dangerouslySetInnerHTML={{

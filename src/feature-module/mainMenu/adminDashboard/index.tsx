@@ -386,7 +386,7 @@ const AdminDashboard = () => {
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
-                            <i className="ion-mic-c"></i>
+                            <i className="fa fa-microphone"></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Speaking</p>
@@ -723,7 +723,7 @@ const AdminDashboard = () => {
                       </div>
                       <div className="col-md-4">
                         <Link
-                          to={routes.studentAttendance}
+                          to={routes.practiceHistory}
                           className="d-block bg-warning-transparent ronded p-2 text-center class-hover"
                         >
                           <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">

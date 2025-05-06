@@ -113,6 +113,9 @@ const Ptetestcard: React.FC = () => {
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-5">
+        <div className="mainHead pb-3">
+            <h3>PTE Test Formate</h3>
+          </div>
           <div className="row">
             <div className="col-md-9">
               <div className="row">

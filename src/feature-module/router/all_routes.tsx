@@ -304,6 +304,8 @@ export const all_routes = {
   examResult: "/academic/exam-result",
   examAttendance: "/academic/exam-attendance",
   classTimetable: "/academic/class-time-table",
+  search:'/search',
+  practiceHistory:'/practice-histroy',
 
   //Hrm module
   staff: "/hrm/staff",

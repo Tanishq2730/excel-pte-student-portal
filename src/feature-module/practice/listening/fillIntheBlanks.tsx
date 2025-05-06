@@ -344,7 +344,7 @@ const FillInTheBlanks = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <p><b>Correct Answers : </b> {questionData?.answer_american}</p>
                         <h3 className="fw-semibold mb-2">Audio Answer:</h3>

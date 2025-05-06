@@ -13,6 +13,9 @@ const SectionalMocktest: React.FC = () => {
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
+        <div className="mainHead pb-3">
+            <h3>Sectional Mocktest</h3>
+          </div>
           <div className="card-body">
             <ul
               className="nav nav-pills justify-content-start nav-style-2 mb-3"

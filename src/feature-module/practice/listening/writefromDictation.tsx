@@ -237,7 +237,7 @@ const WriteFromDictation = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                        style={{ background: "#ffe4e4" }}
+                      
                       >
                         <p><b>American Answers : </b> {questionData?.answer_american}</p>
                         {questionData?.answer_british && <p><b>British Answers : </b> {questionData?.answer_british}</p>}
