@@ -1,67 +1,53 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import SpeakingCard from "./component/speakingCard";
-import WritingCard from "./component/writingCard";
-import ReadingCard from "./component/readingCard";
-import ListeningCard from "./component/listeningCard";
+import TemplateCard from "./component/TemplateCard";
+import { fetchAllTypes } from '../../api/commonAPI';
 
 const Template: React.FC = () => {
+  const [types, setTypes] = useState<{ id: number; name: string }[]>([]);
+  const [activeTab, setActiveTab] = useState<string>("");
+
+  useEffect(() => {
+    const loadTypes = async () => {
+      const res = await fetchAllTypes();
+      if (res?.success && res.data.length) {
+        setTypes(res.data);
+        setActiveTab(res.data[0].name); // Default to first tab
+      }
+    };
+    loadTypes();
+  }, []);
+
   return (
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-4">
           <div className="card-body">
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3">
-              <li className="nav-item">
-                <Link
-                  className="nav-link active"
-                  to="#solid-rounded-tab1"
-                  data-bs-toggle="tab"
-                >
-                  Speaking
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="#solid-rounded-tab2"
-                  data-bs-toggle="tab"
-                >
-                  Writing
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="#solid-rounded-tab3"
-                  data-bs-toggle="tab"
-                >
-                  Reading
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  to="#solid-rounded-tab4"
-                  data-bs-toggle="tab"
-                >
-                  Listening
-                </Link>
-              </li>
+              {types.map((type, index) => (
+                <li className="nav-item" key={type.id}>
+                  <Link
+                    className={`nav-link ${activeTab === type.name ? "active" : ""}`}
+                    to={`#solid-rounded-tab${index + 1}`}
+                    data-bs-toggle="tab"
+                    onClick={() => setActiveTab(type.name)}
+                  >
+                    {type.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
+
             <div className="tab-content">
-              <div className="tab-pane show active" id="solid-rounded-tab1">
-                <SpeakingCard/>
-              </div>
-              <div className="tab-pane" id="solid-rounded-tab2">
-                <WritingCard/>
-              </div>
-              <div className="tab-pane" id="solid-rounded-tab3">
-                <ReadingCard/>
-              </div>
-              <div className="tab-pane" id="solid-rounded-tab4">
-                <ListeningCard/>
-              </div>
+              {types.map((type, index) => (
+                <div
+                  key={type.id}
+                  className={`tab-pane ${activeTab === type.name ? "show active" : ""}`}
+                  id={`solid-rounded-tab${index + 1}`}
+                >
+                  <TemplateCard typeId={type.id} />
+                </div>
+              ))}
             </div>
           </div>
         </div>

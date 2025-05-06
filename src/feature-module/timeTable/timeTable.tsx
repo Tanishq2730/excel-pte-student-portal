@@ -1,88 +1,94 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchTimetables } from "../../api/studyToolsAPI";
 
-const schedule = [
-  {
-    week: "Week 1",
-    days: [
-      ["Read Aloud", "Describe Image", "Repeat sentence"],
-      ["Write from dictation", "Listening FIB", "Listening HIW"],
-      ["Reading FIB", "R/W FIB", "Grammar"],
-      ["Reorders"],
-      ["Summarize Spoken Test"]
-    ]
-  },
-  {
-    week: "Week 2",
-    days: [
-      ["Listening MCQ, SA, HCS, SMW"],
-      ["Write from dictation", "Listening FIB", "Listening HIW"],
-      ["Reading FIB", "R/W FIB", "Grammar"],
-      ["Reorders"],
-      ["Summarize Written Text", "Write Essay"]
-    ]
-  },
-  {
-    week: "Week 3",
-    days: [
-      ["Read Aloud", "Repeat Sentence", "Describe Image, retells"],
-      ["Reading FIB", "R/W FIB", "Grammar"],
-      ["Write from dictation", "Listening FIB", "Listening HIW"],
-      ["Reorders"],
-      ["Summarise spoken Text", "Spelling Test"]
-    ]
-  },
-  {
-    week: "Week 4",
-    days: [
-      ["Reading FIB", "R/W FIB", "Grammar"],
-      ["Read Aloud, Retell, ASQ", "Repeat Sentence", "Describe Image"],
-      ["Write from dictation", "Listening FIB", "Listening HIW"],
-      ["Reorders", "Reading FIB"],
-      ["Summarise spoken Tex", "Spelling Test"]
-    ]
-  }
-];
+interface Day {
+  day: string;
+  task: string;
+}
+
+interface Timetable {
+  id: number;
+  week: string;
+  description: string;
+  time: string;
+  days: Day[];
+}
+
+const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 
 const TimeTable: React.FC = () => {
+  const [timetables, setTimetables] = useState<Timetable[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const loadTimetables = async () => {
+      try {
+        const res = await fetchTimetables();
+        if (res.success) {
+          setTimetables(res.data);
+        }
+      } catch (error) {
+        console.error("Error fetching timetables:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadTimetables();
+  }, []);
+
+  if (loading) return <p className="text-center my-5">Loading...</p>;
+
   return (
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-4">
-          {schedule.map((weekItem, weekIdx) => (
-            <div key={weekIdx} className="card mb-4">
-              <div className="card-header bg-white d-flex justify-content-between align-items-center">
-                <h5 className="mb-0">{weekItem.week}</h5>
-                <span className="badge bg-warning text-dark">Next</span>
-              </div>
-              <div className="card-body">
-                <p className="text-muted">09:00 pm to 10:30 pm Sydney time</p>
-                <div className="table-responsive">
-                  <table className="table table-bordered text-center align-middle schedule-table">
-                    <thead className="table-success">
-                      <tr>
-                        <th>Monday</th>
-                        <th>Tuesday</th>
-                        <th>Wednesday</th>
-                        <th>Thursday</th>
-                        <th>Friday</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      <tr>
-                        {weekItem.days.map((dayTasks, dayIdx) => (
-                          <td key={dayIdx}>
-                            {dayTasks.map((task, taskIdx) => (
-                              <div key={taskIdx}>{task}</div>
-                            ))}
-                          </td>
-                        ))}
-                      </tr>
-                    </tbody>
-                  </table>
+          {timetables.map((weekItem) => {
+            // Group tasks by day
+            const dayTasksMap: Record<string, string[]> = {};
+            weekItem.days.forEach(({ day, task }) => {
+              if (!dayTasksMap[day]) {
+                dayTasksMap[day] = [];
+              }
+              dayTasksMap[day].push(task);
+            });
+
+            return (
+              <div key={weekItem.id} className="card mb-4">
+                <div className="card-header bg-white d-flex justify-content-between align-items-center">
+                  <h5 className="mb-0">{weekItem.week}</h5>
+                  <span className="badge bg-warning text-dark">Next</span>
+                </div>
+                <div className="card-body">
+                  <p className="text-muted">{weekItem.time}</p>
+                  <div className="table-responsive">
+                    <table className="table table-bordered text-center align-middle schedule-table">
+                      <thead className="table-success">
+                        <tr>
+                          {weekDays.map((day) => (
+                            <th key={day}>{day}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          {weekDays.map((day) => (
+                            <td key={day}>
+                              {dayTasksMap[day]?.length
+                                ? dayTasksMap[day].map((task, i) => (
+                                    <div key={i}>{task}</div>
+                                  ))
+                                : "-"}
+                            </td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </div>

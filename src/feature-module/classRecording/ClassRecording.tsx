@@ -1,45 +1,36 @@
 import React, { useState, useEffect } from "react";
-import { FaArrowLeft } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { fetchClassRecordings } from "../../api/studyToolsAPI";
 
-// Define the type for a single recording
 interface Recording {
-  url: string;
+  id: number;
   title: string;
+  description: string;
+  url: string;
+  createdAt: string;
 }
-
-// Dummy data
-const dummyRecordings: Recording[] = [
-  {
-    url: "https://www.youtube.com/embed/dQw4w9WgXcQ",
-    title: "Introduction to React",
-  },
-  {
-    url: "https://www.youtube.com/embed/tgbNymZ7vqY",
-    title: "Advanced JavaScript",
-  },
-  {
-    url: "https://www.youtube.com/embed/ysz5S6PUM-U",
-    title: "TypeScript Basics",
-  },
-  {
-    url: "https://www.youtube.com/embed/3fumBcKC6RE",
-    title: "React Hooks Deep Dive",
-  },
-];
 
 const ClassRecording: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [recordings, setRecordings] = useState<Recording[]>([]);
 
   useEffect(() => {
-    // Simulate async loading
-    const timer = setTimeout(() => {
-      setRecordings(dummyRecordings);
+    const getRecordings = async () => {
+      setLoading(true);
+      try {
+        const response = await fetchClassRecordings();
+        if (response?.success && Array.isArray(response.data)) {
+          setRecordings(response.data);
+        } else {
+          setRecordings([]);
+        }
+      } catch (error) {
+        console.error("Error fetching class recordings:", error);
+        setRecordings([]);
+      }
       setLoading(false);
-    }, 1000);
+    };
 
-    return () => clearTimeout(timer); // Cleanup timeout on unmount
+    getRecordings();
   }, []);
 
   const openVideoInNewTab = (url: string) => {
@@ -59,19 +50,21 @@ const ClassRecording: React.FC = () => {
               ) : recordings.length > 0 ? (
                 recordings.map((card, index) => (
                   <div key={index} className="col-md-3 cardvideo mb-3">
-                    <div className="card">
-                    <div className="card-body">
-                      <iframe
-                        src={card.url}
-                        title={card.title}
-                        width="100%"
-                        height="100%"
-                        allowFullScreen
-                        style={{ cursor: "pointer" }}
-                        onClick={() => openVideoInNewTab(card.url)}
-                      ></iframe>
-                      <h5>{card.title}</h5>
-                    </div>
+                    <div
+                      className="card"
+                      onClick={() => openVideoInNewTab(card.url)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <div className="card-body">
+                        <iframe
+                          src={card.url}
+                          title={card.title}
+                          width="100%"
+                          height="150"
+                          allowFullScreen
+                        />
+                        <h5 className="mt-2">{card.title}</h5>
+                      </div>
                     </div>
                   </div>
                 ))

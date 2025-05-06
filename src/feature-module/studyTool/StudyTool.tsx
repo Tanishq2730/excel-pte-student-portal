@@ -24,7 +24,6 @@ const StudyTool: React.FC = () => {
   const cardData: CardItem[] = [
     { icon: faVideo, title: "Class Recording", link: routes.classRecording },
     { icon: faFileAlt, title: "Template", link: routes.template },
-    { icon: faQuestionCircle, title: "Grammar", link: "/grammar" },
     { icon: faFolder, title: "Prediction File", link: routes.predictionFile },
     { icon: faLink, title: "Class link", link: routes.classLink },
     { icon: faCalendarAlt, title: "Timetable", link: routes.timeTable },

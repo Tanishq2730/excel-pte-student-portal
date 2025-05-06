@@ -153,7 +153,7 @@ export const all_routes = {
   timeTable:"/time-table",
   classLink:"/class-link",
   template:"/template",
-  templateDetail:"/template-detail",
+  templateDetail:"/template-detail/:id",
   subscriptionPlan:"/subscription-plan",
   community:"/community",
   studyPlan:"/study-plan",

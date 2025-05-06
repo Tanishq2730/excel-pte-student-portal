@@ -1,127 +1,101 @@
-import React, { useState } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
+import React, { useEffect, useState } from "react";
+import { Modal, Button, Form, Spinner } from "react-bootstrap";
+import {
+  fetchCommunity,
+  saveCommunity,
+  likeCommunity,
+  unlikeCommunity,
+} from "../../api/communityAPI";
 
 interface Reply {
   id: number;
-  name: string;
-  avatar: string;
-  text: string;
-  date: string;
-  likes: number;
-  replies: Reply[];
+  content: string;
+  user: {
+    id: number;
+    name: string;
+  };
 }
 
-interface Comment extends Reply {}
+interface Comment {
+  id: number;
+  content: string;
+  user: {
+    id: number;
+    name: string;
+  };
+  likes_count: number;
+  user_liked: boolean;
+  replies: Reply[];
+}
 
 const Community: React.FC = () => {
   const [comments, setComments] = useState<Comment[]>([]);
   const [input, setInput] = useState("");
   const [modalShow, setModalShow] = useState(false);
-  const [replyIndex, setReplyIndex] = useState<(number | null)[]>([null]);
   const [replyText, setReplyText] = useState("");
-  const [replyChain, setReplyChain] = useState<Reply[]>([]);
+  const [selectedCommentId, setSelectedCommentId] = useState<number | null>(
+    null
+  );
+  const [loading, setLoading] = useState(false);
 
-  const currentUser = {
-    name: "Farhan Ali",
-    avatar: "/avatar.png",
+  const loadComments = async () => {
+    setLoading(true);
+    try {
+      const response = await fetchCommunity();
+      setComments(response?.data || []);
+    } catch (error) {
+      console.error("Failed to fetch community posts:", error);
+    }
+    setLoading(false);
   };
 
-  const getCurrentDate = () => new Date().toLocaleDateString("en-GB");
+  useEffect(() => {
+    loadComments();
+  }, []);
 
-  const handleSend = () => {
+  const handleSend = async () => {
     if (!input.trim()) return;
-    const newComment: Comment = {
-      id: Date.now(),
-      name: currentUser.name,
-      avatar: currentUser.avatar,
-      text: input,
-      date: getCurrentDate(),
-      likes: 0,
-      replies: [],
-    };
-    setComments([newComment, ...comments]);
-    setInput("");
+    try {
+      await saveCommunity({ content: input, parent_id: "" });
+      setInput("");
+      loadComments();
+    } catch (error) {
+      console.error("Failed to post comment:", error);
+    }
+  };
+  
+  const handleReplySend = async () => {
+    if (!replyText.trim() || selectedCommentId === null) return;
+    try {
+      await saveCommunity({
+        content: replyText,
+        parent_id: selectedCommentId,
+      });
+      setModalShow(false);
+      setReplyText("");
+      loadComments();
+    } catch (error) {
+      console.error("Failed to post reply:", error);
+    }
   };
 
-  const handleLike = (
-    item: Reply,
-    list: Reply[],
-    setList: (val: Reply[]) => void
-  ) => {
-    const updatedList = list.map((el) =>
-      el.id === item.id ? { ...el, likes: el.likes + 1 } : el
-    );
-    setList(updatedList);
+  const handleLike = async (commentId: number, liked: boolean) => {
+    try {
+      if (liked) {
+        await unlikeCommunity(commentId);
+      } else {
+        await likeCommunity(commentId);
+      }
+      loadComments();
+    } catch (error) {
+      console.error("Failed to update like status:", error);
+    }
   };
 
-  const openReplyModal = (chain: Reply[]) => {
-    setReplyChain(chain);
+  const openReplyModal = (commentId: number) => {
+    setSelectedCommentId(commentId);
     setReplyText("");
     setModalShow(true);
-  };
-
-  const addReply = (list: Reply[], chain: Reply[], reply: Reply): Reply[] => {
-    if (chain.length === 0) return [...list, reply];
-    return list.map((item) =>
-      item.id === chain[0].id
-        ? { ...item, replies: addReply(item.replies, chain.slice(1), reply) }
-        : { ...item }
-    );
-  };
-
-  const handleReplySend = () => {
-    if (!replyText.trim()) return;
-    const newReply: Reply = {
-      id: Date.now(),
-      name: currentUser.name,
-      avatar: currentUser.avatar,
-      text: replyText,
-      date: getCurrentDate(),
-      likes: 0,
-      replies: [],
-    };
-    const updatedComments = addReply(comments, replyChain, newReply);
-    setComments(updatedComments);
-    setModalShow(false);
-  };
-
-  const renderReplies = (replies: Reply[], parentChain: Reply[] = []) => {
-    return replies.map((reply) => (
-      <div className="ps-4 pt-2" key={reply.id}>
-        <div className="card p-3 bg-white">
-          <div className="d-flex align-items-center mb-1">
-            {/* <img src={reply.avatar} alt="avatar" className="rounded-circle me-2" width="30" height="30" /> */}
-            <div className="personicon">
-              <i className="ion-person"></i>
-            </div>
-            <strong>{reply.name}</strong>
-          </div>
-          <p className="mb-1">{reply.text}</p>
-          <small>{reply.date}</small>
-          <div className="d-flex justify-content-end align-items-center mt-1">
-            <Button
-              variant="link"
-              className="text-decoration-none"
-              onClick={() =>
-                handleLike(reply, replies, (val) =>
-                  setComments(addReply(comments, parentChain, val[0]))
-                )
-              }
-            >
-              👍 {reply.likes}
-            </Button>
-            <Button
-              variant="link"
-              className="text-decoration-none"
-              onClick={() => openReplyModal([...parentChain, reply])}
-            >
-              💬
-            </Button>
-          </div>
-          {renderReplies(reply.replies, [...parentChain, reply])}
-        </div>
-      </div>
-    ));
   };
 
   return (
@@ -138,46 +112,60 @@ const Community: React.FC = () => {
           Send
         </Button>
 
-        <div className="mt-4">
-          {comments.map((comment) => (
-            <div className="card p-3 mb-3 communitycard" key={comment.id}>
-              <div className="d-flex align-items-center mb-2">
-                {/* <img
-                  src={comment.avatar}
-                  alt="avatar"
-                  className="rounded-circle me-2"
-                  width="40"
-                  height="40"
-                /> */}
-                <div className="personicon">
+        {loading ? (
+          <div className="text-center mt-4">
+            <Spinner animation="border" variant="primary" />
+          </div>
+        ) : (
+          <div className="mt-4">
+            {comments.map((comment) => (
+              <div className="card p-3 mb-3 communitycard" key={comment.id}>
+                <div className="d-flex align-items-center mb-2">
+                  <div className="personicon">
                     <i className="ion-person"></i>
+                  </div>
+                  <strong>{comment.user.name}</strong>
                 </div>
-                <strong>{comment.name}</strong>
-              </div>
-              <p>{comment.text}</p>
-              <div className="bottomfooter">
-                <small>{comment.date}</small>
-                <div className="d-flex justify-content-end align-items-center mt-2">
-                  <Button
-                    variant="link"
-                    className="text-decoration-none"
-                    onClick={() => handleLike(comment, comments, setComments)}
-                  >
-                    👍 {comment.likes}
-                  </Button>
-                  <Button
-                    variant="link"
-                    className="text-decoration-none"
-                    onClick={() => openReplyModal([comment])}
-                  >
-                    💬
-                  </Button>
+                <p>{comment.content}</p>
+                <div className="bottomfooter">
+                  <div className="d-flex justify-content-end align-items-center mt-2">
+                    <Button
+                      variant="link"
+                      className="text-decoration-none"
+                      onClick={() =>
+                        handleLike(comment.id, comment.user_liked)
+                      }
+                    >
+                      👍 {comment.likes_count}
+                    </Button>
+                    <Button
+                      variant="link"
+                      className="text-decoration-none"
+                      onClick={() => openReplyModal(comment.id)}
+                    >
+                      💬
+                    </Button>
+                  </div>
                 </div>
+
+                {/* Render replies */}
+                {comment.replies.map((reply) => (
+                  <div className="ps-4 pt-2" key={reply.id}>
+                    <div className="card p-3 bg-white">
+                      <div className="d-flex align-items-center mb-1">
+                        <div className="personicon">
+                          <i className="ion-person"></i>
+                        </div>
+                        <strong>{reply.user.name}</strong>
+                      </div>
+                      <p className="mb-1">{reply.content}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
-              {renderReplies(comment.replies, [comment])}
-            </div>
-          ))}
-        </div>
+            ))}
+          </div>
+        )}
 
         <Modal show={modalShow} onHide={() => setModalShow(false)}>
           <Modal.Header closeButton>
@@ -193,7 +181,11 @@ const Community: React.FC = () => {
             />
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" style={{marginRight:"1em"}} onClick={() => setModalShow(false)}>
+            <Button
+              variant="secondary"
+              style={{ marginRight: "1em" }}
+              onClick={() => setModalShow(false)}
+            >
               Close
             </Button>
             <Button variant="primary" onClick={handleReplySend}>
