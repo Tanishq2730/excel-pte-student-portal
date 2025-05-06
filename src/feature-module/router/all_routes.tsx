@@ -142,7 +142,7 @@ export const all_routes = {
   reorderParagraph:"/reorder-paragraph/:subtype_id/:question_id?",
   fillInTheBlanksRead:"/reading-fib/:subtype_id/:question_id?",
   fullMocktest:"/full-mocktest",
-  mockTest:"/mocktest",
+  mockTest:"/mocktest/exam/:id/:sessionId?",
   sectionalMocktest:"/sectional-mocktest",
   mockTestResult:"/mocktest-result",
   result:"/result",

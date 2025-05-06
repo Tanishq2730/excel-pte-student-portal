@@ -1,160 +1,99 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import MockTestCard from "../component/common/mockTestCard";
-import { Link } from "react-router-dom";
+import { fetchAllTypes } from "../../../api/commonAPI";
+import { fetchMocktests } from "../../../api/mocktestAPI";
+
+interface Type {
+  id: number;
+  name: string;
+  approxTime: string;
+}
+
+interface MockTest {
+  id: number;
+  name: string;
+  time: string;
+  attempted: number;
+  Type: Type;
+}
 
 const SectionalMocktest: React.FC = () => {
-  const mockTests = [
-    { testNumber: 40, time: "2 hours", attempted: 70 },
-    { testNumber: 41, time: "1.5 hours", attempted: 85 },
-    { testNumber: 42, time: "2.5 hours", attempted: 60 },
-    { testNumber: 43, time: "1 hour", attempted: 90 },
-  ];
+  const [types, setTypes] = useState<Type[]>([]);
+  const [mockTestsByType, setMockTestsByType] = useState<{ [key: number]: MockTest[] }>({});
+  const [activeTab, setActiveTab] = useState<number | null>(null);
+
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const typeRes = await fetchAllTypes();
+        const typeList: Type[] = typeRes.data;
+        setTypes(typeList);
+
+        const mockTestsMap: { [key: number]: MockTest[] } = {};
+
+        for (const type of typeList) {
+          const mockRes = await fetchMocktests(type.id);
+          mockTestsMap[type.id] = mockRes.data;
+        }
+
+        setMockTestsByType(mockTestsMap);
+        if (typeList.length > 0) setActiveTab(typeList[0].id); // set first type as active tab
+      } catch (err) {
+        console.error("Error loading sectional mock tests:", err);
+      }
+    };
+
+    loadData();
+  }, []);
+
   return (
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
-        <div className="mainHead pb-3">
+          <div className="mainHead pb-3">
             <h3>Sectional Mocktest</h3>
           </div>
           <div className="card-body">
-            <ul
-              className="nav nav-pills justify-content-start nav-style-2 mb-3"
-              role="tablist"
-            >
-              <li className="nav-item">
-                <Link
-                  className="nav-link active"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#home-center"
-                  aria-selected="true"
-                >
-                  Speaking
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#about-center"
-                  aria-selected="false"
-                >
-                  Writing
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#services-center"
-                  aria-selected="false"
-                >
-                  Reading
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#contacts-center"
-                  aria-selected="false"
-                >
-                  Listening
-                </Link>
-              </li>
+            <ul className="nav nav-pills justify-content-start nav-style-2 mb-3" role="tablist">
+              {types.map((type) => (
+                <li className="nav-item" key={type.id}>
+                  <button
+                    className={`nav-link ${activeTab === type.id ? "active" : ""}`}
+                    onClick={() => setActiveTab(type.id)}
+                  >
+                    {type.name}
+                  </button>
+                </li>
+              ))}
             </ul>
             <div className="tab-content">
-              <div
-                className="tab-pane show active text-muted"
-                id="home-center"
-                role="tabpanel"
-              >
-                <div className="row">
-                  {mockTests.map((test, index) => (
-                    <div className="col-md-3">
-                      <MockTestCard
-                        key={index}
-                        testNumber={test.testNumber}
-                        time={test.time}
-                        attempted={test.attempted}
-                        onStart={() =>
-                          alert(`Starting Test ${test.testNumber}`)
-                        }
-                      />
-                    </div>
-                  ))}
+              {types.map((type) => (
+                <div
+                  key={type.id}
+                  className={`tab-pane text-muted ${activeTab === type.id ? "show active" : ""}`}
+                  role="tabpanel"
+                >
+                  <div className="row">
+                    {mockTestsByType[type.id]?.length ? (
+                      mockTestsByType[type.id].map((test, index) => (
+                        <div className="col-md-3" key={test.id || index}>
+                          <MockTestCard
+                            id={test.id}
+                            name={test.name}
+                            time={test.Type?.approxTime || test.time}
+                            attempted={test.attempted}
+                            onStart={() => alert(`Starting Test ${test.name}`)}
+                          />
+                        </div>
+                      ))
+                    ) : (
+                      <div className="col-12 text-center">
+                        <p className="text-muted">No mock tests available</p>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
-              <div
-                className="tab-pane text-muted"
-                id="about-center"
-                role="tabpanel"
-              >
-                <div className="row">
-                  {mockTests.map((test, index) => (
-                    <div className="col-md-3">
-                      <MockTestCard
-                        key={index}
-                        testNumber={test.testNumber}
-                        time={test.time}
-                        attempted={test.attempted}
-                        onStart={() =>
-                          alert(`Starting Test ${test.testNumber}`)
-                        }
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div
-                className="tab-pane text-muted"
-                id="services-center"
-                role="tabpanel"
-              >
-                <div className="row">
-                  {mockTests.map((test, index) => (
-                    <div className="col-md-3">
-                      <MockTestCard
-                        key={index}
-                        testNumber={test.testNumber}
-                        time={test.time}
-                        attempted={test.attempted}
-                        onStart={() =>
-                          alert(`Starting Test ${test.testNumber}`)
-                        }
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <div
-                className="tab-pane text-muted"
-                id="contacts-center"
-                role="tabpanel"
-              >
-                <div className="row">
-                  {mockTests.map((test, index) => (
-                    <div className="col-md-3">
-                      <MockTestCard
-                        key={index}
-                        testNumber={test.testNumber}
-                        time={test.time}
-                        attempted={test.attempted}
-                        onStart={() =>
-                          alert(`Starting Test ${test.testNumber}`)
-                        }
-                      />
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

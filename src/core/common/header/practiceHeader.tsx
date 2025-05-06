@@ -64,6 +64,9 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
       }
     };
     getTypes();
+    if (!localStorage.getItem("mocktestType")) {
+      localStorage.setItem("mocktestType", "Academic");
+    }
   }, []);
 
   const getRoutePath = (name: string): string => {
@@ -110,6 +113,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                     href="#pte-academic"
                     role="tab"
                     aria-selected="false"
+                    onClick={() => localStorage.setItem("mocktestType", "Academic")}
                   >
                     PTE Academic / UKVI
                   </a>
@@ -121,6 +125,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                     href="#pte-core"
                     role="tab"
                     aria-selected="true"
+                    onClick={() => localStorage.setItem("mocktestType", "Core")}
                   >
                     PTE Core
                   </a>

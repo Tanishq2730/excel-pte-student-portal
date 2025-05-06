@@ -1,32 +1,88 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
 import MockTestCard from "../component/common/mockTestCard";
+import { fetchAllTypes } from "../../../api/commonAPI";
+import { fetchMocktests } from "../../../api/mocktestAPI";
+import { al } from "react-router/dist/development/fog-of-war-Cm1iXIp7";
+
+interface Subtype {
+  id: number;
+  sub_name: string;
+  ai_score: number;
+  order: number;
+}
+
+interface PracticeType {
+  id: number;
+  name: string;
+  Subtypes: Subtype[];
+}
+
+
+interface Type {
+  id: number;
+  name: string;
+  approxTime: string;
+}
+
+interface MockTest {
+  id:number;
+  name: string;
+  time: string;
+  attempted: number;
+  Type: Type;
+}
 
 const FullMocktest: React.FC = () => {
-  const mockTests = [
-    { testNumber: 40, time: "2 hours", attempted: 70 },
-    { testNumber: 41, time: "1.5 hours", attempted: 85 },
-    { testNumber: 42, time: "2.5 hours", attempted: 60 },
-    { testNumber: 43, time: "1 hour", attempted: 90 },
-  ];
+  const [practiceTypes, setPracticeTypes] = useState<PracticeType[]>([]);
+  const [mockTests, setMockTests] = useState<MockTest[]>([]);
+
+  useEffect(() => {
+    const loadMockTests = async () => {
+      try {
+        const res = await fetchAllTypes();
+        const types: PracticeType[] = res.data;
+        setPracticeTypes(types);
+
+        const allType = types.find((type) => type.name.toLowerCase() === "all");
+        console.log(allType, "allType");
+
+        if (allType) {
+          const mockRes = await fetchMocktests(allType.id);
+
+          setMockTests(mockRes.data); // adjust if the data structure is nested
+        }
+      } catch (err) {
+        console.error("Error loading mock test data:", err);
+      }
+    };
+    loadMockTests();
+  }, []);
+
   return (
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
-        <div className="mainHead pb-3">
+          <div className="mainHead pb-3">
             <h3>Full Mocktest</h3>
           </div>
           <div className="row">
-            {mockTests.map((test, index) => (
-              <div className="col-md-3">
-                <MockTestCard
-                  key={index}
-                  testNumber={test.testNumber}
-                  time={test.time}
-                  attempted={test.attempted}
-                  onStart={() => alert(`Starting Test ${test.testNumber}`)}
-                />
+            {mockTests.length > 0 ? (
+              mockTests.map((test, index) => (
+                <div className="col-md-3" key={index}>
+                  <MockTestCard
+                    id={test.id}
+                    name={test.name}
+                    time={test.Type.approxTime}
+                    attempted={test.attempted}
+                    onStart={() => alert(`Starting Test ${test.name}`)}
+                  />
+                </div>
+              ))
+            ) : (
+              <div className="col-12 text-center">
+                <p className="text-muted">Mocktest not available</p>
               </div>
-            ))}
+            )}
           </div>
         </div>
       </div>
