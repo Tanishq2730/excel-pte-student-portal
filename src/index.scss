@@ -2527,3 +2527,25 @@ body.app-chat {
     border-bottom: none !important;
   }
 }
+
+.quelabel {
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 30px;
+}
+
+.choose-box,
+.choose-radio {
+  margin-top: 1rem;
+  margin-bottom: 5rem;
+}
+
+.quelabel input {
+  margin-right: 0.5rem;
+}
+
+.modal-dcenter .modal-dialog {
+  display: flex;
+  align-items: center;
+  min-height: calc(100% - var(--bs-modal-margin) * 2);
+}

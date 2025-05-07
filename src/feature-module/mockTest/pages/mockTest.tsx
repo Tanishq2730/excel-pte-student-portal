@@ -7,6 +7,7 @@ import KeyboardCheck from "../component/intro/keyboardCheck";
 import Introduction from "../component/intro/Introduction";
 import SelfIntroduction from "../component/intro/selfIntroduction";
 import Session from "../component/intro/session";
+import MockAllQuestion from "./mockAllQuestion"; // Make sure path is correct
 
 const MockTest: React.FC = () => {
   const { id } = useParams();
@@ -27,6 +28,7 @@ const MockTest: React.FC = () => {
         />
       ),
     },
+    { name: "MockAllQuestion", component: <MockAllQuestion /> }, // ✅ Final step added
   ];
 
   const [currentStepIndex, setCurrentStepIndex] = useState(0);
@@ -41,12 +43,16 @@ const MockTest: React.FC = () => {
     <section className="mocktest-session">
       <div>{steps[currentStepIndex].component}</div>
 
+      {/* Hide Next button on last step */}
       {currentStepIndex < steps.length - 1 && (
         <div className="footer-v3">
           <div className="container">
             <div className="row">
               <div className="col text-right">
-                <button className="btn btn-primary mockmainbtn" onClick={handleNext}>
+                <button
+                  className="btn btn-primary mockmainbtn"
+                  onClick={handleNext}
+                >
                   Next
                 </button>
               </div>

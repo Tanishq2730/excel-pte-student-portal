@@ -518,13 +518,14 @@ const Header = () => {
                       <i className="ti ti-settings me-2" />
                       Settings
                     </Link>
-                    <Link
+                    <a
                       className="dropdown-item d-inline-flex align-items-center p-2"
-                      to={routes.profilesettings}
+                      href="https://api.whatsapp.com/send?phone=610403731363"
+                      target="_blank"
                     >
-                      <i className="fe fe-whatsapp me-2" />
+                     <img src="assets/img/whatsappIcon.png" style={{width:"8%",marginRight:'8px'}}/>
                       Whatsapp
-                    </Link>
+                    </a>
                     <Link
                       className="dropdown-item d-inline-flex align-items-center p-2"
                       to={routes.planInfo}

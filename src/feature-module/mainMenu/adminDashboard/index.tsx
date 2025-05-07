@@ -382,11 +382,11 @@ const AdminDashboard = () => {
               <div className="col-md-12">
                 <div className="row">
                   <div className="col-md-3 d-flex">
-                    <div className="card flex-fill animate-card border-0">
+                    <div className="card flex-fill bg-danger-transparent animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
-                            <i className="fa fa-microphone"></i>
+                            <i className="fa fa-microphone" style={{fontSize:'2em'}}></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Speaking</p>
@@ -410,11 +410,11 @@ const AdminDashboard = () => {
                   {/* /Total Students */}
                   {/* Total Teachers */}
                   <div className="col-md-3 d-flex">
-                    <div className="card flex-fill animate-card border-0">
+                    <div className="card flex-fill bg-secondary-transparent animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-secondary-transparent p-1">
-                            <i className="ion-edit"></i>
+                            <i className="ion-edit" style={{fontSize:'2em'}}></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Writing</p>
@@ -438,11 +438,11 @@ const AdminDashboard = () => {
                   {/* /Total Teachers */}
                   {/* Total Staff */}
                   <div className="col-md-3 d-flex">
-                    <div className="card flex-fill animate-card border-0">
+                    <div className="card flex-fill bg-warning-transparent animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-warning-transparent p-1">
-                            <i className="ion-ios7-bookmarks"></i>
+                            <i className="ion-ios7-bookmarks"  style={{fontSize:'2em'}}></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Reading</p>
@@ -466,11 +466,11 @@ const AdminDashboard = () => {
                   {/* /Total Staff */}
                   {/* Total Subjects */}
                   <div className="col-md-3 d-flex">
-                    <div className="card flex-fill animate-card border-0">
+                    <div className="card flex-fill bg-success-transparent animate-card border-0">
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
-                            <i className="ion-headphone"></i>
+                            <i className="ion-headphone" style={{fontSize:'2em'}}></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Listening</p>
@@ -914,7 +914,7 @@ const AdminDashboard = () => {
               </div>
             </div>
             <div className="row">
-              <div className="col-xxl-6 col-xl-6 col-md-12 d-flex">
+              <div className="col-md-6">
                 <div className="card flex-fill upcomingClasses">
                   <div className="card-body ">
                     <h5 className="mb-3">Upcoming Classes</h5>
@@ -1029,7 +1029,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-xxl-6">
+              <div className="col-md-6">
                 <div className="card flex-fill">
                   <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-titile">Activity History</h4>

@@ -181,14 +181,13 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
               <button
                 className="btn btn-soft-danger"
                 data-bs-toggle="modal"
-                data-bs-target="#exampleModalLg"
+                    data-bs-target="#standard-modal"
                 onClick={() => {
                   handleScoreClick(log.id);
                 }}
               >
-                AI Score 
+                AI Score
               </button>
-
             </div>
             <div className="d-flex align-items-center scoreicon">
               <div
@@ -207,14 +206,16 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
                 onClick={() => toggleLike(log.id)}
               >
                 <i
-                  className={`ion-thumbsup ${likes[log.id] ? "text-primary" : ""
-                    }`}
+                  className={`ion-thumbsup ${
+                    likes[log.id] ? "text-primary" : ""
+                  }`}
                 ></i>
-                <span className="ms-1">{log.totalLikes + (likeChanges[log.id] || 0)}</span>
+                <span className="ms-1">
+                  {log.totalLikes + (likeChanges[log.id] || 0)}
+                </span>
               </div>
             </div>
           </div>
-
 
           {(comments[log.id] || []).map((commentObj) => (
             <div
@@ -248,12 +249,12 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
         </div>
       ))}
 
-
       <div
+        id="standard-modal"
         className="modal fade"
-        id="exampleModalLg"
         tabIndex={-1}
-        aria-labelledby="exampleModalLgLabel"
+        role="dialog"
+        aria-labelledby="standard-modalLabel"
         aria-hidden="true"
       >
         <div className="modal-dialog modal-lg">
@@ -262,7 +263,12 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
               <h4 className="modal-title" id="exampleModalLgLabel">
                 AI Score (Partial credit to : Speaking & Reading)
               </h4>
-              <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" />
+              <button
+                type="button"
+                className="btn-close"
+                data-bs-dismiss="modal"
+                aria-label="Close"
+              />
             </div>
             <div className="modal-body">
               {selectedLogDetails?.type.name === "Speaking" && (
@@ -281,8 +287,6 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
           </div>
         </div>
       </div>
-
-
 
       {/* Modal for Adding Comment */}
       {showModal && (
