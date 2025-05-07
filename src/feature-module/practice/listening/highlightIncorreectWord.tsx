@@ -10,11 +10,19 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AudioPlayer from "../component/audioPlayer";
 import AlertComponent from "../../../core/common/AlertComponent";
+import PageHeading from "../component/pageHeading";
+import MyNotes from "../component/myNotes";
 
 const HighlightIncorrectWord = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
-  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
@@ -26,6 +34,11 @@ const HighlightIncorrectWord = () => {
   const startTime = useRef(Date.now());
 
   const timeSpentRef = useRef(0);
+  const [showNotes, setShowNotes] = useState<boolean>(false);
+
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
 
   useEffect(() => {
     const interval = setInterval(() => {
@@ -52,13 +65,15 @@ const HighlightIncorrectWord = () => {
   };
 
   useEffect(() => {
-
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
   useEffect(() => {
     if (questionData?.Subtype?.beginning_in) {
-      const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10);
+      const preparationTimeInSeconds = parseInt(
+        questionData.Subtype.beginning_in,
+        10
+      );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
     }
@@ -88,7 +103,9 @@ const HighlightIncorrectWord = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
   };
 
   const handleAnswerClick = () => {
@@ -97,7 +114,10 @@ const HighlightIncorrectWord = () => {
 
   const handleRestart = () => {
     // Reset countdown to the initial preparation time
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.beginning_in || "0",
+      10
+    );
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
 
@@ -108,29 +128,36 @@ const HighlightIncorrectWord = () => {
     setTimeout(() => setResetRecording(false), 100); // Reset state after a short delay
   };
 
-
-
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/highlight-incorrect-word/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(
+        `/highlight-incorrect-word/${subtype_id}/${questionData?.nextQuestionId}`
+      );
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/highlight-incorrect-word/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(
+        `/highlight-incorrect-word/${subtype_id}/${questionData?.previousQuestionId}`
+      );
     }
   };
 
-  const processQuestionWithHighlights = (question: string, answer: string): string => {
+  const processQuestionWithHighlights = (
+    question: string,
+    answer: string
+  ): string => {
     const correctMatch = answer.match(/correct\s*:\s*(.*?)(?:<br>|$)/i);
     const incorrectMatch = answer.match(/incorrect\s*:\s*(.*)/i);
 
     if (!correctMatch || !incorrectMatch) return question;
 
-    const correctWords = correctMatch[1].split(',').map(word => word.trim());
-    const incorrectWords = incorrectMatch[1].split(',').map(word => word.trim());
+    const correctWords = correctMatch[1].split(",").map((word) => word.trim());
+    const incorrectWords = incorrectMatch[1]
+      .split(",")
+      .map((word) => word.trim());
 
     let updatedQuestion = question;
     const placeholders: string[] = [];
@@ -163,8 +190,6 @@ const HighlightIncorrectWord = () => {
     return updatedQuestion;
   };
 
-
-
   const renderInteractiveQuestion = () => {
     if (!questionData?.question) return null;
 
@@ -183,7 +208,7 @@ const HighlightIncorrectWord = () => {
               padding: "2px",
               marginRight: "4px",
               borderRadius: "4px",
-              userSelect: "none"
+              userSelect: "none",
             }}
           >
             {word}
@@ -199,44 +224,52 @@ const HighlightIncorrectWord = () => {
     );
   };
 
-  
-  const correctAnswers = questionData?.answer_american.match(/incorrect\s*:\s*([^<]+)/i);
+  const correctAnswers = questionData?.answer_american.match(
+    /incorrect\s*:\s*([^<]+)/i
+  );
 
-  const correctWords = correctAnswers ? correctAnswers[1].split(',').map(word => word.trim()) : [];
+  const correctWords = correctAnswers
+    ? correctAnswers[1].split(",").map((word) => word.trim())
+    : [];
 
   const handleSubmitPractice = async () => {
     if (!questionData?.id || !subtype_id) return;
     if (!selectedWords.length) {
-      setAlert({ type: "danger", message: "Please Highlight at least one word" });
+      setAlert({
+        type: "danger",
+        message: "Please Highlight at least one word",
+      });
       return false;
     }
-  
+
     try {
       // Ensure correctAnswers is defined and fall back to an empty array if not
       const ans: string[] = correctWords || []; // Explicitly type `ans` as an array of strings
-  
+
       // Get the words that were selected based on the indices
-      const selectedWordList = selectedWords.map(index => questionData.question.split(" ")[index]);
-  
+      const selectedWordList = selectedWords.map(
+        (index) => questionData.question.split(" ")[index]
+      );
+
       // Calculate score
       const score = selectedWordList.reduce((acc, answer) => {
         const trimmedAnswer = answer.trim();
-        console.log(trimmedAnswer);        
+        console.log(trimmedAnswer);
         return ans.includes(trimmedAnswer) ? acc + 1 : acc - 1;
       }, 0);
-  
+
       // Ensure score is non-negative
       const yourScore = Math.max(score, 0);
-  
+
       // Calculate total score
       const totalScore = ans.length;
-  
+
       const score_data = {
         user_answer: selectedWordList,
         correct_answer: correctAnswers,
         score: yourScore,
       };
-  
+
       const payload = {
         questionId: questionData.id,
         totalscore: totalScore,
@@ -246,12 +279,15 @@ const HighlightIncorrectWord = () => {
         score_data: JSON.stringify(score_data),
         answer: selectedWordList.join(" "), // Send the selected words as a string
       };
-  
+
       const response = await savePractice(false, payload);
-  
+
       if (response.success) {
         getData();
-        const preparationTimeInSeconds = parseInt(questionData?.Subtype.beginning_in || "0", 10);
+        const preparationTimeInSeconds = parseInt(
+          questionData?.Subtype.beginning_in || "0",
+          10
+        );
         setCountdown(preparationTimeInSeconds);
         setTimerActive(true); // Restart the countdown
         setTimeSpent(0);
@@ -269,82 +305,110 @@ const HighlightIncorrectWord = () => {
 
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              There are some words missing in the following text. Please select
-              the correct word in the drop-down box.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="time">
-                  <div className="headBtn">
-                    <span className="text-danger">Time: {formatTime(countdown)}</span>
-                    <CardButton questionData={questionData} />
+          <div className="row">
+            <div className="col-12 mb-3">
+              <button
+                className="btn btn-primary mynotesBtn"
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={toggleNotes}
+              >
+                <i className="fa fa-book"></i>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <PageHeading title="Highlight Correct Word" />
+              <div className="practiceLayout">
+                <p className="my-3">
+                  There are some words missing in the following text. Please
+                  select the correct word in the drop-down box.
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
+                    </div>
                   </div>
-                  <div className="mb-3">
-                    <AudioPlayer questionData={questionData} />
-                  </div>
-                  <div className="innercontent">
-                    {!showAnswer ? (
-                      renderInteractiveQuestion()
-                    ) : (
-                      <p
-                        className="highlight-question"
-                        dangerouslySetInnerHTML={{
-                          __html:
-                            questionData?.question && questionData?.answer_american
-                              ? processQuestionWithHighlights(
-                                questionData.question,
-                                questionData.answer_american
-                              )
-                              : "",
-                        }}
-                      />
-                    )}
-                  </div>
+                  <div className="card-body">
+                    <div className="time">
+                      <div className="headBtn">
+                        <span className="text-danger">
+                          Time: {formatTime(countdown)}
+                        </span>
+                        <CardButton questionData={questionData} />
+                      </div>
+                      <div className="mb-3">
+                        <AudioPlayer questionData={questionData} />
+                      </div>
+                      <div className="innercontent">
+                        {!showAnswer ? (
+                          renderInteractiveQuestion()
+                        ) : (
+                          <p
+                            className="highlight-question"
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                questionData?.question &&
+                                questionData?.answer_american
+                                  ? processQuestionWithHighlights(
+                                      questionData.question,
+                                      questionData.answer_american
+                                    )
+                                  : "",
+                            }}
+                          />
+                        )}
+                      </div>
 
-                  {showAnswer && (
-                    <div
-                      className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
-                    >
-                      <div
-                        className="audio-inner p-4 rounded-3"
-                      
-                      >
-                        <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
+                      {showAnswer && (
+                        <div
+                          className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
+                          style={{ background: "#ffe4e4" }}
+                        >
+                          <div className="audio-inner p-4 rounded-3">
+                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <hr />
+                            <div className="rounded-pill">
+                              <audio controls className="w-100">
+                                <source
+                                  src="your-audio-file.mp3"
+                                  type="audio/mpeg"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          </div>
                         </div>
+                      )}
+                      <div className="bottomBtn mt-3">
+                        <QuestionNavigation
+                          questionData={questionData}
+                          onAnswerClick={handleAnswerClick}
+                          onRestart={handleRestart}
+                          onNext={handleNext}
+                          onPrevious={handlePrevious}
+                          onSubmit={handleSubmitPractice}
+                        />
                       </div>
                     </div>
-                  )}
-                  <div className="bottomBtn mt-3">
-                    <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onSubmit={handleSubmitPractice}
-                    />
                   </div>
                 </div>
               </div>
             </div>
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
           <div className="community">
             <Community questionData={questionData} />

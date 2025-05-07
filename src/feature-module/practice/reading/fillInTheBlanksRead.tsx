@@ -11,6 +11,7 @@ import QuestionNavigation from "../component/questionNavigation";
 import parse, { DOMNode, Element } from "html-react-parser";
 import AlertComponent from "../../../core/common/AlertComponent";
 import MyNotes from "../component/myNotes";
+import PageHeading from "../component/pageHeading";
 
 const FillInTheBlanksRead = () => {
   const { subtype_id, question_id } = useParams<{
@@ -308,6 +309,7 @@ const FillInTheBlanksRead = () => {
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>
+            <PageHeading title="Reading Fill in the Blank" />
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
               <div className="practiceLayout">
                 <p className="my-3">

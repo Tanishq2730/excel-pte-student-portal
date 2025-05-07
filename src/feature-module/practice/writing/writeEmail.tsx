@@ -10,24 +10,36 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 import WriteEmailScoring from "../component/scoring/WriteEmailScoring";
+import PageHeading from "../component/pageHeading";
+import MyNotes from "../component/myNotes";
 
 const WriteEmail = () => {
-  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
+  const { subtype_id, question_id } = useParams<{
+    subtype_id: string;
+    question_id?: string;
+  }>();
   const navigate = useNavigate();
 
   const [showAnswer, setShowAnswer] = useState(false);
-  const [selectedLanguage, setSelectedLanguage] = useState('American');
+  const [selectedLanguage, setSelectedLanguage] = useState("American");
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
-  const [alert, setAlert] = useState<{ type: "success" | "danger"; message: string } | null>(null);
+  const [showNotes, setShowNotes] = useState<boolean>(false);
+  const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
   const [wordCount, setWordCount] = useState(0);
   const [summaryText, setSummaryText] = useState("");
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setSummaryText(text);
-    const words = text.trim().split(/\s+/).filter((word) => word.length > 0);
+    const words = text
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
     setWordCount(words.length);
   };
 
@@ -71,7 +83,10 @@ const WriteEmail = () => {
 
   useEffect(() => {
     if (questionData?.Subtype?.remaining_time) {
-      const preparationTimeInSeconds = parseInt(questionData.Subtype.remaining_time, 10);
+      const preparationTimeInSeconds = parseInt(
+        questionData.Subtype.remaining_time,
+        10
+      );
       setCountdown(preparationTimeInSeconds);
       setTimerActive(true);
     }
@@ -94,9 +109,10 @@ const WriteEmail = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds}`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${
+      seconds < 10 ? `0${seconds}` : seconds
+    }`;
   };
-
 
   // Handling navigation to next and previous questions
   const handleNext = () => {
@@ -107,18 +123,22 @@ const WriteEmail = () => {
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/write-email/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(
+        `/write-email/${subtype_id}/${questionData?.previousQuestionId}`
+      );
     }
   };
 
   const handleRestart = () => {
     // Reset countdown to the initial preparation time
-    const preparationTimeInSeconds = parseInt(questionData?.Subtype.remaining_time || "0", 10);
+    const preparationTimeInSeconds = parseInt(
+      questionData?.Subtype.remaining_time || "0",
+      10
+    );
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
 
     setShowAnswer(false); // Optionally reset the answer view
-
   };
 
   const handleAnswerClick = () => {
@@ -136,7 +156,11 @@ const WriteEmail = () => {
       const wordCounts = wordCount;
       const scoringData = { id, session_id, question, answerText, wordCount };
 
-      const result = await WriteEmailScoring(scoringData, questionData, selectedLanguage);
+      const result = await WriteEmailScoring(
+        scoringData,
+        questionData,
+        selectedLanguage
+      );
 
       if (result) {
         const { score, totalscore, user_answer, score_data } = result;
@@ -155,7 +179,10 @@ const WriteEmail = () => {
 
         if (response.success) {
           getData();
-          const preparationTimeInSeconds = parseInt(questionData?.Subtype.remaining_time || "0", 10);
+          const preparationTimeInSeconds = parseInt(
+            questionData?.Subtype.remaining_time || "0",
+            10
+          );
           setCountdown(preparationTimeInSeconds);
           setTimerActive(true); // Restart the countdown
           setTimeSpent(0);
@@ -166,7 +193,7 @@ const WriteEmail = () => {
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }
-      }else {
+      } else {
         setAlert({ type: "danger", message: "Failed to save practice" });
       }
     } catch (error) {
@@ -175,89 +202,123 @@ const WriteEmail = () => {
     }
   };
 
+  const toggleNotes = () => {
+    setShowNotes((prev) => !prev);
+  };
   return (
     <div className="page-wrappers">
-      {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
-          <div className="practiceLayout">
-            <p className="my-3">
-              Read the passage below and summarize it using one sentence. Type
-              your response in the box at the bottom of the screen. You have 10
-              minutes to finish this task. Your response will be judged on the
-              quality of your writing and on how well your response presents the
-              key points in the passage.
-            </p>
-            <div className="card">
-              <div className="card-header">
-                <div className="card-title text-white">{questionData?.question_name}</div>
-              </div>
-              <div className="card-body">
-                <div className="time">
-                  <div className="headBtn">
-                    <span className="text-danger">
-                      Submit your response before time finishes! Otherwise your
-                      response won`t be saved and scored.
-                    </span>
-                    <span className="text-danger">Time: {formatTime(countdown)}</span>
-                    <CardButton questionData={questionData} />
+          <div className="row">
+            <div className="col-12 mb-3">
+              <button
+                className="btn btn-primary mynotesBtn"
+                style={{ display: "flex", flexDirection: "column" }}
+                onClick={toggleNotes}
+              >
+                <i className="fa fa-book"></i>
+                {showNotes ? "Close Notes" : "My Notes"}
+              </button>
+            </div>
+            <div className={showNotes ? "col-md-9" : "col-md-12"}>
+              <PageHeading title="Write Email" />
+              <div className="practiceLayout">
+                <p className="my-3">
+                  Read the passage below and summarize it using one sentence.
+                  Type your response in the box at the bottom of the screen. You
+                  have 10 minutes to finish this task. Your response will be
+                  judged on the quality of your writing and on how well your
+                  response presents the key points in the passage.
+                </p>
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-white">
+                      {questionData?.question_name}
+                    </div>
                   </div>
-                  <div className="innercontent">
-                    <p dangerouslySetInnerHTML={{ __html: questionData?.question || "" }} />
-                  </div>
-                  <div className="card">
-                    <div className="card-header bg-white">
-                      <div className="card-title">
-                        <h5>Total Word Count: {wordCount}</h5>
+                  <div className="card-body">
+                    <div className="time">
+                      <div className="headBtn">
+                        <span className="text-danger">
+                          Submit your response before time finishes! Otherwise
+                          your response won`t be saved and scored.
+                        </span>
+                        <span className="text-danger">
+                          Time: {formatTime(countdown)}
+                        </span>
+                        <CardButton questionData={questionData} />
                       </div>
-                    </div>
-                    <div className="card-body">
-                      <textarea
-                        className="form-control"
-                        rows={16}
-                        placeholder="Write a Summary..."
-                        value={summaryText}
-                        onChange={handleTextChange}
-                      ></textarea>
-                    </div>
-                  </div>
-                  
-                  <div className="bottomBtn mt-3">
-                    <QuestionNavigation
-                      questionData={questionData}
-                      onAnswerClick={handleAnswerClick}
-                      onRestart={handleRestart}
-                      onNext={handleNext}
-                      onPrevious={handlePrevious}
-                      onSubmit={handleSubmitPractice}
-                    />
-                  </div>
-                  {showAnswer && (
-                    <div
-                      className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
-                    >
-                      <div
-                        className="audio-inner p-4 rounded-3"
-                      
-                      >
-                        <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
+                      <div className="innercontent">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: questionData?.question || "",
+                          }}
+                        />
+                      </div>
+                      <div className="card">
+                        <div className="card-header bg-white">
+                          <div className="card-title">
+                            <h5>Total Word Count: {wordCount}</h5>
+                          </div>
+                        </div>
+                        <div className="card-body">
+                          <textarea
+                            className="form-control"
+                            rows={16}
+                            placeholder="Write a Summary..."
+                            value={summaryText}
+                            onChange={handleTextChange}
+                          ></textarea>
                         </div>
                       </div>
+
+                      <div className="bottomBtn mt-3">
+                        <QuestionNavigation
+                          questionData={questionData}
+                          onAnswerClick={handleAnswerClick}
+                          onRestart={handleRestart}
+                          onNext={handleNext}
+                          onPrevious={handlePrevious}
+                          onSubmit={handleSubmitPractice}
+                        />
+                      </div>
+                      {showAnswer && (
+                        <div
+                          className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
+                          style={{ background: "#ffe4e4" }}
+                        >
+                          <div className="audio-inner p-4 rounded-3">
+                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <hr />
+                            <div className="rounded-pill">
+                              <audio controls className="w-100">
+                                <source
+                                  src="your-audio-file.mp3"
+                                  type="audio/mpeg"
+                                />
+                                Your browser does not support the audio element.
+                              </audio>
+                            </div>
+                          </div>
+                        </div>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
             </div>
+            {showNotes && (
+              <div className="col-md-3">
+                <MyNotes />
+              </div>
+            )}
           </div>
           <div className="community">
             <Community questionData={questionData} />

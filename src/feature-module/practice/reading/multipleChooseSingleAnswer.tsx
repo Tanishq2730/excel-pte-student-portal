@@ -10,6 +10,7 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 import MyNotes from "../component/myNotes";
+import PageHeading from "../component/pageHeading";
 
 const MultipleChooseSingleAnswer = () => {
   const { subtype_id, question_id } = useParams<{
@@ -225,6 +226,7 @@ const MultipleChooseSingleAnswer = () => {
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>
+            <PageHeading title="Multiple Choose Single Answer" />
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
               <div className="practiceLayout">
                 <p className="my-3">

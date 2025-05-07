@@ -95,7 +95,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
 
   return (
     <div className="practice-header-wrapper">
-      <span className="nav-link">
+      <span className="nav-link sub-menu">
         Practice <i className="ion-chevron-down"></i>
       </span>
       {showMegaMenu && (

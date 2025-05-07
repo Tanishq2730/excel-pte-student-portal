@@ -10,6 +10,7 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 import MyNotes from "../component/myNotes";
+import PageHeading from "../component/pageHeading";
 
 const MultipleChooseAnswer = () => {
   const { subtype_id, question_id } = useParams<{
@@ -241,6 +242,7 @@ const MultipleChooseAnswer = () => {
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>
+            <PageHeading title="Choose Multiple Answer" />
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
               <div className="practiceLayout">
                 <p className="my-3">
@@ -328,7 +330,7 @@ const MultipleChooseAnswer = () => {
                           </div>
                         </div>
                       </div>
-                      
+
                       <div className="bottomBtn mt-3">
                         <QuestionNavigation
                           questionData={questionData}
@@ -344,10 +346,7 @@ const MultipleChooseAnswer = () => {
                           className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
                           style={{ background: "rgb(228 246 255)" }}
                         >
-                          <div
-                            className="audio-inner p-4 rounded-3"
-             
-                          >
+                          <div className="audio-inner p-4 rounded-3">
                             <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                             <hr />
                             <div className="rounded-pill">

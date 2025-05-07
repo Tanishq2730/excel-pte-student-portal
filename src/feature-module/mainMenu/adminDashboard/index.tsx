@@ -1034,7 +1034,7 @@ const AdminDashboard = () => {
                   <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-titile">Activity History</h4>
                   </div>
-                  <div className="card-body py-1">
+                  <div className="card-body py-1 " style={{height:"21.4em",overflowY:"scroll"}}>
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item py-3 px-0 pb-0">
                         <div className="d-flex align-items-center justify-content-between flex-wrap">

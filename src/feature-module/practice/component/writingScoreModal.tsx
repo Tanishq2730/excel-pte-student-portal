@@ -53,10 +53,10 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
   return (
     <div className="container py-4" style={{ fontFamily: 'Arial, sans-serif' }}>     
      
-      <div className="mt-2">
-          <span style={{ color: '#d32f2f' }}>Bad</span>
-          <span style={{ color: '#f5a623' }}> / AVG</span>
-          <span style={{ color: '#4caf50' }}> / Good</span>
+      <div className="mb-3">
+          <span style={{ color: '#d32f2f' }}>Bad : 30</span>
+          <span style={{ color: '#f5a623' }}> / AVG : 40</span>
+          <span style={{ color: '#4caf50' }}> / Good : 45</span>
         </div>
       {/* Scored Transcript */}
       <div className="p-3 rounded mb-4" style={{ backgroundColor: '#f1f9fb' }}>

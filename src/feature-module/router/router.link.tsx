@@ -72,6 +72,7 @@ import Ptetestcard from "../ptetestFormate/ptetestcard";
 import PlanInfo from "../planInfo/PlanInfo";
 import Search from "../search/search";
 import PracticeHistory from "../PracticeHistory/practiceHistory";
+import ShareLink from "../shareLink/ShareLink";
 
 const routes = all_routes;
 
@@ -252,4 +253,5 @@ export const commonRoutes = [
   { path: routes.ptetestcard, element: <Ptetestcard />, route: Route },
   { path: routes.search, element: <Search />, route: Route },
   { path: routes.practiceHistory, element: <PracticeHistory />, route: Route },
+  { path: routes.shareLink, element: <ShareLink />, route: Route },
 ];

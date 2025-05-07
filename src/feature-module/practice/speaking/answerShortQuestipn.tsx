@@ -25,6 +25,7 @@ import spanHtml from "../component/spanHtml";
 import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
+import PageHeading from "../component/pageHeading";
 
 interface Timestamp {
   word: string;
@@ -563,6 +564,8 @@ const AnswerShortQuestion = () => {
             </button>
           </div>
 
+          <PageHeading title="Answer Short Question" />
+
           <div className="practiceLayout">
             <p className="my-3">
               Look at the text below. In 40 seconds, you must read this text
@@ -653,7 +656,7 @@ const AnswerShortQuestion = () => {
                   {showAnswer && (
                     <div
                       className="py-4 mx-auto audio-card answerCard my-3 rounded-3"
-                      style={{ background: "#ffe4e4" }}
+                      style={{ background: "rgb(228, 246, 255) !important" }}
                     >
                       <div
                         className="audio-inner p-4 rounded-3"

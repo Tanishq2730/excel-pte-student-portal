@@ -25,6 +25,7 @@ import spanHtml from "../component/spanHtml";
 import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
+import PageHeading from "../component/pageHeading";
 
 // Define types
 interface Timestamp {
@@ -558,6 +559,7 @@ const ReadAloud = () => {
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>
+            <PageHeading title="Read Aloud" />
 
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
               <div className="practiceLayout">

@@ -25,6 +25,7 @@ import spanHtml from "../component/spanHtml";
 import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
+import PageHeading from "../component/pageHeading";
 
 interface Timestamp {
   word: string;
@@ -637,7 +638,7 @@ const RespondSituation = () => {
               {showNotes ? "Close Notes" : "My Notes"}
             </button>
           </div>
-
+          <PageHeading title="Respond to Situation" />
           <div className="practiceLayout">
             <p className="my-3">
               Look at the text below. In 40 seconds, you must read this text

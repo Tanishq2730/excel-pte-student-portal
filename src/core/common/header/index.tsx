@@ -101,7 +101,7 @@ const Header = () => {
             <ImageWithBasePath src="assets/img/logo-black.png" alt="Logo" />
           </Link>
           <Link to={routes.adminDashboard} className="dark-logo">
-            <ImageWithBasePath src="assets/img/logo-black.png" alt="Logo" />
+            <ImageWithBasePath src="assets/img/light-logo.png" alt="Logo" />
           </Link>
           <Link id="toggle_btn" to="#" onClick={handleToggleMiniSidebar}>
             <i className="ti ti-menu-deep" />
@@ -145,7 +145,7 @@ const Header = () => {
                 <ul className="nav-list">
                   <li className="nav-item">
                     <Link to={routes.adminDashboard}>
-                      <span className="nav-link">Dashboard</span>
+                      <span className="sub-menu">Dashboard</span>
                     </Link>
                   </li>
                   <li
@@ -157,17 +157,17 @@ const Header = () => {
                   </li>
                   <li className="nav-item">
                     <Link to={routes.community}>
-                      <span className="nav-link">Community</span>
+                      <span className="sub-menu">Community</span>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to={routes.studyTool}>
-                      <span className="nav-link">Study Tools</span>
+                      <span className="sub-menu">Study Tools</span>
                     </Link>
                   </li>
                   <li className="nav-item">
                     <Link to={routes.subscriptionPlan}>
-                      <span className="nav-link">Subscription</span>
+                      <span className="sub-menu">Subscription</span>
                     </Link>
                   </li>
                 </ul>

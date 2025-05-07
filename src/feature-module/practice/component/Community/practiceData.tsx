@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { fetchPracticeLogs, fetchPracticeLog } from "../../../../api/practiceAPI";
+import {
+  fetchPracticeLogs,
+  fetchPracticeLog,
+} from "../../../../api/practiceAPI";
 import moment from "moment";
 import SpeakingScoreModal from "../speakingScoreModal";
-import WritingScoreModal from "../writingScoreModal"; 
+import WritingScoreModal from "../writingScoreModal";
 import ReadingScoreModal from "../readingScoreModal";
 import ListeningScoreModal from "../listeningScoreModal";
 
@@ -16,7 +19,7 @@ interface PracticeLog {
   score: number;
   createdAt: string;
   late_speak: boolean;
-  total_score:number;
+  total_score: number;
   user: {
     name: string;
     profile_image: string | null;
@@ -27,7 +30,6 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
   const [practiceLogs, setPracticeLogs] = useState<PracticeLog[]>([]);
   const [selectedLogId, setSelectedLogId] = useState<number | null>(null);
   const [selectedLogDetails, setSelectedLogDetails] = useState<any>(null);
-
 
   useEffect(() => {
     const getData = async () => {
@@ -99,20 +101,23 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             </div>
 
             <div className="d-flex align-items-center">
-            <button
-              className="popbtn border rounded-pill px-2 py-1 me-3"
-              data-bs-toggle="modal"
-              data-bs-target="#exampleModalLg"
-              onClick={() => handleScoreClick(log.id)}
-              style={{
-                backgroundColor: "#f0f0f0",
-                borderColor: "#00c6b5",
-                color: "black",
-                fontSize: "0.9rem",
-              }}
-            >
-              My Score <strong>{log.score} / {log.total_score}</strong>
-            </button>
+              <button
+                className="popbtn border rounded-pill px-2 py-1 me-3"
+                data-bs-toggle="modal"
+                data-bs-target="#exampleModalLg"
+                onClick={() => handleScoreClick(log.id)}
+                style={{
+                  backgroundColor: "#f0f0f0",
+                  borderColor: "#00c6b5",
+                  color: "black",
+                  fontSize: "0.9rem",
+                }}
+              >
+                My Score{" "}
+                <strong>
+                  {log.score} / {log.total_score}
+                </strong>
+              </button>
               <div className="text-danger" style={{ fontSize: "0.9rem" }}>
                 {log.late_speak
                   ? "Good job! Keep practicing."
@@ -120,9 +125,18 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               </div>
             </div>
 
-            <button className="btn btn-danger btn-sm ms-3 rounded-circle">
-              <i className="fa fa-trash"></i>
-            </button>
+            <div>
+              <button
+                className="btn btn-secondary btn-sm ms-3 rounded-circle"
+                data-bs-toggle="modal"
+                data-bs-target="#standard-modal"
+              >
+                <i className="ion-forward"></i>
+              </button>
+              <button className="btn btn-danger btn-sm ms-3 rounded-circle">
+                <i className="fa fa-trash"></i>
+              </button>
+            </div>
             <div
               className="modal fade"
               id="exampleModalLg"
@@ -134,7 +148,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                 <div className="modal-content">
                   <div className="modal-header">
                     <h4 className="modal-title" id="exampleModalLgLabel">
-                    AI Score (Partial credit to : Speaking & Reading)
+                      AI Score (Partial credit to : Speaking & Reading)
                     </h4>
                     <button
                       type="button"
@@ -144,19 +158,55 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                     />
                   </div>
                   <div className="modal-body">
-                    {questionData?.Type?.name === 'Speaking' && (
+                    {questionData?.Type?.name === "Speaking" && (
                       <SpeakingScoreModal logDetail={selectedLogDetails} />
                     )}
-                    {questionData?.Type?.name === 'Writing' && (
+                    {questionData?.Type?.name === "Writing" && (
                       <WritingScoreModal logDetail={selectedLogDetails} />
                     )}
-                    {questionData?.Type?.name === 'Reading' && (
+                    {questionData?.Type?.name === "Reading" && (
                       <ReadingScoreModal logDetail={selectedLogDetails} />
                     )}
-                    {questionData?.Type?.name === 'Listning' && (
+                    {questionData?.Type?.name === "Listning" && (
                       <ListeningScoreModal logDetail={selectedLogDetails} />
                     )}
-                    
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              id="standard-modal"
+              className="modal fade"
+              tabIndex={-1}
+              role="dialog"
+              aria-labelledby="standard-modalLabel"
+              aria-hidden="true"
+            >
+              <div className="modal-dialog modal-dialog-centered">
+                <div className="modal-content">
+                  <div className="modal-body p-3">
+                    <h5>
+                      Answer Link Created Send the following link to your
+                      friends to share your answer!
+                    </h5>
+                    <hr />
+                    <span>RA#338 APEUni RA EN V2e AI Score 37/90</span>
+                    <hr />
+                    <p>
+                      https://www.apeuni.com/practice/answer_item?model=read_alouds&answer_id=3194598191
+                    </p>
+                  </div>
+                  <div className="modal-footer">
+                    <button
+                      type="button"
+                      className="btn btn-cancel"
+                      data-bs-dismiss="modal"
+                    >
+                      Close
+                    </button>
+                    <button type="button" className="btn btn-primary">
+                      Copy Link
+                    </button>
                   </div>
                 </div>
               </div>

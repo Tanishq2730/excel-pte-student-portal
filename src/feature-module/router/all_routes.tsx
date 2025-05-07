@@ -306,6 +306,7 @@ export const all_routes = {
   classTimetable: "/academic/class-time-table",
   search:'/search',
   practiceHistory:'/practice-histroy',
+  shareLink:'/share-link',
 
   //Hrm module
   staff: "/hrm/staff",

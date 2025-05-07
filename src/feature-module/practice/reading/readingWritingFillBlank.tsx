@@ -11,6 +11,7 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 import MyNotes from "../component/myNotes";
+import PageHeading from "../component/pageHeading";
 
 const ReadingWritngFillBlank = () => {
   const { subtype_id, question_id } = useParams<{
@@ -271,6 +272,7 @@ const ReadingWritngFillBlank = () => {
                 {showNotes ? "Close Notes" : "My Notes"}
               </button>
             </div>
+            <PageHeading title="Reading & Writng Fill in the Blank" />
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
               <div className="practiceLayout">
                 <p className="my-3">

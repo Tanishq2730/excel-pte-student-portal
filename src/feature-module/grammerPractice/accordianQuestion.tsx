@@ -2,15 +2,14 @@ import React from "react";
 
 interface Props {
   onStartQuiz: () => void;
+  onShowLesson: () => void;
 }
 
-const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
+const AccordianQuestion: React.FC<Props> = ({ onStartQuiz, onShowLesson }) => {
   return (
     <div className="card-body">
-      <div
-        className="accordion accordion-solid-primary accordions-items-seperate"
-        id="accordioninfoborderExample"
-      >
+      <div className="accordion accordion-solid-primary accordions-items-seperate" id="accordioninfoborderExample">
+        
         {/* Adjective */}
         <div className="accordion-item">
           <h2 className="accordion-header" id="headingborderinfoOne">
@@ -26,8 +25,16 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
               <div className="acBtn">
                 <div>Adjective</div>
                 <div className="d-flex">
-                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  
+                  <button
+                    className="btn btn-primary py-1 mx-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowLesson();
+                    }}
+                  >
+                    Lesson
+                  </button>
                 </div>
               </div>
             </button>
@@ -41,15 +48,11 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
             </div>
           </div>
@@ -70,8 +73,16 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
               <div className="acBtn">
                 <div>Adverbs & Degree</div>
                 <div className="d-flex">
-                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  
+                  <button
+                    className="btn btn-primary py-1 mx-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowLesson();
+                    }}
+                  >
+                    Lesson
+                  </button>
                 </div>
               </div>
             </button>
@@ -85,15 +96,11 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
             </div>
           </div>
@@ -114,8 +121,16 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
               <div className="acBtn">
                 <div>Adverbs & Manner</div>
                 <div className="d-flex">
-                  <button className="btn btn-primary py-1 mx-2">Lesson</button>
-                  
+                  <button
+                    className="btn btn-primary py-1 mx-2"
+                    type="button"
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onShowLesson();
+                    }}
+                  >
+                    Lesson
+                  </button>
                 </div>
               </div>
             </button>
@@ -129,15 +144,11 @@ const AccordianQuestion: React.FC<Props> = ({ onStartQuiz }) => {
             <div className="accordion-body">
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 1</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
               <div className="practiceCard" onClick={onStartQuiz}>
                 <p className="mb-0">Practice 2</p>
-                <div className="count">
-                  <p>10/10</p>
-                </div>
+                <div className="count"><p>10/10</p></div>
               </div>
             </div>
           </div>
