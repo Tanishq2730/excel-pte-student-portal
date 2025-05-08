@@ -2,6 +2,7 @@
   "name": "my-app",
   "version": "0.1.0",
   "homepage": "/excelpte",
+  "proxy": "https://excelpte.com",
   "private": true,
   "dependencies": {
     "@ant-design/icons": "^5.6.1",

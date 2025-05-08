@@ -38,6 +38,7 @@ export interface ApiResponse<T = any> {
       const response = await fetch(url, {
         method,
         headers,
+        credentials: 'include',
         body: method === 'GET' ? undefined : (isMultipart ? body : JSON.stringify(body)),
       });
   
