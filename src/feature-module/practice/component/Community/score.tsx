@@ -145,8 +145,7 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
       setSelectedLogDetails(null);
     }
   };
-  console.log(selectedLogDetails, "selectedLogDetails");
-
+  
   return (
     <>
       {communityLogs.map((log) => (

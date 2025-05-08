@@ -9,7 +9,9 @@ const SpeakingScoreModal: React.FC<SpeakingScoreModalProps> = ({ logDetail }) =>
   // if (!logDetail || !logDetail.data) return null;
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;
-  const parsedScoreData = JSON.parse(logDetail?.score_data || '{}');
+  const parsedScoreData = typeof logDetail?.score_data === 'string'
+    ? JSON.parse(logDetail.score_data)
+    : logDetail?.score_data || {};
 
   if (!logDetail) return null;
   const scoreData = [
