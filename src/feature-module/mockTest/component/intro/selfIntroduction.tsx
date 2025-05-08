@@ -106,9 +106,9 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal }) => {
           <div className="container">
             <div className="row">
               <div className="col"></div>
-              <div className="col text-right">
+              <div className="col text-end">
                 <button
-                  className="btn btn-primary mockmainbtn"
+                  className="btn btn-primary"
                   onClick={handlenext}
                 >
                   Next

@@ -1,20 +1,21 @@
 import React, { useState } from "react";
-import RedorderParagraph from "./reorderParagraph";
-import ReadingWritingFillintheBlank from "./readingWritingFillintheBlank";
-import ReadingFillintheBlank from "./readingFillintheBlank";
-import McChooseSingleAnswer from "./mcChooseSingleAnswer";
-import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
+import RedorderParagraph from "../reading/reorderParagraph";
+import ReadingWritingFillintheBlank from "../reading/readingWritingFillintheBlank";
+import ReadingFillintheBlank from "../reading/readingFillintheBlank";
+import McChooseSingleAnswer from "../reading/mcChooseSingleAnswer";
+import MultipleChooseMultipleAnswer from "../reading/multipleChooseMultipleAnswer";
+import SummarizeWritinText from "./summarizeWrittenText";
+import WriteEmail from "./writeEmail";
+import WriteEssay from "./writeEssay";
 
-const ReadingIntro: React.FC = () => {
+const WritingIntro: React.FC = () => {
   const [step, setStep] = useState(0);
 
   // List of components to show one-by-one
   const components = [
-    <RedorderParagraph key="reorder" />,
-    <ReadingWritingFillintheBlank key="rwfib" />,
-    <ReadingFillintheBlank key="rfib" />,
-    <McChooseSingleAnswer key="mcq" />,
-    <MultipleChooseMultipleAnswer key="mcma" />,
+    <SummarizeWritinText key="swt" />,
+    <WriteEmail key="we" />,
+    <WriteEssay key="we" />,
   ];
 
   const handleNext = () => {
@@ -61,4 +62,4 @@ const ReadingIntro: React.FC = () => {
   );
 };
 
-export default ReadingIntro;
+export default WritingIntro;

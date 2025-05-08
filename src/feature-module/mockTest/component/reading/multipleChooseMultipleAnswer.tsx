@@ -1,6 +1,6 @@
 import React from "react";
 
-const McChooseSingleAnswer: React.FC = () => {
+const MultipleChooseMultipleAnswer: React.FC = () => {
   return (
     <div className="container mt-3">
       <p>
@@ -85,4 +85,4 @@ const McChooseSingleAnswer: React.FC = () => {
   );
 };
 
-export default McChooseSingleAnswer;
+export default MultipleChooseMultipleAnswer;

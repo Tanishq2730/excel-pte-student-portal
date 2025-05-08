@@ -1,20 +1,17 @@
 import React, { useState } from "react";
-import RedorderParagraph from "./reorderParagraph";
-import ReadingWritingFillintheBlank from "./readingWritingFillintheBlank";
-import ReadingFillintheBlank from "./readingFillintheBlank";
-import McChooseSingleAnswer from "./mcChooseSingleAnswer";
-import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
+import SummarizeWritinText from "../writing/summarizeWrittenText";
+import ReadAloud from "./readAloud";
+import RepeatSentence from "./repeatSentence";
+import DescribeImage from "./describeImage";
 
-const ReadingIntro: React.FC = () => {
+const SpeakingIntro: React.FC = () => {
   const [step, setStep] = useState(0);
 
   // List of components to show one-by-one
   const components = [
-    <RedorderParagraph key="reorder" />,
-    <ReadingWritingFillintheBlank key="rwfib" />,
-    <ReadingFillintheBlank key="rfib" />,
-    <McChooseSingleAnswer key="mcq" />,
-    <MultipleChooseMultipleAnswer key="mcma" />,
+    <ReadAloud key="swt" />,
+    <RepeatSentence key="rs" />,
+    <DescribeImage key="rs" />,
   ];
 
   const handleNext = () => {
@@ -61,4 +58,4 @@ const ReadingIntro: React.FC = () => {
   );
 };
 
-export default ReadingIntro;
+export default SpeakingIntro;

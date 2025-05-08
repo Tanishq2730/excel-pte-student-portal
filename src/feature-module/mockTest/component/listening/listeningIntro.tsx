@@ -1,20 +1,24 @@
 import React, { useState } from "react";
-import RedorderParagraph from "./reorderParagraph";
-import ReadingWritingFillintheBlank from "./readingWritingFillintheBlank";
-import ReadingFillintheBlank from "./readingFillintheBlank";
-import McChooseSingleAnswer from "./mcChooseSingleAnswer";
+import SummarizeSpokenText from "./summarizeSpokenText";
+import FillIntheBlank from "./fillIntheBlank";
+import MultipleChooseSingleAnswer from "./multipleChooseSingleAnswer";
 import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
+import HighlightIncorrectWord from "./highlightIncorrectWord";
+import WriteFromDictation from "./writeFromDictation";
+import SelectMissingWord from "./selectMissingWord";
 
-const ReadingIntro: React.FC = () => {
+const ListeningIntro: React.FC = () => {
   const [step, setStep] = useState(0);
 
   // List of components to show one-by-one
   const components = [
-    <RedorderParagraph key="reorder" />,
-    <ReadingWritingFillintheBlank key="rwfib" />,
-    <ReadingFillintheBlank key="rfib" />,
-    <McChooseSingleAnswer key="mcq" />,
-    <MultipleChooseMultipleAnswer key="mcma" />,
+    <SummarizeSpokenText key="spt" />,
+    <FillIntheBlank key="fb" />,
+    <MultipleChooseSingleAnswer key="mcs" />,
+    <MultipleChooseMultipleAnswer key="mcs" />,
+    <HighlightIncorrectWord key="mcs" />,
+    <WriteFromDictation key="wd" />,
+    <SelectMissingWord key="wd" />,
   ];
 
   const handleNext = () => {
@@ -61,4 +65,4 @@ const ReadingIntro: React.FC = () => {
   );
 };
 
-export default ReadingIntro;
+export default ListeningIntro;

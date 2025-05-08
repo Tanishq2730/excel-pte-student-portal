@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from "react";
 import ReadingIntro from "../component/reading/readingIntro";
+import WritingIntro from "../component/writing/writingIntro";
+import SpeakingIntro from "../component/Speaking/speakingIntro";
+import ListeningIntro from "../component/listening/listeningIntro";
 // import ListeningIntro from "../component/listening/listeningIntro"; // future component
 
 const MockAllQuestion: React.FC = () => {
@@ -10,7 +13,10 @@ const MockAllQuestion: React.FC = () => {
 
     switch (testType) {
       case "reading":
-        setSectionPart(<ReadingIntro />);
+        // setSectionPart(<ReadingIntro />);
+        // setSectionPart(<WritingIntro />);
+        // setSectionPart(<SpeakingIntro />);
+        setSectionPart(<ListeningIntro />);
         break;
       // case "listening":
       //   setSectionPart(<ListeningIntro />);
