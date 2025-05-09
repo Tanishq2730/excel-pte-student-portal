@@ -37,12 +37,15 @@ const SectionalMocktest: React.FC = () => {
         }
 
         setMockTestsByType(mockTestsMap);
+         if (typeList.length > 0) {
+            setActiveTab(typeList[0].id);
+            localStorage.setItem("mockSection", typeList[0].name); // Set "Speaking" or first tab
+          }
         if (typeList.length > 0) setActiveTab(typeList[0].id); // set first type as active tab
       } catch (err) {
         console.error("Error loading sectional mock tests:", err);
       }
     };
-
     loadData();
   }, []);
 
@@ -59,7 +62,10 @@ const SectionalMocktest: React.FC = () => {
                 <li className="nav-item" key={type.id}>
                   <button
                     className={`nav-link ${activeTab === type.id ? "active" : ""}`}
-                    onClick={() => setActiveTab(type.id)}
+                    onClick={() => {
+                                      setActiveTab(type.id);
+                                      localStorage.setItem("mockSection", type.name);
+                                    }}
                   >
                     {type.name}
                   </button>

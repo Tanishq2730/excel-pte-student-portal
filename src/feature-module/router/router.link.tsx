@@ -51,6 +51,7 @@ import ReorderParagraph from "../practice/reading/reOrderParagraph";
 import FillInTheBlanksRead from "../practice/reading/fillInTheBlanksRead";
 import FullMocktest from "../mockTest/pages/fullMocktest";
 import MockTest from "../mockTest/pages/mockTest";
+import MockAllQuestionWrapper from "../mockTest/pages/MockAllQuestionWrapper";
 import SectionalMocktest from "../mockTest/pages/sectionalMocktest";
 import MockTestResult from "../mockTest/pages/mockTestResult";
 import Result from "../mockTest/pages/result";
@@ -232,6 +233,7 @@ export const publicRoutes = [
 
 export const mockRoutes = [
   { path: routes.mockTest, element: <MockTest />, route: Route },
+  { path: routes.MockAllQuestion, element: <MockAllQuestionWrapper />, route: Route },
   { path: routes.result, element: <Result />, route: Route },
 ];
 export const commonRoutes = [

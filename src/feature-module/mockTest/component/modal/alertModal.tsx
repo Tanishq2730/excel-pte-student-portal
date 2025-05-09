@@ -1,8 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Modal from "react-bootstrap/Modal";
 
-import "../../css/modal.css";
-
 interface AlertModalProps {
   show: boolean;
   onHide: () => void;

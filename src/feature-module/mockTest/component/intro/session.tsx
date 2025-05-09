@@ -48,23 +48,29 @@ const Session: React.FC = () => {
           </p>
           <div className="options">
             <label className={`option ${selectedLanguage === "British" ? "active" : ""}`}>
-              <input
-                type="radio"
-                name="language"
-                value="British"
-                checked={selectedLanguage === "British"}
-                onChange={() => setSelectedLanguage("British")}
-              />
+            <input
+              type="radio"
+              name="language"
+              value="British"
+              checked={selectedLanguage === "British"}
+              onChange={() => {
+                setSelectedLanguage("British");
+                localStorage.setItem("languageStyle", "British");
+              }}
+            />
               British (UK)
             </label>
             <label className={`option ${selectedLanguage === "American" ? "active" : ""}`}>
-              <input
-                type="radio"
-                name="language"
-                value="American"
-                checked={selectedLanguage === "American"}
-                onChange={() => setSelectedLanguage("American")}
-              />
+                <input
+                  type="radio"
+                  name="language"
+                  value="American"
+                  checked={selectedLanguage === "American"}
+                  onChange={() => {
+                    setSelectedLanguage("American");
+                    localStorage.setItem("languageStyle", "American");
+                  }}
+                />
               American (US)
             </label>
           </div>

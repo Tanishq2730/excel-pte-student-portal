@@ -1,10 +1,10 @@
 import React, { useEffect, useRef, useState } from "react";
-
-const DescribeImage: React.FC = () => {
-  const [countdown, setCountdown] = useState(40); // Initial countdown
+import { image_url } from "../../../../environment";
+const DescribeImage: React.FC<{ question: any }> = ({ question }) => {
+  const [countdown, setCountdown] = useState(question.Subtype.preparation_time); // Countdown based on preparation time
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(40); // Recording duration
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(question.Subtype.recording_time); // Recording time from the question data
 
   const timerRef = useRef<number | null>(null);
   const recordingRef = useRef<number | null>(null);
@@ -26,8 +26,8 @@ const DescribeImage: React.FC = () => {
   useEffect(() => {
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev) => prev - 1);
-        setRecordingProgress(((40 - recordingTimeLeft + 1) / 40) * 100);
+        setRecordingTimeLeft((prev: number) => prev - 1);
+        setRecordingProgress(((question.Subtype.recording_time - recordingTimeLeft + 1) / question.Subtype.recording_time) * 100);
       }, 1000);
     }
     return () => clearTimeout(recordingRef.current!);
@@ -36,13 +36,16 @@ const DescribeImage: React.FC = () => {
   return (
     <div className="container mt-3">
       <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 40 seconds to read aloud.
+        Look at the image below. In {question.Subtype.preparation_time} seconds, you must describe this image aloud as naturally and clearly as possible. You have {question.Subtype.recording_time} seconds to speak.
       </p>
       <div className="recorderDetail">
         <div className="row">
           <div className="col-md-6">
-            <img src="assets/img/logo.ong" />
+            <img
+              src={`${image_url}${question.describe_image}`}
+              alt="Describe"
+              style={{ width: "100%", height: "auto", borderRadius: "5px" }}
+            />
           </div>
           <div className="col-md-6">
             <div className="recorder">
@@ -86,6 +89,15 @@ const DescribeImage: React.FC = () => {
             </div>
           </div>
         </div>
+      </div>
+      {/* Optionally render the question */}
+      <div className="questionContent">
+        <h5>{question.question_name}</h5>
+        {/* <div
+          dangerouslySetInnerHTML={{
+            __html: question.question,
+          }}
+        /> */}
       </div>
     </div>
   );

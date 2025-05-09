@@ -11,3 +11,19 @@ export const fetchMocktests = async (id: number) => {
       throw error;
     }
   };
+
+  export const validateMocktest = async (mocktestId:any,formData: any) => {
+      return await apiHandler(`${api_url}v1/mocktests/validate/${mocktestId}`, "POST",formData);
+  };
+
+  export const saveIntroduction = async (formData: any) => {
+      return await apiHandler(`${api_url}v1/mocktests/save-introduction`, "POST",formData,true);
+  };
+
+  export const sessionValidate = async (formData: any) => {
+      return await apiHandler(`${api_url}v1/mocktests/session-validate`, "POST",formData);
+  };
+
+  export const mockTestQuestions = async (mocktestId:any) => {
+      return await apiHandler(`${api_url}v1/mocktest/${mocktestId}/questions`, "GET");
+  };

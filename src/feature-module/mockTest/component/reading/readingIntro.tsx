@@ -1,11 +1,21 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import RedorderParagraph from "./reorderParagraph";
 import ReadingWritingFillintheBlank from "./readingWritingFillintheBlank";
 import ReadingFillintheBlank from "./readingFillintheBlank";
 import McChooseSingleAnswer from "./mcChooseSingleAnswer";
 import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
 
-const ReadingIntro: React.FC = () => {
+interface ReadingIntroProps {
+  queno: number;
+  mockquestions: any;
+  setSectionPart: Dispatch<SetStateAction<JSX.Element | null>>;
+}
+
+const ReadingIntro: React.FC<ReadingIntroProps> = ({
+  queno,
+  mockquestions,
+  setSectionPart,
+}) => {
   const [step, setStep] = useState(0);
 
   // List of components to show one-by-one
@@ -22,7 +32,7 @@ const ReadingIntro: React.FC = () => {
   };
 
   const handleSkip = () => {
-    handleNext(); // Just move to next, same as Next
+    handleNext();
   };
 
   return (

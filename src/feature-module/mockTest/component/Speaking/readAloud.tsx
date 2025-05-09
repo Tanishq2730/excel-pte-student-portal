@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const ReadAloud: React.FC = () => {
+const ReadAloud: React.FC<{ question: any }> = ({ question }) => {
   const [countdown, setCountdown] = useState(40); // Initial countdown
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);

@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const RepeatSentence: React.FC = () => {
+const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
   const [countdown, setCountdown] = useState(40);
   const [isRecording, setIsRecording] = useState(false);
   const [isPlayback, setIsPlayback] = useState(true);

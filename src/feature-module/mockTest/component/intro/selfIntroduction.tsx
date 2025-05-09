@@ -1,40 +1,100 @@
 import React, { useState, useEffect } from "react";
-// import "./SelfIntroduction.css";
+import MockRecorder from "../MockRecorder";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
+import { saveIntroduction } from "../../../../api/mocktestAPI";
 
 interface Props {
   id: string | undefined;
   session_id: string;
   LoadFinal: () => void;
+  setCannotSkipModal: (value: boolean) => void;
 }
 
-const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal }) => {
+const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal,setCannotSkipModal  }) => {
   const [mtime, setmTime] = useState<number>(55);
   const [time2, setTime2] = useState<number>(25);
   const [recordingStoppedModal, setRecordingStoppedModal] =
     useState<boolean>(false);
+  const [showRecorder, setShowRecorder] = useState(false); // Moved up ✅
+  const [recordingDone, setRecordingDone] = useState(false);
+
+  const [resetRecording, setResetRecording] = useState<boolean>(false);
+  const [recordedAudioBlob, setRecordedAudioBlob] = useState<Blob | null>(null);
+  const [recordedAudioUrl, setRecordedAudioUrl] = useState<string>("");
+  const [startRecording, setStartRecording] = useState(false);
+  const { transcript, resetTranscript } = useSpeechRecognition();
 
   useEffect(() => {
-    if (time2 > 0) {
-      const interval = setInterval(() => {
-        setTime2((prev) => prev - 1);
+  if (time2 > 0) {
+    const interval = setInterval(() => {
+      setTime2((prev) => prev - 1);
+    }, 1000);
+    return () => clearInterval(interval);
+  } else {
+    setShowRecorder(true);
+    setStartRecording(true); // ✅ Start recording automatically
+  }
+}, [time2]);
+
+  useEffect(() => {
+    let interval: ReturnType<typeof setInterval>; // ✅ Fixed type
+    if (showRecorder && mtime > 0) {
+      interval = setInterval(() => {
+        setmTime((prev) => prev - 1);
       }, 1000);
-      return () => clearInterval(interval);
-    } else {
-      setRecordingStoppedModal(true); // ✅ fixed function name
+    } else if (showRecorder && mtime === 0) {
+      setRecordingStoppedModal(true);
+      setRecordingDone(true); // ✅ enable the Next button
     }
-  }, [time2]);
+    return () => clearInterval(interval);
+  }, [showRecorder, mtime]);
 
   useEffect(() => {
-    let introtime = localStorage.getItem("introtime");
+    const introtime = localStorage.getItem("introtime");
     setmTime(introtime ? parseInt(introtime) : 55);
   }, []);
 
-  const handlenext = () => {
-    setRecordingStoppedModal(true);
-    LoadFinal();
+  const progress = ((25 - time2) / 25) * 100;
+
+  const handleRecordingComplete = (audioBlob: Blob, audioUrl: string) => {
+    console.log("Recording complete:", audioBlob, audioUrl);
+    
+    setRecordedAudioBlob(audioBlob);
+    setRecordedAudioUrl(audioUrl);
   };
 
-  const progress = ((25 - time2) / 25) * 100;
+  const handleStopRecording = async () => {
+  setCannotSkipModal(false);
+  setResetRecording(true);
+  SpeechRecognition.stopListening();
+  resetTranscript();
+  setTimeout(() => setResetRecording(false), 100);
+  setRecordingDone(true);
+  LoadFinal(); // ✅ Inform parent
+
+  if (recordedAudioBlob && id && session_id) {
+    try {
+      const formData = new FormData();      
+      if (recordedAudioBlob) {
+        const audioFile = new File([recordedAudioBlob], "answer.wav", {
+          type: "audio/wav",
+        });
+        formData.append("answer", audioFile);
+      }
+
+      formData.append("mocktestId", id);
+      formData.append("sessionid", session_id);
+
+      const response = await saveIntroduction(formData);
+      console.log("Self introduction saved:", response);
+    } catch (err) {
+      console.error("Error saving self-introduction:", err);
+    }
+  }
+};
+console.log("session_id", session_id);
 
   return (
     <div>
@@ -68,6 +128,17 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal }) => {
             </div>
 
             <div className="col-md-6">
+              
+              {showRecorder ? (
+                <div className="micSection">
+                  <MockRecorder
+                    onRecordingComplete={handleRecordingComplete}
+                    onStopRecording={handleStopRecording}
+                    resetRecording={resetRecording}
+                    startRecording={startRecording} // ✅ Pass this prop
+                  />
+                </div>
+              ) :(
               <div className="record-box">
                 <p className="record-title">Recorded Answer</p>
                 <p className="record-status">
@@ -87,7 +158,10 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal }) => {
                   ></div>
                 </div>
               </div>
+              )}
             </div>
+
+            
           </div>
         </div>
 
@@ -101,22 +175,6 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal }) => {
             </div>
           </div>
         )}
-
-        <div className="footer-v3">
-          <div className="container">
-            <div className="row">
-              <div className="col"></div>
-              <div className="col text-end">
-                <button
-                  className="btn btn-primary"
-                  onClick={handlenext}
-                >
-                  Next
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
       </div>
     </div>
   );

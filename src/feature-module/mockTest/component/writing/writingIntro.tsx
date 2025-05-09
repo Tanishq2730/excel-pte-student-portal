@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import RedorderParagraph from "../reading/reorderParagraph";
 import ReadingWritingFillintheBlank from "../reading/readingWritingFillintheBlank";
 import ReadingFillintheBlank from "../reading/readingFillintheBlank";
@@ -8,14 +8,23 @@ import SummarizeWritinText from "./summarizeWrittenText";
 import WriteEmail from "./writeEmail";
 import WriteEssay from "./writeEssay";
 
-const WritingIntro: React.FC = () => {
+interface WritingIntroProps {
+  queno: number;
+  mockquestions: any;
+  setSectionPart: Dispatch<SetStateAction<JSX.Element | null>>;
+}
+
+const WritingIntro: React.FC<WritingIntroProps> = ({
+  queno,
+  mockquestions,
+  setSectionPart,
+}) => {
   const [step, setStep] = useState(0);
 
-  // List of components to show one-by-one
   const components = [
     <SummarizeWritinText key="swt" />,
     <WriteEmail key="we" />,
-    <WriteEssay key="we" />,
+    <WriteEssay key="we2" />,
   ];
 
   const handleNext = () => {
@@ -23,7 +32,7 @@ const WritingIntro: React.FC = () => {
   };
 
   const handleSkip = () => {
-    handleNext(); // Just move to next, same as Next
+    handleNext();
   };
 
   return (
@@ -31,7 +40,7 @@ const WritingIntro: React.FC = () => {
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
-            You are about to begin part 2 of the exam: Reading
+            You are about to begin part 2 of the exam: Writing
           </p>
           <p className="font-weight-bold">Time allowed: 29-30 minutes</p>
         </div>

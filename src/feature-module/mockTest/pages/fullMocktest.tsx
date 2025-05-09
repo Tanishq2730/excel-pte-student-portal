@@ -44,7 +44,7 @@ const FullMocktest: React.FC = () => {
         setPracticeTypes(types);
 
         const allType = types.find((type) => type.name.toLowerCase() === "all");
-        console.log(allType, "allType");
+        localStorage.setItem("mockSection",'All'); 
 
         if (allType) {
           const mockRes = await fetchMocktests(allType.id);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { Dispatch, SetStateAction, useState } from "react";
 import SummarizeSpokenText from "./summarizeSpokenText";
 import FillIntheBlank from "./fillIntheBlank";
 import MultipleChooseSingleAnswer from "./multipleChooseSingleAnswer";
@@ -7,18 +7,27 @@ import HighlightIncorrectWord from "./highlightIncorrectWord";
 import WriteFromDictation from "./writeFromDictation";
 import SelectMissingWord from "./selectMissingWord";
 
-const ListeningIntro: React.FC = () => {
+interface ListeningIntroProps {
+  queno: number;
+  mockquestions: any;
+  setSectionPart: Dispatch<SetStateAction<JSX.Element | null>>;
+}
+
+const ListeningIntro: React.FC<ListeningIntroProps> = ({
+  queno,
+  mockquestions,
+  setSectionPart,
+}) => {
   const [step, setStep] = useState(0);
 
-  // List of components to show one-by-one
   const components = [
     <SummarizeSpokenText key="spt" />,
     <FillIntheBlank key="fb" />,
     <MultipleChooseSingleAnswer key="mcs" />,
-    <MultipleChooseMultipleAnswer key="mcs" />,
-    <HighlightIncorrectWord key="mcs" />,
+    <MultipleChooseMultipleAnswer key="mcm" />,
+    <HighlightIncorrectWord key="hiw" />,
     <WriteFromDictation key="wd" />,
-    <SelectMissingWord key="wd" />,
+    <SelectMissingWord key="smw" />,
   ];
 
   const handleNext = () => {
@@ -26,7 +35,7 @@ const ListeningIntro: React.FC = () => {
   };
 
   const handleSkip = () => {
-    handleNext(); // Just move to next, same as Next
+    handleNext();
   };
 
   return (
@@ -34,7 +43,7 @@ const ListeningIntro: React.FC = () => {
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
-            You are about to begin part 2 of the exam: Reading
+            You are about to begin part 2 of the exam: Listening
           </p>
           <p className="font-weight-bold">Time allowed: 29-30 minutes</p>
         </div>
