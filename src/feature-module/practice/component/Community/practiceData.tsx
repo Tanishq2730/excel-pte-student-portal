@@ -146,8 +146,8 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             >
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
-                  <div className="modal-header">
-                    <h4 className="modal-title" id="exampleModalLgLabel">
+                  <div className="modal-header bg-primary">
+                    <h4 className="modal-title text-white" id="exampleModalLgLabel">
                       AI Score (Partial credit to : Speaking & Reading)
                     </h4>
                     <button

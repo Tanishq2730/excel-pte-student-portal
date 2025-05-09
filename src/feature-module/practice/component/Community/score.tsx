@@ -256,11 +256,11 @@ const Score: React.FC<ScoreProps> = ({ communityLogs }) => {
         aria-labelledby="standard-modalLabel"
         aria-hidden="true"
       >
-        <div className="modal-dialog modal-lg">
+        <div className="modal-dialog modal-lg ssss">
           <div className="modal-content">
-            <div className="modal-header">
-              <h4 className="modal-title" id="exampleModalLgLabel">
-                AI Score (Partial credit to : Speaking & Reading)
+            <div className="modal-header bg-primary">
+              <h4 className="modal-title bg-primary" id="exampleModalLgLabel">
+                AI Score (Partial credit to : Speaking & Reading) bhghgh jj
               </h4>
               <button
                 type="button"

@@ -209,9 +209,10 @@ const Header = () => {
               <div className="search">
                 <Link
                   to=""
-                  className="btn btn-outline-light bg-white btn-icon d-flex justify-content-center align-items-center me-1 p-2 px-4"
+                  className="freeuser d-flex justify-content-center align-items-center me-1 p-2 px-4  text-white"
+                  style={{ width: "8em !important" }}
                 >
-                  <span style={{fontWeight:'400'}}>Free</span>
+                  <p style={{ fontWeight: "400" }}>Free User</p>
                 </Link>
               </div>
               <div className="search">
@@ -523,7 +524,10 @@ const Header = () => {
                       href="https://api.whatsapp.com/send?phone=610403731363"
                       target="_blank"
                     >
-                     <img src="assets/img/whatsappIcon.png" style={{width:"8%",marginRight:'8px'}}/>
+                      <img
+                        src="assets/img/whatsappIcon.png"
+                        style={{ width: "8%", marginRight: "8px" }}
+                      />
                       Whatsapp
                     </a>
                     <Link
@@ -531,7 +535,7 @@ const Header = () => {
                       to={routes.planInfo}
                     >
                       <i className="ion-navigate me-2" />
-                      Plan Info 
+                      Plan Info
                     </Link>
                     <hr className="m-0" />
                     <button

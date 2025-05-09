@@ -23,13 +23,13 @@ export const SidebarData = [
         showSubRoute: false,
         submenu: false,
       },
-      {
-        label: "Study Plan",
-        link: routes.studyPlan,
-        icon: "ion-calendar",
-        showSubRoute: false,
-        submenu: false,
-      },
+      // {
+      //   label: "Study Plan",
+      //   link: routes.studyPlan,
+      //   icon: "ion-calendar",
+      //   showSubRoute: false,
+      //   submenu: false,
+      // },
       {
         label: "My Performance",
         link: routes.performance,

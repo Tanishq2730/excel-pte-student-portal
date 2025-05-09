@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchClassRecordings } from "../../api/studyToolsAPI";
+import { Link } from "react-router-dom";
+import { all_routes } from "../../feature-module/router/all_routes";
 
 interface Recording {
   id: number;
@@ -12,6 +14,7 @@ interface Recording {
 const ClassRecording: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [recordings, setRecordings] = useState<Recording[]>([]);
+  const routes = all_routes;  
 
   useEffect(() => {
     const getRecordings = async () => {
@@ -38,9 +41,17 @@ const ClassRecording: React.FC = () => {
   };
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrappers mt-5">
       <div className="content">
         <div className="container">
+          <div className="mainHead pb-3 mainHeader">
+            <Link to={routes.studyTool}>
+            <div className="icon">
+              <i className="fa fa-arrow-left"></i>
+            </div>
+            </Link>
+            <h3>Class Recording</h3>
+          </div>
           <div className="classRecording">
             <div className="row mt-5">
               {loading ? (

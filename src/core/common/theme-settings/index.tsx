@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
-import { RootState } from "../../data/redux/store";
 import { fetchQuestions, saveBookmark } from "../../../api/practiceAPI";
+import PageHeading from "../../../feature-module/practice/component/pageHeading";
+import { Link } from "react-router-dom";
 
 interface Subtype {
   id: number;
@@ -27,7 +27,8 @@ const ThemeSettings = () => {
   const [tab, setTab] = useState<"all" | "weekly" | "bookmarked">("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 10; // Customize as needed
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+  const itemsPerPage = 10;
 
   const subtypeId = localStorage.getItem("subtypeId");
   const subtypeIdNumber = subtypeId ? parseInt(subtypeId) : null;
@@ -61,10 +62,30 @@ const ThemeSettings = () => {
     setCurrentPage(1);
   }, [difficulty, practiceStatus, searchTerm, tab]);
 
+  useEffect(() => {
+    if (sidebarOpen) {
+      document.body.classList.add("offcanvas-open");
+      const backdrop = document.createElement("div");
+      backdrop.className = "offcanvas-backdrop fade show";
+      backdrop.id = "custom-backdrop";
+      document.body.appendChild(backdrop);
+    } else {
+      document.body.classList.remove("offcanvas-open");
+      const backdrop = document.getElementById("custom-backdrop");
+      if (backdrop) backdrop.remove();
+    }
+
+    return () => {
+      document.body.classList.remove("offcanvas-open");
+      const backdrop = document.getElementById("custom-backdrop");
+      if (backdrop) backdrop.remove();
+    };
+  }, [sidebarOpen]);
+
   const filterQuestions = () => {
     return questionData.filter((q) => {
       if (tab === "weekly" && !q.weekly) return false;
-      if (tab === "bookmarked") return true;
+      if (tab === "bookmarked") return q.bookmarked;
 
       if (difficulty && q.difficulties !== difficulty) return false;
       if (practiceStatus === "done" && !q.practiced) return false;
@@ -79,6 +100,7 @@ const ThemeSettings = () => {
       return true;
     });
   };
+
   const filteredQuestions = filterQuestions();
   const paginatedQuestions = filteredQuestions.slice(
     (currentPage - 1) * itemsPerPage,
@@ -87,8 +109,7 @@ const ThemeSettings = () => {
 
   const handleBookmarkToggle = async (questionId: number) => {
     try {
-      const res = await saveBookmark({ question_id: questionId });
-      // Optional: refetch questions if status changes on backend
+      await saveBookmark({ question_id: questionId });
       const updatedQuestions = questionData.map((q) =>
         q.id === questionId ? { ...q, bookmarked: !q.bookmarked } : q
       );
@@ -103,29 +124,32 @@ const ThemeSettings = () => {
       <div className="sidebar-contact">
         <div
           className="toggle-theme questionBtn"
-          data-bs-toggle="offcanvas"
-          data-bs-target="#theme-setting"
+          onClick={() => setSidebarOpen(!sidebarOpen)}
         >
           <i className="fa fa-chevron-left" />
         </div>
       </div>
 
       <div
-        className="sidebar-themesettings offcanvas offcanvas-end"
+        className={`sidebar-themesettings offcanvas offcanvas-end ${
+          sidebarOpen ? "show" : ""
+        }`}
         id="theme-setting"
+        style={{ visibility: sidebarOpen ? "visible" : "hidden" }}
       >
         <button
           className="btn btn-primary right-chevron-btn"
-          data-bs-dismiss="offcanvas"
+          onClick={() => setSidebarOpen(false)}
         >
           <i className="fa fa-chevron-right" />
         </button>
 
         <div className="offcanvas-header d-flex align-items-center justify-content-between bg-light-500">
+          <PageHeading title="Read Aloud" />
           <div className="d-flex align-items-center">
             <h4 className="mb-1">{questionData[0]?.Subtype[0]?.sub_name}</h4>
             <div className="mainFilter">
-              <div className="myfilter  mb-3" style={{ width: "40em" }}>
+              <div className="myfilter" style={{ width: "40em" }}>
                 <div className="row g-3">
                   <div className="col-md-6">
                     <label htmlFor="difficulty" className="form-label fw-bold">
@@ -166,6 +190,7 @@ const ThemeSettings = () => {
               </div>
             </div>
           </div>
+
           <div className="top-nav-search">
             <div className="searchinputs">
               <input
@@ -183,6 +208,14 @@ const ThemeSettings = () => {
           <div className="accordion" id="settingtheme">
             <div className="questionList">
               <div className="card" style={{ marginLeft: "2em" }}>
+                <div className="pendingQuestion">
+                  <p>
+                    <b>Continue From</b> | 1001635 : Parent Teacher Conferences{" "}
+                    <Link to="#">
+                      <span>Click to Continue to previous practice List</span>
+                    </Link>
+                  </p>
+                </div>
                 <div className="card-body">
                   <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3">
                     {["all", "weekly", "bookmarked"].map((t) => (
@@ -215,7 +248,7 @@ const ThemeSettings = () => {
                       </div>
 
                       <div className="questionCard">
-                        {filterQuestions().map((item, index) => (
+                        {paginatedQuestions.map((item, index) => (
                           <div
                             key={item.id}
                             className={`card mb-3 p-3 d-flex justify-content-between onhovercard align-items-center ${
@@ -299,11 +332,7 @@ const ThemeSettings = () => {
                                   }
                                 >
                                   <i
-                                    className={`fa ${
-                                      item.bookmarked
-                                        ? "fa fa-bookmark"
-                                        : "fa fa-bookmark"
-                                    }`}
+                                    className={`fa fa-bookmark`}
                                     style={{ color: "#dc3545" }}
                                   />
                                 </button>

@@ -220,7 +220,7 @@ const MultipleChooseSingleAnswerListen = () => {
                     <div className="">
                       <div className="card shadow-sm">
                         <div className="card-header bg-white">
-                          <h5 className="mb-0">
+                          <h5 className="mb-0 text-dark">
                             Why did the man mention phones in the end?
                           </h5>
                         </div>

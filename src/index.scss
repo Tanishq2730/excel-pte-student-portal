@@ -2121,8 +2121,13 @@ body.app-chat {
   border-bottom: 2px solid #00b2a9;
 }
 
+.freeuser {
+  background-color: #00b2a9;
+  border-radius: 5px;
+}
+
 .card-header h5 {
-  color: #00b2a9;
+  color: #171717;
   font-weight: 600;
 }
 
@@ -2324,7 +2329,7 @@ body.app-chat {
 .mynotesBtn {
   position: fixed;
   right: 0;
-  top: 23%;
+  top: 30%;
   z-index: 8765;
 }
 
@@ -2387,19 +2392,19 @@ body.app-chat {
 }
 .badword {
   color: #d32f2f;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2em;
   margin-bottom: 0.5em;
 }
 .goodword {
   color: #4caf50;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2em;
   margin-bottom: 0.5em;
 }
 .avgword {
   color: #f5a623;
-  font-weight: 600;
+  font-weight: 500;
   font-size: 1.2em;
   margin-bottom: 0.5em;
 }
@@ -2624,16 +2629,69 @@ body.app-chat {
   }
 }
 
-.answerCard{
+.answerCard {
   background-color: rgb(228, 246, 255) !important;
 }
 
-.hiIhZW{
+.hiIhZW {
   background-color: transparent !important;
 }
 
-.footer-v3{
+.footer-v3 {
   position: absolute;
   width: 100%;
   bottom: 2%;
+}
+
+.studyStyle {
+  p {
+    font-size: 12px;
+  }
+}
+
+.attemptedicon {
+  margin-bottom: 1em;
+}
+
+.practice-header-wrapper {
+  .tabinnerasection{
+    margin-top: 2em;
+  }
+  .mega-column {
+    i {
+      font-size: 2em;
+      margin-right: 0.5em;
+    }
+  }
+}
+
+
+.pendingQuestion{
+  background-color: rgb(213, 241, 255);
+  p{
+    padding: 10px;
+  }
+  span{
+    color: #1b507a;
+    margin-left: 1em;
+  };
+}
+
+.mainHeader{
+  display: flex;
+  justify-content: left;
+  align-items: center;
+  .icon{
+    width: 2em;
+    height: 2em;
+    background-color: #1b507a;
+    border-radius: 100px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 1em;
+    i{
+      color: #fff;
+    }
+  }
 }

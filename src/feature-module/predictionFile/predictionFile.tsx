@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { fetchPredictions } from "../../api/studyToolsAPI";
 import { image_url } from "../../environment";
+import { Link } from "react-router-dom";
+import { all_routes } from "../../feature-module/router/all_routes";
 
 const PredictionFile: React.FC = () => {
-
   const [predictions, setPredictions] = useState<any[]>([]);
+  const routes = all_routes;
 
   useEffect(() => {
     const loadPredictions = async () => {
@@ -22,10 +24,18 @@ const PredictionFile: React.FC = () => {
   }, []);
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrappers mt-5">
       <div className="content">
         <div className="container">
-          <div className="prediction-file my-5">
+          <div className="mainHead pb-3 mainHeader">
+            <Link to={routes.studyTool}>
+              <div className="icon">
+                <i className="fa fa-arrow-left"></i>
+              </div>
+            </Link>
+            <h3>Template</h3>
+          </div>
+          <div className="prediction-file my-2">
             <div className="prediction">
               <div className="row">
                 {predictions.length > 0 ? (
@@ -38,7 +48,10 @@ const PredictionFile: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                         >
-                          <img src={image_url + item.cover_file} alt={item.title} />
+                          <img
+                            src={image_url + item.cover_file}
+                            alt={item.title}
+                          />
                           <div className="pcard-inner">
                             <p>Download {item.title}</p>
                           </div>

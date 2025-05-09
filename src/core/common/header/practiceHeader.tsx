@@ -50,6 +50,14 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
   "Write from Dictation": "writeFromDictation",
 };
 
+const typeIcons: { [key: string]: string } = {
+  "Speaking": "fas fa-microphone",
+  "Writing": "fas fa-pen",
+  "Reading": "fas fa-book-open",
+  "Listening": "fas fa-headphones",
+  // Add other type.name keys and appropriate FontAwesome classes
+};
+
 const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
   const [practiceTypes, setPracticeTypes] = useState<PracticeType[]>([]);
   const dispatch = useDispatch();
@@ -95,7 +103,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
 
   return (
     <div className="practice-header-wrapper">
-      <span className="nav-link sub-menu">
+      <span className="sub-menu">
         Practice <i className="ion-chevron-down"></i>
       </span>
       {showMegaMenu && (
@@ -143,7 +151,11 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                       (type) =>
                         type.name !== "All" && (
                           <div className="mega-column" key={type.id}>
-                            <h6>{type.name}</h6>
+                            <h6>
+                              <i className={typeIcons[type.name] || "fas fa-folder"}></i>
+                              {type.name}
+                            </h6>
+                            <hr className="border-primary" />
                             {type.Subtypes.sort(
                               (a, b) => a.order - b.order
                             ).map((sub) => (
@@ -183,7 +195,10 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                       (type) =>
                         type.name !== "All" && (
                           <div className="mega-column" key={type.id}>
-                            <h6>{type.name}</h6>
+                            <h6>
+                              <i className={typeIcons[type.name] || "fas fa-folder"}></i>
+                              {type.name}
+                            </h6>
                             {type.Subtypes.sort(
                               (a, b) => a.order - b.order
                             ).map((sub) => (

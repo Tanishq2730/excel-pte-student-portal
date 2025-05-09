@@ -60,7 +60,7 @@ const CardButton: React.FC<CardButtonProps> = ({ questionData }) => {
 
           <button
             className="btn btn-group py-1"
-            style={{ background: "#ff838333", color: "#000" }}
+            style={{ color: "#000" }}
             onClick={toggleBookmark}
           >
             {isBookmarked ? (

@@ -1,11 +1,13 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import TemplateCard from "./component/TemplateCard";
-import { fetchAllTypes } from '../../api/commonAPI';
+import { fetchAllTypes } from "../../api/commonAPI";
+import { all_routes } from "../../feature-module/router/all_routes";
 
 const Template: React.FC = () => {
   const [types, setTypes] = useState<{ id: number; name: string }[]>([]);
   const [activeTab, setActiveTab] = useState<string>("");
+  const routes = all_routes;
 
   useEffect(() => {
     const loadTypes = async () => {
@@ -22,12 +24,22 @@ const Template: React.FC = () => {
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-4">
+          <div className="mainHead pb-3 mainHeader">
+            <Link to={routes.studyTool}>
+              <div className="icon">
+                <i className="fa fa-arrow-left"></i>
+              </div>
+            </Link>
+            <h3>Template</h3>
+          </div>
           <div className="card-body">
             <ul className="nav nav-tabs nav-tabs-solid nav-tabs-rounded mb-3">
               {types.map((type, index) => (
                 <li className="nav-item" key={type.id}>
                   <Link
-                    className={`nav-link ${activeTab === type.name ? "active" : ""}`}
+                    className={`nav-link ${
+                      activeTab === type.name ? "active" : ""
+                    }`}
                     to={`#solid-rounded-tab${index + 1}`}
                     data-bs-toggle="tab"
                     onClick={() => setActiveTab(type.name)}
@@ -42,7 +54,9 @@ const Template: React.FC = () => {
               {types.map((type, index) => (
                 <div
                   key={type.id}
-                  className={`tab-pane ${activeTab === type.name ? "show active" : ""}`}
+                  className={`tab-pane ${
+                    activeTab === type.name ? "show active" : ""
+                  }`}
                   id={`solid-rounded-tab${index + 1}`}
                 >
                   <TemplateCard typeId={type.id} />

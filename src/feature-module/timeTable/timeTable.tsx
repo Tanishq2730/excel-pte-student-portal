@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { fetchTimetables } from "../../api/studyToolsAPI";
+import { Link } from "react-router-dom";
+import { all_routes } from "../../feature-module/router/all_routes";
 
 interface Day {
   day: string;
@@ -19,6 +21,7 @@ const weekDays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"];
 const TimeTable: React.FC = () => {
   const [timetables, setTimetables] = useState<Timetable[]>([]);
   const [loading, setLoading] = useState(true);
+  const routes = all_routes;
 
   useEffect(() => {
     const loadTimetables = async () => {
@@ -43,6 +46,14 @@ const TimeTable: React.FC = () => {
     <div className="page-wrappers">
       <div className="content">
         <div className="container my-4">
+          <div className="mainHead pb-3 mainHeader">
+            <Link to={routes.studyTool}>
+              <div className="icon">
+                <i className="fa fa-arrow-left"></i>
+              </div>
+            </Link>
+            <h3>Time Table</h3>
+          </div>
           {timetables.map((weekItem) => {
             // Group tasks by day
             const dayTasksMap: Record<string, string[]> = {};

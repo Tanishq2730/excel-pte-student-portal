@@ -386,7 +386,10 @@ const AdminDashboard = () => {
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl bg-danger-transparent me-2 p-1">
-                            <i className="fa fa-microphone" style={{fontSize:'2em'}}></i>
+                            <i
+                              className="fa fa-microphone"
+                              style={{ fontSize: "2em" }}
+                            ></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Speaking</p>
@@ -414,7 +417,10 @@ const AdminDashboard = () => {
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-secondary-transparent p-1">
-                            <i className="ion-edit" style={{fontSize:'2em'}}></i>
+                            <i
+                              className="ion-edit"
+                              style={{ fontSize: "2em" }}
+                            ></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Writing</p>
@@ -442,7 +448,10 @@ const AdminDashboard = () => {
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-warning-transparent p-1">
-                            <i className="ion-ios7-bookmarks"  style={{fontSize:'2em'}}></i>
+                            <i
+                              className="ion-ios7-bookmarks"
+                              style={{ fontSize: "2em" }}
+                            ></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Reading</p>
@@ -470,7 +479,10 @@ const AdminDashboard = () => {
                       <div className="card-body">
                         <div className="d-flex align-items-center">
                           <div className="avatar avatar-xl me-2 bg-success-transparent p-1">
-                            <i className="ion-headphone" style={{fontSize:'2em'}}></i>
+                            <i
+                              className="ion-headphone"
+                              style={{ fontSize: "2em" }}
+                            ></i>
                           </div>
                           <div className="overflow-hidden flex-fill">
                             <p className="mb-0">Listening</p>
@@ -503,12 +515,38 @@ const AdminDashboard = () => {
                     <div className="studyPlan">
                       <div className="calendar">
                         <Calendar
-                          className="datepickers mb-4"
+                          className="datepickers mb-1"
                           value={date}
                           onChange={(e) => setDate(e.value)}
                           inline
                           style={{ width: "100% !important" }}
                         />
+                        <div className="attemptedicon">
+                          <div className="innerattempt">
+                            <span style={{fontSize:"12px"}}>Task Completed</span>{" "}
+                            <p
+                              className="bg-success"
+                              style={{
+                                width: "1em",
+                                height: "1em",
+                                marginLeft: "10px",
+                                borderRadius: "100px",
+                              }}
+                            ></p>
+                          </div>
+                          <div className="innerattempt">
+                          <span style={{fontSize:"12px"}}>Task Not Completed</span>{" "}
+                            <p
+                              className="bg-danger"
+                              style={{
+                                width: "1em",
+                                height: "1em",
+                                marginLeft: "10px",
+                                borderRadius: "100px",
+                              }}
+                            ></p>
+                          </div>
+                        </div>
                         <StudyPlaner />
                       </div>
                     </div>
@@ -802,7 +840,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="d-flex align-items-center rounded border p-2 mb-3">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                      <i className="ion-ios7-bookmarks text-green"></i>
+                        <i className="ion-ios7-bookmarks text-green"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
@@ -823,7 +861,7 @@ const AdminDashboard = () => {
                     </div>
                     <div className="d-flex align-items-center rounded border p-2 mb-0">
                       <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-                      <i className="ion-headphone text-warning"></i>
+                        <i className="ion-headphone text-warning"></i>
                       </span>
                       <div className="w-100">
                         <div className="d-flex justify-content-between">
@@ -1034,7 +1072,10 @@ const AdminDashboard = () => {
                   <div className="card-header d-flex align-items-center justify-content-between">
                     <h4 className="card-titile">Activity History</h4>
                   </div>
-                  <div className="card-body py-1 " style={{height:"21.4em",overflowY:"scroll"}}>
+                  <div
+                    className="card-body py-1 "
+                    style={{ height: "21.4em", overflowY: "scroll" }}
+                  >
                     <ul className="list-group list-group-flush">
                       <li className="list-group-item py-3 px-0 pb-0">
                         <div className="d-flex align-items-center justify-content-between flex-wrap">

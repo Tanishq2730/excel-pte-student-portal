@@ -281,7 +281,7 @@ const MultipleChooseAnswerListen = () => {
                         <div className="">
                           <div className="card shadow-sm">
                             <div className="card-header bg-white">
-                              <h5 className="mb-0">
+                              <h5 className="mb-0 text-dark" style={{color:"#000"}}>
                                 According to paragraph, sculptors in the Italian
                                 Renaissance stopped using cannonballs in bronze
                                 statues of horses because
