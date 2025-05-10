@@ -6,6 +6,7 @@ import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
 import HighlightIncorrectWord from "./highlightIncorrectWord";
 import WriteFromDictation from "./writeFromDictation";
 import SelectMissingWord from "./selectMissingWord";
+import HighlightCorrectSummary from "./highlightCorrectSummary";
 
 interface ListeningIntroProps {
   queno: number;
@@ -19,19 +20,92 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
   setSectionPart,
 }) => {
   const [step, setStep] = useState(0);
+  const listeningQuestions = mockquestions?.listening || [];
+console.log("Listening Questions: ", listeningQuestions);
 
-  const components = [
-    <SummarizeSpokenText key="spt" />,
-    <FillIntheBlank key="fb" />,
-    <MultipleChooseSingleAnswer key="mcs" />,
-    <MultipleChooseMultipleAnswer key="mcm" />,
-    <HighlightIncorrectWord key="hiw" />,
-    <WriteFromDictation key="wd" />,
-    <SelectMissingWord key="smw" />,
-  ];
+  const getComponent = (question: any, index: number) => {
+    const subtype = question?.Subtype?.sub_name;
+
+    switch (subtype) {
+      case "Highlight Correct Summary":
+        return (
+          <HighlightCorrectSummary
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "Summarize Spoken Text":
+        return (
+          <SummarizeSpokenText
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "Fill in the Blanks":
+        return (
+          <FillIntheBlank
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "MC, Select Single Answer":
+        return (
+          <MultipleChooseSingleAnswer
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "MC, Select Multiple Answer":
+        return (
+          <MultipleChooseMultipleAnswer
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "Highlight Incorrect Words":
+        return (
+          <HighlightIncorrectWord
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "Write from Dictation":
+        return (
+          <WriteFromDictation
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      case "Select Missing Word":
+        return (
+          <SelectMissingWord
+            key={index}
+            question={question}
+            queno={queno}
+          />
+        );
+      default:
+        return <div key={index}>Unsupported listening question type</div>;
+    }
+  };
 
   const handleNext = () => {
-    setStep((prev) => Math.min(prev + 1, components.length));
+    if (step < listeningQuestions.length) {
+      setStep(step + 1);
+    } else {
+      setSectionPart(
+        <div className="container mt-5">
+          <h4>Listening section completed.</h4>
+        </div>
+      );
+    }
   };
 
   const handleSkip = () => {
@@ -43,30 +117,36 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
-            You are about to begin part 2 of the exam: Listening
+            You are about to begin part 3 of the exam: <strong>Listening</strong>
           </p>
-          <p className="font-weight-bold">Time allowed: 29-30 minutes</p>
+          <p className="font-weight-bold">Time allowed: 29–30 minutes</p>
         </div>
       ) : (
-        components[step - 1]
+        getComponent(listeningQuestions[step - 1], step - 1)
       )}
 
-      <div className="footer-v3">
+      <div className="footer-v3 mt-4">
         <div className="container">
-          <div className="row">
-            <div className="col text-left">
-              <button className="btn btn-primary" onClick={handleNext}>
-                Save & Next
+          <div className="row justify-content-between">
+            <div className="col-auto">
+              <button
+                className="btn btn-primary"
+                onClick={handleNext}
+                disabled={step > listeningQuestions.length}
+              >
+                {step === 0 ? "Start" : "Save & Next"}
               </button>
             </div>
-            <div className="col text-end">
-              <button className="btn btn-primary mx-1" onClick={handleSkip}>
-                Skip
-              </button>
-              <button className="btn btn-primary" onClick={handleNext}>
-                Next
-              </button>
-            </div>
+            {step > 0 && (
+              <div className="col-auto text-end">
+                <button className="btn btn-outline-secondary mx-1" onClick={handleSkip}>
+                  Skip
+                </button>
+                <button className="btn btn-primary" onClick={handleNext}>
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>

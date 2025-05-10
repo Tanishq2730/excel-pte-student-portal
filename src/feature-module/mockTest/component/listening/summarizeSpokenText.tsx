@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const SummarizeSpokenText: React.FC = () => {
+
+interface SummarizeSpokenTextProps {
+  question: any;
+  queno: number;
+}
+
+
+const SummarizeSpokenText: React.FC<SummarizeSpokenTextProps> = ({ question, queno }) => {
   const [countdown, setCountdown] = useState(40); // Initial countdown
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);

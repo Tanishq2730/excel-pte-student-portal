@@ -1,9 +1,4 @@
 import React, { Dispatch, SetStateAction, useState } from "react";
-import RedorderParagraph from "../reading/reorderParagraph";
-import ReadingWritingFillintheBlank from "../reading/readingWritingFillintheBlank";
-import ReadingFillintheBlank from "../reading/readingFillintheBlank";
-import McChooseSingleAnswer from "../reading/mcChooseSingleAnswer";
-import MultipleChooseMultipleAnswer from "../reading/multipleChooseMultipleAnswer";
 import SummarizeWritinText from "./summarizeWrittenText";
 import WriteEmail from "./writeEmail";
 import WriteEssay from "./writeEssay";
@@ -21,14 +16,26 @@ const WritingIntro: React.FC<WritingIntroProps> = ({
 }) => {
   const [step, setStep] = useState(0);
 
-  const components = [
-    <SummarizeWritinText key="swt" />,
-    <WriteEmail key="we" />,
-    <WriteEssay key="we2" />,
-  ];
+  const writingQuestions = mockquestions?.writing || [];
+
+  // Dynamically map subtype names to components
+  const getComponent = (question: any, index: number) => {
+    const subtype = question?.Subtype?.sub_name;
+
+    switch (subtype) {
+      case "Summarize Written Text":
+        return <SummarizeWritinText key={index} question={question} />;
+      case "Write Email":
+        return <WriteEmail key={index} question={question} />;
+      case "Write Essay":
+        return <WriteEssay key={index} question={question} />;
+      default:
+        return <div key={index}>Unsupported writing question type</div>;
+    }
+  };
 
   const handleNext = () => {
-    setStep((prev) => Math.min(prev + 1, components.length));
+    setStep((prev) => Math.min(prev + 1, writingQuestions.length));
   };
 
   const handleSkip = () => {
@@ -40,12 +47,12 @@ const WritingIntro: React.FC<WritingIntroProps> = ({
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
-            You are about to begin part 2 of the exam: Writing
+            You are about to begin part 3 of the exam: Writing
           </p>
           <p className="font-weight-bold">Time allowed: 29-30 minutes</p>
         </div>
       ) : (
-        components[step - 1]
+        getComponent(writingQuestions[step - 1], step - 1)
       )}
 
       <div className="footer-v3">
@@ -59,9 +66,6 @@ const WritingIntro: React.FC<WritingIntroProps> = ({
             <div className="col text-end">
               <button className="btn btn-primary mx-1" onClick={handleSkip}>
                 Skip
-              </button>
-              <button className="btn btn-primary" onClick={handleNext}>
-                Next
               </button>
             </div>
           </div>

@@ -1,13 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import AudioPlayer from "../audioPlayer";
 
-interface MissingWordProps {
+interface CorrectWordProps {
   question: any;
   queno: number;
 }
 
-const SelectMissingWord: React.FC<MissingWordProps> = ({ question, queno }) => {
- const preparationTime = question?.Subtype?.beginning_in || 0;
+const HighlightCorrectSummary: React.FC<CorrectWordProps> = ({ question, queno }) => {
+  const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
   const [showCountdown, setShowCountdown] = useState(false); // control countdown visibility
@@ -123,14 +123,6 @@ useEffect(() => {
           <AudioPlayer questionData={question} />
         ) : null}
 
-           <div className="recorderQuestion mt-3">
-          <div
-            dangerouslySetInnerHTML={{
-              __html: question.question,
-            }}
-          />
-        </div>
-
       {/* Options */}
       <div className="card p-3 mt-4">
         {options.map((option) => (
@@ -160,4 +152,4 @@ useEffect(() => {
   );
 };
 
-export default SelectMissingWord;
+export default HighlightCorrectSummary;

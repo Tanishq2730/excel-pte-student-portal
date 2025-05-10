@@ -1,13 +1,14 @@
 import React, { useState } from "react";
 
-const WriteEmail: React.FC = () => {
+const WriteEmail: React.FC<{ question: any }> = ({ question }) => {
   return (
     <div className="container mt-3">
       <div className="card p-3">
-        <p>
-          The 1920's movie goers experience was largely dominated by silent
-          movies but saw the introduction of synchronized sound.
-        </p>
+        <div
+            dangerouslySetInnerHTML={{
+              __html: question.question,
+            }}
+          />
       </div>
       <div className="card p-3 mt-3">
         <textarea

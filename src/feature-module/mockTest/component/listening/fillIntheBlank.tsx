@@ -1,44 +1,179 @@
 import React, { useEffect, useRef, useState } from "react";
+import AudioPlayer from "../audioPlayer";
+import parse, { DOMNode, Element } from "html-react-parser";
 
-const FillIntheBlank: React.FC = () => {
-  const [countdown, setCountdown] = useState(40); // Initial countdown
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(40); // Recording duration
+interface FillInTheBlankProps {
+  question: any;
+  queno: number;
+}
 
-  const timerRef = useRef<number | null>(null);
-  const recordingRef = useRef<number | null>(null);
 
-  // Countdown before recording starts
+const FillIntheBlank: React.FC<FillInTheBlankProps> = ({ question, queno }) => {
+
+  const preparationTime = question?.Subtype?.beginning_in || 0;
+  const [isPlayback, setIsPlayback] = useState(true); // preparation progress
+  const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
+  const [showCountdown, setShowCountdown] = useState(false); // control countdown visibility
+  const [showAudio, setShowAudio] = useState(false); // show audio only after countdown 
+  const [checkedOptions, setCheckedOptions] = useState<string[]>([]);
+  const [progress, setProgress] = useState(0);
+  const [answers, setAnswers] = useState<{ [key: number]: string }>({});
+  const [usedWords, setUsedWords] = useState<string[]>([]);
+  const [showAnswer, setShowAnswer] = useState(false);
+  const progressRef = useRef<number | null>(null);
+  const countdownRef = useRef<number | null>(null);
+
+  // Start the progress bar for preparation time
   useEffect(() => {
-    if (countdown > 0) {
-      timerRef.current = window.setTimeout(
-        () => setCountdown(countdown - 1),
-        1000
-      );
+    if (!isPlayback) return;
+
+    let elapsed = 0;
+    const interval = 100;
+    const totalDuration = preparationTime * 1000;
+
+    progressRef.current = window.setInterval(() => {
+      elapsed += interval;
+      setProgress(Math.min((elapsed / totalDuration) * 100, 100));
+
+      if (elapsed >= totalDuration) {
+        clearInterval(progressRef.current!);
+        setIsPlayback(false);
+        setShowCountdown(true); // start countdown after preparation
+      }
+    }, interval);
+
+    return () => clearInterval(progressRef.current!);
+  }, [isPlayback, preparationTime]);
+
+  // Countdown effect
+  useEffect(() => {
+    if (!showCountdown || countdown <= 0) return;
+
+    const timer = window.setTimeout(() => {
+      if (countdown === 1) {
+        setShowCountdown(false);
+        setShowAudio(true); // finally show audio
+      }
+      setCountdown((prev) => prev - 1);
+    }, 1000);
+
+    return () => clearTimeout(timer);
+  }, [showCountdown, countdown]);
+
+
+  const dragDropOptions = question?.drag_drop
+    ? question.drag_drop.split(",").map((text: any) => text.trim())
+    : [];
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement | HTMLSpanElement>,
+    word: string
+  ) => {
+    e.dataTransfer.setData("text/plain", word);
+  };
+
+  const handleDrop = (e: React.DragEvent, index: number | null = null) => {
+    e.preventDefault();
+    const word = e.dataTransfer.getData("text/plain");
+
+    if (index !== null) {
+      setAnswers((prevAnswers) => {
+        const existingWord = prevAnswers[index];
+
+        if (existingWord === word) return prevAnswers; // if same word, do nothing
+
+        const updatedAnswers = { ...prevAnswers, [index]: word };
+
+        // Remove old word from usedWords if present
+        if (existingWord) {
+          setUsedWords((prevUsed) =>
+            prevUsed.filter((w) => w !== existingWord)
+          );
+        }
+
+        // Add new word to usedWords if not already present
+        setUsedWords((prevUsed) =>
+          prevUsed.includes(word) ? prevUsed : [...prevUsed, word]
+        );
+
+        return updatedAnswers;
+      });
     } else {
-      setIsRecording(true);
+      // Dropping back into word bank
+      const indexToRemove = Object.keys(answers).find(
+        (key) => answers[parseInt(key, 10)] === word
+      );
+      if (indexToRemove !== undefined) {
+        setAnswers((prev) => {
+          const newAnswers = { ...prev };
+          delete newAnswers[parseInt(indexToRemove)];
+          return newAnswers;
+        });
+        setUsedWords((prev) => prev.filter((w) => w !== word));
+      }
     }
-    return () => clearTimeout(timerRef.current!);
-  }, [countdown]);
+  };
 
-  // Recording timer
-  useEffect(() => {
-    if (isRecording && recordingTimeLeft > 0) {
-      recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev) => prev - 1);
-        setRecordingProgress(((40 - recordingTimeLeft + 1) / 40) * 100);
-      }, 1000);
-    }
-    return () => clearTimeout(recordingRef.current!);
-  }, [isRecording, recordingTimeLeft]);
+  const handleDragOver = (e: React.DragEvent) => {
+    e.preventDefault();
+  };
+
+  let blankCounter = 0;
+
+  const correctAnswers = question?.answer_american
+    ? question.answer_american.split(",").map((ans: any) => ans.trim())
+    : [];
+
+  const customParseOptions = {
+    replace: (domNode: DOMNode) => {
+      if (
+        (domNode as Element).name === "span" &&
+        (domNode as Element).attribs?.class === "blank"
+      ) {
+        const currentIndex = blankCounter++;
+
+        const userAnswer = answers[currentIndex];
+        const correctAnswer = correctAnswers[currentIndex];
+
+        const isCorrect = showAnswer && userAnswer === correctAnswer;
+        const isFilled = !!userAnswer;
+
+        return (
+          <span
+            key={currentIndex}
+            onDrop={(e) => handleDrop(e, currentIndex)}
+            onDragOver={handleDragOver}
+            style={{
+              borderBottom: "2px dashed #aaa",
+              padding: "2px 10px",
+              minWidth: "60px",
+              marginRight: "4px",
+              textAlign: "center",
+              backgroundColor: isCorrect
+                ? "#d4edda" // ✅ Green for correct answer
+                : isFilled && showAnswer
+                  ? "#f8d7da" // ❌ Light red for incorrect (optional)
+                  : "#fff",
+              display: "inline-block",
+              cursor: "pointer",
+            }}
+          >
+            {userAnswer || "___"}
+          </span>
+        );
+      }
+    },
+  };
+
+  const availableWords = dragDropOptions.filter(
+    (word: any) => !usedWords.includes(word)
+  );
 
   return (
     <div className="container mt-3">
-      <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 40 seconds to read aloud.
-      </p>
+      <p>{question?.question_name}</p>
+
+      {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">
         <div className="recorder">
           <div
@@ -48,15 +183,13 @@ const FillIntheBlank: React.FC = () => {
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
               width: "fit-content",
+              marginBottom: "15px",
             }}
           >
-            <p style={{ marginBottom: 5 }}>Recorded Answer</p>
-            <p style={{ marginBottom: 5 }}>Current status :</p>
-            <h4 style={{ marginTop: 0 }}>
-              {isRecording
-                ? "Recording...."
-                : `Beginning in ${countdown} Seconds`}
-            </h4>
+            <p style={{ fontWeight: 600, marginBottom: 5 }}>Current status :</p>
+            <h3 style={{ marginTop: 0 }}>
+              {isPlayback ? "Preparing..." : countdown > 0 ? "Starting soon..." : "Completed"}
+            </h3>
             <div
               style={{
                 height: 8,
@@ -64,30 +197,63 @@ const FillIntheBlank: React.FC = () => {
                 borderRadius: 10,
                 position: "relative",
                 overflow: "hidden",
-                marginTop: 10,
               }}
             >
               <div
                 style={{
                   height: "100%",
-                  width: isRecording ? `${recordingProgress}%` : "0%",
-                  backgroundColor: "#111",
-                  transition: "width 1s linear",
+                  width: `${progress}%`,
+                  backgroundColor: "#aaa",
                   borderRadius: 10,
+                  transition: "width 0.1s linear",
                 }}
               ></div>
             </div>
+            <div style={{ textAlign: "right", marginTop: 5 }}>
+              <span style={{ color: "red", fontSize: 20 }}>🔊</span>
+            </div>
           </div>
         </div>
+      </div>
 
-        <div className="card p-3 mt-4">
-          <p>
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout. The point
-            of using Lorem Ipsum is that it has a more-or-less normal
-            distribution of letters, as opposed to using 'Content here, content
-            here', making it look like readable English.
-          </p>
+      {/* Countdown or AudioPlayer */}
+      {isPlayback ? null : showCountdown ? (
+        <div className="text-center mb-3">
+          <h5>Get ready... starting in {countdown}s</h5>
+        </div>
+      ) : showAudio ? (
+        <AudioPlayer questionData={question} />
+      ) : null}
+
+      {/* Options */}
+      <div className="card p-3 mt-4">
+        <div
+          className="p-4 space-y-4 fillDropdown"
+          style={{ fontSize: "1.25rem" }}
+        >
+          {parse(
+            question?.question || "",
+            customParseOptions
+          )}
+
+          <div
+            className="innercontent mt-4"
+            onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
+            onDragOver={handleDragOver} // Allow drop
+          >
+            <div className="selectableBtn d-flex flex-wrap gap-2">
+              {availableWords.map((word:any, idx:any) => (
+                <div
+                  key={idx}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, word)}
+                  className="btn btn-soft-secondary rounded-pill"
+                >
+                  {word}
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </div>

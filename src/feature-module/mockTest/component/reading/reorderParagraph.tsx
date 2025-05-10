@@ -1,6 +1,12 @@
 import React, { useState } from "react";
-import ParaReorder from "../../../practice/component/paraReorder";
-const RedorderParagraph: React.FC = () => {
+import MockParaReorder from "../MockParaReorder";
+
+const RedorderParagraph: React.FC<{ question: any }> = ({ question }) => {
+
+    const [showAnswer, setShowAnswer] = useState(false);
+    const [answers, setAnswers] = useState<string[]>([]);
+    const [resetParaReorder, setResetParaReorder] = useState(false);
+
   return (
     <div className="container mt-3">
       <p>
@@ -8,7 +14,11 @@ const RedorderParagraph: React.FC = () => {
         correct word in the drop-down box.
       </p>
       <div className="card p-3">
-        Reorder
+        <MockParaReorder
+          questionData={question}
+          onAnswerChange={setAnswers}
+          resetTrigger={resetParaReorder}
+        />
       </div>
     </div>
   );

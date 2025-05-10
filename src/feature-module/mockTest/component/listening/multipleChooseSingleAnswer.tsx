@@ -1,44 +1,77 @@
 import React, { useEffect, useRef, useState } from "react";
+import AudioPlayer from "../audioPlayer";
 
-const MultipleChooseSingleAnswer: React.FC = () => {
-  const [countdown, setCountdown] = useState(40); // Initial countdown
-  const [isRecording, setIsRecording] = useState(false);
-  const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(40); // Recording duration
+interface SingleAnswerProps {
+  question: any;
+  queno: number;
+}
 
-  const timerRef = useRef<number | null>(null);
-  const recordingRef = useRef<number | null>(null);
+const MultipleChooseSingleAnswer: React.FC<SingleAnswerProps> = ({ question, queno }) => {
+ const preparationTime = question?.Subtype?.beginning_in || 0;
+  const [isPlayback, setIsPlayback] = useState(true); // preparation progress
+  const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
+  const [showCountdown, setShowCountdown] = useState(false); // control countdown visibility
+  const [showAudio, setShowAudio] = useState(false); // show audio only after countdown
+  const [checkedOptions, setCheckedOptions] = useState<string | null>(null);
+  const [progress, setProgress] = useState(0);
 
-  // Countdown before recording starts
+  const progressRef = useRef<number | null>(null);
+  const countdownRef = useRef<number | null>(null);
+
+  // Start the progress bar for preparation time
   useEffect(() => {
-    if (countdown > 0) {
-      timerRef.current = window.setTimeout(
-        () => setCountdown(countdown - 1),
-        1000
-      );
-    } else {
-      setIsRecording(true);
-    }
-    return () => clearTimeout(timerRef.current!);
-  }, [countdown]);
+  if (!isPlayback) return;
 
-  // Recording timer
-  useEffect(() => {
-    if (isRecording && recordingTimeLeft > 0) {
-      recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev) => prev - 1);
-        setRecordingProgress(((40 - recordingTimeLeft + 1) / 40) * 100);
-      }, 1000);
+  let elapsed = 0;
+  const interval = 100;
+  const totalDuration = preparationTime * 1000;
+
+  progressRef.current = window.setInterval(() => {
+    elapsed += interval;
+    setProgress(Math.min((elapsed / totalDuration) * 100, 100));
+
+    if (elapsed >= totalDuration) {
+      clearInterval(progressRef.current!);
+      setIsPlayback(false);
+      setShowCountdown(true); // start countdown after preparation
     }
-    return () => clearTimeout(recordingRef.current!);
-  }, [isRecording, recordingTimeLeft]);
+  }, interval);
+
+  return () => clearInterval(progressRef.current!);
+}, [isPlayback, preparationTime]);
+
+// Countdown effect
+useEffect(() => {
+  if (!showCountdown || countdown <= 0) return;
+
+  const timer = window.setTimeout(() => {
+    if (countdown === 1) {
+      setShowCountdown(false);
+      setShowAudio(true); // finally show audio
+    }
+    setCountdown((prev) => prev - 1);
+  }, 1000);
+
+  return () => clearTimeout(timer);
+}, [showCountdown, countdown]);
+
+  const options = [
+    { id: "A", text: question?.option_one },
+    { id: "B", text: question?.option_two },
+    { id: "C", text: question?.option_three },
+    { id: "D", text: question?.option_four },
+    { id: "E", text: question?.option_five },
+  ].filter((option) => option.text?.trim() !== "");
+
+  const handleChange = (optionId: string) => {
+    setCheckedOptions(optionId);
+  };
 
   return (
     <div className="container mt-3">
-      <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 40 seconds to read aloud.
-      </p>
+      <p>{question?.question_name}</p>
+
+      {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">
         <div className="recorder">
           <div
@@ -48,15 +81,13 @@ const MultipleChooseSingleAnswer: React.FC = () => {
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
               width: "fit-content",
+              marginBottom: "15px",
             }}
           >
-            <p style={{ marginBottom: 5 }}>Recorded Answer</p>
-            <p style={{ marginBottom: 5 }}>Current status :</p>
-            <h4 style={{ marginTop: 0 }}>
-              {isRecording
-                ? "Recording...."
-                : `Beginning in ${countdown} Seconds`}
-            </h4>
+            <p style={{ fontWeight: 600, marginBottom: 5 }}>Current status :</p>
+            <h3 style={{ marginTop: 0 }}>
+              {isPlayback ? "Preparing..." : countdown > 0 ? "Starting soon..." : "Completed"}
+            </h3>
             <div
               style={{
                 height: 8,
@@ -64,77 +95,59 @@ const MultipleChooseSingleAnswer: React.FC = () => {
                 borderRadius: 10,
                 position: "relative",
                 overflow: "hidden",
-                marginTop: 10,
               }}
             >
               <div
                 style={{
                   height: "100%",
-                  width: isRecording ? `${recordingProgress}%` : "0%",
-                  backgroundColor: "#111",
-                  transition: "width 1s linear",
+                  width: `${progress}%`,
+                  backgroundColor: "#aaa",
                   borderRadius: 10,
+                  transition: "width 0.1s linear",
                 }}
               ></div>
             </div>
-          </div>
-        </div>
-
-        <div className="card p-3 mt-4">
-          <div className="col-12 col-md-12">
-            <div className="d-flex align-items-center border rounded p-3 h-100">
-              <input
-                type="radio"
-                name="mcq-option"
-                className="form-check-input m-auto me-3"
-                id="option-A"
-              />
-              <label
-                htmlFor="option-A"
-                className="d-flex align-items-center w-100"
-              >
-                <div
-                  className="me-3 d-flex justify-content-center align-items-center bg-primary text-white fw-bold rounded"
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    minWidth: "30px",
-                  }}
-                >
-                  A
-                </div>
-                <span>This is static option A</span>
-              </label>
-            </div>
-          </div>
-
-          <div className="col-12 col-md-12 mt-3">
-            <div className="d-flex align-items-center border rounded p-3 h-100">
-              <input
-                type="radio"
-                name="mcq-option"
-                className="form-check-input m-auto me-3"
-                id="option-B"
-              />
-              <label
-                htmlFor="option-B"
-                className="d-flex align-items-center w-100"
-              >
-                <div
-                  className="me-3 d-flex justify-content-center align-items-center bg-primary text-white fw-bold rounded"
-                  style={{
-                    width: "30px",
-                    height: "30px",
-                    minWidth: "30px",
-                  }}
-                >
-                  B
-                </div>
-                <span>This is static option B</span>
-              </label>
+            <div style={{ textAlign: "right", marginTop: 5 }}>
+              <span style={{ color: "red", fontSize: 20 }}>🔊</span>
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Countdown or AudioPlayer */}
+      {isPlayback ? null : showCountdown ? (
+          <div className="text-center mb-3">
+            <h5>Get ready... starting in {countdown}s</h5>
+          </div>
+        ) : showAudio ? (
+          <AudioPlayer questionData={question} />
+        ) : null}
+
+
+      {/* Options */}
+      <div className="card p-3 mt-4">
+        {options.map((option) => (
+          <div key={option.id} className="col-12 col-md-12">
+            <div className="d-flex align-items-start border rounded p-3 h-100">
+              <input
+                type="radio"
+                className="form-check-input m-auto me-3"
+                id={`option-${option.id}`}
+                checked={checkedOptions === option.id}
+                onChange={() => handleChange(option.id)}
+              />
+              <label htmlFor={`option-${option.id}`} className="d-flex align-items-center w-100">
+                <div
+                  className="me-3 d-flex justify-content-center align-items-center bg-primary text-white fw-bold rounded"
+                  style={{ width: "30px", height: "30px", minWidth: "30px" }}
+                >
+                  {option.id}
+                </div>
+                <span>{option.text}</span>
+              </label>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
