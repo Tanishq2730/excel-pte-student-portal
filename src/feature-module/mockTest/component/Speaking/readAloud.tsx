@@ -1,18 +1,23 @@
 import React, { useEffect, useRef, useState } from "react";
+import { image_url } from "../../../../environment";
 
 const ReadAloud: React.FC<{ question: any }> = ({ question }) => {
-  const [countdown, setCountdown] = useState(40); // Initial countdown
+  const [countdown, setCountdown] = useState(question.Subtype.preparation_time); // Countdown based on preparation time
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(40); // Recording duration
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(question.Subtype.recording_time); // Recording time from the question data
 
   const timerRef = useRef<number | null>(null);
   const recordingRef = useRef<number | null>(null);
 
   // Countdown before recording starts
+  // Countdown before recording starts
   useEffect(() => {
     if (countdown > 0) {
-      timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
+      timerRef.current = window.setTimeout(
+        () => setCountdown(countdown - 1),
+        1000
+      );
     } else {
       setIsRecording(true);
     }
@@ -23,8 +28,8 @@ const ReadAloud: React.FC<{ question: any }> = ({ question }) => {
   useEffect(() => {
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev) => prev - 1);
-        setRecordingProgress(((40 - recordingTimeLeft + 1) / 40) * 100);
+        setRecordingTimeLeft((prev: number) => prev - 1);
+        setRecordingProgress(((question.Subtype.recording_time - recordingTimeLeft + 1) / question.Subtype.recording_time) * 100);
       }, 1000);
     }
     return () => clearTimeout(recordingRef.current!);
@@ -78,12 +83,11 @@ const ReadAloud: React.FC<{ question: any }> = ({ question }) => {
         </div>
 
         <div className="recorderQuestion mt-3">
-          <p>
-            Globalization refers to a set of changes rather than a single
-            change. Many of these changes are social, cultural and political
-            rather than purely economic, and one of the main drivers in addition
-            to the global marketplace is the communication revolution.
-          </p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: question.question,
+            }}
+          />
         </div>
       </div>
     </div>

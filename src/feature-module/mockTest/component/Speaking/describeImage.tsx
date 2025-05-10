@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { image_url } from "../../../../environment";
+
 const DescribeImage: React.FC<{ question: any }> = ({ question }) => {
   const [countdown, setCountdown] = useState(question.Subtype.preparation_time); // Countdown based on preparation time
   const [isRecording, setIsRecording] = useState(false);

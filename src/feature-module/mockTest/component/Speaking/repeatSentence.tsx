@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 
 const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
-  const [countdown, setCountdown] = useState(40);
-  const [isRecording, setIsRecording] = useState(false);
+
   const [isPlayback, setIsPlayback] = useState(true);
   const [playbackProgress, setPlaybackProgress] = useState(0);
+  const [countdown, setCountdown] = useState(question.Subtype.preparation_time); // Countdown based on preparation time
+  const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(40);
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(question.Subtype.recording_time);
 
   const playbackRef = useRef<number | null>(null);
+  const timerRef = useRef<number | null>(null);
   const recordingRef = useRef<number | null>(null);
 
   // Simulate 5s audio playback before recording
@@ -30,22 +32,24 @@ const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
     return () => clearInterval(playbackRef.current!);
   }, [isPlayback]);
 
-  // Countdown before recording starts
   useEffect(() => {
-    if (!isPlayback && countdown > 0) {
-      const timer = window.setTimeout(() => setCountdown(countdown - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (countdown === 0 && !isPlayback) {
+    if (countdown > 0) {
+      timerRef.current = window.setTimeout(
+        () => setCountdown(countdown - 1),
+        1000
+      );
+    } else {
       setIsRecording(true);
     }
-  }, [countdown, isPlayback]);
+    return () => clearTimeout(timerRef.current!);
+  }, [countdown]);
 
   // Recording timer
   useEffect(() => {
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev) => prev - 1);
-        setRecordingProgress(((40 - recordingTimeLeft + 1) / 40) * 100);
+        setRecordingTimeLeft((prev: number) => prev - 1);
+        setRecordingProgress(((question.Subtype.recording_time - recordingTimeLeft + 1) / question.Subtype.recording_time) * 100);
       }, 1000);
     }
     return () => clearTimeout(recordingRef.current!);
@@ -97,6 +101,7 @@ const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
           </div>
 
           {/* Recording Card */}
+
           <div
             style={{
               border: "1px solid #111",
@@ -106,15 +111,13 @@ const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
               width: "fit-content",
             }}
           >
-            <p style={{ fontWeight: 500, marginBottom: 5 }}>Recorded Answer</p>
-            <p style={{ fontWeight: 600, marginBottom: 5 }}>Current Status:</p>
-            <h3 style={{ marginTop: 0 }}>
+            <p style={{ marginBottom: 5 }}>Recorded Answer</p>
+            <p style={{ marginBottom: 5 }}>Current status :</p>
+            <h4 style={{ marginTop: 0 }}>
               {isRecording
                 ? "Recording...."
-                : countdown > 0
-                ? `Beginning in ${countdown} Seconds`
-                : "Waiting..."}
-            </h3>
+                : `Beginning in ${countdown} Seconds`}
+            </h4>
             <div
               style={{
                 height: 8,
@@ -122,12 +125,13 @@ const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
                 borderRadius: 10,
                 position: "relative",
                 overflow: "hidden",
+                marginTop: 10,
               }}
             >
               <div
                 style={{
                   height: "100%",
-                  width: `${recordingProgress}%`,
+                  width: isRecording ? `${recordingProgress}%` : "0%",
                   backgroundColor: "#111",
                   transition: "width 1s linear",
                   borderRadius: 10,
@@ -138,12 +142,11 @@ const RepeatSentence: React.FC<{ question: any }> = ({ question }) => {
         </div>
 
         <div className="recorderQuestion mt-3">
-          <p>
-            Globalization refers to a set of changes rather than a single
-            change. Many of these changes are social, cultural and political
-            rather than purely economic, and one of the main drivers in addition
-            to the global marketplace is the communication revolution.
-          </p>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: question.question,
+            }}
+          />
         </div>
       </div>
     </div>
