@@ -11,7 +11,7 @@ const MultipleChooseMultipleAnswer: React.FC = () => {
 
   // Countdown before recording starts
   useEffect(() => {
-    if (countdown > 0) {
+    if (countdown > 0) {  
       timerRef.current = window.setTimeout(
         () => setCountdown(countdown - 1),
         1000

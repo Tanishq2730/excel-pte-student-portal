@@ -2,6 +2,7 @@ import React, { Dispatch, SetStateAction, useState } from "react";
 import ReadAloud from "./readAloud";
 import RepeatSentence from "./repeatSentence";
 import DescribeImage from "./describeImage";
+import RetellLecture from "./retellLecture";
 
 interface SpeakingIntroProps {
   queno: number;
@@ -27,6 +28,8 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
         return <RepeatSentence key={index} question={question} />;
       case "Describe Image":
         return <DescribeImage key={index} question={question} />;
+      case "Retell Lecture":
+        return <RetellLecture />;
       default:
         return <div key={index}>Unsupported question type</div>;
     }
