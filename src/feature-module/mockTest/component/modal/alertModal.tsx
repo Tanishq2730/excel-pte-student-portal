@@ -38,11 +38,11 @@ const AlertModal: React.FC<AlertModalProps> = ({
         <br />
         <p>Click "Continue" to start the test.</p>
         <br />
-        <button className="btn-theme-v3 save" onClick={onButtonClick}>
+        <button className="btn btn-primary save" onClick={onButtonClick}>
           Continue
         </button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <button className="btn-theme-v3" onClick={onCloseClick}>
+        <button className="btn btn-primary" onClick={onCloseClick}>
           No
         </button>
       </Modal.Body>

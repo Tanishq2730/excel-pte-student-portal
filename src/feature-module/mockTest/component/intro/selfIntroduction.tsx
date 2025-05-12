@@ -169,7 +169,7 @@ console.log("session_id", session_id);
           <div className="modal-backdrop">
             <div className="modal-box">
               <h4>Time is up!</h4>
-              <button onClick={() => setRecordingStoppedModal(false)}>
+              <button className="btn btn-primary mt-3" onClick={() => setRecordingStoppedModal(false)}>
                 Close
               </button>
             </div>

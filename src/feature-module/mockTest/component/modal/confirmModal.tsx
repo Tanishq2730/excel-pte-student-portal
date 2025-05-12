@@ -34,11 +34,11 @@ const ConfirmModal: React.FC<ConfirmModalProps> = ({ show, onHide, onButtonClick
           Are you sure if you want to submit this answer and go to the next question?
         </p>
         <br />
-        <button className="btn-theme-v3 save" onClick={onButtonClick}>
+        <button className="btn btn-primary save" onClick={onButtonClick}>
           Yes
         </button>
         &nbsp;&nbsp;&nbsp;&nbsp;
-        <button className="btn-theme-v3" onClick={closeModal}>
+        <button className="btn btn-primary" onClick={closeModal}>
           No
         </button>
       </Modal.Body>

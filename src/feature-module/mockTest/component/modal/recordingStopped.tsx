@@ -25,7 +25,7 @@ const RecordingStoppedModal: React.FC<RecordingStoppedModalProps> = ({
         <br />
         <p>Please click "Next" to go to the next question</p>
         <br />
-        <button className="btn-theme-v3" onClick={onButtonClick}>
+        <button className="btn btn-primary mt-2" onClick={onButtonClick}>
           Next
         </button>
       </Modal.Body>

@@ -28,7 +28,7 @@ const CannotSkipModal: React.FC<CannotSkipProps> = ({ show, onHide }) => {
           You need to finish answering this question before going to the next.
         </p>
         <br />
-        <button className="btn-theme-v3" onClick={closeModal}>
+        <button className="btn btn-primary mt-2" onClick={closeModal}>
           Close
         </button>
       </Modal.Body>

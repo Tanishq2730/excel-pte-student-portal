@@ -143,7 +143,7 @@ const MockTest: React.FC = () => {
         <div className="modal-backdrop">
           <div className="modal-box">
             <h4>Please complete your self-introduction recording before continuing.</h4>
-            <button onClick={() => setCannotSkipModal(false)}>OK</button>
+            <button className="btn btn-primary mt-3" onClick={() => setCannotSkipModal(false)}>OK</button>
           </div>
         </div>
       )}
