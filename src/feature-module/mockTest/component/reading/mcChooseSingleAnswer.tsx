@@ -1,9 +1,17 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
+import { useParams } from 'react-router-dom';
+interface getProps {
+  question: any;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
+}
 
-const McChooseSingleAnswer: React.FC<{ question: any }> = ({ question }) => {
-  console.log("question", question);
+const McChooseSingleAnswer: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+  //console.log("question", question);
   const [checkedOptions, setCheckedOptions] = useState<string | null>(null);
-
+  const timeStartRef = useRef(Date.now());
+  const { id,session_id } = useParams<{ id: string,session_id:any }>(); 
+ 
   const options = [
     { id: "A", text: question?.option_one },
     { id: "B", text: question?.option_two },
@@ -15,6 +23,48 @@ const McChooseSingleAnswer: React.FC<{ question: any }> = ({ question }) => {
   const handleChange = (optionId: string) => {
     setCheckedOptions(optionId);
   };
+
+ const handleSubmit = () => {
+    if (!checkedOptions) {
+      return false;
+    }
+
+    const correctAnswer = question?.answer_american || "";
+    const correctAnswers = correctAnswer.split(",");
+    const isCorrect = correctAnswers.includes(checkedOptions);
+    const score = isCorrect ? 1 : 0;
+    const totalscore = correctAnswers.length;
+
+    const score_data = {
+      user_answer: checkedOptions,
+      correct_answer: correctAnswers,
+      score,
+    };
+
+    const timeSpent = Math.floor((Date.now() - timeStartRef.current) / 1000);
+
+    const payload = {
+      questionId: question.id,
+      mocktest_id: id,
+      sessionId: session_id,
+      totalscore,
+      lateSpeak: 1,
+      score,
+      score_data: JSON.stringify(score_data),
+      answer: checkedOptions,
+    };
+
+    // Instead of calling setAnswer directly, we'll return the answer as an object
+    return payload;
+  };
+
+    useEffect(() => {
+      setCheckedOptions(null); // Reset selection on question change
+    }, [question]);
+    useEffect(() => {
+      registerSubmit(handleSubmit); // Register new submit function on change
+    }, [question, checkedOptions]);
+  
 
   return (
     <div className="container mt-3">

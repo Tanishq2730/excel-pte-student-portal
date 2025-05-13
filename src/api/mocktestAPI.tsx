@@ -27,3 +27,11 @@ export const fetchMocktests = async (id: number) => {
   export const mockTestQuestions = async (mocktestId:any) => {
       return await apiHandler(`${api_url}v1/mocktest/${mocktestId}/questions`, "GET");
   };
+
+  export const saveMocktestQuestion = async  (type:any,formData: any) => {
+      return await apiHandler(`${api_url}v1/mocktests/save`, "POST",formData,type && true);
+  };
+
+  export const saveFinalMocktest = async  (formData:any) => {
+      return await apiHandler(`${api_url}v1/mocktests/final-save`, "POST",formData);
+  };

@@ -1,11 +1,61 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import parse, { DOMNode, Element } from "html-react-parser";
+import { useParams } from 'react-router-dom';
 
-const ReadingFillintheBlank: React.FC<{ question: any }> = ({ question }) => {
+interface getProps {
+  question: any;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => any) => void;
+}
+const ReadingFillintheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
 
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [usedWords, setUsedWords] = useState<string[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
+
+  const handleSubmit = () => {
+    const userAnswerArray = Object.values(answers);
+    const correctAnswerArray = correctAnswers;
+    let user_answer = userAnswerArray.join(",").trim();
+    let score = 0;
+    const resultDetails = [];
+
+    for (let i = 0; i < correctAnswerArray.length; i++) {
+      const userAns = userAnswerArray[i]?.trim() || "";
+      const correctAns = correctAnswerArray[i]?.trim();
+
+      const isCorrect = userAns === correctAns;
+
+      resultDetails.push({
+        userAnswer: userAns,
+        correctAnswer: correctAns,
+        isCorrect,
+      });
+
+      score += isCorrect ? 1 : 0;
+    }
+
+    const payload = {
+      questionId: question.id,
+      totalscore: correctAnswerArray.length,
+      mocktest_id: id,
+      sessionId: session_id,
+      score,
+      answer: user_answer,
+      score_data: JSON.stringify({
+        user_question: question.question,
+        user_answer: user_answer,
+        answer: correctAnswers,
+      }),
+    };
+
+    return payload;
+  };
+
+  useEffect(() => {
+    registerSubmit(handleSubmit);
+  }, [answers]);
 
   const dragDropOptions = question?.drag_drop
     ? question.drag_drop.split(",").map((text: any) => text.trim())

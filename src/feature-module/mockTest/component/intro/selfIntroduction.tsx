@@ -63,38 +63,45 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal,setCannot
     
     setRecordedAudioBlob(audioBlob);
     setRecordedAudioUrl(audioUrl);
+    handleStopRecording(audioBlob, audioUrl); // Pass values directly
   };
 
-  const handleStopRecording = async () => {
+ const handleStopRecording = async (
+  audioBlobParam?: Blob,
+  audioUrlParam?: string
+) => {
   setCannotSkipModal(false);
   setResetRecording(true);
   SpeechRecognition.stopListening();
   resetTranscript();
   setTimeout(() => setResetRecording(false), 100);
   setRecordingDone(true);
-  LoadFinal(); // ✅ Inform parent
+  LoadFinal();
 
-  if (recordedAudioBlob && id && session_id) {
+  const blobToUse = audioBlobParam || recordedAudioBlob;
+  const urlToUse = audioUrlParam || recordedAudioUrl;
+
+  console.log("recordedAudioBlob", blobToUse);
+  console.log("recordedAudioUrl", urlToUse);
+  console.log("id", id);
+
+  if (blobToUse && id && session_id) {
     try {
-      const formData = new FormData();      
-      if (recordedAudioBlob) {
-        const audioFile = new File([recordedAudioBlob], "answer.wav", {
-          type: "audio/wav",
-        });
-        formData.append("answer", audioFile);
-      }
-
+      const formData = new FormData();
+      const audioFile = new File([blobToUse], "answer.wav", {
+        type: "audio/wav",
+      });
+      formData.append("answer", audioFile);
       formData.append("mocktestId", id);
       formData.append("sessionid", session_id);
 
       const response = await saveIntroduction(formData);
-      console.log("Self introduction saved:", response);
     } catch (err) {
       console.error("Error saving self-introduction:", err);
     }
   }
 };
-console.log("session_id", session_id);
+
 
   return (
     <div>
