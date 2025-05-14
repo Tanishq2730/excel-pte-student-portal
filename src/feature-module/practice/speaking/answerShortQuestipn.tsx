@@ -26,6 +26,7 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
 import PageHeading from "../component/pageHeading";
+import AudioPlayer from "../component/audioPlayer";
 
 interface Timestamp {
   word: string;
@@ -588,7 +589,7 @@ const AnswerShortQuestion = () => {
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
-                    <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
+                    {/* <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
                       <button
                         className="btn btn-outline-secondary rounded-circle me-3"
                         onClick={togglePlay}
@@ -633,7 +634,8 @@ const AnswerShortQuestion = () => {
                       </select>
 
                       <audio ref={audioRef} src={url} preload="metadata" />
-                    </div>
+                    </div> */}
+                    <AudioPlayer/>
                   </div>
                   <div className="micSection">
                     <Recorder

@@ -2631,6 +2631,9 @@ body.app-chat {
 
 .answerCard {
   background-color: rgb(228, 246, 255) !important;
+  p{
+    font-size: 16px;
+  }
 }
 
 .hiIhZW {
@@ -2695,4 +2698,12 @@ body.app-chat {
       color: #fff;
     }
   }
+}
+
+.scorebtnClose{
+  background-color: #fff !important;
+}
+
+.headerpersonicon{
+  color: #4c4c4c !important;
 }

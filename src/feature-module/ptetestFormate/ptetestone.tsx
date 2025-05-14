@@ -99,7 +99,11 @@ const Ptetestone: React.FC<PtetestoneProps> = ({ isOpen, onSkillSelect }) => {
   return (
     <div
       className="card mb-4"
-      style={{ borderRadius: "15px", overflow: "hidden", boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)" }}
+      style={{
+        borderRadius: "15px",
+        overflow: "hidden",
+        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+      }}
     >
       <div
         className="card-header bg-primary text-white"
@@ -113,21 +117,31 @@ const Ptetestone: React.FC<PtetestoneProps> = ({ isOpen, onSkillSelect }) => {
         {sections.map((section) => (
           <React.Fragment key={section.id}>
             <button
-              className={`list-group-item list-group-item-action ${openSections.includes(section.id) ? "active" : ""}`}
+              className={`list-group-item list-group-item-action ${
+                openSections.includes(section.id) ? "active" : ""
+              }`}
               onClick={() => toggleSection(section.id, section.skills)}
               style={{
-                backgroundColor: openSections.includes(section.id) ? "#343a40" : "#f8f9fa",
+                backgroundColor: openSections.includes(section.id)
+                  ? "#343a40"
+                  : "#f8f9fa",
                 color: openSections.includes(section.id) ? "white" : "black",
                 border: "1px solid #ddd",
+                textAlign:'center'
               }}
             >
               {section.title}
             </button>
 
             <div
-              className={`collapse ${openSections.includes(section.id) ? "show" : ""}`}
+              className={`collapse ${
+                openSections.includes(section.id) ? "show" : ""
+              }`}
             >
-              <div className="list-group-item p-3" style={{ backgroundColor: "#f1f1f1" }}>
+              <div
+                className="list-group-item p-3"
+                style={{ backgroundColor: "#f1f1f1",textAlign:'center' }}
+              >
                 <p dangerouslySetInnerHTML={{ __html: section.content }}></p>
               </div>
             </div>

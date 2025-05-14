@@ -403,6 +403,9 @@
     height: 2.313rem;
     font-size: .95rem;
     flex-shrink: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 .btn-wave {
     display: inline-block !important;

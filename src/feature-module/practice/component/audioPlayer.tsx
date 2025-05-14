@@ -115,7 +115,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
         </button>
 
         {/* Progress Bar */}
-        <div className="flex-grow-1 me-2" style={{ minWidth: "200px" }}>
+        <div className="flex-grow-1 me-2" style={{ minWidth: "200px",display:'flex',alignItems:'center' }}>
           <input
             type="range"
             className="form-range"
@@ -130,7 +130,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
               height: "6px",
             }}
           />
-          <small className="text-muted">
+          <small className="text-muted" style={{width:"6em",marginLeft:"1em"}}>
             {formatTime(currentTime)} / {formatTime(duration)}
           </small>
         </div>
@@ -160,15 +160,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
         />
 
         {/* Volume Dropdown */}
-        <select
-          onChange={handleVolumeDropdown}
-          className="form-select form-select-sm w-auto"
-          title="Volume Level"
-        >
-          <option value="high">🔊 High</option>
-          <option value="medium">🔉 Medium</option>
-          <option value="low">🔈 Low</option>
-        </select>
+        
 
         {/* Speed Dropdown */}
         <select

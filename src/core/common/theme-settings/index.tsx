@@ -152,16 +152,14 @@ const ThemeSettings = () => {
               <div className="myfilter" style={{ width: "40em" }}>
                 <div className="row g-3">
                   <div className="col-md-6">
-                    <label htmlFor="difficulty" className="form-label fw-bold">
-                      Difficulty
-                    </label>
                     <select
                       id="difficulty"
                       className="form-select"
                       value={difficulty}
                       onChange={(e) => setDifficulty(e.target.value)}
                     >
-                      <option value="">All</option>
+                      <option value="">Difficulty</option>
+                      {/* <option value="">All</option> */}
                       <option value="easy">Easy</option>
                       <option value="medium">Medium</option>
                       <option value="hard">Hard</option>
@@ -169,19 +167,15 @@ const ThemeSettings = () => {
                   </div>
 
                   <div className="col-md-6">
-                    <label
-                      htmlFor="practiceStatus"
-                      className="form-label fw-bold"
-                    >
-                      Practice Status
-                    </label>
+                    
                     <select
                       id="practiceStatus"
                       className="form-select"
                       value={practiceStatus}
                       onChange={(e) => setPracticeStatus(e.target.value)}
                     >
-                      <option value="all">All</option>
+                      <option value="all">Practice Status</option>
+                      {/* <option value="all">All</option> */}
                       <option value="done">Done</option>
                       <option value="pending">Pending</option>
                     </select>
@@ -232,6 +226,24 @@ const ThemeSettings = () => {
                         </button>
                       </li>
                     ))}
+                    <div className="col-md-2">
+                    <select
+                      id="practiceStatus"
+                      className="form-select"
+                      value={practiceStatus}
+                      onChange={(e) => setPracticeStatus(e.target.value)}
+                    >
+                      <option value="all">Type</option>
+                      <option value="all">Bar</option>
+                      <option value="done">Line</option>
+                      <option value="pending">Pie</option>
+                      <option value="pending">Flow</option>
+                      <option value="pending">Table</option>
+                      <option value="pending">Map</option>
+                      <option value="pending">Pic</option>
+                      <option value="pending">Comb</option>
+                    </select>
+                  </div>
                   </ul>
 
                   <div className="tab-content">

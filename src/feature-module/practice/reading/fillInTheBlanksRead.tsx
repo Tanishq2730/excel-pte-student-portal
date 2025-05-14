@@ -347,7 +347,7 @@ const FillInTheBlanksRead = () => {
                               key={idx}
                               draggable
                               onDragStart={(e) => handleDragStart(e, word)}
-                              className="btn btn-outline-dark rounded-pill"
+                              className="btn btn-secondary rounded-pill"
                             >
                               {word}
                             </div>

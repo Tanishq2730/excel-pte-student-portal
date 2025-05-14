@@ -77,21 +77,12 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
             style={{ borderColor: "#00c6b5", maxWidth: "100%", margin: "auto" }}
           >
             <div className="d-flex align-items-center">
-              <img
-                src={
-                  log.user.profile_image
-                    ? log.user.profile_image
-                    : "assets/img/logo-black.png"
-                }
-                alt="Profile"
-                className="rounded-circle me-2"
-                style={{
-                  width: "50px",
-                  height: "50px",
-                  objectFit: "cover",
-                  border: "1px solid #ccc",
-                }}
-              />
+              <div
+                className="rounded-circle bg-secondary d-flex justify-content-center align-items-center me-3"
+                style={{ width: "60px", height: "60px" }}
+              >
+                <i className="ion-person text-white fs-3"></i>
+              </div>
               <div>
                 <div className="fw-bold">{log.user.name}</div>
                 <div style={{ fontSize: "0.9rem" }}>
@@ -100,7 +91,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               </div>
             </div>
 
-            <div className="d-flex align-items-center">
+            <div className=" align-items-start" style={{ width: "45%" }}>
               <button
                 className="popbtn border rounded-pill px-2 py-1 me-3"
                 data-bs-toggle="modal"
@@ -147,12 +138,15 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               <div className="modal-dialog modal-lg">
                 <div className="modal-content">
                   <div className="modal-header bg-primary">
-                    <h4 className="modal-title text-white" id="exampleModalLgLabel">
+                    <h4
+                      className="modal-title text-white"
+                      id="exampleModalLgLabel"
+                    >
                       AI Score (Partial credit to : Speaking & Reading)
                     </h4>
                     <button
                       type="button"
-                      className="btn-close"
+                      className="btn-close scorebtnClose"
                       data-bs-dismiss="modal"
                       aria-label="Close"
                     />

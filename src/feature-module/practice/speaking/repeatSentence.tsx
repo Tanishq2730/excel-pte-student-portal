@@ -26,6 +26,7 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import MyNotes from "../component/myNotes";
 import PageHeading from "../component/pageHeading";
+import AudioPlayer from "../component/audioPlayer";
 
 // Define types
 interface Timestamp {
@@ -709,10 +710,13 @@ const RepeatSentence = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
+                  <span className="text-danger">
+                      Prepare: {formatTime(countdown)}
+                    </span>
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
-                    <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
+                    {/* <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
                       <button
                         className="btn btn-outline-secondary rounded-circle me-3"
                         onClick={togglePlay}
@@ -757,7 +761,8 @@ const RepeatSentence = () => {
                       </select>
 
                       <audio ref={audioRef} src={url} preload="metadata" />
-                    </div>
+                    </div> */}
+                    <AudioPlayer/>
                   </div>
                   <div className="micSection">
                     <Recorder
@@ -786,6 +791,7 @@ const RepeatSentence = () => {
                         className="audio-inner p-4 rounded-3"
                       
                       >
+                        <h4 className="mb-3">Answere : </h4>
                         <p
                           dangerouslySetInnerHTML={{
                             __html: questionData?.answer_american || "",

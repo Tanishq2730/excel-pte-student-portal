@@ -361,7 +361,7 @@ const FillInTheBlanks = () => {
                         <AudioPlayer questionData={questionData} />
                       </div>
                       <div
-                        className="p-4 space-y-4 fillDropdown"
+                        className="p-4 space-y-4 fillDropdown bottomborder"
                         style={{ fontSize: "1.25rem" }}
                       >
                         {parse(

@@ -523,19 +523,20 @@ const AdminDashboard = () => {
                         />
                         <div className="attemptedicon">
                           <div className="innerattempt">
-                            <span style={{fontSize:"12px"}}>Task Completed</span>{" "}
+                            <span style={{fontSize:"12px"}}>Attempted</span>{" "}
                             <p
-                              className="bg-success"
+                              className=""
                               style={{
                                 width: "1em",
                                 height: "1em",
                                 marginLeft: "10px",
                                 borderRadius: "100px",
+                                background:"#00b2a9"
                               }}
                             ></p>
                           </div>
                           <div className="innerattempt">
-                          <span style={{fontSize:"12px"}}>Task Not Completed</span>{" "}
+                          <span style={{fontSize:"12px"}}>Not Attempted</span>{" "}
                             <p
                               className="bg-danger"
                               style={{
@@ -717,7 +718,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-calendar" />
                             </span>
                           </div>
-                          <p className="text-dark">Templates</p>
+                          <p className="text-dark">Temp</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -730,7 +731,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-license" />
                             </span>
                           </div>
-                          <p className="text-dark">Class Link</p>
+                          <p className="text-dark">Class</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -743,7 +744,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-hexagonal-prism" />
                             </span>
                           </div>
-                          <p className="text-dark">Prediction</p>
+                          <p className="text-dark">Predt</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -756,7 +757,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-report-money" />
                             </span>
                           </div>
-                          <p className="text-dark">Grammar</p>
+                          <p className="text-dark">Gram</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -769,7 +770,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-calendar-share" />
                             </span>
                           </div>
-                          <p className="text-dark">Prc. Hist.</p>
+                          <p className="text-dark">Pract</p>
                         </Link>
                       </div>
                       <div className="col-md-4">
@@ -782,7 +783,7 @@ const AdminDashboard = () => {
                               <i className="ti ti-file-pencil" />
                             </span>
                           </div>
-                          <p className="text-dark">Timetable</p>
+                          <p className="text-dark">TT</p>
                         </Link>
                       </div>
                     </div>

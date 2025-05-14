@@ -120,6 +120,7 @@ const Ptetestthree: React.FC<PtetestthreeProps> = ({ isOpen, onSkillSelect }) =>
                 backgroundColor: openSections.includes(section.id) ? "#343a40" : "#f8f9fa",
                 color: openSections.includes(section.id) ? "white" : "black",
                 border: "1px solid #ddd",
+                textAlign:'center'
               }}
             >
               {section.title}
@@ -128,7 +129,7 @@ const Ptetestthree: React.FC<PtetestthreeProps> = ({ isOpen, onSkillSelect }) =>
             <div
               className={`collapse ${openSections.includes(section.id) ? "show" : ""}`}
             >
-              <div className="list-group-item p-3" style={{ backgroundColor: "#f1f1f1" }}>
+              <div className="list-group-item p-3" style={{ backgroundColor: "#f1f1f1",textAlign:'center' }}>
                 <p dangerouslySetInnerHTML={{ __html: section.content }}></p>
               </div>
             </div>

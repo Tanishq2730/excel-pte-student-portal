@@ -44,7 +44,7 @@ const StudyTool: React.FC = () => {
                       <div className="text-info mb-3 icon">
                         <FontAwesomeIcon icon={item.icon} size="2x" />
                       </div>
-                      <h6 className="fw-semibold">{item.title}</h6>
+                      <h3 className="fw-semibold">{item.title}</h3>
                     </div>
                   </Link>
                 </div>

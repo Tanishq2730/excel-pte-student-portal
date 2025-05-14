@@ -1,5 +1,5 @@
-import { useEffect, useState, ReactNode } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../../../feature-module/router/all_routes";
 import { fetchAllTypes } from "../../../api/commonAPI";
 import { useDispatch } from "react-redux";
@@ -7,7 +7,7 @@ import { setSubtypeValue } from "../../data/redux/practiceSlice";
 
 interface PracticeHeaderProps {
   showMegaMenu: boolean;
-  children?: ReactNode;
+  setShowMegaMenu: (show: boolean) => void;
 }
 
 interface Subtype {
@@ -15,7 +15,6 @@ interface Subtype {
   sub_name: string;
   ai_score: number;
   order: number;
-  // Add other fields if needed
 }
 
 interface PracticeType {
@@ -24,7 +23,6 @@ interface PracticeType {
   Subtypes: Subtype[];
 }
 
-// ✅ Map readable sub_name values to keys in all_routes
 const routeNameMap: { [key: string]: keyof typeof all_routes } = {
   "Read Aloud": "readAloud",
   "Repeat Sentence": "repeatSentence",
@@ -51,16 +49,16 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
 };
 
 const typeIcons: { [key: string]: string } = {
-  "Speaking": "fas fa-microphone",
-  "Writing": "fas fa-pen",
-  "Reading": "fas fa-book-open",
-  "Listening": "fas fa-headphones",
-  // Add other type.name keys and appropriate FontAwesome classes
+  Speaking: "fas fa-microphone",
+  Writing: "fas fa-pen",
+  Reading: "fas fa-book-open",
+  Listening: "fas fa-headphones",
 };
 
-const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
+const PracticeHeader = ({ showMegaMenu, setShowMegaMenu }: PracticeHeaderProps) => {
   const [practiceTypes, setPracticeTypes] = useState<PracticeType[]>([]);
   const dispatch = useDispatch();
+  const location = useLocation();
 
   useEffect(() => {
     const getTypes = async () => {
@@ -72,32 +70,30 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
       }
     };
     getTypes();
+
     if (!localStorage.getItem("mocktestType")) {
       localStorage.setItem("mocktestType", "Academic");
     }
   }, []);
 
+  // Close the mega menu on route change
+  useEffect(() => {
+    setShowMegaMenu(false);
+  }, [location.pathname]);
+
   const getRoutePath = (name: string): string => {
     const routeKey = routeNameMap[name];
     if (!routeKey) console.warn(`No route matched for: ${name}`);
-
     return routeKey ? all_routes[routeKey] : "#";
   };
 
-  const getLinkPath = (
-    route: string,
-    subtypeId: number,
-    questionId?: number | null
-  ): string => {
+  const getLinkPath = (route: string, subtypeId: number, questionId?: number | null): string => {
     let path = route.replace(":subtype_id", subtypeId.toString());
-
     if (questionId) {
       path = path.replace(":question_id?", questionId.toString());
     } else {
-      // remove the trailing optional param if not provided
       path = path.replace("/:question_id?", "");
     }
-
     return path;
   };
 
@@ -110,10 +106,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
         <div className="mega-menu">
           <div className="innermegamenu">
             <div className="card-body">
-              <ul
-                className="nav nav-pills justify-content-start mx-0 nav-style-2 mb-3"
-                role="tablist"
-              >
+              <ul className="nav nav-pills justify-content-start mx-0 nav-style-2 mb-3" role="tablist">
                 <li className="nav-item">
                   <a
                     className="nav-link active"
@@ -128,7 +121,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                 </li>
                 <li className="nav-item">
                   <a
-                    className="nav-link "
+                    className="nav-link"
                     data-bs-toggle="tab"
                     href="#pte-core"
                     role="tab"
@@ -141,11 +134,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
               </ul>
 
               <div className="tab-content">
-                <div
-                  className="tab-pane show active text-muted"
-                  id="pte-core"
-                  role="tabpanel"
-                >
+                <div className="tab-pane text-muted" id="pte-academic" role="tabpanel">
                   <div className="tabinnerasection">
                     {practiceTypes.map(
                       (type) =>
@@ -156,27 +145,17 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                               {type.name}
                             </h6>
                             <hr className="border-primary" />
-                            {type.Subtypes.sort(
-                              (a, b) => a.order - b.order
-                            ).map((sub) => (
+                            {type.Subtypes.sort((a, b) => a.order - b.order).map((sub) => (
                               <Link
                                 key={sub.id}
-                                to={getLinkPath(
-                                  getRoutePath(sub.sub_name),
-                                  sub.id,
-                                  null
-                                )}
-                                onClick={() =>
-                                  localStorage.setItem(
-                                    "subtypeId",
-                                    sub.id.toString()
-                                  )
-                                }
+                                to={getLinkPath(getRoutePath(sub.sub_name), sub.id, null)}
+                                onClick={() => {
+                                  localStorage.setItem("subtypeId", sub.id.toString());
+                                  setShowMegaMenu(false); // Close menu on click
+                                }}
                               >
                                 {sub.sub_name}
-                                {sub.ai_score ? (
-                                  <span className="ai-score">AI Score</span>
-                                ) : null}
+                                {sub.ai_score ? <span className="ai-score">AI Score</span> : null}
                               </Link>
                             ))}
                           </div>
@@ -185,11 +164,7 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                   </div>
                 </div>
 
-                <div
-                  className="tab-pane text-muted"
-                  id="pte-academic"
-                  role="tabpanel"
-                >
+                <div className="tab-pane show active text-muted" id="pte-core" role="tabpanel">
                   <div className="tabinnerasection">
                     {practiceTypes.map(
                       (type) =>
@@ -199,27 +174,18 @@ const PracticeHeader = ({ showMegaMenu }: PracticeHeaderProps) => {
                               <i className={typeIcons[type.name] || "fas fa-folder"}></i>
                               {type.name}
                             </h6>
-                            {type.Subtypes.sort(
-                              (a, b) => a.order - b.order
-                            ).map((sub) => (
+                            <hr className="border-primary" />
+                            {type.Subtypes.sort((a, b) => a.order - b.order).map((sub) => (
                               <Link
                                 key={sub.id}
-                                to={getLinkPath(
-                                  getRoutePath(sub.sub_name),
-                                  sub.id,
-                                  null
-                                )}
-                                onClick={() =>
-                                  localStorage.setItem(
-                                    "subtypeId",
-                                    sub.id.toString()
-                                  )
-                                }
+                                to={getLinkPath(getRoutePath(sub.sub_name), sub.id, null)}
+                                onClick={() => {
+                                  localStorage.setItem("subtypeId", sub.id.toString());
+                                  setShowMegaMenu(false); // Close menu on click
+                                }}
                               >
                                 {sub.sub_name}
-                                {sub.ai_score ? (
-                                  <span className="ai-score">AI Score</span>
-                                ) : null}
+                                {sub.ai_score ? <span className="ai-score">AI Score</span> : null}
                               </Link>
                             ))}
                           </div>

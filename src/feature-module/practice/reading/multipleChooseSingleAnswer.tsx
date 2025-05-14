@@ -248,7 +248,7 @@ const MultipleChooseSingleAnswer = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-8">
                           <div className="innercontent mt-0">
                             <p
                               dangerouslySetInnerHTML={{
@@ -257,7 +257,7 @@ const MultipleChooseSingleAnswer = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           <div className="chooseSection">
                             <div className="">
                               <div className="card shadow-sm">
