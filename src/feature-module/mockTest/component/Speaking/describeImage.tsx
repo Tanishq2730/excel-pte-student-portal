@@ -1,49 +1,494 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
+import { useParams } from "react-router-dom";
+import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../../environment";
+import SpeechRecognition, { useSpeechRecognition, } from "react-speech-recognition";
+import stringSimilarity from "string-similarity";
+interface getProps {
+  questionData: any;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
+}
 
-const DescribeImage: React.FC<{ question: any }> = ({ question }) => {
-  const [countdown, setCountdown] = useState(question.Subtype.preparation_time); // Countdown based on preparation time
+interface Timestamp {
+  word: string;
+  timestamp: Date;
+}
+
+const DescribeImage: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
+  const [countdown, setCountdown] = useState(questionData.Subtype.preparation_time); // Countdown based on preparation time
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(question.Subtype.recording_time); // Recording time from the question data
-
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(questionData.Subtype.recording_time); // Recording time from the question data
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
+  const { id, session_id } = useParams<{ id: any; session_id: any }>();
+  const [transcript, setTranscript] = useState<any>(null);
+  const [recordedAudioBlob, setSetAudioBlob] = useState<any>(null);
   const timerRef = useRef<number | null>(null);
   const recordingRef = useRef<number | null>(null);
+  const streamRef = useRef<MediaStream | null>(null);
+  const [correctText, setCorrectText] = useState<string>("");
+  const [transcriptTimestamps, setTranscriptTimestamps] = useState<Timestamp[]>(
+    []
+  );
+  const [goodWords, setGoodWords] = useState<number>(0);
+  const [lateSpeak, setLateSpeak] = useState<number>(0);
+  const [totalWordsInCorrectText, settotalWordsInCorrectText] =
+    useState<number>(0);
+  const [contentScoreOutOf90, setContentScoreOutOf90] = useState<number>(0);
+  const [fluencyScoreOutOf90, setFluencyScoreOutOf90] = useState<number>(0);
+  const [pronunciationScoreOutOf90, setPronunciationScoreOutOf90] =
+    useState<number>(0);
+  const [targetScoreOutOf90, setTargetScoreOutOf90] = useState<string>("0.00");
+  const [badWords, setBadWords] = useState(0);
+  const [avgWords, setAvgWords] = useState(0);
+  const [pauseWords, setPauseWords] = useState(0);
+  const [transcriptWithPauses, setTranscriptWithPauses] = useState<
+    { word: string; isPauseWord: boolean; color: string }[]
+  >([]);
+  const [recordingStartTime, setRecordingStartTime] = useState<number>(
+    Date.now()
+  );
 
-  // Countdown before recording starts
+  const playBeep = () => {
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(1000, ctx.currentTime); // 1000 Hz = beep
+    gainNode.gain.setValueAtTime(1, ctx.currentTime);
+
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.3); // 0.3 second beep
+  };
+
+
+  // Countdown
   useEffect(() => {
     if (countdown > 0) {
-      timerRef.current = window.setTimeout(
-        () => setCountdown(countdown - 1),
-        1000
-      );
+      timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
     } else {
-      setIsRecording(true);
+      playBeep();
+      setTimeout(() => setIsRecording(true), 300); // Small delay after beep
     }
     return () => clearTimeout(timerRef.current!);
   }, [countdown]);
 
-  // Recording timer
+  // Start recording when isRecording becomes true
+  useEffect(() => {
+    const startRecording = async () => {
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        streamRef.current = stream;
+        const recorder = new MediaRecorder(stream);
+        const chunks: Blob[] = [];
+
+        // ✅ Setup SpeechRecognition
+        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const recognition = new SpeechRecognition();
+        recognition.lang = "en-US";
+        recognition.interimResults = false;
+        recognition.continuous = true;
+
+        recognition.onresult = (event: any) => {
+          let finalTranscript = "";
+          for (let i = event.resultIndex; i < event.results.length; ++i) {
+            if (event.results[i].isFinal) {
+              finalTranscript += event.results[i][0].transcript + " ";
+            }
+          }
+          setTranscript(finalTranscript);
+        };
+
+        recognition.onerror = (e: any) => {
+          console.error("Speech recognition error:", e);
+        };
+
+        recognition.start(); // ✅ Start listening
+
+        recorder.ondataavailable = (e) => {
+          if (e.data.size > 0) chunks.push(e.data);
+        };
+
+        recorder.onstop = () => {
+          const audioBlobData = new Blob(chunks, { type: 'audio/webm' });
+          setSetAudioBlob(audioBlobData); // ✅ Send both audio and text
+          setAudioChunks(chunks);
+          recognition.stop(); // ✅ Stop listening
+          stream.getTracks().forEach((track) => track.stop());
+        };
+
+        recorder.start();
+        setMediaRecorder(recorder);
+        setAudioChunks([]);
+      } catch (error) {
+        console.error("Error accessing microphone", error);
+      }
+    };
+
+    if (isRecording) {
+      startRecording();
+    }
+  }, [isRecording]);
+
+  // Handle recording time countdown and stop
   useEffect(() => {
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev: number) => prev - 1);
-        setRecordingProgress(((question.Subtype.recording_time - recordingTimeLeft + 1) / question.Subtype.recording_time) * 100);
+        setRecordingTimeLeft((prev: any) => prev - 1);
+        setRecordingProgress(((questionData.Subtype.recording_time - recordingTimeLeft + 1) / questionData.Subtype.recording_time) * 100);
       }, 1000);
     }
+
+    if (isRecording && recordingTimeLeft === 0 && mediaRecorder?.state === "recording") {
+      mediaRecorder.stop();
+      setIsRecording(false);
+    }
+
     return () => clearTimeout(recordingRef.current!);
   }, [isRecording, recordingTimeLeft]);
+
+
+
+  // Calculate pause duration
+    const calculatePauseDuration = (currentIndex: number): number => {
+      if (
+        !transcriptTimestamps ||
+        transcriptTimestamps.length <= currentIndex ||
+        currentIndex === 0
+      ) {
+        return 0;
+      }
+  
+      const prevWordTimestamp = transcriptTimestamps[currentIndex - 1];
+      const currentWordTimestamp = transcriptTimestamps[currentIndex];
+      const currentWord = spokenWords2[currentIndex];
+  
+      if (!prevWordTimestamp || !currentWordTimestamp) {
+        return 0;
+      }
+  
+      if (currentWord.endsWith(".")) {
+        return 1;
+      }
+  
+      const pauseDuration =
+        (currentWordTimestamp.timestamp.getTime() -
+          prevWordTimestamp.timestamp.getTime()) /
+        1000;
+  
+      return pauseDuration;
+    };
+  
+    // Calculate pronunciation score
+    const calculatePronunciationScore = (
+      recognizedTranscript: string,
+      correctText: string
+    ): number => {
+      const recognizedLowercase = recognizedTranscript.toLowerCase();
+      const correctLowercase = correctText.toLowerCase();
+  
+      const similarity = stringSimilarity.compareTwoStrings(
+        recognizedLowercase,
+        correctLowercase
+      );
+  
+      const pronunciationScore = similarity * 90;
+      return pronunciationScore;
+    };
+  
+    // Update transcript timestamps
+    const updateTranscriptTimestamps = (index: number, word: string): void => {
+      const newTimestamps = [...transcriptTimestamps];
+      newTimestamps[index] = { word, timestamp: new Date() };
+      setTranscriptTimestamps(newTimestamps);
+    };
+  
+    // Memoized spoken words
+    const spokenWords2 = useMemo<string[]>(() => {
+      return transcript
+        ? transcript
+            .toLowerCase()
+            .trim()
+            .split(/\s+|(?<=\w)(?=\W)/)
+        : [];
+    }, [transcript]);
+  
+    useEffect(() => {
+      if (spokenWords2.length > 0) {
+        updateTranscriptTimestamps(
+          spokenWords2.length - 1,
+          spokenWords2[spokenWords2.length - 1]
+        );
+      }
+    }, [spokenWords2]);
+  
+    useEffect(() => {
+      // Placeholder if you want to perform anything on transcriptTimestamps change
+    }, [transcriptTimestamps]);
+  
+    useEffect(() => {
+      if (transcript && recordedAudioBlob) {
+        let pauseDurationAccumulator = 0;
+  
+        const spokenWords = transcript
+          .toLowerCase()
+          .trim()
+          .split(/\s+|(?<=\w)(?=\W)/);
+  
+        const correctWords = correctText.toLowerCase().trim().split(/\s+/);
+        console.log("correctWords", correctWords);
+        console.log("spokenWords", spokenWords);
+  
+        const goodCount = spokenWords.filter((word:any) =>
+          correctWords.includes(word)
+        ).length;
+  
+        setGoodWords(goodCount);
+  
+        let totalPauseWords = 0;
+        let avgCount = 0;
+        let badCount = 0;
+  
+        const transcriptWithPauses = spokenWords2.map((word, index) => {
+          const isEndOfSentence = word.endsWith(".");
+          const pauseDuration = calculatePauseDuration(index);
+          const isPauseWord = pauseDuration > 1;
+          const cleanWord = word
+            .toLowerCase()
+            .replace(/[^\w\s]|_/g, "")
+            .replace(/\s+/g, " ");
+  
+          const isGood = correctWords.includes(cleanWord);
+          const isAverage =
+            !isGood && correctWords.find((w) => w.includes(cleanWord));
+  
+          let color = "";
+          if (isGood) {
+            color = "goodword";
+          } else if (isAverage) {
+            color = "avgword";
+            if (word !== "." && word !== "?") {
+              avgCount++;
+            }
+          } else {
+            color = "badword";
+            badCount++;
+          }
+  
+          pauseDurationAccumulator += pauseDuration;
+          if (isPauseWord) {
+            totalPauseWords++;
+            pauseDurationAccumulator = 0;
+          }
+  
+          return { word, isPauseWord, color };
+        });
+  
+        const totalWords = spokenWords.length;
+        const totalDuration = recordingStartTime
+          ? (Date.now() - recordingStartTime) / 1000
+          : 1;
+  
+        const totalWordsInCorrectText = correctWords.length;
+        const goodCount2 = spokenWords.filter((word:any) =>
+          correctWords.includes(word)
+        ).length;
+  
+        let contentScoreOutOf90 = 0;
+        let avgscore = 0;
+        let badscore = 0;
+        let pausescore = 0;
+        let pronunciationScoreOutOf90 = 0;
+        let fluencyScoreOutOf90 = 0;
+        // Calculate the average score (avgscore) based on the average word similarity to the correct text
+        avgscore = ((avgCount * 90) / totalWordsInCorrectText) * 0.75;
+        badscore = ((badCount * 90) / totalWordsInCorrectText) * 0.45;
+        pausescore = ((totalPauseWords * 90) / totalWordsInCorrectText) * 0.25;
+  
+        ///////////////////////////////////////////////////////////////
+        // Calculate the fluency score out of 90
+        ///////////////////////////////////////////////////////////////
+  
+        // 0 - 60 score meter
+        // update on 01-06-2024 45->40
+        const fluencyScoreMeter = 40; // 35 previous
+        fluencyScoreOutOf90 = (goodCount2 * fluencyScoreMeter) / totalDuration;
+        if (fluencyScoreOutOf90 > 90) {
+          fluencyScoreOutOf90 = 90;
+        }
+  
+        if (totalDuration <= 10) {
+          fluencyScoreOutOf90 = 10;
+          contentScoreOutOf90 = 10;
+          pronunciationScoreOutOf90 = 10;
+  
+          // changes on 24-06-2024
+          // we have to give no score if no transcript formed
+          if (spokenWords && spokenWords.length > 0) {
+          } else {
+            fluencyScoreOutOf90 = 0;
+            contentScoreOutOf90 = 0;
+            pronunciationScoreOutOf90 = 0;
+          }
+          // changes
+        }
+  
+        if (totalDuration == 0) {
+          fluencyScoreOutOf90 = 0;
+          contentScoreOutOf90 = 0;
+          pronunciationScoreOutOf90 = 0;
+        }
+        // Usage in the existing code
+  
+        // new code
+        pronunciationScoreOutOf90 = calculatePronunciationScore(
+          transcript,
+          correctText
+        );
+        pronunciationScoreOutOf90 = pronunciationScoreOutOf90;
+  
+        // updated  on 01-06-2024
+        pronunciationScoreOutOf90 -= pronunciationScoreOutOf90 * 0.15;
+  
+        if (pronunciationScoreOutOf90 > 25 && pronunciationScoreOutOf90 < 50) {
+          pronunciationScoreOutOf90 = pronunciationScoreOutOf90 + 10;
+        }
+  
+        if (pronunciationScoreOutOf90 > 90) {
+          pronunciationScoreOutOf90 = 90;
+        }
+  
+        if (pronunciationScoreOutOf90 < 0) {
+          pronunciationScoreOutOf90 = 0;
+        }
+  
+        // Calculate the content score as a weighted sum of good word count and average score
+        // new calculation
+        let contentx = totalWords - badCount - totalPauseWords;
+        contentScoreOutOf90 = (contentx * 90) / totalWordsInCorrectText;
+  
+        // updated on 01-06-2024 15% decrease
+        contentScoreOutOf90 -= contentScoreOutOf90 * 0.15;
+  
+        if (contentScoreOutOf90 > 25 && contentScoreOutOf90 < 50) {
+          contentScoreOutOf90 = contentScoreOutOf90 + 10;
+        }
+  
+        // contentScoreOutOf90 = contentScoreOutOf90 - ((contentScoreOutOf90 * ((pronunciationScoreOutOf90 * 100) / 90)) / 100);
+        if (contentScoreOutOf90 > 90) {
+          contentScoreOutOf90 = 90;
+        }
+        if (contentScoreOutOf90 < 0) {
+          contentScoreOutOf90 = 0;
+        }
+        ///////////////////////////////////////////////////////////////
+  
+        // console.log("fluencyScoreOutOf90 1: ", fluencyScoreOutOf90);
+        if (fluencyScoreOutOf90 > 90) {
+          fluencyScoreOutOf90 = 90;
+        }
+  
+        if (fluencyScoreOutOf90 < 0) {
+          fluencyScoreOutOf90 = 0;
+        }
+  
+        // console.log("fluencyScoreOutOf90 2: ", fluencyScoreOutOf90);
+        ///////////////////////////////////////////////////////////////
+  
+        // console.log("pronunciationScoreOutOf90", pronunciationScoreOutOf90);
+  
+        // Calculate target score as a weighted sum of fluency, content, and pronunciation scores
+        const targetScoreOutOf90 = (
+          fluencyScoreOutOf90 * 0.3 +
+          contentScoreOutOf90 * 0.4 +
+          pronunciationScoreOutOf90 * 0.3
+        ).toFixed(2);
+  
+        setLateSpeak(1);
+        settotalWordsInCorrectText(totalWordsInCorrectText);
+        setContentScoreOutOf90(contentScoreOutOf90);
+        setFluencyScoreOutOf90(fluencyScoreOutOf90);
+        setPronunciationScoreOutOf90(pronunciationScoreOutOf90);
+        setTargetScoreOutOf90(targetScoreOutOf90);
+        setAvgWords(avgCount);
+        setBadWords(badCount);
+        setPauseWords(totalPauseWords);
+        setTranscriptWithPauses(transcriptWithPauses);
+      }
+    }, [transcript, recordedAudioBlob]);
+
+
+  useEffect(() => {
+    setSetAudioBlob(null); // Reset selection on question change
+  }, [questionData]);
+
+  useEffect(() => {
+    registerSubmit(handleSubmit); // Register new submit function on change
+  }, [questionData, recordedAudioBlob, transcript]);
+
+  const handleSubmit = async () => {
+    console.log(questionData, "question");
+    if (!recordedAudioBlob && !transcript) {
+      return false;
+    }
+
+    const totalscore = 90;
+          const combinedTranscriptHTML = ReactDOMServer.renderToString(
+            <span>
+              {transcriptWithPauses.map((wordObj, index) => (
+                <span key={index} className={wordObj.color}>
+                  {wordObj.word}{" "}
+                </span>
+              ))}
+            </span>
+          );
+    
+          let score_data = {
+            content: contentScoreOutOf90,
+            fluency: fluencyScoreOutOf90,
+            pronunciation: pronunciationScoreOutOf90,
+            transcript: questionData?.transcription,
+            scored_transcript: combinedTranscriptHTML,
+          };
+    
+          const questionId = questionData?.id;
+          const formData = new FormData();
+          formData.append("questionId", questionId.toString());
+          formData.append("sessionId", session_id.toString());
+          formData.append("mocktest_id", id.toString());
+          formData.append("totalscore", totalscore.toString());
+          formData.append("lateSpeak", lateSpeak.toString());
+          formData.append("score", targetScoreOutOf90.toString());
+          formData.append("score_data", JSON.stringify(score_data));
+    console.log(recordedAudioBlob);
+    
+          // Attach audio blob as file
+          if (recordedAudioBlob) {
+            const audioFile = new File([recordedAudioBlob], "answer.wav", {
+              type: "audio/wav",
+            });
+            formData.append("answer", audioFile);
+          }
+    return formData;
+
+  };
 
   return (
     <div className="container mt-3">
       <p>
-        Look at the image below. In {question.Subtype.preparation_time} seconds, you must describe this image aloud as naturally and clearly as possible. You have {question.Subtype.recording_time} seconds to speak.
+        Look at the image below. In {questionData.Subtype.preparation_time} seconds, you must describe this image aloud as naturally and clearly as possible. You have {questionData.Subtype.recording_time} seconds to speak.
       </p>
       <div className="recorderDetail">
         <div className="row">
           <div className="col-md-6">
             <img
-              src={`${image_url}${question.describe_image}`}
+              src={`${image_url}${questionData.describe_image}`}
               alt="Describe"
               style={{ width: "100%", height: "auto", borderRadius: "5px" }}
             />
@@ -93,7 +538,7 @@ const DescribeImage: React.FC<{ question: any }> = ({ question }) => {
       </div>
       {/* Optionally render the question */}
       <div className="questionContent">
-        <h5>{question.question_name}</h5>
+        <h5>{questionData.question_name}</h5>
         {/* <div
           dangerouslySetInnerHTML={{
             __html: question.question,

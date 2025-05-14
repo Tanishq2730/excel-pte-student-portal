@@ -1,8 +1,12 @@
-import React, { Dispatch, SetStateAction, useState } from "react";
+import React, { Dispatch, SetStateAction, useState,useRef } from "react";
 import ReadAloud from "./readAloud";
 import RepeatSentence from "./repeatSentence";
 import DescribeImage from "./describeImage";
 import RetellLecture from "./retellLecture";
+import AnswerShortQuestion from "./answerShortQuestion";
+import RespondtoSituation from "./respondtoSituation";
+import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
+import { useParams } from 'react-router-dom';
 
 interface SpeakingIntroProps {
   queno: number;
@@ -16,61 +20,134 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
   setSectionPart,
 }) => {
   const [step, setStep] = useState(0);
+  const speakingQuestions = mockquestions?.speaking || [];
+  const [currentAnswer, setCurrentAnswer] = useState<any>(null);
+  const submitCurrentQuestionRef = useRef<(() => void) | null>(null);
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
+console.log(speakingQuestions,'speakingQuestions');
 
   // Dynamically map subtype names to components
   const getComponent = (question: any, index: number) => {
     const subtype = question?.Subtype?.sub_name;
 
+    const commonProps = {
+      key: index,
+      questionData:question,
+      setAnswer: setCurrentAnswer,
+      registerSubmit: (fn: () => void) => {
+        submitCurrentQuestionRef.current = fn;
+      },
+    };
+
     switch (subtype) {
       case "Read Aloud":
-        return <ReadAloud key={index} question={question} />;
+        return <ReadAloud {...commonProps} />;
       case "Repeat Sentence":
-        return <RepeatSentence key={index} question={question} />;
+        return <RepeatSentence {...commonProps} />;
       case "Describe Image":
-        return <DescribeImage key={index} question={question} />;
-      case "Retell Lecture":
-        return <RetellLecture />;
+        return <DescribeImage {...commonProps} />;
+      case "Re-tell Lecture":
+        return <RetellLecture {...commonProps} />;
+      case "Answer Short Question":
+        return <AnswerShortQuestion {...commonProps} />;
+      case "Respond to Situation":
+        return <RespondtoSituation {...commonProps} />;
       default:
         return <div key={index}>Unsupported question type</div>;
     }
   };
 
-  const speakingQuestions = mockquestions?.speaking || [];
+  
 
-  const handleNext = () => {
-    setStep((prev) => Math.min(prev + 1, speakingQuestions.length));
-  };
+  const handleNext = async () => {
+     if (step === 0) {
+       setStep(1);
+       return;
+     }
+   
+     let answer = null;
+     if (submitCurrentQuestionRef.current) {
+        answer = await submitCurrentQuestionRef.current(); // Now it will return the payload
+     }
+   
+     const currentQuestion = speakingQuestions[step - 1];
+     console.log("currentQuestion", currentQuestion);
+     console.log("currentAnswer", answer);
+   
+     if (answer) {
+       try {
+         const response = await saveMocktestQuestion(true, answer);
+         console.log("Answer saved:", response);
+       } catch (error) {
+         console.error("Error saving answer:", error);
+       }
+     }
+   
+     if (step < speakingQuestions.length) {
+       setStep(step + 1);
+     } else {
+        try {
+          const payload = {     
+             mocktestId: id,
+             sessionid: session_id
+          };
+         const response = await saveFinalMocktest(payload);
+         setSectionPart(<div className="container mt-5"><h4>Speaking section completed.</h4></div>);
+         console.log("Answer saved:", response);
+       } catch (error) {
+         console.error("Error saving answer:", error);
+       } 
+     }
+   };
+   
+   
+     const handleSkip = () => {
+       if (step < speakingQuestions.length) {
+         setStep(step + 1);
+       } else {
+         setSectionPart(
+           <div className="container mt-5">
+             <h4>Writing section completed.</h4>
+           </div>
+         );
+       }
+     };
 
-  const handleSkip = () => {
-    handleNext();
-  };
-
-  return (
+   return (
     <>
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
-            You are about to begin part 2 of the exam: Speaking
+            You are about to begin part 2 of the exam: <strong>Speaking</strong>
           </p>
-          <p className="font-weight-bold">Time allowed: 29-30 minutes</p>
+          <p className="font-weight-bold">Time allowed: 29–30 minutes</p>
         </div>
       ) : (
         getComponent(speakingQuestions[step - 1], step - 1)
       )}
 
-      <div className="footer-v3">
+      <div className="footer-v3 mt-4">
         <div className="container">
-          <div className="row">
-            <div className="col text-left">
-              <button className="btn btn-primary" onClick={handleNext}>
-                Save & Next
+          <div className="row justify-content-between">
+            <div className="col-auto">
+              <button
+                className="btn btn-primary"
+                onClick={handleNext}
+                disabled={step > speakingQuestions.length}
+              >
+                {step === 0 ? "Start" : "Save & Next"}
               </button>
             </div>
-            <div className="col text-end">
-              <button className="btn btn-primary mx-1" onClick={handleSkip}>
-                Skip
-              </button>
-            </div>
+            {step > 0 && (
+              <div className="col-auto text-end">
+                <button className="btn btn-outline-secondary mx-1" onClick={handleSkip}>
+                  Skip
+                </button>
+                <button className="btn btn-primary" onClick={handleNext}>
+                  Next
+                </button>
+              </div>
+            )}
           </div>
         </div>
       </div>
