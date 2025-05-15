@@ -1,12 +1,14 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from 'react-router-dom';
 import AudioPlayer from "../audioPlayer";
 
-interface CorrectWordProps {
+interface getProps {
   question: any;
-  queno: number;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
 }
 
-const HighlightCorrectSummary: React.FC<CorrectWordProps> = ({ question, queno }) => {
+const HighlightCorrectSummary: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
@@ -14,9 +16,10 @@ const HighlightCorrectSummary: React.FC<CorrectWordProps> = ({ question, queno }
   const [showAudio, setShowAudio] = useState(false); // show audio only after countdown
   const [checkedOptions, setCheckedOptions] = useState<string | null>(null);
   const [progress, setProgress] = useState(0);
-
+  const { id,session_id } = useParams<{ id: string,session_id:any }>(); 
   const progressRef = useRef<number | null>(null);
   const countdownRef = useRef<number | null>(null);
+  const timeStartRef = useRef(Date.now());
 
   // Start the progress bar for preparation time
   useEffect(() => {
@@ -66,6 +69,47 @@ useEffect(() => {
   const handleChange = (optionId: string) => {
     setCheckedOptions(optionId);
   };
+
+  const handleSubmit = () => {
+      if (!checkedOptions) {
+        return false;
+      }
+  
+      const correctAnswer = question?.answer_american || "";
+      const correctAnswers = correctAnswer.split(",");
+      const isCorrect = correctAnswers.includes(checkedOptions);
+      const score = isCorrect ? 1 : 0;
+      const totalscore = correctAnswers.length;
+  
+      const score_data = {
+        user_answer: checkedOptions,
+        correct_answer: correctAnswers,
+        score,
+      };
+  
+      const timeSpent = Math.floor((Date.now() - timeStartRef.current) / 1000);
+  
+      const payload = {
+        questionId: question.id,
+        mocktest_id: id,
+        sessionId: session_id,
+        totalscore,
+        lateSpeak: 1,
+        score,
+        score_data: JSON.stringify(score_data),
+        answer: checkedOptions,
+      };
+  
+      // Instead of calling setAnswer directly, we'll return the answer as an object
+      return payload;
+    };
+  
+      useEffect(() => {
+        setCheckedOptions(null); // Reset selection on question change
+      }, [question]);
+      useEffect(() => {
+        registerSubmit(handleSubmit); // Register new submit function on change
+      }, [question, checkedOptions]);
 
   return (
     <div className="container mt-3">

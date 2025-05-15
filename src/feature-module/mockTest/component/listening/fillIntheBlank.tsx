@@ -1,14 +1,16 @@
 import React, { useEffect, useRef, useState } from "react";
 import AudioPlayer from "../audioPlayer";
 import parse, { DOMNode, Element } from "html-react-parser";
+import { useParams } from 'react-router-dom';
 
-interface FillInTheBlankProps {
+interface getProps {
   question: any;
-  queno: number;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
 }
 
 
-const FillIntheBlank: React.FC<FillInTheBlankProps> = ({ question, queno }) => {
+const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
 
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
@@ -22,7 +24,7 @@ const FillIntheBlank: React.FC<FillInTheBlankProps> = ({ question, queno }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const progressRef = useRef<number | null>(null);
   const countdownRef = useRef<number | null>(null);
-
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
   // Start the progress bar for preparation time
   useEffect(() => {
     if (!isPlayback) return;
@@ -61,6 +63,49 @@ const FillIntheBlank: React.FC<FillInTheBlankProps> = ({ question, queno }) => {
   }, [showCountdown, countdown]);
 
 
+  const handleSubmit = () => {
+      const userAnswerArray = Object.values(answers);
+      const correctAnswerArray = correctAnswers;
+      let user_answer = userAnswerArray.join(",").trim();
+      let score = 0;
+      const resultDetails = [];
+  
+      for (let i = 0; i < correctAnswerArray.length; i++) {
+        const userAns = userAnswerArray[i]?.trim() || "";
+        const correctAns = correctAnswerArray[i]?.trim();
+  
+        const isCorrect = userAns === correctAns;
+  
+        resultDetails.push({
+          userAnswer: userAns,
+          correctAnswer: correctAns,
+          isCorrect,
+        });
+  
+        score += isCorrect ? 1 : 0;
+      }
+  
+      const payload = {
+        questionId: question.id,
+        totalscore: correctAnswerArray.length,
+        mocktest_id: id,
+        sessionId: session_id,
+        score,
+        answer: user_answer,
+        score_data: JSON.stringify({
+          user_question: question.question,
+          user_answer: user_answer,
+          answer: correctAnswers,
+        }),
+      };
+  
+      return payload;
+    };
+  
+    useEffect(() => {
+      registerSubmit(handleSubmit);
+    }, [answers]);
+    
   const dragDropOptions = question?.drag_drop
     ? question.drag_drop.split(",").map((text: any) => text.trim())
     : [];

@@ -1,6 +1,6 @@
 import { fetchWfdCheck } from "../../../../api/practiceAPI";
 
-const WriteFromDictationScoring = async (scoringData: any, questionData: any, selectedLanguage: string) => {
+const WriteFromDictationScoring = async (scoringData: any, questionData: any, selectedLanguage: string,question?:any) => {
     if (!scoringData) {
         console.error("scoringData is undefined");
         return; // or handle the error appropriately
@@ -8,7 +8,7 @@ const WriteFromDictationScoring = async (scoringData: any, questionData: any, se
 
     const { answerText, wordCount } = scoringData;
 
-    const QueData = await questionData;
+    const QueData = await questionData || question;
 
     let answer = "";
     if (selectedLanguage === "American") {

@@ -1,21 +1,25 @@
 import React, { useEffect, useRef, useState } from "react";
+import { useParams } from 'react-router-dom';
+import WriteFromDictationScoring from "../../../practice/component/scoring/WriteFromDictationScoring";
 import AudioPlayer from "../audioPlayer";
-interface DictationProps {
+
+interface getProps {
   question: any;
-  queno: number;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
 }
 
-const WriteFromDictation: React.FC<DictationProps> = ({ question, queno }) => {
+const WriteFromDictation: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
   const [showCountdown, setShowCountdown] = useState(false); // control countdown visibility
   const [showAudio, setShowAudio] = useState(false); // show audio only after countdown
   const [progress, setProgress] = useState(0);
-    const [wordCount, setWordCount] = useState(0);
-    const [summaryText, setSummaryText] = useState("");
-    const [selectedLanguage, setSelectedLanguage] = useState("American");
-
+  const [wordCount, setWordCount] = useState(0);
+  const [summaryText, setSummaryText] = useState("");
+  const [selectedLanguage, setSelectedLanguage] = useState("American");
+const { id, session_id } = useParams<{ id: string, session_id: any }>();
   const progressRef = useRef<number | null>(null);
 
   // Start the progress bar for preparation time
@@ -66,6 +70,53 @@ useEffect(() => {
     setWordCount(words.length);
   };
 
+   useEffect(() => {
+    setSummaryText(""); // Reset selection on question change
+  }, [question]);
+
+  useEffect(() => {
+    registerSubmit(handleSubmit); // Register new submit function on change
+  }, [question, summaryText]);
+
+  const handleSubmit = async () => {
+    console.log(question, "question");
+    if (!summaryText) {
+      return false;
+    }
+
+      const question_id = question.id;
+      const questionData = question.question;
+      const session_id = Math.random() * 1000;
+      const answerText = summaryText;
+      const wordCounts = wordCount;
+      const scoringData = { question_id, session_id, question, answerText, wordCount };
+
+      const result = await WriteFromDictationScoring(
+        scoringData,
+        question,
+        selectedLanguage
+      );
+
+    if (result) {
+      const { score, totalScore, userAnswerText, scoredText } = result;
+
+      // Now you can safely use score, totalScore, userAnswerText, scoredText
+      const payload = {
+        questionId: question.id,
+        mocktest_id: id,
+        sessionId: session_id,
+        totalscore: totalScore, // You can adjust this if you calculate it
+        lateSpeak: 1,
+        score: score,
+        score_data: scoredText,
+        answer: userAnswerText,
+      };
+      return payload;
+    }
+    return false;
+
+  };
+  
   return (
     <div className="container mt-3">
       <p>{question?.question_name}</p>

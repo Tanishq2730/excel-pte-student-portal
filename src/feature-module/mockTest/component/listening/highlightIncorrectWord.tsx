@@ -1,12 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 import AudioPlayer from "../audioPlayer";
 
-interface IncorrectWordProps {
+interface getProps {
   question: any;
-  queno: number;
+  setAnswer: (answerData: any) => void;
+  registerSubmit: (submitFn: () => void) => void;
 }
 
-const HighlightIncorrectWord: React.FC<IncorrectWordProps> = ({ question, queno }) => {
+const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
