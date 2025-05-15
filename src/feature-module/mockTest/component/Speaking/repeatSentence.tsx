@@ -562,6 +562,7 @@ const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
               width: "fit-content",
+              marginLeft:'2em'
             }}
           >
             <p style={{ marginBottom: 5 }}>Recorded Answer</p>

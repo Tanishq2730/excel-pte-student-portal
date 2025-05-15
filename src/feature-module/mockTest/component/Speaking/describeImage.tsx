@@ -493,7 +493,7 @@ const DescribeImage: React.FC<getProps> = ({ questionData, setAnswer, registerSu
               style={{ width: "100%", height: "auto", borderRadius: "5px" }}
             />
           </div>
-          <div className="col-md-6">
+          <div className="col-md-6 m-auto">
             <div className="recorder">
               <div
                 style={{

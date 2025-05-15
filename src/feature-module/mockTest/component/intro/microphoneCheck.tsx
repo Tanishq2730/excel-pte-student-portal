@@ -1,15 +1,26 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState, useEffect } from "react";
+
+const MAX_RECORD_DURATION = 30000; // 30 seconds
 
 const MicrophoneCheck: React.FC = () => {
   const [recording, setRecording] = useState(false);
   const [audioURL, setAudioURL] = useState<string | null>(null);
   const [status, setStatus] = useState("Idle");
+  const [progress, setProgress] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunks = useRef<Blob[]>([]);
+  const streamRef = useRef<MediaStream | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+  const progressIntervalRef = useRef<number | null>(null);
+  const autoStopTimeoutRef = useRef<number | null>(null);
 
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      streamRef.current = stream;
+
       mediaRecorderRef.current = new MediaRecorder(stream);
       audioChunks.current = [];
 
@@ -22,11 +33,24 @@ const MicrophoneCheck: React.FC = () => {
         const url = URL.createObjectURL(audioBlob);
         setAudioURL(url);
         setStatus("Finished...");
+        setProgress(100);
+        clearInterval(progressIntervalRef.current!);
+        clearTimeout(autoStopTimeoutRef.current!);
+        stopStream();
       };
 
       mediaRecorderRef.current.start();
       setRecording(true);
       setStatus("Recording...");
+      setProgress(0);
+
+      progressIntervalRef.current = window.setInterval(() => {
+        setProgress((prev) => (prev < 95 ? prev + 1 : 95));
+      }, MAX_RECORD_DURATION / 100);
+
+      autoStopTimeoutRef.current = window.setTimeout(() => {
+        stopRecording();
+      }, MAX_RECORD_DURATION);
     } catch (error) {
       console.error("Microphone access denied or error:", error);
       setStatus("Microphone access denied.");
@@ -34,29 +58,79 @@ const MicrophoneCheck: React.FC = () => {
   };
 
   const stopRecording = () => {
-    if (mediaRecorderRef.current) {
+    // Stop recording if recording is active
+    if (mediaRecorderRef.current && recording) {
       mediaRecorderRef.current.stop();
       setRecording(false);
+    }
+
+    // Stop audio playback if playing
+    if (audioRef.current && isPlaying) {
+      audioRef.current.pause();
+      audioRef.current.currentTime = 0;
+      setStatus("Playback Stopped");
+      setIsPlaying(false);
+    }
+
+    clearInterval(progressIntervalRef.current!);
+    clearTimeout(autoStopTimeoutRef.current!);
+    stopStream();
+  };
+
+  const stopStream = () => {
+    if (streamRef.current) {
+      streamRef.current.getTracks().forEach((track) => track.stop());
+      streamRef.current = null;
     }
   };
 
   const handlePlayback = () => {
-    setStatus("Playing...");
-    const audio = new Audio(audioURL!);
-    audio.play();
+    if (audioRef.current) {
+      audioRef.current.play();
+      setStatus("Playing...");
+      setIsPlaying(true);
+
+      audioRef.current.onended = () => {
+        setStatus("Finished...");
+        setIsPlaying(false);
+      };
+    }
   };
+
+  // When audio is paused or stopped externally, update isPlaying
+  useEffect(() => {
+    if (!audioRef.current) return;
+
+    const handlePause = () => setIsPlaying(false);
+    const audioEl = audioRef.current;
+
+    audioEl.addEventListener("pause", handlePause);
+    audioEl.addEventListener("ended", handlePause);
+
+    return () => {
+      audioEl.removeEventListener("pause", handlePause);
+      audioEl.removeEventListener("ended", handlePause);
+    };
+  }, [audioURL]);
+
+  useEffect(() => {
+    return () => {
+      clearInterval(progressIntervalRef.current!);
+      clearTimeout(autoStopTimeoutRef.current!);
+      stopStream();
+    };
+  }, []);
 
   return (
     <div className="container">
       <div className="mockInfoContent">
         <h4>Microphone Check</h4>
-        <div className="mockInfoContent">
+        <div className="">
           <p className="font-weight-bold">
             This is an opportunity to check that your microphone is working
             correctly.
             <br />
-            1. Make sure your headset is on and the microphone is positioned
-            near your mouth.
+            1. Make sure your headset is on and the microphone is positioned near your mouth.
             <br />
             2. Click "Record" and say: "Testing, testing, one, two, three".
             <br />
@@ -66,35 +140,42 @@ const MicrophoneCheck: React.FC = () => {
           </p>
 
           <div className="descimgage2">
-            <p className="text-start">Current status:</p>
-            {/* <p className="text-start">{status}</p> */}
+            <p className="text-start mb-1">
+              Current status: <strong>{status}</strong>
+            </p>
 
-            <input
-              type="range"
-              min="0"
-              max="100"
-              value={status === "Recording..." ? 50 : status === "Finished..." ? 100 : 0}
-              readOnly
-              className="progress-v3"
-              style={{
-                background:
-                  "linear-gradient(to right, var(--primary-color) 0%, var(--primary-color) 0%, #ccc 0%, #ccc 100%)",
-              }}
-            />
-
-
-            <div className="my-3">
-            {audioURL && (
-              <audio
-                controls
-                style={{ height: "40px", width: "300px" }}
-                src={audioURL}
-              >
-                Your browser does not support the audio element.
-              </audio>
-            )}
+            {/* Progress Bar */}
+            <div
+              className="progress mb-3"
+              style={{ height: "12px", borderRadius: "20px", backgroundColor: "#e0e0e0",width:"16em" }}
+            >
+              <div
+                className="progress-bar"
+                role="progressbar"
+                style={{
+                  width: `${progress}%`,
+                  // width: `${progress}%`,
+                  backgroundColor: "#183052",
+                  transition: "width 0.2s linear",
+                }}
+              ></div>
             </div>
 
+            {/* Audio Player */}
+            <div className="my-3">
+              {audioURL && (
+                <audio
+                  ref={audioRef}
+                  controls
+                  style={{ height: "40px", width: "300px" }}
+                  src={audioURL}
+                >
+                  Your browser does not support the audio element.
+                </audio>
+              )}
+            </div>
+
+            {/* Buttons */}
             <button
               className="btn btn-theme"
               style={{
@@ -104,7 +185,7 @@ const MicrophoneCheck: React.FC = () => {
                 margin: "0 2px",
               }}
               onClick={startRecording}
-              disabled={recording}
+              disabled={recording || isPlaying}
             >
               Record
             </button>
@@ -118,7 +199,7 @@ const MicrophoneCheck: React.FC = () => {
                 margin: "0 2px",
               }}
               onClick={handlePlayback}
-              disabled={!audioURL}
+              disabled={!audioURL || recording || isPlaying}
             >
               Playback
             </button>
@@ -132,7 +213,7 @@ const MicrophoneCheck: React.FC = () => {
                 margin: "0 2px",
               }}
               onClick={stopRecording}
-              disabled={!recording}
+              disabled={false} // Always enabled
             >
               Stop
             </button>

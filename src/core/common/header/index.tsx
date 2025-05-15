@@ -212,7 +212,7 @@ const Header = () => {
               <div className="search">
                 <Link
                   to=""
-                  className="freeuser d-flex justify-content-center align-items-center me-1 p-2 px-4  text-white"
+                  className="freeuser d-flex justify-content-center align-items-center me-2 p-2 px-4  text-white"
                   style={{ width: "8em !important" }}
                 >
                   <p style={{ fontWeight: "400" }}>Free User</p>

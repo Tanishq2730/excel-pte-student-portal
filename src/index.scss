@@ -1870,6 +1870,7 @@ body.app-chat {
 }
 
 .mocktest-session {
+  padding-bottom: 4em;
   .mockmainbtn {
     position: absolute;
     right: 5%;
@@ -1879,6 +1880,36 @@ body.app-chat {
 
 .mockInfoContent {
   margin-top: 2em;
+  p{
+    line-height: 30px;
+    font-size: 18px;
+    padding-top: 1em;
+  }
+  h6{
+    line-height: 30px;
+    font-size: 18px;
+  }
+  h5{
+    line-height: 30px;
+    font-size: 18px;
+  }
+}
+
+.mocktest-session{
+  p{
+    line-height: 30px;
+    font-size: 18px;
+    padding-top: 1em;
+  }
+  .recorderDetail{
+    .recorder{
+      display: flex;
+      justify-content: center;
+    }
+  }
+  .questionContent{
+    display: none;
+  }
 }
 
 .record-box {
@@ -1947,7 +1978,7 @@ body.app-chat {
 
 .modal-box {
   background-color: #fff;
-  padding: 30px;
+  padding: 3em 10em;
   border-radius: 8px;
   text-align: center;
 }
@@ -2641,10 +2672,11 @@ body.app-chat {
 }
 
 .footer-v3 {
-  position: absolute;
+  position: fixed;
   width: 100%;
   bottom: 2%;
-  margin-top: 2em;
+  margin-top: 2em !important;
+  background-color: #fff !important;
 }
 
 .studyStyle {
@@ -2706,4 +2738,9 @@ body.app-chat {
 
 .headerpersonicon{
   color: #4c4c4c !important;
+}
+
+
+.timer{
+  display: flex;
 }

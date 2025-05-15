@@ -134,7 +134,7 @@ const SelfIntroduction: React.FC<Props> = ({ id, session_id, LoadFinal,setCannot
               <br />
             </div>
 
-            <div className="col-md-6">
+            <div className="col-md-3">
               
               {showRecorder ? (
                 <div className="micSection">
