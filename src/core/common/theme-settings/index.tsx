@@ -190,7 +190,7 @@ const ThemeSettings = () => {
               <input
                 type="text"
                 className="questionSearch"
-                placeholder="Question Content / Number"
+                placeholder="Question Search"
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
               />

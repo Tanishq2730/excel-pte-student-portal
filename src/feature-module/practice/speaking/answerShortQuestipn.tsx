@@ -664,6 +664,7 @@ const AnswerShortQuestion = () => {
                         className="audio-inner p-4 rounded-3"
                       
                       >
+                        <h3 className="mb-3">Answer</h3>
                         <p dangerouslySetInnerHTML={{ __html: questionData?.answer_american || "" }} />
                         {/* <h3 className="fw-semibold mb-2">Audio Answer:</h3>
                         <hr />

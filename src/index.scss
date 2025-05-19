@@ -2148,9 +2148,9 @@ body.app-chat {
   color: #fff;
 }
 
-.card-header {
-  border-bottom: 2px solid #00b2a9;
-}
+// .card-header {
+//   border-bottom: 2px solid #00b2a9;
+// }
 
 .freeuser {
   background-color: #00b2a9;
@@ -2743,4 +2743,29 @@ body.app-chat {
 
 .timer{
   display: flex;
+}
+
+.cardDetail{
+  ul{
+    list-style: disc;
+  }
+  .right{
+    color: rgb(56, 211, 56);
+  }
+  .wrong{
+    color: rgb(230, 65, 65);
+  }
+  .multiple{
+    display: flex;
+    span{
+      margin: 0px 10px !important;
+    }
+  }
+  .multiples{
+    span{
+      border: 1px solid #000;
+      padding: 10px 14px;
+      border-radius: 100px;
+    }
+  }
 }

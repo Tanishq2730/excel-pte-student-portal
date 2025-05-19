@@ -264,7 +264,7 @@ const MultipleChooseAnswer = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="row">
-                        <div className="col-md-6">
+                        <div className="col-md-8">
                           <div className="innercontent mt-0">
                             <p
                               dangerouslySetInnerHTML={{
@@ -273,7 +273,7 @@ const MultipleChooseAnswer = () => {
                             />
                           </div>
                         </div>
-                        <div className="col-md-6">
+                        <div className="col-md-4">
                           <div className="chooseSection">
                             <div className="">
                               <div className="card shadow-sm">
@@ -347,7 +347,7 @@ const MultipleChooseAnswer = () => {
                           style={{ background: "rgb(228 246 255)" }}
                         >
                           <div className="audio-inner p-4 rounded-3">
-                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
+                            <h3 className="mb-3">Answer</h3>
                             <hr />
                             <div className="rounded-pill">
                               <audio controls className="w-100">

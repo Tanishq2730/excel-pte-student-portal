@@ -6,12 +6,11 @@ interface WritingScoreModalProps {
 }
 
 const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
-  // if (!logDetail || !logDetail.data) return null;
+  if (!logDetail) return null;
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;
   const parsedScoreData = JSON.parse(logDetail?.score_data || '{}');
 
-  if (!logDetail) return null;
   const scoreData = [
     {
       label: 'Content',
@@ -51,20 +50,21 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
   ];
 
   return (
-    <div className="container py-4" style={{ fontFamily: 'Arial, sans-serif' }}>     
-     
-     <div className="mt-2 mb-3">
+    <div className="container py-4" style={{ fontFamily: 'Arial, sans-serif' }}>
+      {/* Word Buttons */}
+      <div className="mt-2 mb-3">
         <button className="btn btn-outline-danger">
-          <span className="">Bad words :30</span>
+          <span>Bad words :30</span>
         </button>
         <button className="btn btn-outline-warning mx-3">
-          <span className=""> AVG Words :40</span>
+          <span>AVG Words :40</span>
         </button>
         <button className="btn btn-outline-success">
-          <span className="">Good Words :60</span>
+          <span>Good Words :60</span>
         </button>
       </div>
-      {/* Scored Transcript */}
+
+      {/* AI Speech Recognition */}
       <div className="p-3 rounded mb-4" style={{ backgroundColor: '#f1f9fb' }}>
         <strong>AI Speech Recognition:</strong>
         <div className="mt-2" dangerouslySetInnerHTML={{ __html: parsedScoreData.highlightedText || '' }} />
@@ -75,22 +75,42 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
       <div className="row mt-3">
         {scoreData.map((item, idx) => (
           <div className="col-md-6 mb-4" key={idx}>
-            <div className="p-3 rounded shadow-sm" style={{ backgroundColor: '#fef9f7', border: '1px solid #f1e1dc' }}>
-              <div className="d-flex justify-content-between fw-semibold">
+            <div
+              className="p-3 rounded shadow-sm"
+              style={{
+                backgroundColor: '#fef9f7',
+                border: '1px solid #f1e1dc',
+                height: '100%'
+              }}
+            >
+              <div className="d-flex justify-content-between fw-semibold mb-1">
                 <span>{item.label}</span>
-                <span>{item.score} / {logDetail.total_score}</span>
+                <span>
+                  {item.score} / {item.totalscore}
+                </span>
               </div>
-              <div className="mt-2 mb-1" style={{ backgroundColor: '#e0e0e0', height: '8px', borderRadius: '4px' }}>
+              <div
+                className="w-100"
+                style={{
+                  backgroundColor: '#e0e0e0',
+                  height: '8px',
+                  borderRadius: '4px',
+                  overflow: 'hidden'
+                }}
+              >
                 <div
                   style={{
-                    width: `${(item.score / item.totalscore) * 100}%`,
+                    width: `${Math.min((item.score / item.totalscore) * 100, 100)}%`,
                     backgroundColor: item.barColor,
                     height: '100%',
-                    borderRadius: '4px'
+                    borderRadius: '4px',
+                    transition: 'width 0.5s ease'
                   }}
                 ></div>
               </div>
-              {item.desc && <small className="text-muted d-block mt-1">{item.desc}</small>}
+              {item.desc && (
+                <small className="text-muted d-block mt-1">{item.desc}</small>
+              )}
             </div>
           </div>
         ))}

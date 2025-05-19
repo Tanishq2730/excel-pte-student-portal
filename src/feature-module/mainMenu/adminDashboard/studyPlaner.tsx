@@ -54,7 +54,7 @@ const StudyPlaner: React.FC = () => {
         </ul>
         <div className="tab-content mb-4">
           <div className="tab-pane active" id="orders" role="tabpanel">
-            <div className="card-body bg-gray rounded-3">
+            <div className="card-body  rounded-3">
               <div className="studycontent">
                 <div className="head mb-3">
                   <div className="icon bg-danger-transparent">
@@ -69,7 +69,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -85,7 +85,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -101,7 +101,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -117,7 +117,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -133,7 +133,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -147,7 +147,7 @@ const StudyPlaner: React.FC = () => {
             </div>
           </div>
           <div className="tab-pane" id="accepted" role="tabpanel">
-            <div className="card-body bg-gray rounded-3">
+            <div className="card-body  rounded-3">
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-secondary-transparent">
@@ -162,7 +162,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -178,7 +178,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -191,7 +191,7 @@ const StudyPlaner: React.FC = () => {
             </div>
           </div>
           <div className="tab-pane" id="declined" role="tabpanel">
-            <div className="card-body bg-gray rounded-3">
+            <div className="card-body  rounded-3">
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-warning-transparent">
@@ -206,7 +206,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
@@ -219,7 +219,7 @@ const StudyPlaner: React.FC = () => {
             </div>
           </div>
           <div className="tab-pane" id="listening" role="tabpanel">
-          <div className="card-body bg-gray rounded-3">
+          <div className="card-body  rounded-3">
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-success-transparent">
@@ -234,7 +234,7 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <div className="progress progress-xs flex-grow-1">
                     <div
-                      className="progress-bar bg-secondary rounded"
+                      className="progress-bar bg-primary rounded"
                       role="progressbar"
                       style={{ width: "80%" }}
                       aria-valuenow={30}
