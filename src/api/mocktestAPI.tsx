@@ -35,3 +35,14 @@ export const fetchMocktests = async (id: number) => {
   export const saveFinalMocktest = async  (formData:any) => {
       return await apiHandler(`${api_url}v1/mocktests/final-save`, "POST",formData);
   };
+
+  export const fetchMocktestResults = async () => {
+    try {
+      const mocktestType = localStorage.getItem("mocktestType") || "Academic"; // default fallback
+      const url = `${api_url}v1/mocktests/result/list?mocktestType=${encodeURIComponent(mocktestType)}`;
+      return await apiHandler(url, "GET");
+    } catch (error) {
+      console.error("Error fetching mocktests:", error);
+      throw error;
+    }
+  };

@@ -1,29 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import MockTestResultCard from "../component/common/mockTestResultCard";
+import { fetchMocktestResults } from "../../../api/mocktestAPI";
+
+interface MockTestData {
+  id: number;
+  sessionId: string;
+  start: string;
+  end: string | null;
+  status: string;
+  introduction: string;
+  mocktest: {
+    id: number;
+    name: string;
+    mocktestType: string;
+    typeId: number;
+  };
+}
 
 const MockTestResult: React.FC = () => {
-  const mockTests = [
-    { testNumber: 40, time: "2 hours", attempted: 70 },
-    { testNumber: 41, time: "1.5 hours", attempted: 85 },
-    { testNumber: 42, time: "2.5 hours", attempted: 60 },
-    { testNumber: 43, time: "1 hour", attempted: 90 },
-  ];
+  const [mockTests, setMockTests] = useState<MockTestData[]>([]);
+
+  useEffect(() => {
+    const getData = async () => {
+      try {
+        const res = await fetchMocktestResults();
+        if (res.success) {
+          setMockTests(res.data);
+        }
+      } catch (err) {
+        console.error("Error loading mock test data:", err);
+      }
+    };
+    getData();
+  }, []);
+
   return (
     <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
-        <div className="mainHead pb-3">
-            <h3>Mocktest Result</h3>
+          <div className="mainHead pb-3">
+            <h3>Mocktest Results</h3>
           </div>
           <div className="row">
-            {mockTests.map((test, index) => (
-              <div className="col-md-3">
+            {mockTests.map((test) => (
+              <div key={test.id} className="col-md-3">
                 <MockTestResultCard
-                  key={index}
-                  testNumber={test.testNumber}
-                  time={test.time}
-                  attempted={test.attempted}
-                  onStart={() => alert(`Starting Test ${test.testNumber}`)}
+                  mocktest={test.mocktest.name}
+                  mockType={test.mocktest.mocktestType}
+                  sessionId={test.sessionId}
+                  startTime={test.start}
+                  endTime={test.end}
+                  status={test.status}
+                  introductionAudio={test.introduction}
+                  onStart={() => alert(`Reviewing session ${test.sessionId}`)}
                 />
               </div>
             ))}

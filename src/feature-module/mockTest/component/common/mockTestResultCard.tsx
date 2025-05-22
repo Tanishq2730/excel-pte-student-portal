@@ -2,20 +2,32 @@ import React from "react";
 import { all_routes } from "../../../../feature-module/router/all_routes";
 import { Link } from "react-router-dom";
 
-interface MockTestCardProps {
-  testNumber: number;
-  time: string;
-  attempted: number;
+interface MockTestResultCardProps {
+  mocktest: string;
+  mockType: string;
+  sessionId: string;
+  startTime: string;
+  endTime: string | null;
+  status: string;
+  introductionAudio?: string;
   onStart: () => void;
+  onDelete?: () => void; // Optional delete handler
 }
 
-const MockTestResultCard: React.FC<MockTestCardProps> = ({
-  testNumber,
-  time,
-  attempted,
+const MockTestResultCard: React.FC<MockTestResultCardProps> = ({
+  mocktest,
+  mockType,
+  sessionId,
+  startTime,
+  endTime,
+  status,
+  introductionAudio,
   onStart,
+  onDelete,
 }) => {
   const routes = all_routes;
+  const modalId = `delete-modal-${sessionId}`;
+
   return (
     <div className="mock-test-card">
       <div
@@ -24,7 +36,7 @@ const MockTestResultCard: React.FC<MockTestCardProps> = ({
       >
         <div className="card-header border-0 pt-0">
           <div className="card-title">
-            <h2 className="mb-0">Full Mock Test {testNumber}</h2>
+            <h2 className="mb-0">{mocktest}</h2>
           </div>
         </div>
         <div className="reaultCardBtn">

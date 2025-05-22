@@ -1,158 +1,92 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
+import { fetchCategoryQuiz } from "../../api/quizAPI";
+
+interface Quiz {
+  id: number;
+  quiz_name: string;
+  attemptedQuestions: number;
+  totalQuestions: number;
+}
+
+interface QuizCategory {
+  id: number;
+  category_name: string;
+  quiz: Quiz[];
+}
 
 interface Props {
-  onStartQuiz: () => void;
-  onShowLesson: () => void;
+  onStartQuiz: (quiz: Quiz) => void;
+  onShowLesson: (categoryId: number) => void;
 }
 
 const AccordianQuestion: React.FC<Props> = ({ onStartQuiz, onShowLesson }) => {
+  const [categoryQuizes, setCategoryQuiz] = useState<QuizCategory[]>([]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await fetchCategoryQuiz();
+      if (res?.success && res.data.length) {
+        setCategoryQuiz(res.data);
+      }
+    };
+    loadData();
+  }, []);
+
   return (
     <div className="card-body">
       <div className="accordion accordion-solid-primary accordions-items-seperate" id="accordioninfoborderExample">
-        
-        {/* Adjective */}
-        <div className="accordion-item">
-          <h2 className="accordion-header" id="headingborderinfoOne">
-            <button
-              className="accordion-button"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#infoBorderOne"
-              aria-expanded="true"
-              aria-controls="infoBorderOne"
-              onClick={onStartQuiz}
-            >
-              <div className="acBtn">
-                <div>Adjective</div>
-                <div className="d-flex">
-                  <button
-                    className="btn btn-primary py-1 mx-2"
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onShowLesson();
-                    }}
-                  >
-                    Lesson
-                  </button>
+        {categoryQuizes.map((category, index) => (
+          <div className="accordion-item" key={category.id}>
+            <h2 className="accordion-header" id={`heading${category.id}`}>
+              <button
+                className={`accordion-button ${index === 0 ? "" : "collapsed"}`}
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target={`#collapse${category.id}`}
+                aria-expanded={index === 0 ? "true" : "false"}
+                aria-controls={`collapse${category.id}`}
+              >
+                <div className="acBtn">
+                  <div>{category.category_name}</div>
+                  <div className="d-flex">
+                    <button
+                      className="btn btn-primary py-1 mx-2"
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        onShowLesson(category.id);
+                      }}
+                    >
+                      Lesson
+                    </button>
+                  </div>
                 </div>
-              </div>
-            </button>
-          </h2>
-          <div
-            id="infoBorderOne"
-            className="accordion-collapse collapse show"
-            aria-labelledby="headingborderinfoOne"
-            data-bs-parent="#accordioninfoborderExample"
-          >
-            <div className="accordion-body">
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
-              </div>
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
+              </button>
+            </h2>
+            <div
+              id={`collapse${category.id}`}
+              className={`accordion-collapse collapse ${index === 0 ? "show" : ""}`}
+              aria-labelledby={`heading${category.id}`}
+              data-bs-parent="#accordioninfoborderExample"
+            >
+              <div className="accordion-body">
+                {category.quiz.map((quiz) => (
+                  <div
+                    className="practiceCard"
+                    key={quiz.id}
+                    onClick={() => onStartQuiz(quiz)}
+                  >
+                    <p className="mb-0">{quiz.quiz_name}</p>
+                    <div className="count">
+                      <p>{quiz.attemptedQuestions} / {quiz.totalQuestions}</p>
+                    </div>
+                  </div>
+                ))}
+                {category.quiz.length === 0 && <p className="text-muted">No quizzes available.</p>}
               </div>
             </div>
           </div>
-        </div>
-
-        {/* Adverbs & Degree */}
-        <div className="accordion-item">
-          <h2 className="accordion-header" id="headingborderinfoTwo">
-            <button
-              className="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#infoBorderTwo"
-              aria-expanded="false"
-              aria-controls="infoBorderTwo"
-              onClick={onStartQuiz}
-            >
-              <div className="acBtn">
-                <div>Adverbs & Degree</div>
-                <div className="d-flex">
-                  <button
-                    className="btn btn-primary py-1 mx-2"
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onShowLesson();
-                    }}
-                  >
-                    Lesson
-                  </button>
-                </div>
-              </div>
-            </button>
-          </h2>
-          <div
-            id="infoBorderTwo"
-            className="accordion-collapse collapse"
-            aria-labelledby="headingborderinfoTwo"
-            data-bs-parent="#accordioninfoborderExample"
-          >
-            <div className="accordion-body">
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
-              </div>
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Adverbs & Manner */}
-        <div className="accordion-item">
-          <h2 className="accordion-header" id="headingborderinfoThree">
-            <button
-              className="accordion-button collapsed"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#infoBorderThree"
-              aria-expanded="false"
-              aria-controls="infoBorderThree"
-              onClick={onStartQuiz}
-            >
-              <div className="acBtn">
-                <div>Adverbs & Manner</div>
-                <div className="d-flex">
-                  <button
-                    className="btn btn-primary py-1 mx-2"
-                    type="button"
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      onShowLesson();
-                    }}
-                  >
-                    Lesson
-                  </button>
-                </div>
-              </div>
-            </button>
-          </h2>
-          <div
-            id="infoBorderThree"
-            className="accordion-collapse collapse"
-            aria-labelledby="headingborderinfoThree"
-            data-bs-parent="#accordioninfoborderExample"
-          >
-            <div className="accordion-body">
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 1</p>
-                <div className="count"><p>10/10</p></div>
-              </div>
-              <div className="practiceCard" onClick={onStartQuiz}>
-                <p className="mb-0">Practice 2</p>
-                <div className="count"><p>10/10</p></div>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );

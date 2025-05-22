@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
+import { saveQuizQuestions } from '../../api/quizAPI';
 interface Question {
+  id: number;
+  quizId: number;
   question: string;
   options: string[];
   correctAnswer: string;
@@ -45,11 +47,29 @@ const Quiz: React.FC<QuizProps> = ({ questions, onComplete, onStepChange, onRest
     }
   }, [goToStep]);
 
-  const handleOptionClick = (option: string) => {
+  const handleOptionClick = async (option: string) => {
+    // if (!isAnswered) {
+    //   setSelectedOption(option);
+    //   setIsAnswered(true);
+    //   onStepChange(currentQuestionIndex + 1, option === currentQuestion.correctAnswer);
+    // }
     if (!isAnswered) {
       setSelectedOption(option);
       setIsAnswered(true);
-      onStepChange(currentQuestionIndex + 1, option === currentQuestion.correctAnswer);
+
+      const isCorrect = option === currentQuestion.correctAnswer;
+        onStepChange(currentQuestionIndex + 1, isCorrect);
+        const quizId = currentQuestion.quizId;
+        const QuestionId = currentQuestion.id;
+        const payload = {selected_option:option}
+      // Call your API here
+      try {
+        const response =  await saveQuizQuestions(quizId,QuestionId,payload);
+        console.log(response);
+        
+      } catch (error) {
+        console.error('Error saving answer:', error);
+      }
     }
   };
 
@@ -64,6 +84,7 @@ const Quiz: React.FC<QuizProps> = ({ questions, onComplete, onStepChange, onRest
       onComplete();
     }
   };
+console.log(currentQuestion);
 
   return (
     <div className="containers">
@@ -73,11 +94,13 @@ const Quiz: React.FC<QuizProps> = ({ questions, onComplete, onStepChange, onRest
       </div>
       <p className="mt-3 text-start">{currentQuestion.question}</p>
       <div className="list-group">
-        {currentQuestion.options.map((option, index) => {
+        {currentQuestion?.options?.map((option, index) => {
           let className = 'list-group-item text-start';
           if (isAnswered) {
-            if (option === selectedOption) {
-              className += option === currentQuestion.correctAnswer ? ' bg-success text-white' : ' bg-danger text-white';
+            if (option === currentQuestion.correctAnswer) {
+              className += ' bg-success text-white';
+            } else if (option === selectedOption) {
+              className += ' bg-danger text-white';
             }
           }
           return (
