@@ -108,6 +108,7 @@ const AdminDashboard = () => {
     slidesToShow: 1,
     margin: 24,
     speed: 500,
+    arrows: false,
     responsive: [
       {
         breakpoint: 1500,

@@ -39,20 +39,12 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ typeId }) => {
         {templates.map((template) => (
           <div className="col-md-2" key={template.id}>
             <div className="card">
-            <Link
+              <Link
                 to={all_routes.templateDetail.replace(":id", template.id.toString())}
                 state={{ template }}
-                >
+              >
                 <div className="cardIcon">
-                  <img
-                    src={
-                      template.image_pdf?.endsWith(".pdf")
-                        ? "/assets/img/pdf-icon.png"
-                        : template.image_pdf
-                    }
-                    alt={template.title}
-                    style={{ width: "100%", height: "100px", objectFit: "cover" }}
-                  />
+                  <i className="ion-person" style={{ fontSize: "50px" }}></i>
                 </div>
                 <h5>{template.title}</h5>
               </Link>
