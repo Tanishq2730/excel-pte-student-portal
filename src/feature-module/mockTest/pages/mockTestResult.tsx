@@ -45,6 +45,7 @@ const MockTestResult: React.FC = () => {
             {mockTests.map((test) => (
               <div key={test.id} className="col-md-3">
                 <MockTestResultCard
+                  id={test.id}
                   mocktest={test.mocktest.name}
                   mockType={test.mocktest.mocktestType}
                   sessionId={test.sessionId}

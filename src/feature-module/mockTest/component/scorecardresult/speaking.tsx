@@ -42,13 +42,18 @@ const questions: Question[] = [
   },
 ];
 
-const Speaking: React.FC = () => {
-  const [remarks, setRemarks] = useState<{ [key: number]: string }>({});
 
-  const handleRemarkChange = (id: number, value: string) => {
-    setRemarks({ ...remarks, [id]: value });
-  };
+interface dataProps {
+  data: any;
+}
 
+
+const Speaking: React.FC<dataProps> = ({ data }) => {
+ 
+   if (!Array.isArray(data) || data.length === 0) {
+    return <p className="text-muted">No writing data available.</p>;
+  }
+  
   return (
     <div className="container mt-4">
       {questions.map((question) => (

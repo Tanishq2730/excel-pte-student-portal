@@ -41,7 +41,13 @@ const questions: Question[] = [
   },
 ];
 
-const Reading: React.FC = () => {
+
+interface dataProps {
+  data: Question[];
+}
+
+
+const Reading: React.FC<dataProps> = ({ data }) => {
   const [remarks, setRemarks] = useState<{ [key: number]: string }>({});
 
   const handleRemarkChange = (id: number, value: string) => {

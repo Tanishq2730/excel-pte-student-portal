@@ -18,6 +18,10 @@ interface Question {
     highlightedWord: string;
 }
 
+interface dataProps {
+  data: Question[];
+}
+
 const questions: Question[] = [
     {
         id: 1,
@@ -38,12 +42,15 @@ const questions: Question[] = [
     },
 ];
 
-const Listening: React.FC = () => {
-    const [remarks, setRemarks] = useState<{ [key: number]: string }>({});
+const Listening: React.FC<dataProps> = ({ data }) => {
 
-    const handleRemarkChange = (id: number, value: string) => {
-        setRemarks({ ...remarks, [id]: value });
-    };
+    if (!Array.isArray(data) || data.length === 0) {
+        return <p className="text-muted">No writing data available.</p>;
+    }
+    console.clear();
+ console.log(data);
+  console.log(JSON.stringify(data, null, 2));
+   
     return (
         <div className="container mt-4">
             {questions.map((question) => (

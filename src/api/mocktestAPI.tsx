@@ -46,3 +46,7 @@ export const fetchMocktests = async (id: number) => {
       throw error;
     }
   };
+
+  export const mockTestResultDetail = async (id:any) => {
+      return await apiHandler(`${api_url}v1/mocktests/result/${id}`, "GET");
+  };

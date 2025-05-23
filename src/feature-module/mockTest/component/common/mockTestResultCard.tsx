@@ -3,6 +3,7 @@ import { all_routes } from "../../../../feature-module/router/all_routes";
 import { Link } from "react-router-dom";
 
 interface MockTestResultCardProps {
+  id:number;
   mocktest: string;
   mockType: string;
   sessionId: string;
@@ -15,6 +16,7 @@ interface MockTestResultCardProps {
 }
 
 const MockTestResultCard: React.FC<MockTestResultCardProps> = ({
+  id,
   mocktest,
   mockType,
   sessionId,
@@ -27,7 +29,7 @@ const MockTestResultCard: React.FC<MockTestResultCardProps> = ({
 }) => {
   const routes = all_routes;
   const modalId = `delete-modal-${sessionId}`;
-
+  const resultLink = routes.result.replace(":id", id.toString());
   return (
     <div className="mock-test-card">
       <div
@@ -41,7 +43,7 @@ const MockTestResultCard: React.FC<MockTestResultCardProps> = ({
         </div>
         <div className="reaultCardBtn">
           <Link
-            to={routes.result}
+            to={resultLink}
             className="btn btn-primary rounded-pill w-100 mt-3"
           >
             Check result

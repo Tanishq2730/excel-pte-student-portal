@@ -146,7 +146,7 @@ export const all_routes = {
   MockAllQuestion:"/mocktest/exam/:id/:session_id",
   sectionalMocktest:"/sectional-mocktest",
   mockTestResult:"/mocktest-result",
-  result:"/result",
+  result:"/result/:id",
   pendingMocktest:"/pending-mocktest",
   studyTool:"/study-tool",
   classRecording:"/class-recording",
