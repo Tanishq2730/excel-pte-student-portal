@@ -2192,6 +2192,9 @@ body.app-chat {
       border-radius: 100px;
       padding: 10px;
       margin-bottom: 1em;
+      display: flex;
+      justify-content: center;
+      align-items: center;
       img {
         width: 100%;
         padding: 10px;

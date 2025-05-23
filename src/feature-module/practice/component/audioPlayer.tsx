@@ -126,8 +126,12 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
               accentColor: "#4a90e2",
               background: `linear-gradient(to right, #4a90e2 ${
                 (currentTime / duration) * 100
-              }%, #dee2e6 ${(currentTime / duration) * 100}%)`,
-              height: "6px",
+              }%, #e9ecef ${(currentTime / duration) * 100}%)`,
+              height: "8px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              WebkitAppearance: "none",
+              appearance: "none"
             }}
           />
           <small className="text-muted" style={{width:"6em",marginLeft:"1em"}}>
