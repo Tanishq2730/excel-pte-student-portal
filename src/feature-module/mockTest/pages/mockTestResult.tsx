@@ -32,8 +32,9 @@ const MockTestResult: React.FC = () => {
       }
     };
     getData();
+  
   }, []);
-
+  console.log(mockTests);
   return (
     <div className="page-wrapper">
       <div className="content">
@@ -43,7 +44,7 @@ const MockTestResult: React.FC = () => {
           </div>
           <div className="row">
             {mockTests.map((test) => (
-              <div key={test.id} className="col-md-3">
+              <div key={test.id} className="col-md-3 mb-3">
                 <MockTestResultCard
                   id={test.id}
                   mocktest={test.mocktest.name}
