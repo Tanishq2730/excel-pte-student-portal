@@ -26,6 +26,7 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../environment";
 import PageHeading from "../component/pageHeading";
+import DictionaryModal from "../component/DictionaryModal";
 
 // Define types
 interface Timestamp {
@@ -164,6 +165,8 @@ const ReadAloud = () => {
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
   };
+  
+  
 
   const handleRestart = () => {
     const preparationTimeInSeconds = parseInt(
@@ -535,6 +538,15 @@ const ReadAloud = () => {
       setAlert({ type: "danger", message: "Something went wrong." });
     }
   };
+const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+const [selectedWord, setSelectedWord] = useState<string>("");
+
+const handleWordClick = (word: string) => {
+  console.log(word);
+  
+  setSelectedWord(word);
+  setShowDictionaryModal(true);
+};
 
   return (
     <div className="page-wrappers">
@@ -582,17 +594,25 @@ const ReadAloud = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: questionData?.question || "",
-                          }}
-                        />
+                        <p>
+                              {questionData?.question?.split(" ").map((word, idx) => (
+                                <span
+                                  key={idx}
+                                  onClick={() => handleWordClick(word)}
+                                  style={{ cursor: "pointer", marginRight: 4 }}
+                                  title="Click to see definition"
+                                >
+                                  {word}
+                                </span>
+                              ))}
+                            </p>  
                       </div>
                       <div className="micSection">
                         <Recorder
                           onRecordingComplete={handleRecordingComplete}
                           onStopRecording={handleStopRecording}
                           resetRecording={resetRecording}
+                          countdown={countdown}
                         />
                       </div>
 
@@ -615,20 +635,12 @@ const ReadAloud = () => {
                             className="audio-inner p-4 rounded-3"
              
                           >
-                            <h3 className="mb-3">Answer</h3>
-                            <p
+                            <h3 className="mb-3">Answer</h3>                            
+                             <p
                               dangerouslySetInnerHTML={{
                                 __html: questionData?.answer_american || "",
                               }}
-                            />
-                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source src={url} type="audio/mpeg" />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                            />                          
                           </div>
                         </div>
                       )}
@@ -637,6 +649,12 @@ const ReadAloud = () => {
                 </div>
               </div>
             </div>
+
+          <DictionaryModal
+            isOpen={showDictionaryModal}
+            onClose={() => setShowDictionaryModal(false)}
+            word={selectedWord}
+          />
 
             {showNotes && (
               <div className="col-md-3">

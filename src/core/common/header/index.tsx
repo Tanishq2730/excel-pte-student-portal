@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -10,20 +11,31 @@ import {
   setMobileSidebar,
   toggleMiniSidebar,
 } from "../../data/redux/sidebarSlice";
-import { useState } from "react";
 import { all_routes } from "../../../feature-module/router/all_routes";
 import { logout } from "../../data/redux/authSlice";
 import { useNavigate } from "react-router-dom";
 import PracticeHeader from "./practiceHeader";
+import { fetchBookingData } from "../../../core/data/redux/bookingSlice"; // adjust path as needed
+import { RootState } from "../../../core/data/redux/store";
+import { AppDispatch } from "../../../core/data/redux/store";
 
 const Header = () => {
   const routes = all_routes;
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const dataTheme = useSelector((state: any) => state.themeSetting.dataTheme);
   const dataLayout = useSelector((state: any) => state.themeSetting.dataLayout);
+  const userData = useSelector((state: any) => state.auth);
   const [notificationVisible, setNotificationVisible] = useState(false);
   const [showMegaMenu, setShowMegaMenu] = useState(false);
   const navigate = useNavigate();
+
+  const dispatch: AppDispatch = useDispatch();
+
+  const { bookingData, loading, error } = useSelector((state: RootState) => state.bookingData);
+
+  useEffect(() => {
+    dispatch(fetchBookingData());
+  }, [dispatch]);
 
   const mobileSidebar = useSelector(
     (state: any) => state.sidebarSlice.mobileSidebar
@@ -178,44 +190,20 @@ const Header = () => {
             </div>
             {/* /Search */}
             <div className="d-flex align-items-center">
-              {/* <div className="dropdown me-2">
-                <Link
-                  to="#"
-                  className="btn btn-outline-light fw-normal bg-white d-flex align-items-center p-2"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  <i className="ti ti-calendar-due me-1" />
-                  Academic Year : 2024 / 2025
-                </Link>
-                <div className="dropdown-menu dropdown-menu-right">
-                  <Link
-                    to="#"
-                    className="dropdown-item d-flex align-items-center"
-                  >
-                    Academic Year : 2023 / 2024
-                  </Link>
-                  <Link
-                    to="#"
-                    className="dropdown-item d-flex align-items-center"
-                  >
-                    Academic Year : 2022 / 2023
-                  </Link>
-                  <Link
-                    to="#"
-                    className="dropdown-item d-flex align-items-center"
-                  >
-                    Academic Year : 2021 / 2022
-                  </Link>
-                </div>
-              </div> */}
+              
               <div className="search">
                 <Link
                   to=""
                   className="freeuser d-flex justify-content-center align-items-center me-2 p-2 px-4  text-white"
                   style={{ width: "8em !important" }}
                 >
-                  <p style={{ fontWeight: "400" }}>Free User</p>
+                 <p style={{ fontWeight: "400" }}>
+                  {
+                    bookingData?.latestBooking && bookingData?.pendingDays > 0
+                      ? "Premium User"
+                      : "Free User"
+                  }
+                </p>
                 </Link>
               </div>
               <div className="search">

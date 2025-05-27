@@ -3,7 +3,7 @@ import themeSettingSlice from './themeSettingSlice';
 import sidebarSlice from './sidebarSlice';
 import authReducer from './authSlice';
 import practiceSlice from './practiceSlice';
-
+import bookingReducer from './bookingSlice';
 
 const store = configureStore({
   reducer: {
@@ -11,6 +11,7 @@ const store = configureStore({
     sidebarSlice: sidebarSlice,
     auth: authReducer,
     subType: practiceSlice,
+    bookingData: bookingReducer,
   },
 });
 

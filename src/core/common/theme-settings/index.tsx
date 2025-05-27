@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { fetchQuestions, saveBookmark } from "../../../api/practiceAPI";
 import PageHeading from "../../../feature-module/practice/component/pageHeading";
 import { Link } from "react-router-dom";
+import { all_routes } from "../../../feature-module/router/all_routes";
 
 interface Subtype {
   id: number;
@@ -15,9 +16,34 @@ interface PracticeType {
   practiced: boolean;
   difficulties: string;
   weekly: boolean;
-  Subtype: Subtype[];
+  Subtype: Subtype;
   bookmarked: boolean;
 }
+
+const routeNameMap: { [key: string]: keyof typeof all_routes } = {
+  "Read Aloud": "readAloud",
+  "Repeat Sentence": "repeatSentence",
+  "Describe Image": "describeImage",
+  "Re-tell Lecture": "reTellLecture",
+  "Answer Short Question": "answerShortQuestion",
+  "Respond to Situation": "respondSituation",
+  "Summarize Written Text": "summarizeWritinText",
+  "Write Essay": "writeEssay",
+  "Write Email": "writeEmail",
+  "Reading and Writing Fill in the Blanks": "readingWritngFillBlank",
+  "MC, Choose Multiple Answer": "multipleChooseAnswer",
+  "MC, Choose Single Answer": "multipleChooseSingleAnswer",
+  "Reading Fill in the Blanks": "fillInTheBlanksRead",
+  "Re-order Paragraphs": "reorderParagraph",
+  "Summarize Spoken Text": "summarizeSpokenText",
+  "MC, Select Multiple Answer": "multipleChooseAnswerListen",
+  "Fill in the Blanks": "fillInTheBlanks",
+  "Highlight Correct Summary": "highlightCorrectSummary",
+  "MC, Select Single Answer": "multipleChooseSingleAnswerListen",
+  "Select Missing Word": "selectMissingWord",
+  "Highlight Incorrect Words": "highlightIncorrectWord",
+  "Write from Dictation": "writeFromDictation",
+};
 
 const ThemeSettings = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -118,6 +144,17 @@ const ThemeSettings = () => {
       console.error("Error toggling bookmark:", error);
     }
   };
+// console.log(questionData[0]?.Subtype?.sub_name);
+
+const getQuestionLink = (q: PracticeType): string => {
+  const routeKey = routeNameMap[q.Subtype?.sub_name];
+  const route = all_routes[routeKey];
+  if (!route) return "#";
+  return route
+    .replace(":subtype_id", q.Subtype?.id.toString())
+    .replace("/:question_id?", `/${q.id}`);
+};
+
 
   return (
     <>
@@ -145,9 +182,9 @@ const ThemeSettings = () => {
         </button>
 
         <div className="offcanvas-header d-flex align-items-center justify-content-between bg-light-500">
-          <PageHeading title="Read Aloud" />
+          <PageHeading title={questionData[0]?.Subtype ? questionData[0]?.Subtype?.sub_name : 'NA'} />
           <div className="d-flex align-items-center">
-            <h4 className="mb-1">{questionData[0]?.Subtype[0]?.sub_name}</h4>
+            {/* <h4 className="mb-1">{questionData[0]?.Subtype?.sub_name}</h4> */}
             <div className="mainFilter">
               <div className="myfilter" style={{ width: "40em" }}>
                 <div className="row g-3">
@@ -226,24 +263,25 @@ const ThemeSettings = () => {
                         </button>
                       </li>
                     ))}
+                    { questionData[0]?.Subtype?.sub_name === "Describe Image" &&
                     <div className="col-md-2">
-                    <select
-                      id="practiceStatus"
-                      className="form-select"
-                      value={practiceStatus}
-                      onChange={(e) => setPracticeStatus(e.target.value)}
-                    >
-                      <option value="all">Type</option>
-                      <option value="all">Bar</option>
-                      <option value="done">Line</option>
-                      <option value="pending">Pie</option>
-                      <option value="pending">Flow</option>
-                      <option value="pending">Table</option>
-                      <option value="pending">Map</option>
-                      <option value="pending">Pic</option>
-                      <option value="pending">Comb</option>
-                    </select>
-                  </div>
+                      <select
+                        id="practiceStatus"
+                        className="form-select"
+                        value={practiceStatus}
+                        onChange={(e) => setPracticeStatus(e.target.value)}
+                      >
+                        <option value="Type">Type</option>
+                        <option value="Bar">Bar</option>
+                        <option value="Line">Line</option>
+                        <option value="Pie">Pie</option>
+                        <option value="Flow">Flow</option>
+                        <option value="Table">Table</option>
+                        <option value="Map">Map</option>
+                        <option value="Pic">Pic</option>
+                      </select>
+                    </div>
+                    }
                   </ul>
 
                   <div className="tab-content">
@@ -261,6 +299,9 @@ const ThemeSettings = () => {
 
                       <div className="questionCard">
                         {paginatedQuestions.map((item, index) => (
+                          <Link to={getQuestionLink(item)}>
+     
+    
                           <div
                             key={item.id}
                             className={`card mb-3 p-3 d-flex justify-content-between onhovercard align-items-center ${
@@ -351,6 +392,7 @@ const ThemeSettings = () => {
                               </div>
                             </div>
                           </div>
+                          </Link>
                         ))}
                       </div>
                     </div>

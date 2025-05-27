@@ -164,21 +164,11 @@ const ReOrderParagraph = () => {
           let pair1 = correctAnswers[i] + "," + correctAnswers[i + 1];
           let yourTotalPairs = user_answer_arr.length;
 
-          // console.log("pair1: ", pair1);
-          // console.log("yourTotalPairs: ", yourTotalPairs);
-
           for (let j = 0; j < yourTotalPairs - 1; j++) {
             if (user_answer_arr[j] && user_answer_arr[j + 1]) {
               let ypair = user_answer_arr[j] + "," + user_answer_arr[j + 1];
 
-              // console.log("ypair: ", ypair);
-              // console.log("user_answer_arr: ", user_answer_arr[j]);
-
-              // console.log("pair1 === ypair: ", pair1 === ypair);
-
-              if (pair1 === ypair) {
-                // console.log("matchingPairs: ", matchingPairs);
-
+              if (pair1 === ypair) {                
                 matchingPairs++;
               }
             }
@@ -284,7 +274,7 @@ const ReOrderParagraph = () => {
                         <ParaReorder
                           questionData={questionData}
                           onAnswerChange={setAnswers}
-                          resetTrigger={resetParaReorder}
+                          // resetTrigger={resetParaReorder}
                         />
                       </div>
                       {showAnswer && (

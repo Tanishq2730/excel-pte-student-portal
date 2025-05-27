@@ -12,6 +12,7 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import SummarizeWritingTextScoring from "../component/scoring/SummarizeWritingTextScoring";
 import PageHeading from "../component/pageHeading";
 import MyNotes from "../component/myNotes";
+import DictionaryModal from "../component/DictionaryModal";
 
 const SummarizeWritinText = () => {
   const { subtype_id, question_id } = useParams<{
@@ -213,6 +214,18 @@ const SummarizeWritinText = () => {
   const toggleNotes = () => {
     setShowNotes((prev) => !prev);
   };
+
+  const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<string>("");
+  
+  const handleWordClick = (word: string) => {
+    console.log(word);
+    
+    setSelectedWord(word);
+    setShowDictionaryModal(true);
+  };
+
+
   return (
     <div className="page-wrappers">
       {alert && (
@@ -260,11 +273,18 @@ const SummarizeWritinText = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: questionData?.question || "",
-                          }}
-                        />
+                        <p>
+                              {questionData?.question?.split(" ").map((word, idx) => (
+                                <span
+                                  key={idx}
+                                  onClick={() => handleWordClick(word)}
+                                  style={{ cursor: "pointer", marginRight: 4 }}
+                                  title="Click to see definition"
+                                >
+                                  {word}
+                                </span>
+                              ))}
+                            </p>  
                       </div>
                       <div className="card">
                         <div className="card-header bg-white">
@@ -309,17 +329,7 @@ const SummarizeWritinText = () => {
                               }}
                             />
                             <hr />
-                            {/* <h3 className="fw-semibold mb-2">Audio Answer:</h3> */}
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source
-                                  src="your-audio-file.mp3"
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                            
                           </div>
                         </div>
                       )}
@@ -328,6 +338,11 @@ const SummarizeWritinText = () => {
                 </div>
               </div>
             </div>
+             <DictionaryModal
+                        isOpen={showDictionaryModal}
+                        onClose={() => setShowDictionaryModal(false)}
+                        word={selectedWord}
+                      />
             {showNotes && (
               <div className="col-md-3">
                 <MyNotes />

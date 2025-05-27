@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef,useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
@@ -114,58 +114,68 @@ const FillInTheBlanksRead = () => {
     setShowAnswer((prev) => !prev);
   };
 
-  const dragDropOptions = questionData?.drag_drop
+  const dragDropOptions = useMemo(() => {
+  return questionData?.drag_drop
     ? questionData.drag_drop.split(",").map((text) => text.trim())
     : [];
+}, [questionData]);
 
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement | HTMLSpanElement>,
-    word: string
-  ) => {
-    e.dataTransfer.setData("text/plain", word);
-  };
+const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number) => {
+  e.dataTransfer.setData("text/plain", word);
+  if (sourceIndex !== undefined) {
+    e.dataTransfer.setData("sourceIndex", sourceIndex.toString());
+  }
+};
 
-  const handleDrop = (e: React.DragEvent, index: number | null = null) => {
-    e.preventDefault();
-    const word = e.dataTransfer.getData("text/plain");
+  const handleDrop = (e: React.DragEvent, targetIndex: number | null) => {
+  e.preventDefault();
+  const word = e.dataTransfer.getData("text/plain");
+  const sourceIndexRaw = e.dataTransfer.getData("sourceIndex");
+  const sourceIndex = sourceIndexRaw ? parseInt(sourceIndexRaw, 10) : null;
 
-    if (index !== null) {
-      setAnswers((prevAnswers) => {
-        const existingWord = prevAnswers[index];
+  if (!word) return;
 
-        if (existingWord === word) return prevAnswers; // if same word, do nothing
+  if (targetIndex !== null) {
+    setAnswers((prev) => {
+      const updated = { ...prev };
 
-        const updatedAnswers = { ...prevAnswers, [index]: word };
-
-        // Remove old word from usedWords if present
-        if (existingWord) {
-          setUsedWords((prevUsed) =>
-            prevUsed.filter((w) => w !== existingWord)
-          );
-        }
-
-        // Add new word to usedWords if not already present
-        setUsedWords((prevUsed) =>
-          prevUsed.includes(word) ? prevUsed : [...prevUsed, word]
-        );
-
-        return updatedAnswers;
-      });
-    } else {
-      // Dropping back into word bank
-      const indexToRemove = Object.keys(answers).find(
-        (key) => answers[parseInt(key, 10)] === word
-      );
-      if (indexToRemove !== undefined) {
-        setAnswers((prev) => {
-          const newAnswers = { ...prev };
-          delete newAnswers[parseInt(indexToRemove)];
-          return newAnswers;
-        });
-        setUsedWords((prev) => prev.filter((w) => w !== word));
+      // Remove word from source blank if exists
+      if (sourceIndex !== null && updated[sourceIndex] === word) {
+        delete updated[sourceIndex];
       }
+
+      // Remove any word already in target
+      if (updated[targetIndex]) {
+        const wordInTarget = updated[targetIndex];
+        setUsedWords((prevWords) =>
+          prevWords.filter((w) => w !== wordInTarget)
+        );
+      }
+
+      // Assign new word to target
+      updated[targetIndex] = word;
+      return updated;
+    });
+
+    setUsedWords((prev) => {
+      const withoutWord = prev.filter((w) => w !== word);
+      return [...withoutWord, word];
+    });
+  } else {
+    // Drop back to word bank
+    const indexToRemove = Object.keys(answers).find(
+      (key) => answers[parseInt(key, 10)] === word
+    );
+    if (indexToRemove !== undefined) {
+      setAnswers((prev) => {
+        const updated = { ...prev };
+        delete updated[parseInt(indexToRemove)];
+        return updated;
+      });
+      setUsedWords((prev) => prev.filter((w) => w !== word));
     }
-  };
+  }
+};
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -173,9 +183,11 @@ const FillInTheBlanksRead = () => {
 
   let blankCounter = 0;
 
-  const correctAnswers = questionData?.answer_american
+  const correctAnswers = useMemo(() => {
+  return questionData?.answer_american
     ? questionData.answer_american.split(",").map((ans) => ans.trim())
     : [];
+}, [questionData]);
 
   const customParseOptions = {
     replace: (domNode: DOMNode) => {
@@ -193,26 +205,28 @@ const FillInTheBlanksRead = () => {
 
         return (
           <span
-            key={currentIndex}
-            onDrop={(e) => handleDrop(e, currentIndex)}
-            onDragOver={handleDragOver}
-            style={{
-              borderBottom: "2px dashed #aaa",
-              padding: "2px 10px",
-              minWidth: "60px",
-              marginRight: "4px",
-              textAlign: "center",
-              backgroundColor: isCorrect
-                ? "#d4edda" // ✅ Green for correct answer
-                : isFilled && showAnswer
-                ? "#f8d7da" // ❌ Light red for incorrect (optional)
-                : "#fff",
-              display: "inline-block",
-              cursor: "pointer",
-            }}
-          >
-            {userAnswer || "___"}
-          </span>
+  key={currentIndex}
+  draggable={!!userAnswer}
+  onDragStart={(e) => handleDragStart(e, userAnswer, currentIndex)}
+  onDrop={(e) => handleDrop(e, currentIndex)}
+  onDragOver={handleDragOver}
+  style={{
+    borderBottom: "2px dashed #aaa",
+    padding: "2px 10px",
+    minWidth: "60px",
+    marginRight: "4px",
+    textAlign: "center",
+    backgroundColor: isCorrect
+      ? "#d4edda"
+      : isFilled && showAnswer
+      ? "#f8d7da"
+      : "#fff",
+    display: "inline-block",
+    cursor: !!userAnswer ? "grab" : "pointer",
+  }}
+>
+  {userAnswer || "___"}
+</span>
         );
       }
     },
@@ -337,7 +351,7 @@ const FillInTheBlanksRead = () => {
                       {parse(questionData?.question || "", customParseOptions)}
 
                       <div
-                        className="innercontent mt-4"
+                        className="innercontent drop-zone mt-4"
                         onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
                         onDragOver={handleDragOver} // Allow drop
                       >
@@ -347,7 +361,7 @@ const FillInTheBlanksRead = () => {
                               key={idx}
                               draggable
                               onDragStart={(e) => handleDragStart(e, word)}
-                              className="btn btn-secondary rounded-pill"
+                              className="btn btn-secondary rounded-pill"                             
                             >
                               {word}
                             </div>

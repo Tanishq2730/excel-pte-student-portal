@@ -110,9 +110,8 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                 </strong>
               </button>
               <div className="text-danger" style={{ fontSize: "0.9rem" }}>
-                {log.late_speak
-                  ? "Good job! Keep practicing."
-                  : "You have started speaking after 3 seconds and your response is not scored."}
+                {log.late_speak == false
+                  && "You have started speaking after 3 seconds and your response is not scored."}
               </div>
             </div>
 

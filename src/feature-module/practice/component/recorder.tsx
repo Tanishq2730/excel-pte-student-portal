@@ -29,13 +29,15 @@ type RecorderProps = {
   onRecordingComplete: (audioBlob: Blob, audioUrl: string) => void;
   onStopRecording: () => void;
   resetRecording: boolean;
+  countdown?:number;
 };
 
-const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecording, resetRecording }) => {
+const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecording, resetRecording,countdown }) => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioUrl, setAudioUrl] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
+// console.log(countdown,'success');
 
   const progressRef = useRef<number>(0);
   const timerRef = useRef<number | null>(null);
@@ -44,6 +46,24 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
   const waveformContainerRef = useRef<HTMLDivElement | null>(null);
 
   const { transcript, resetTranscript } = useSpeechRecognition();
+
+
+  const playBeep = () => {
+      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+  
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+  
+      oscillator.type = "triangle";
+      oscillator.frequency.setValueAtTime(1000, ctx.currentTime); // 1000 Hz = beep
+      gainNode.gain.setValueAtTime(1, ctx.currentTime);
+  
+      oscillator.start();
+      oscillator.stop(ctx.currentTime + 0.3); // 0.3 second beep
+    };
+
 
   // Load waveform when audioUrl changes
   useEffect(() => {
@@ -79,8 +99,21 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
     };
   }, []);
 
+const [hasStarted, setHasStarted] = useState(false);
+
+// useEffect(() => {
+//   if (countdown === 0 && !recording && !hasStarted) {
+//     setHasStarted(true); // Mark it as triggered
+//     startRecording();
+//   }
+// }, [countdown, recording, hasStarted]);
+// console.log(countdown);
+
   const startRecording = async () => {
-    try {
+     try {
+    playBeep(); // Play beep first
+
+    setTimeout(async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
       const chunks: Blob[] = [];
@@ -102,7 +135,6 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
       setMediaRecorder(recorder);
       setRecording(true);
 
-      // Initialize and start the progress bar interval
       progressRef.current = 0;
       setProgress(0);
       timerRef.current = window.setInterval(() => {
@@ -110,9 +142,11 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
         setProgress(progressRef.current);
       }, 1000);
 
-    } catch (err) {
-      console.error('Microphone access error:', err);
-    }
+    }, 500); // Delay start to give time for beep to finish
+
+  } catch (err) {
+    console.error('Microphone access error:', err);
+  }
   };
 
   const stopRecording = () => {

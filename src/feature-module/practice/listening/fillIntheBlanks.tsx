@@ -398,17 +398,7 @@ const FillInTheBlanks = () => {
                               <b>Correct Answers : </b>{" "}
                               {questionData?.answer_american}
                             </p>
-                            <h3 className="fw-semibold mb-2">Audio Answer:</h3>
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source
-                                  src="your-audio-file.mp3"
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                           
                           </div>
                         </div>
                       )}

@@ -12,6 +12,7 @@ import QuestionNavigation from "../component/questionNavigation";
 import AlertComponent from "../../../core/common/AlertComponent";
 import MyNotes from "../component/myNotes";
 import PageHeading from "../component/pageHeading";
+import DictionaryModal from "../component/DictionaryModal";
 
 const ReadingWritngFillBlank = () => {
   const { subtype_id, question_id } = useParams<{
@@ -195,67 +196,112 @@ const ReadingWritngFillBlank = () => {
     }
   };
 
+  
+  const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<string>("");
+  
+  const handleWordClick = (word: string) => {
+    console.log(word);
+    
+    setSelectedWord(word);
+    setShowDictionaryModal(true);
+  };
+  
+  
   const renderQuestionWithDropdowns = (): { __html: string } | undefined => {
-    if (!questionData?.question) return undefined;
+  if (!questionData?.question) return undefined;
 
-    const parser = new DOMParser();
-    const doc = parser.parseFromString(questionData.question, "text/html");
-    const selects = Array.from(doc.querySelectorAll("select"));
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(questionData.question, "text/html");
 
-    selects.forEach((select, index) => {
-      const options = Array.from(select.querySelectorAll("option")).map(
-        (opt) => opt.textContent || ""
-      );
-      const selectedValue = userAnswers[index] || "";
-      const correctAnswer = correctAnswers[index];
+  const wrapWords = (node: ChildNode) => {
+    if (node.nodeType === Node.TEXT_NODE) {
+      const text = node.textContent || "";
+      const words = text.split(/(\s+)/); // keep spaces
 
-      // Apply border style ONLY when showAnswer is true and a value is selected
-      const borderClass =
-        showAnswer && selectedValue
-          ? selectedValue === correctAnswer
-            ? "border-success text-success"
-            : "border-danger text-danger"
-          : "";
+      const wrapped = words
+        .map((word) => {
+          const trimmed = word.trim();
+          if (!trimmed) return word;
 
-      const dropdown = (
-        <select
-          value={selectedValue}
-          onChange={(e) => handleDropdownChange(index, e.target.value)}
-          className={`form-select d-inline w-auto mx-1 align-baseline ${borderClass}`}
-        >
-          <option value="" disabled>
-            Select
-          </option>
-          {options.map((opt, i) => (
-            <option key={i} value={opt}>
-              {opt}
-            </option>
-          ))}
-        </select>
-      );
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.style.cursor = "pointer";
+
+          span.onclick = () => handleWordClick(trimmed);
+
+          const wrapper = document.createElement("span");
+          wrapper.appendChild(span);
+          return wrapper.innerHTML;
+        })
+        .join("");
 
       const wrapper = document.createElement("span");
-      wrapper.innerHTML = ReactDOMServer.renderToStaticMarkup(dropdown);
-      select.replaceWith(wrapper);
-
-      // Only show the correct answer text when Answer button is clicked
-      if (showAnswer) {
-        const correctSpan = document.createElement("strong");
-        correctSpan.textContent = ` ${correctAnswer}`;
-        correctSpan.style.backgroundColor = "#d4edda"; // light green
-        correctSpan.style.padding = "2px 6px";
-        correctSpan.style.borderRadius = "4px";
-        correctSpan.style.marginLeft = "4px";
-        correctSpan.style.color = "#155724";
-
-        wrapper.appendChild(correctSpan);
-      }
-    });
-
-    return { __html: doc.body.innerHTML };
+      wrapper.innerHTML = wrapped;
+      node.replaceWith(wrapper);
+    } else if (node.childNodes) {
+      Array.from(node.childNodes).forEach(wrapWords);
+    }
   };
 
+  wrapWords(doc.body);
+
+  const selects = Array.from(doc.querySelectorAll("select"));
+  selects.forEach((select, index) => {
+    const options = Array.from(select.querySelectorAll("option")).map(
+      (opt) => opt.textContent || ""
+    );
+    const selectedValue = userAnswers[index] || "";
+    const correctAnswer = correctAnswers[index];
+
+    const borderClass =
+      showAnswer && selectedValue
+        ? selectedValue === correctAnswer
+          ? "border-success text-success"
+          : "border-danger text-danger"
+        : "";
+
+    const dropdown = (
+      <select
+        value={selectedValue}
+        onChange={(e) => handleDropdownChange(index, e.target.value)}
+        className={`form-select d-inline w-auto mx-1 align-baseline ${borderClass}`}
+      >
+        <option value="" disabled>
+          Select
+        </option>
+        {options.map((opt, i) => (
+          <option key={i} value={opt}>
+            {opt}
+          </option>
+        ))}
+      </select>
+    );
+
+    const wrapper = document.createElement("span");
+    wrapper.innerHTML = ReactDOMServer.renderToStaticMarkup(dropdown);
+    select.replaceWith(wrapper);
+
+    if (showAnswer) {
+      const correctSpan = document.createElement("strong");
+      correctSpan.textContent = ` ${correctAnswer}`;
+      correctSpan.style.backgroundColor = "#d4edda";
+      correctSpan.style.padding = "2px 6px";
+      correctSpan.style.borderRadius = "4px";
+      correctSpan.style.marginLeft = "4px";
+      correctSpan.style.color = "#155724";
+
+      wrapper.appendChild(correctSpan);
+    }
+  });
+
+  return { __html: doc.body.innerHTML };
+};
+
   const correctAnswers = questionData?.answer_american?.split(",") || [];
+
+
+
 
   return (
     <div className="page-wrappers">
@@ -318,15 +364,7 @@ const ReadingWritngFillBlank = () => {
                               <strong>Correct Answer:</strong>{" "}
                               {questionData?.answer_american}
                             </div>
-                            <h3 className="fw-semibold mt-3">Audio Answer:</h3>
-                            <hr />
-                            <audio controls className="w-100">
-                              <source
-                                src="your-audio-file.mp3"
-                                type="audio/mpeg"
-                              />
-                              Your browser does not support the audio element.
-                            </audio>
+                            
                           </div>
                         </div>
                       )}
@@ -335,6 +373,12 @@ const ReadingWritngFillBlank = () => {
                 </div>
               </div>
             </div>
+
+             <DictionaryModal
+            isOpen={showDictionaryModal}
+            onClose={() => setShowDictionaryModal(false)}
+            word={selectedWord}
+          />
             {showNotes && (
               <div className="col-md-3">
                 <MyNotes />

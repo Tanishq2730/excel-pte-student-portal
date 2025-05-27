@@ -12,6 +12,7 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import WriteEmailScoring from "../component/scoring/WriteEmailScoring";
 import PageHeading from "../component/pageHeading";
 import MyNotes from "../component/myNotes";
+import DictionaryModal from "../component/DictionaryModal";
 
 const WriteEmail = () => {
   const { subtype_id, question_id } = useParams<{
@@ -205,6 +206,17 @@ const WriteEmail = () => {
   const toggleNotes = () => {
     setShowNotes((prev) => !prev);
   };
+
+  const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<string>("");
+  
+  const handleWordClick = (word: string) => {
+    console.log(word);
+    
+    setSelectedWord(word);
+    setShowDictionaryModal(true);
+  };
+  
   return (
     <div className="page-wrappers">
       {alert && (
@@ -256,11 +268,18 @@ const WriteEmail = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
-                        <p
-                          dangerouslySetInnerHTML={{
-                            __html: questionData?.question || "",
-                          }}
-                        />
+                        <p>
+                              {questionData?.question?.split(" ").map((word, idx) => (
+                                <span
+                                  key={idx}
+                                  onClick={() => handleWordClick(word)}
+                                  style={{ cursor: "pointer", marginRight: 4 }}
+                                  title="Click to see definition"
+                                >
+                                  {word}
+                                </span>
+                              ))}
+                            </p> 
                       </div>
                       <div className="card">
                         <div className="card-header bg-white">
@@ -314,6 +333,11 @@ const WriteEmail = () => {
                 </div>
               </div>
             </div>
+             <DictionaryModal
+            isOpen={showDictionaryModal}
+            onClose={() => setShowDictionaryModal(false)}
+            word={selectedWord}
+          />
             {showNotes && (
               <div className="col-md-3">
                 <MyNotes />
