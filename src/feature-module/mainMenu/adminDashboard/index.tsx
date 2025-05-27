@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import CountUp from "react-countup";
 import { Calendar } from "primereact/calendar";
@@ -12,12 +12,15 @@ import "slick-carousel/slick/slick-theme.css";
 import AdminDashboardModal from "./adminDashboardModal";
 import StudyPlaner from "./studyPlaner";
 import ReactApexChart from "react-apexcharts";
+import { DashboardCounts } from "../../../api/dashboardAPI";
 
 const AdminDashboard = () => {
   const routes = all_routes;
-  const [date, setDate] = useState<Nullable<Date>>(null);
+  const [date, setDate] = useState<Nullable<Date>>(null); 
   const [target, setTarget] = useState(79);
   const [modalSource, setModalSource] = useState("left");
+  const [counts, setCounts] = useState<string[]>([]);
+  
   function SampleNextArrow(props: any) {
     const { style, onClick } = props;
 
@@ -275,6 +278,17 @@ const AdminDashboard = () => {
       },
     },
   });
+
+  useEffect(() => {
+    const loadTypes = async () => {
+      const res = await DashboardCounts();
+      console.log(counts)
+      if (res?.success) {
+        setCounts(res.data);
+      }
+    };
+    loadTypes();
+  }, []);
 
   return (
     <>

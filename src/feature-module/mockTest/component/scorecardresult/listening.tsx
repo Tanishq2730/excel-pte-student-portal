@@ -16,9 +16,9 @@ const Listening: React.FC<dataProps> = ({ data }) => {
       </div>
     );
   }
-  console.clear();
-  console.log(data);
-  console.log(JSON.stringify(data, null, 2));
+    // console.clear();
+    // console.log(data);
+    // console.log(JSON.stringify(data, null, 2));
 
   return (
     <div className="container mt-4">

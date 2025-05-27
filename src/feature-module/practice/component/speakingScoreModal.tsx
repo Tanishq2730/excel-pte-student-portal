@@ -43,6 +43,8 @@ const SpeakingScoreModal: React.FC<SpeakingScoreModalProps> = ({
       barColor: "#1b507a",
     },
   ];
+  console.log(parsedScoreData);
+
 
   return (
     <div className="container py-4" style={{ fontFamily: "Arial, sans-serif" }}>
