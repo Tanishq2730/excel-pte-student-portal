@@ -1,14 +1,80 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import { Calendar } from "primereact/calendar";
+import { Nullable } from "primereact/ts-helpers";
+import { StudyPlaner as StudyPlanerAPI } from "../../../api/dashboardAPI";
+
+interface StudyPlanerType {
+  attempted: number;
+  notAttempted: number;
+}
 
 const StudyPlaner: React.FC = () => {
+  const [date, setDate] = useState<Nullable<Date>>(null);
+
+  const [planer, setPlaner] = useState<StudyPlanerType>({
+    attempted: 0,
+    notAttempted: 0,
+  });
+
+  useEffect(() => {
+    getPlaner();
+    
+  }, []);
+
+  const getPlaner = async () => {
+    if (date) {
+      const payload = {date:date,typeId:1}
+      const res = await StudyPlanerAPI(date.toISOString(), 1);
+
+      if (res?.success) {
+        setPlaner(res.data);
+        console.log(res);
+      }
+    }
+  };
+
   return (
     <div className="studyplantab">
+      <Calendar
+        className="datepickers mb-1"
+        value={date}
+        onChange={(e) => setDate(e.value)}
+        inline
+        style={{ width: "100% !important" }}
+      />
+      <div className="attemptedicon">
+        <div className="innerattempt">
+          <span style={{ fontSize: "12px" }}>Attempted</span>{" "}
+          <p
+            className=""
+            style={{
+              width: "1em",
+              height: "1em",
+              marginLeft: "10px",
+              borderRadius: "100px",
+              background: "#00b2a9",
+            }}
+          ></p>
+        </div>
+        <div className="innerattempt">
+          <span style={{ fontSize: "12px" }}>Not Attempted</span>{" "}
+          <p
+            className="bg-danger"
+            style={{
+              width: "1em",
+              height: "1em",
+              marginLeft: "10px",
+              borderRadius: "100px",
+            }}
+          ></p>
+        </div>
+      </div>
       <div className="card-body p-0">
         <ul
           className="nav nav-tabs bg-success-transparent tab-style-1 d-sm-flex d-block"
           role="tablist"
-          style={{justifyContent:'center'}}
+          style={{ justifyContent: "center" }}
         >
           <li className="nav-item">
             <Link
@@ -142,7 +208,6 @@ const StudyPlaner: React.FC = () => {
                     />
                   </div>
                 </div>
-                
               </div>
             </div>
           </div>
@@ -151,7 +216,7 @@ const StudyPlaner: React.FC = () => {
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-secondary-transparent">
-                  <i className="ion-ios7-bookmarks"></i>
+                    <i className="ion-ios7-bookmarks"></i>
                   </div>
                   <h3>Reading</h3>
                 </div>
@@ -195,7 +260,7 @@ const StudyPlaner: React.FC = () => {
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-warning-transparent">
-                  <i className="ion-edit"></i>
+                    <i className="ion-edit"></i>
                   </div>
                   <h3>Writing</h3>
                 </div>
@@ -219,11 +284,11 @@ const StudyPlaner: React.FC = () => {
             </div>
           </div>
           <div className="tab-pane" id="listening" role="tabpanel">
-          <div className="card-body  rounded-3">
+            <div className="card-body  rounded-3">
               <div className="studycontent">
                 <div className="head">
                   <div className="icon bg-success-transparent">
-                  <i className="ion-headphone"></i>
+                    <i className="ion-headphone"></i>
                   </div>
                   <h3>Listening</h3>
                 </div>
