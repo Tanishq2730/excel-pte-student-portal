@@ -8,6 +8,7 @@ interface getProps {
   questionData: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
 interface Timestamp {
@@ -15,7 +16,7 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const AnswerShortQuestion: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
+const AnswerShortQuestion: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit, setCountdownDone }) => {
   const [countdown, setCountdown] = useState(questionData.Subtype.preparation_time);
    const [isRecording, setIsRecording] = useState(false);
    const [recordingProgress, setRecordingProgress] = useState(0);
@@ -75,6 +76,7 @@ const AnswerShortQuestion: React.FC<getProps> = ({ questionData, setAnswer, regi
     } else {
       playBeep();
       setTimeout(() => setIsRecording(true), 300); // Small delay after beep
+      setCountdownDone(true);
     }
     return () => clearTimeout(timerRef.current!);
   }, [countdown]);

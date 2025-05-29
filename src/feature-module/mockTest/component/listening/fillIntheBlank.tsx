@@ -7,10 +7,11 @@ interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
 
-const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
 
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
@@ -48,19 +49,20 @@ const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmi
   }, [isPlayback, preparationTime]);
 
   // Countdown effect
-  useEffect(() => {
-    if (!showCountdown || countdown <= 0) return;
-
-    const timer = window.setTimeout(() => {
-      if (countdown === 1) {
-        setShowCountdown(false);
-        setShowAudio(true); // finally show audio
-      }
-      setCountdown((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [showCountdown, countdown]);
+ useEffect(() => {
+   if (!showCountdown || countdown <= 0) return;
+ 
+   const timer = window.setTimeout(() => {
+     if (countdown === 1) {
+       setShowCountdown(false);
+       setShowAudio(true);
+       setCountdownDone(true); // ✅ Notify parent component
+     }
+     setCountdown((prev) => prev - 1);
+   }, 1000);
+ 
+   return () => clearTimeout(timer);
+ }, [showCountdown, countdown, setCountdownDone]);
 
 
   const handleSubmit = () => {
@@ -267,7 +269,7 @@ const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmi
           <h5>Get ready... starting in {countdown}s</h5>
         </div>
       ) : showAudio ? (
-        <AudioPlayer questionData={question} />
+        <AudioPlayer questionData={question} startCountdown={countdown} />
       ) : null}
 
       {/* Options */}

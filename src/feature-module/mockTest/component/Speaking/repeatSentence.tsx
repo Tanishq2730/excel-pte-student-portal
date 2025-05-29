@@ -8,6 +8,7 @@ interface getProps {
   questionData: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;  
 }
 
 interface Timestamp {
@@ -15,7 +16,7 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const RepeatSentence: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
+const RepeatSentence: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit, setCountdownDone }) => {
 
   const [isPlayback, setIsPlayback] = useState(true);
   const [playbackProgress, setPlaybackProgress] = useState(0);

@@ -5,9 +5,10 @@ interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
-const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
@@ -46,17 +47,18 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
   // Countdown effect
   useEffect(() => {
     if (!showCountdown || countdown <= 0) return;
-
+  
     const timer = window.setTimeout(() => {
       if (countdown === 1) {
         setShowCountdown(false);
-        setShowAudio(true); // finally show audio
+        setShowAudio(true);
+        setCountdownDone(true); // ✅ Notify parent component
       }
       setCountdown((prev) => prev - 1);
     }, 1000);
-
+  
     return () => clearTimeout(timer);
-  }, [showCountdown, countdown]);
+  }, [showCountdown, countdown, setCountdownDone]);
 
 
   const processQuestionWithHighlights = (
@@ -200,7 +202,7 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
           <h5>Get ready... starting in {countdown}s</h5>
         </div>
       ) : showAudio ? (
-        <AudioPlayer questionData={question} />
+        <AudioPlayer questionData={question} startCountdown={countdown} />
       ) : null}
 
       {/* Options */}

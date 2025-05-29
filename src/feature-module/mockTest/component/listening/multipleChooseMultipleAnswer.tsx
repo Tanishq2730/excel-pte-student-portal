@@ -5,8 +5,9 @@ interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
-const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
@@ -42,18 +43,19 @@ const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer,
 
   // Countdown effect
   useEffect(() => {
-    if (!showCountdown || countdown <= 0) return;
-
-    const timer = window.setTimeout(() => {
-      if (countdown === 1) {
-        setShowCountdown(false);
-        setShowAudio(true); // finally show audio
-      }
-      setCountdown((prev) => prev - 1);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [showCountdown, countdown]);
+     if (!showCountdown || countdown <= 0) return;
+   
+     const timer = window.setTimeout(() => {
+       if (countdown === 1) {
+         setShowCountdown(false);
+         setShowAudio(true);
+         setCountdownDone(true); // ✅ Notify parent component
+       }
+       setCountdown((prev) => prev - 1);
+     }, 1000);
+   
+     return () => clearTimeout(timer);
+   }, [showCountdown, countdown, setCountdownDone]);
 
   const options = [
     { id: "A", text: question?.option_one },
@@ -171,7 +173,7 @@ const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer,
           <h5>Get ready... starting in {countdown}s</h5>
         </div>
       ) : showAudio ? (
-        <AudioPlayer questionData={question} />
+        <AudioPlayer questionData={question} startCountdown={countdown} />
       ) : null}
 
       {/* Options */}

@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState,useRef } from "react";
+import React, { Dispatch, SetStateAction, useState,useRef, useEffect } from "react";
 import SummarizeSpokenText from "./summarizeSpokenText";
 import FillIntheBlank from "./fillIntheBlank";
 import MultipleChooseSingleAnswer from "./multipleChooseSingleAnswer";
@@ -26,7 +26,7 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const submitCurrentQuestionRef = useRef<(() => void) | null>(null);
   const { id, session_id } = useParams<{ id: string; session_id: any }>();
-
+ const [isCountdownDone, setCountdownDone] = useState(true);
   console.log("Listening Questions: ", listeningQuestions);
 
 
@@ -40,6 +40,7 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
       registerSubmit: (fn: () => void) => {
         submitCurrentQuestionRef.current = fn;
       },
+      setCountdownDone,
     };
 
     switch (subtype) {
@@ -79,6 +80,12 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
         return <div key={index}>Unsupported listening question type</div>;
     }
   };
+
+   useEffect(() => {
+    if (step > 0) {
+      setCountdownDone(false); // Reset countdown when a new question starts
+    }
+  }, [step]);
 
   const handleNext = async () => {
        if (step === 0) {
@@ -154,17 +161,17 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
               <button
                 className="btn btn-primary"
                 onClick={handleNext}
-                disabled={step > listeningQuestions.length}
+                disabled={step > listeningQuestions.length || step !== 0 && !isCountdownDone}
               >
                 {step === 0 ? "Start" : "Save & Next"}
               </button>
             </div>
             {step > 0 && (
               <div className="col-auto text-end">
-                <button className="btn btn-outline-secondary mx-1" onClick={handleSkip}>
+                <button className="btn btn-outline-secondary mx-1" onClick={handleSkip} >
                   Skip
                 </button>
-                <button className="btn btn-primary" onClick={handleNext}>
+                <button className="btn btn-primary" onClick={handleNext} disabled={!isCountdownDone}>
                   Next
                 </button>
               </div>

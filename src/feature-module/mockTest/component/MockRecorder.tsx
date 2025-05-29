@@ -8,7 +8,12 @@ type MockRecorderProps = {
   startRecording?: boolean; 
 };
 
-const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStopRecording, resetRecording }) => {
+const MockRecorder: React.FC<MockRecorderProps> = ({
+  onRecordingComplete,
+  onStopRecording,
+  resetRecording,
+  startRecording,
+}) => {
   const [recording, setRecording] = useState<boolean>(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [progress, setProgress] = useState<number>(0);
@@ -22,6 +27,13 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
     }
   }, [resetRecording]);
 
+  // 🟢 Automatically start recording when the prop becomes true
+  useEffect(() => {
+    if (startRecording) {
+      handleStartRecording();
+    }
+  }, [startRecording]);
+
   const resetRecordingHandler = () => {
     resetTranscript();
     setRecording(false);
@@ -33,7 +45,7 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
     setProgress(0);
   };
 
-  const startRecording = async () => {
+  const handleStartRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
 
@@ -71,7 +83,6 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
         if (progressValue > 100) progressValue = 100;
         setProgress(progressValue);
       }, 100);
-
     } catch (error) {
       console.error('Microphone access error:', error);
     }
@@ -91,7 +102,7 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
       setProgress(0);
     }
   };
-  
+
   return (
     <div className="recorder-section startspeak" style={{ maxWidth: "100%", margin: "auto" }}>
       <div className="body" style={{ textAlign: "center" }}>
@@ -113,7 +124,7 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
 
           <div
             className={`mic-button ${recording ? "bg-theme" : ""}`}
-            onClick={recording ? stopRecording : startRecording}
+            onClick={recording ? stopRecording : handleStartRecording}
             style={{
               width: "40px", height: "40px", borderRadius: "50%",
               backgroundColor: recording ? "#f44336" : "#fff",
@@ -129,5 +140,6 @@ const MockRecorder: React.FC<MockRecorderProps> = ({ onRecordingComplete, onStop
     </div>
   );
 };
+
 
 export default MockRecorder;

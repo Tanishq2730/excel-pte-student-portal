@@ -5,10 +5,11 @@ interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
 
-const SummarizeSpokenText: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const SummarizeSpokenText: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
   const [countdown, setCountdown] = useState(40); // Initial countdown
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);

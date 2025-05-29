@@ -8,6 +8,7 @@ interface getProps {
   questionData: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
 interface Timestamp {
@@ -15,7 +16,7 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const RetellLecture: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
+const RetellLecture: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit,setCountdownDone }) => {
   const [countdown, setCountdown] = useState(questionData.Subtype.preparation_time);
     const [isRecording, setIsRecording] = useState(false);
     const [recordingProgress, setRecordingProgress] = useState(0);
@@ -74,7 +75,8 @@ const RetellLecture: React.FC<getProps> = ({ questionData, setAnswer, registerSu
         timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
       } else {
         playBeep();
-        setTimeout(() => setIsRecording(true), 300); // Small delay after beep
+        setTimeout(() => setIsRecording(true), 300);
+        setCountdownDone(true);
       }
       return () => clearTimeout(timerRef.current!);
     }, [countdown]);

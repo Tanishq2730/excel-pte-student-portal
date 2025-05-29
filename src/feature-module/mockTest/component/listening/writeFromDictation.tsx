@@ -7,9 +7,10 @@ interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
-const WriteFromDictation: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const WriteFromDictation: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
@@ -52,12 +53,13 @@ useEffect(() => {
     if (countdown === 1) {
       setShowCountdown(false);
       setShowAudio(true); // finally show audio
+      setCountdownDone(true);
     }
     setCountdown((prev) => prev - 1);
   }, 1000);
 
   return () => clearTimeout(timer);
-}, [showCountdown, countdown]);
+}, [showCountdown, countdown,setCountdownDone]);
 
 
  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -170,7 +172,7 @@ useEffect(() => {
             <h5>Get ready... starting in {countdown}s</h5>
           </div>
         ) : showAudio ? (
-          <AudioPlayer questionData={question} />
+          <AudioPlayer questionData={question} startCountdown={countdown} />
         ) : null}
         <div className="card-header bg-white">
           <div className="card-title">

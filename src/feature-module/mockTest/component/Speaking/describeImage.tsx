@@ -8,6 +8,7 @@ interface getProps {
   questionData: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
+  setCountdownDone: (done: boolean) => void;
 }
 
 interface Timestamp {
@@ -15,7 +16,7 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const DescribeImage: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
+const DescribeImage: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit,setCountdownDone }) => {
   const [countdown, setCountdown] = useState(questionData.Subtype.preparation_time); // Countdown based on preparation time
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
@@ -69,15 +70,17 @@ const DescribeImage: React.FC<getProps> = ({ questionData, setAnswer, registerSu
 
 
   // Countdown
-  useEffect(() => {
-    if (countdown > 0) {
-      timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
-    } else {
-      playBeep();
-      setTimeout(() => setIsRecording(true), 300); // Small delay after beep
-    }
-    return () => clearTimeout(timerRef.current!);
-  }, [countdown]);
+ useEffect(() => {
+  if (countdown > 0) {
+    timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
+  } else {
+    playBeep();
+    setTimeout(() => setIsRecording(true), 300);
+    setCountdownDone(true); // ✅ Mark countdown as finished
+  }
+
+  return () => clearTimeout(timerRef.current!);
+}, [countdown]);
 
   // Start recording when isRecording becomes true
   useEffect(() => {

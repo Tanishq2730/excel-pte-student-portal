@@ -1,4 +1,4 @@
-import React, { Dispatch, SetStateAction, useState,useRef } from "react";
+import React, { Dispatch, SetStateAction, useState,useRef, useEffect } from "react";
 import ReadAloud from "./readAloud";
 import RepeatSentence from "./repeatSentence";
 import DescribeImage from "./describeImage";
@@ -24,6 +24,7 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
   const [currentAnswer, setCurrentAnswer] = useState<any>(null);
   const submitCurrentQuestionRef = useRef<(() => void) | null>(null);
   const { id, session_id } = useParams<{ id: string; session_id: any }>();
+  const [isCountdownDone, setCountdownDone] = useState(true);
 console.log(speakingQuestions,'speakingQuestions');
 
   // Dynamically map subtype names to components
@@ -37,6 +38,7 @@ console.log(speakingQuestions,'speakingQuestions');
       registerSubmit: (fn: () => void) => {
         submitCurrentQuestionRef.current = fn;
       },
+      setCountdownDone,
     };
 
     switch (subtype) {
@@ -57,7 +59,11 @@ console.log(speakingQuestions,'speakingQuestions');
     }
   };
 
-  
+  useEffect(() => {
+  if (step > 0) {
+    setCountdownDone(false); // Reset countdown when a new question starts
+  }
+}, [step]);
 
   const handleNext = async () => {
      if (step === 0) {
@@ -71,13 +77,12 @@ console.log(speakingQuestions,'speakingQuestions');
      }
    
      const currentQuestion = speakingQuestions[step - 1];
-     console.log("currentQuestion", currentQuestion);
-     console.log("currentAnswer", answer);
+    
    
      if (answer) {
        try {
          const response = await saveMocktestQuestion(true, answer);
-         console.log("Answer saved:", response);
+        
        } catch (error) {
          console.error("Error saving answer:", error);
        }
@@ -133,7 +138,7 @@ console.log(speakingQuestions,'speakingQuestions');
               <button
                 className="btn btn-primary"
                 onClick={handleNext}
-                disabled={step > speakingQuestions.length}
+                disabled={step > speakingQuestions.length || step !== 0 && !isCountdownDone}
               >
                 {step === 0 ? "Start" : "Save & Next"}
               </button>
@@ -143,7 +148,7 @@ console.log(speakingQuestions,'speakingQuestions');
                 <button className="btn btn-outline-secondary mx-1" onClick={handleSkip}>
                   Skip
                 </button>
-                <button className="btn btn-primary" onClick={handleNext}>
+                <button className="btn btn-primary" onClick={handleNext}  disabled={!isCountdownDone} >
                   Next
                 </button>
               </div>
