@@ -10,6 +10,7 @@ import CardButton from "../component/cardButton";
 import QuestionNavigation from "../component/questionNavigation";
 import AudioPlayer from "../component/audioPlayer";
 import AlertComponent from "../../../core/common/AlertComponent";
+import PageHeading from "../component/pageHeading";
 
 const MultipleChooseSingleAnswerListen = () => {
  const { subtype_id, question_id } = useParams<{ subtype_id: string; question_id?: string }>();
@@ -63,24 +64,6 @@ const MultipleChooseSingleAnswerListen = () => {
        }
      }, [subtype_id, question_id, navigate]);
    
-      const [startCountdown, setStartCountdown] = useState<number | null>(null);
-         const [startCountdownActive, setStartCountdownActive] = useState(false);
-       
-        useEffect(() => {
-         if (!questionData) return;
-       
-         const prepTime = parseInt(questionData.Subtype?.beginning_in || "0", 10);
-       
-         if (prepTime > 0) {
-           setCountdown(prepTime);
-           setTimerActive(true);
-         } else {
-           setStartCountdown(3); // Start the 3-2-1 countdown
-           setStartCountdownActive(true);
-         }
-       }, [questionData]);
-
-
      useEffect(() => {
        if (questionData?.Subtype?.beginning_in) {
          const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10); 
@@ -94,21 +77,6 @@ const MultipleChooseSingleAnswerListen = () => {
          document.getElementById("startRecordingButton")?.click();
        }
      }, [questionData]);
-
-     useEffect(() => {
-         let intervalId: number;
-       
-         if (startCountdownActive && startCountdown && startCountdown > 0) {
-           intervalId = setInterval(() => {
-             setStartCountdown((prev) => (prev ? prev - 1 : 0));
-           }, 1000);
-         } else if (startCountdownActive && startCountdown === 0) {
-           setStartCountdownActive(false);
-           startRecordingCallback(); // Start recording after 3-2-1
-         }
-       
-         return () => clearInterval(intervalId);
-       }, [startCountdown, startCountdownActive, startRecordingCallback]); 
    
      useEffect(() => {
        let intervalId: number;
@@ -229,6 +197,7 @@ const MultipleChooseSingleAnswerListen = () => {
       {alert && <AlertComponent type={alert.type} message={alert.message} onClose={() => setAlert(null)} />}
       <div className="content">
         <div className="container">
+           <PageHeading title="MC, Choose Single Answer" />
           <div className="practiceLayout">
             <p className="my-3">
               Look at the text below. In 40 seconds, you must read this text
@@ -243,11 +212,11 @@ const MultipleChooseSingleAnswerListen = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                  <span className="text-danger">Beginning in: {startCountdown}</span>
+                  <span className="text-danger">Beginning in: {countdown}</span>
                   <CardButton questionData={questionData} />
                   </div>
                   <div className="mb-3">
-                    <AudioPlayer questionData={questionData} startCountdown={startCountdown } />
+                    <AudioPlayer questionData={questionData} startCountdown={countdown } />
                   </div>
                   <div className="chooseSection">
                     <div className="">
