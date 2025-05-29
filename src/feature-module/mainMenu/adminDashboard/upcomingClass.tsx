@@ -1,6 +1,31 @@
 import React, { useEffect, useState } from "react";
+import { UpcommingClasses } from "../../../api/dashboardAPI";
+
+interface UpcomingClassesType {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+}
 
 const UpcomingClass: React.FC = () => {
+  const [upcomingClasses, setUpcomingClasses] = useState<UpcomingClassesType[]>(
+    []
+  );
+
+  useEffect(() => {
+    getUpcomingClasses();
+  }, []);
+
+  const getUpcomingClasses = async () => {
+    const res = await UpcommingClasses();
+    // console.log(upcomingClasses, "upcomingClasses");
+    if (res?.success) {
+      // console.log("Data being set to state:tanishq", res.data);
+      setUpcomingClasses(res.data);
+    }
+  };
+
   return (
     <div className="card flex-fill upcomingClasses">
       <div className="card-body ">

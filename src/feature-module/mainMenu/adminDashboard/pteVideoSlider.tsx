@@ -1,8 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import {  DashboardVideo } from "../../../api/dashboardAPI";
 
+interface DashboardVideoType {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+}
 function SampleNextArrow(props: any) {
   const { style, onClick } = props;
 
@@ -31,6 +38,20 @@ function SamplePrevArrow(props: any) {
 }
 
 const PteVideoSlider = () => {
+  const [video, setVideo] = useState<DashboardVideoType[]>([]);
+
+  useEffect(() => {
+    videoCount();
+  }, []);
+
+  const videoCount = async () => {
+    const res = await DashboardVideo();
+    // console.log(video);
+    if (res?.success) {
+      // console.log("Data being set to state:tanishq", res.data);
+      setVideo(res.data);
+    }
+  };
   const settings = {
     dots: false,
     autoplay: false,

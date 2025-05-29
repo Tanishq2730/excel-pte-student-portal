@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { ReviewsData } from "../../../api/dashboardAPI";
 
 function SampleNextArrow(props: any) {
   const { style, onClick } = props;
@@ -30,7 +31,27 @@ function SamplePrevArrow(props: any) {
   );
 }
 
+interface ReviewsDataType {
+  id: number;
+  name: string;
+  review: string;
+}
+
 const Testimonial = () => {
+  const [reviews, setReviews] = useState<ReviewsDataType[]>([]);
+
+  useEffect(() => {
+    getReviews();
+  }, []);
+
+  const getReviews = async () => {
+    const res = await ReviewsData();
+    // console.log(reviews,"tanishq");
+    if (res?.success) {
+      // console.log("Data being set to state:tanishq", res.data);
+      setReviews(res.data);
+    }
+  };
   const settings = {
     dots: false,
     autoplay: false,

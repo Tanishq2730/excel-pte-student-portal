@@ -10,4 +10,16 @@ export const ExamCountdown = async () => {
 export const StudyPlaner = async (date: string, typeId: number) => {
     return await apiHandler(`${api_url}v1/dashboard/study-plan-progress?date=${date}&typeId=${typeId}`, "GET");
 };
+export const DashboardVideo = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/pte-video`, "GET");
+};
+export const ReviewsData = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/reviews`, "GET");
+};
+export const UpcommingClasses = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/upcoming-classes`, "GET");
+};
+export const RecentActivity = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/recent-activity`, "GET");
+};
 

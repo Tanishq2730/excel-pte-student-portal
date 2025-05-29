@@ -1,9 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
+import { RecentActivity } from "../../../api/dashboardAPI";
+
+interface RecentActivityType {
+  id: number;
+  title: string;
+  description: string;
+  image: string;
+  badge: string;
+  created_at: string;
+}
 
 const ActivityHistory: React.FC = () => {
-  return (
+  const [recentActivity, setRecentActivity] = useState<RecentActivityType[]>([]);
+
+  useEffect(() => {
+    getRecentActivity();
+  }, []);
+
+  const getRecentActivity = async () => {
+    const res = await RecentActivity();
+    // console.log(res,"recentActivity");
+    if (res?.success) {
+      // console.log("Data being set to state:", res.data);
+      setRecentActivity(res.data);
+    }
+  };
+
+    return (
     <div className="card flex-fill">
       <div className="card-header d-flex align-items-center justify-content-between">
         <h4 className="card-titile">Activity History</h4>
@@ -13,81 +38,28 @@ const ActivityHistory: React.FC = () => {
         style={{ height: "21.4em", overflowY: "scroll" }}
       >
         <ul className="list-group list-group-flush">
-          <li className="list-group-item py-3 px-0 pb-0">
-            <div className="d-flex align-items-center justify-content-between flex-wrap">
-              <div className="d-flex align-items-center overflow-hidden mb-3">
-                <Link to="#" className="avatar avatar-xl flex-shrink-0 me-2">
-                  <ImageWithBasePath
-                    src="assets/img/home-work/home-work-01.jpg"
-                    alt="img"
-                  />
-                </Link>
-                <div className="overflow-hidden">
-                  <p className="d-flex align-items-center text-info mb-1">
-                    Mock Test
-                  </p>
-                  <h6 className="text-truncate mb-1">
-                    {/* <Link to={routes.classHomeWork}> */}
-                    Speaking Mock Test 40. #812
-                    {/* </Link> */}
-                  </h6>
-                  <div className="d-flex align-items-center flex-wrap">
-                    <p>16 Jun 2024</p>
+          {recentActivity.map((activity, index) => (
+            <li key={activity.id} className="list-group-item py-3 px-0 pb-0">
+              <div className="d-flex align-items-center justify-content-between flex-wrap">
+                <div className="d-flex align-items-center overflow-hidden mb-3">
+                  <Link to="#" className="avatar activity-avatar avatar-xl flex-shrink-0 me-2">
+                    <i className="ion-person"></i>
+                  </Link>
+                  <div className="overflow-hidden">
+                    <p className="d-flex align-items-center text-info mb-1">
+                      {activity.badge}
+                    </p>
+                    <h6 className="text-truncate mb-1">
+                      {activity.title}
+                    </h6>
+                    <div className="d-flex align-items-center flex-wrap">
+                      <p>{activity.created_at || "No description"}</p>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-          </li>
-          <li className="list-group-item py-3 px-0 pb-0">
-            <div className="d-flex align-items-center justify-content-between flex-wrap">
-              <div className="d-flex align-items-center overflow-hidden mb-3">
-                <Link to="#" className="avatar avatar-xl flex-shrink-0 me-2">
-                  <ImageWithBasePath
-                    src="assets/img/home-work/home-work-01.jpg"
-                    alt="img"
-                  />
-                </Link>
-                <div className="overflow-hidden">
-                  <p className="d-flex align-items-center text-info mb-1">
-                    Mock Test
-                  </p>
-                  <h6 className="text-truncate mb-1">
-                    {/* <Link to={routes.classHomeWork}> */}
-                    Speaking Mock Test 40. #812
-                    {/* </Link> */}
-                  </h6>
-                  <div className="d-flex align-items-center flex-wrap">
-                    <p>16 Jun 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
-          <li className="list-group-item py-3 px-0 pb-0">
-            <div className="d-flex align-items-center justify-content-between flex-wrap">
-              <div className="d-flex align-items-center overflow-hidden mb-3">
-                <Link to="#" className="avatar avatar-xl flex-shrink-0 me-2">
-                  <ImageWithBasePath
-                    src="assets/img/home-work/home-work-01.jpg"
-                    alt="img"
-                  />
-                </Link>
-                <div className="overflow-hidden">
-                  <p className="d-flex align-items-center text-info mb-1">
-                    Mock Test
-                  </p>
-                  <h6 className="text-truncate mb-1">
-                    {/* <Link to={routes.classHomeWork}> */}
-                    Speaking Mock Test 40. #812
-                    {/* </Link> */}
-                  </h6>
-                  <div className="d-flex align-items-center flex-wrap">
-                    <p>16 Jun 2024</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </li>
+            </li>
+          ))}
         </ul>
       </div>
     </div>
