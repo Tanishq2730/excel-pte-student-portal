@@ -18,6 +18,7 @@ interface PracticeType {
   weekly: boolean;
   Subtype: Subtype;
   bookmarked: boolean;
+  image_type:string;
 }
 
 const routeNameMap: { [key: string]: keyof typeof all_routes } = {
@@ -50,6 +51,7 @@ const ThemeSettings = () => {
   const [questionData, setQuestionData] = useState<PracticeType[]>([]);
   const [difficulty, setDifficulty] = useState<string>("");
   const [practiceStatus, setPracticeStatus] = useState<string>("all");
+  const [imageType, setImageType] = useState<string>("all");
   const [tab, setTab] = useState<"all" | "weekly" | "bookmarked">("all");
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [currentPage, setCurrentPage] = useState(1);
@@ -116,6 +118,11 @@ const ThemeSettings = () => {
       if (difficulty && q.difficulties !== difficulty) return false;
       if (practiceStatus === "done" && !q.practiced) return false;
       if (practiceStatus === "pending" && q.practiced) return false;
+
+      if (questionData[0]?.Subtype?.sub_name === "Describe Image" && imageType !== "0") {
+        // Assuming questions have a field like `image_type` to compare against imageType
+        if (q.image_type !== imageType) return false;
+      }
 
       if (
         searchTerm &&
@@ -266,19 +273,20 @@ const getQuestionLink = (q: PracticeType): string => {
                     { questionData[0]?.Subtype?.sub_name === "Describe Image" &&
                     <div className="col-md-2">
                       <select
-                        id="practiceStatus"
+                        id="imageType"
                         className="form-select"
-                        value={practiceStatus}
-                        onChange={(e) => setPracticeStatus(e.target.value)}
+                        value={imageType}
+                        onChange={(e) => setImageType(e.target.value)}
                       >
-                        <option value="Type">Type</option>
-                        <option value="Bar">Bar</option>
-                        <option value="Line">Line</option>
-                        <option value="Pie">Pie</option>
-                        <option value="Flow">Flow</option>
-                        <option value="Table">Table</option>
-                        <option value="Map">Map</option>
-                        <option value="Pic">Pic</option>
+                        <option value="0">All</option>
+                        <option value="1">Line Graph</option>
+                        <option value="2">Bar Graph</option>
+                        <option value="3">Pie Chart</option>
+                        <option value="4">Table</option>
+                        <option value="5">Flow Chart</option>
+                        <option value="6">Image</option>
+                        <option value="7">Process</option>
+                        <option value="8">Maps</option>
                       </select>
                     </div>
                     }

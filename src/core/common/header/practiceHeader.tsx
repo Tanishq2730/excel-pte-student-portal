@@ -34,15 +34,15 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
   "Write Essay": "writeEssay",
   "Write Email": "writeEmail",
   "Reading and Writing Fill in the Blanks": "readingWritngFillBlank",
-  "MC, Choose Multiple Answer": "multipleChooseAnswer",
-  "MC, Choose Single Answer": "multipleChooseSingleAnswer",
+  "MC, Select Multiple Answer": "multipleChooseAnswer",
+  "MC, Select Single Answer": "multipleChooseSingleAnswer",
   "Reading Fill in the Blanks": "fillInTheBlanksRead",
   "Re-order Paragraphs": "reorderParagraph",
   "Summarize Spoken Text": "summarizeSpokenText",
-  "MC, Select Multiple Answer": "multipleChooseAnswerListen",
+  "MC, Choose Multiple Answer": "multipleChooseAnswerListen",
   "Fill in the Blanks": "fillInTheBlanks",
   "Highlight Correct Summary": "highlightCorrectSummary",
-  "MC, Select Single Answer": "multipleChooseSingleAnswerListen",
+  "MC, Choose Single Answer": "multipleChooseSingleAnswerListen",
   "Select Missing Word": "selectMissingWord",
   "Highlight Incorrect Words": "highlightIncorrectWord",
   "Write from Dictation": "writeFromDictation",
@@ -181,7 +181,7 @@ const PracticeHeader = ({ showMegaMenu, setShowMegaMenu }: PracticeHeaderProps) 
                                   }}
                                 >
                                   {sub.sub_name}
-                                  {sub.ai_score ? <span className="ai-score">AI</span> : null}
+                                  {sub.ai_score == 1 ? <span className="ai-score">AI Score</span> : null}
                                 </Link>
                               ))}
                           </div>
@@ -217,7 +217,7 @@ const PracticeHeader = ({ showMegaMenu, setShowMegaMenu }: PracticeHeaderProps) 
                                   }}
                                 >
                                   {sub.sub_name}
-                                  {sub.ai_score ? <span className="ai-score">AI</span> : null}
+                                  {sub.ai_score == 1 ? <span className="ai-score">AI Score</span> : null}
                                 </Link>
                               ))}
                           </div>

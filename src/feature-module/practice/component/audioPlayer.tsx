@@ -6,9 +6,10 @@ interface QuestionData {
 }
 interface AudioPlayerProps {
   questionData?: QuestionData | null;
+  startCountdown?: number | null;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }) => {
   const url = `${image_url}${questionData?.speak_audio_file}`;
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -58,6 +59,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData }) => {
       audio.removeEventListener("loadedmetadata", updateDuration);
     };
   }, []);
+
+  useEffect(() => {
+  if (startCountdown === 0 && audioRef.current) {
+    audioRef.current.play();
+    setIsPlaying(true);
+  }
+}, [startCountdown]);
 
   const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newTime = Number(e.target.value);

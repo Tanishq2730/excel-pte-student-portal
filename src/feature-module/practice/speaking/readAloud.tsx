@@ -45,7 +45,7 @@ const ReadAloud = () => {
   } | null>(null);
   const [showAnswer, setShowAnswer] = useState(false);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
-  const [countdown, setCountdown] = useState<number>(0);
+  const [countdown, setCountdown] = useState<number>(1);
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [resetRecording, setResetRecording] = useState<boolean>(false);
   const [showNotes, setShowNotes] = useState<boolean>(false); // ⭐ New State for MyNotes
@@ -157,16 +157,15 @@ const ReadAloud = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${
-      seconds < 10 ? `0${seconds}` : seconds
-    }`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+      }`;
   };
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
   };
-  
-  
+
+
 
   const handleRestart = () => {
     const preparationTimeInSeconds = parseInt(
@@ -317,9 +316,9 @@ const ReadAloud = () => {
   const spokenWords2 = useMemo<string[]>(() => {
     return transcript
       ? transcript
-          .toLowerCase()
-          .trim()
-          .split(/\s+|(?<=\w)(?=\W)/)
+        .toLowerCase()
+        .trim()
+        .split(/\s+|(?<=\w)(?=\W)/)
       : [];
   }, [transcript]);
 
@@ -538,15 +537,22 @@ const ReadAloud = () => {
       setAlert({ type: "danger", message: "Something went wrong." });
     }
   };
-const [showDictionaryModal, setShowDictionaryModal] = useState(false);
-const [selectedWord, setSelectedWord] = useState<string>("");
+  const [showDictionaryModal, setShowDictionaryModal] = useState(false);
+  const [selectedWord, setSelectedWord] = useState<string>("");
 
-const handleWordClick = (word: string) => {
-  console.log(word);
-  
-  setSelectedWord(word);
-  setShowDictionaryModal(true);
-};
+  const handleWordClick = (word: string) => {
+    console.log(word);
+
+    setSelectedWord(word);
+    setShowDictionaryModal(true);
+  };
+
+  const [recordingTime, setRecordingTime] = useState(0);
+
+  const handleTimerUpdate = (seconds: number) => {
+    setRecordingTime(seconds);
+  };
+
 
   return (
     <div className="page-wrappers">
@@ -589,23 +595,27 @@ const handleWordClick = (word: string) => {
                     <div className="time">
                       <div className="headBtn">
                         <span className="text-danger">
-                          Prepare: {formatTime(countdown)}
+                          {recordingTime > 0
+                            ? `Recording: ${recordingTime}`
+                            : countdown > 0
+                              ? `Prepare: ${formatTime(countdown)}`
+                              : "Prepare"}
                         </span>
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
                         <p>
-                              {questionData?.question?.split(" ").map((word, idx) => (
-                                <span
-                                  key={idx}
-                                  onClick={() => handleWordClick(word)}
-                                  style={{ cursor: "pointer", marginRight: 4 }}
-                                  title="Click to see definition"
-                                >
-                                  {word}
-                                </span>
-                              ))}
-                            </p>  
+                          {questionData?.question?.split(" ").map((word, idx) => (
+                            <span
+                              key={idx}
+                              onClick={() => handleWordClick(word)}
+                              style={{ cursor: "pointer", marginRight: 4 }}
+                              title="Click to see definition"
+                            >
+                              {word}
+                            </span>
+                          ))}
+                        </p>
                       </div>
                       <div className="micSection">
                         <Recorder
@@ -613,6 +623,12 @@ const handleWordClick = (word: string) => {
                           onStopRecording={handleStopRecording}
                           resetRecording={resetRecording}
                           countdown={countdown}
+                          onTimerUpdate={handleTimerUpdate}
+                          durationLimit={
+                            questionData?.Subtype?.recording_time != null
+                              ? Number(questionData.Subtype.recording_time)
+                              : undefined
+                          }
                         />
                       </div>
 
@@ -633,14 +649,14 @@ const handleWordClick = (word: string) => {
                         >
                           <div
                             className="audio-inner p-4 rounded-3"
-             
+
                           >
-                            <h3 className="mb-3">Answer</h3>                            
-                             <p
+                            <h3 className="mb-3">Answer</h3>
+                            <p
                               dangerouslySetInnerHTML={{
                                 __html: questionData?.answer_american || "",
                               }}
-                            />                          
+                            />
                           </div>
                         </div>
                       )}
@@ -650,11 +666,11 @@ const handleWordClick = (word: string) => {
               </div>
             </div>
 
-          <DictionaryModal
-            isOpen={showDictionaryModal}
-            onClose={() => setShowDictionaryModal(false)}
-            word={selectedWord}
-          />
+            <DictionaryModal
+              isOpen={showDictionaryModal}
+              onClose={() => setShowDictionaryModal(false)}
+              word={selectedWord}
+            />
 
             {showNotes && (
               <div className="col-md-3">

@@ -131,6 +131,24 @@ const AnswerShortQuestion = () => {
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
+
+  const [startCountdown, setStartCountdown] = useState<number | null>(null);
+  const [startCountdownActive, setStartCountdownActive] = useState(false);
+  
+   useEffect(() => {
+    if (!questionData) return;
+  
+    const prepTime = parseInt(questionData.Subtype?.preparation_time || "0", 10);
+  
+    if (prepTime > 0) {
+      setCountdown(prepTime);
+      setTimerActive(true);
+    } else {
+      setStartCountdown(3);
+      setStartCountdownActive(true);
+    }
+  }, [questionData]);
+
   useEffect(() => {
     if (questionData?.Subtype?.preparation_time) {
       const preparationTimeInSeconds = parseInt(
@@ -147,6 +165,23 @@ const AnswerShortQuestion = () => {
       document.getElementById("startRecordingButton")?.click();
     }
   }, [questionData]);
+
+  useEffect(() => {
+    let intervalId: number;
+  
+    if (startCountdownActive && startCountdown && startCountdown > 0) {
+      intervalId = setInterval(() => {
+        setStartCountdown((prev) => (prev ? prev - 1 : 0));
+      }, 1000);
+    } else if (startCountdownActive && startCountdown === 0) {
+      setStartCountdownActive(false);
+      startRecordingCallback(); // Start recording after 3-2-1
+    }
+  
+    return () => clearInterval(intervalId);
+  }, [startCountdown, startCountdownActive, startRecordingCallback]);
+  
+  
 
   useEffect(() => {
     let intervalId: number;
@@ -583,59 +618,16 @@ const AnswerShortQuestion = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Prepare: {formatTime(countdown)}
-                    </span>
+                     {startCountdownActive ? (
+                      <span className="text-primary">Starting in: {startCountdown}</span>
+                    ) : (
+                      <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                    )}
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
-                    {/* <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
-                      <button
-                        className="btn btn-outline-secondary rounded-circle me-3"
-                        onClick={togglePlay}
-                      >
-                        <i
-                          className={`bi ${
-                            isPlaying ? "fa fa-pause" : "fa fa-play"
-                          }`}
-                        ></i>
-                      </button>
-
-                      <input
-                        type="range"
-                        className="form-range me-2 flex-grow-1"
-                        value={currentTime}
-                        max={duration}
-                        onChange={handleProgressChange}
-                      />
-                      <span className="me-3 text-muted">
-                        {formatTime(currentTime)}/{formatTime(duration)}
-                      </span>
-
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        className="form-range me-2"
-                        style={{ width: "80px" }}
-                      />
-                      <select
-                        value={playbackRate}
-                        onChange={handleSpeedChange}
-                        className="form-select w-auto"
-                      >
-                        <option value={0.5}>0.5x</option>
-                        <option value={1}>1.0</option>
-                        <option value={1.5}>1.5x</option>
-                        <option value={2}>2x</option>
-                      </select>
-
-                      <audio ref={audioRef} src={url} preload="metadata" />
-                    </div> */}
-                    <AudioPlayer/>
+                    
+                    <AudioPlayer questionData={questionData} startCountdown={startCountdown } />
                   </div>
                   <div className="micSection">
                     <Recorder

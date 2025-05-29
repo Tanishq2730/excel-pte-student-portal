@@ -63,6 +63,24 @@ const MultipleChooseSingleAnswerListen = () => {
        }
      }, [subtype_id, question_id, navigate]);
    
+      const [startCountdown, setStartCountdown] = useState<number | null>(null);
+         const [startCountdownActive, setStartCountdownActive] = useState(false);
+       
+        useEffect(() => {
+         if (!questionData) return;
+       
+         const prepTime = parseInt(questionData.Subtype?.beginning_in || "0", 10);
+       
+         if (prepTime > 0) {
+           setCountdown(prepTime);
+           setTimerActive(true);
+         } else {
+           setStartCountdown(3); // Start the 3-2-1 countdown
+           setStartCountdownActive(true);
+         }
+       }, [questionData]);
+
+
      useEffect(() => {
        if (questionData?.Subtype?.beginning_in) {
          const preparationTimeInSeconds = parseInt(questionData.Subtype.beginning_in, 10); 
@@ -76,6 +94,21 @@ const MultipleChooseSingleAnswerListen = () => {
          document.getElementById("startRecordingButton")?.click();
        }
      }, [questionData]);
+
+     useEffect(() => {
+         let intervalId: number;
+       
+         if (startCountdownActive && startCountdown && startCountdown > 0) {
+           intervalId = setInterval(() => {
+             setStartCountdown((prev) => (prev ? prev - 1 : 0));
+           }, 1000);
+         } else if (startCountdownActive && startCountdown === 0) {
+           setStartCountdownActive(false);
+           startRecordingCallback(); // Start recording after 3-2-1
+         }
+       
+         return () => clearInterval(intervalId);
+       }, [startCountdown, startCountdownActive, startRecordingCallback]); 
    
      useEffect(() => {
        let intervalId: number;
@@ -210,11 +243,11 @@ const MultipleChooseSingleAnswerListen = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                  <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                  <span className="text-danger">Beginning in: {startCountdown}</span>
                   <CardButton questionData={questionData} />
                   </div>
                   <div className="mb-3">
-                    <AudioPlayer questionData={questionData} />
+                    <AudioPlayer questionData={questionData} startCountdown={startCountdown } />
                   </div>
                   <div className="chooseSection">
                     <div className="">
@@ -270,16 +303,7 @@ const MultipleChooseSingleAnswerListen = () => {
                       
                       >
                         <h3 className="mb-3">Answer</h3>
-                        <hr />
-                        <div className="rounded-pill">
-                          <audio controls className="w-100">
-                            <source
-                              src="your-audio-file.mp3"
-                              type="audio/mpeg"
-                            />
-                            Your browser does not support the audio element.
-                          </audio>
-                        </div>
+                        
                       </div>
                     </div>
                   )}

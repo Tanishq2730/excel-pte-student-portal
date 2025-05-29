@@ -130,6 +130,25 @@ const ReTellLecture = () => {
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
+
+  const [startCountdown, setStartCountdown] = useState<number | null>(null);
+  const [startCountdownActive, setStartCountdownActive] = useState(false);
+
+  useEffect(() => {
+    if (!questionData) return;
+
+    const prepTime = parseInt(questionData.Subtype?.preparation_time || "0", 10);
+
+    if (prepTime > 0) {
+      setCountdown(prepTime);
+      setTimerActive(true);
+    } else {
+      setStartCountdown(3);
+      setStartCountdownActive(true);
+    }
+  }, [questionData]);
+
+
   useEffect(() => {
     if (questionData?.Subtype?.preparation_time) {
       const preparationTimeInSeconds = parseInt(
@@ -146,6 +165,22 @@ const ReTellLecture = () => {
       document.getElementById("startRecordingButton")?.click();
     }
   }, [questionData]);
+
+
+  useEffect(() => {
+    let intervalId: number;
+
+    if (startCountdownActive && startCountdown && startCountdown > 0) {
+      intervalId = setInterval(() => {
+        setStartCountdown((prev) => (prev ? prev - 1 : 0));
+      }, 1000);
+    } else if (startCountdownActive && startCountdown === 0) {
+      setStartCountdownActive(false);
+      startRecordingCallback(); // Start recording after 3-2-1
+    }
+
+    return () => clearInterval(intervalId);
+  }, [startCountdown, startCountdownActive, startRecordingCallback]);
 
   useEffect(() => {
     let intervalId: number;
@@ -165,9 +200,8 @@ const ReTellLecture = () => {
   const formatTimePreapre = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${
-      seconds < 10 ? `0${seconds}` : seconds
-    }`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+      }`;
   };
 
   const handleStopRecording = () => {
@@ -212,15 +246,6 @@ const ReTellLecture = () => {
     }
   };
 
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
-  };
 
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
@@ -245,30 +270,6 @@ const ReTellLecture = () => {
       audio.removeEventListener("loadedmetadata", updateDuration);
     };
   }, []);
-
-  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
-    }
-  };
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-      setVolume(newVolume);
-    }
-  };
-
-  const handleSpeedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSpeed = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.playbackRate = newSpeed;
-      setPlaybackRate(newSpeed);
-    }
-  };
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
@@ -336,9 +337,9 @@ const ReTellLecture = () => {
   const spokenWords2 = useMemo<string[]>(() => {
     return transcript
       ? transcript
-          .toLowerCase()
-          .trim()
-          .split(/\s+|(?<=\w)(?=\W)/)
+        .toLowerCase()
+        .trim()
+        .split(/\s+|(?<=\w)(?=\W)/)
       : [];
   }, [transcript]);
 
@@ -629,6 +630,12 @@ const ReTellLecture = () => {
     }
   };
 
+  const [recordingTime, setRecordingTime] = useState(0);
+
+  const handleTimerUpdate = (seconds: number) => {
+    setRecordingTime(seconds);
+  };
+
   return (
     <div className="page-wrappers">
       {alert && (
@@ -667,68 +674,31 @@ const ReTellLecture = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                    <span className="text-danger">
-                      Prepare: {formatTime(countdown)}
-                    </span>
+                    {startCountdownActive ? (
+                      <span className="text-primary">Starting in: {startCountdown}</span>
+                    ) : (
+                      <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                    )}
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="innercontent">
-                    {/* <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
-                      <button
-                        className="btn btn-outline-secondary rounded-circle me-3"
-                        onClick={togglePlay}
-                      >
-                        <i
-                          className={`bi ${
-                            isPlaying ? "fa fa-pause" : "fa fa-play"
-                          }`}
-                        ></i>
-                      </button>
-
-                      <input
-                        type="range"
-                        className="form-range me-2 flex-grow-1"
-                        value={currentTime}
-                        max={duration}
-                        onChange={handleProgressChange}
-                      />
-                      <span className="me-3 text-muted">
-                        {formatTime(currentTime)}/{formatTime(duration)}
-                      </span>
-
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        className="form-range me-2"
-                        style={{ width: "80px" }}
-                      />
-                      <select
-                        value={playbackRate}
-                        onChange={handleSpeedChange}
-                        className="form-select w-auto"
-                      >
-                        <option value={0.5}>0.5x</option>
-                        <option value={1}>1.0</option>
-                        <option value={1.5}>1.5x</option>
-                        <option value={2}>2x</option>
-                      </select>
-
-                      <audio ref={audioRef} src={url} preload="metadata" />
-                    </div> */}
-                    <AudioPlayer/>
+                    <AudioPlayer questionData={questionData} startCountdown={countdown} />
                   </div>
                   <div className="micSection">
                     <Recorder
                       onRecordingComplete={handleRecordingComplete}
                       onStopRecording={handleStopRecording}
                       resetRecording={resetRecording}
+                      countdown={countdown}
+                      onTimerUpdate={handleTimerUpdate}
+                      durationLimit={
+                        questionData?.Subtype?.recording_time != null
+                          ? Number(questionData.Subtype.recording_time)
+                          : undefined
+                      }
                     />
                   </div>
-                  
+
                   <div className="bottomBtn mt-3">
                     <QuestionNavigation
                       questionData={questionData}
@@ -746,7 +716,7 @@ const ReTellLecture = () => {
                     >
                       <div
                         className="audio-inner p-4 rounded-3"
-                      
+
                       >
                         <h3 className="mb-3">Answer</h3>
                         <p
@@ -754,7 +724,7 @@ const ReTellLecture = () => {
                             __html: questionData?.answer_american || "",
                           }}
                         />
-                       
+
                       </div>
                     </div>
                   )}

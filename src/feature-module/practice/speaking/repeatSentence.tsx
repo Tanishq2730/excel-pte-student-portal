@@ -45,7 +45,7 @@ const RepeatSentence = () => {
     message: string;
   } | null>(null);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
-  const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
+  const [countdown, setCountdown] = useState<number>(1); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [resetRecording, setResetRecording] = useState<boolean>(false); // Add reset state
   const [showAnswer, setShowAnswer] = useState(false);
@@ -130,22 +130,44 @@ const RepeatSentence = () => {
     if (subtype_id) getData();
   }, [subtype_id, question_id, navigate]);
 
-  useEffect(() => {
-    if (questionData?.Subtype?.preparation_time) {
-      const preparationTimeInSeconds = parseInt(
-        questionData.Subtype.preparation_time,
-        10
-      );
-      setCountdown(preparationTimeInSeconds);
-      setTimerActive(true);
-    }
-  }, [questionData]);
 
-  const startRecordingCallback = useCallback(() => {
+  const [startCountdown, setStartCountdown] = useState<number | null>(null);
+const [startCountdownActive, setStartCountdownActive] = useState(false);
+
+ useEffect(() => {
+  if (!questionData) return;
+
+  const prepTime = parseInt(questionData.Subtype?.preparation_time || "0", 10);
+
+  if (prepTime > 0) {
+    setCountdown(prepTime);
+    setTimerActive(true);
+  } else {
+    setStartCountdown(3); // Start the 3-2-1 countdown
+    setStartCountdownActive(true);
+  }
+}, [questionData]);
+
+const startRecordingCallback = useCallback(() => {
     if (questionData && questionData.Subtype.preparation_time === "0") {
       document.getElementById("startRecordingButton")?.click();
     }
   }, [questionData]);
+
+useEffect(() => {
+  let intervalId: number;
+
+  if (startCountdownActive && startCountdown && startCountdown > 0) {
+    intervalId = setInterval(() => {
+      setStartCountdown((prev) => (prev ? prev - 1 : 0));
+    }, 1000);
+  } else if (startCountdownActive && startCountdown === 0) {
+    setStartCountdownActive(false);
+    startRecordingCallback(); // Start recording after 3-2-1
+  }
+
+  return () => clearInterval(intervalId);
+}, [startCountdown, startCountdownActive, startRecordingCallback]);  
 
   useEffect(() => {
     let intervalId: number;
@@ -188,7 +210,7 @@ const RepeatSentence = () => {
       questionData?.Subtype.preparation_time || "0",
       10
     );
-    setCountdown(preparationTimeInSeconds);
+    setCountdown(1);
     setTimerActive(true);
     setShowAnswer(false);
     setResetRecording(true);
@@ -202,24 +224,6 @@ const RepeatSentence = () => {
     setTargetScoreOutOf90("0.00");
     setGoodWords(0);
     setTimeout(() => setResetRecording(false), 100);
-  };
-
-  const formatTimePrepare = (time: number) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${
-      seconds < 10 ? `0${seconds}` : seconds
-    }`;
-  };
-
-  const togglePlay = () => {
-    if (!audioRef.current) return;
-    if (isPlaying) {
-      audioRef.current.pause();
-    } else {
-      audioRef.current.play();
-    }
-    setIsPlaying(!isPlaying);
   };
 
   const formatTime = (time: number) => {
@@ -244,31 +248,7 @@ const RepeatSentence = () => {
       audio.removeEventListener("timeupdate", updateTime);
       audio.removeEventListener("loadedmetadata", updateDuration);
     };
-  }, []);
-
-  const handleProgressChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newTime = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.currentTime = newTime;
-      setCurrentTime(newTime);
-    }
-  };
-
-  const handleVolumeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newVolume = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.volume = newVolume;
-      setVolume(newVolume);
-    }
-  };
-
-  const handleSpeedChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const newSpeed = Number(e.target.value);
-    if (audioRef.current) {
-      audioRef.current.playbackRate = newSpeed;
-      setPlaybackRate(newSpeed);
-    }
-  };
+  }, []); 
 
   const handleAnswerClick = () => {
     setShowAnswer((prev) => !prev);
@@ -672,6 +652,12 @@ const RepeatSentence = () => {
     }
   };
 
+  const [recordingTime, setRecordingTime] = useState(0);
+  
+    const handleTimerUpdate = (seconds: number) => {
+      setRecordingTime(seconds);
+    };
+
   return (
     <div className="page-wrappers">
       {alert && (
@@ -710,65 +696,28 @@ const RepeatSentence = () => {
               <div className="card-body">
                 <div className="time">
                   <div className="headBtn">
-                  <span className="text-danger">
-                      Prepare: {formatTime(countdown)}
-                    </span>
+                    {startCountdownActive ? (
+                      <span className="text-primary">Starting in: {startCountdown}</span>
+                    ) : (
+                      <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                    )}
                     <CardButton questionData={questionData} />
                   </div>
-                  <div className="innercontent">
-                    {/* <div className="d-flex align-items-center bg-light rounded-pill px-3 py-2">
-                      <button
-                        className="btn btn-outline-secondary rounded-circle me-3"
-                        onClick={togglePlay}
-                      >
-                        <i
-                          className={`bi ${
-                            isPlaying ? "fa fa-pause" : "fa fa-play"
-                          }`}
-                        ></i>
-                      </button>
-
-                      <input
-                        type="range"
-                        className="form-range me-2 flex-grow-1"
-                        value={currentTime}
-                        max={duration}
-                        onChange={handleProgressChange}
-                      />
-                      <span className="me-3 text-muted">
-                        {formatTime(currentTime)}/{formatTime(duration)}
-                      </span>
-
-                      <input
-                        type="range"
-                        min={0}
-                        max={1}
-                        step={0.01}
-                        value={volume}
-                        onChange={handleVolumeChange}
-                        className="form-range me-2"
-                        style={{ width: "80px" }}
-                      />
-                      <select
-                        value={playbackRate}
-                        onChange={handleSpeedChange}
-                        className="form-select w-auto"
-                      >
-                        <option value={0.5}>0.5x</option>
-                        <option value={1}>1.0</option>
-                        <option value={1.5}>1.5x</option>
-                        <option value={2}>2x</option>
-                      </select>
-
-                      <audio ref={audioRef} src={url} preload="metadata" />
-                    </div> */}
-                    <AudioPlayer/>
+                  <div className="innercontent">                    
+                    <AudioPlayer questionData={questionData} startCountdown={startCountdown } />
                   </div>
                   <div className="micSection">
                     <Recorder
                       onRecordingComplete={handleRecordingComplete}
                       onStopRecording={handleStopRecording}
                       resetRecording={resetRecording}
+                      countdown={countdown}
+                          onTimerUpdate={handleTimerUpdate}
+                          durationLimit={
+                            questionData?.Subtype?.recording_time != null
+                              ? Number(questionData.Subtype.recording_time)
+                              : undefined
+                          }
                     />
                   </div>
                   

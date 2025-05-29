@@ -2,23 +2,19 @@ import React, { useRef, useState, useEffect } from 'react';
 import WaveSurfer from 'wavesurfer.js';
 import SpeechRecognition, { useSpeechRecognition } from "react-speech-recognition";
 
-// Add styles at the top of the file
 const progressBarStyles = `
   progress {
     -webkit-appearance: none;
     appearance: none;
   }
-
   progress::-webkit-progress-bar {
     background-color: #e3f2fd;
     border-radius: 4px;
   }
-
   progress::-webkit-progress-value {
     background-color: #2196f3;
     border-radius: 4px;
   }
-
   progress::-moz-progress-bar {
     background-color: #2196f3;
     border-radius: 4px;
@@ -29,43 +25,45 @@ type RecorderProps = {
   onRecordingComplete: (audioBlob: Blob, audioUrl: string) => void;
   onStopRecording: () => void;
   resetRecording: boolean;
-  countdown?:number;
+  countdown?: number;
+  onTimerUpdate?: (seconds: number) => void;
+  durationLimit?: number;
 };
 
-const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecording, resetRecording,countdown }) => {
+const Recorder: React.FC<RecorderProps> = ({
+  onRecordingComplete,
+  onStopRecording,
+  resetRecording,
+  countdown,
+  onTimerUpdate,
+  durationLimit
+}) => {
   const [recording, setRecording] = useState(false);
   const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
   const [audioUrl, setAudioUrl] = useState<string>('');
   const [progress, setProgress] = useState<number>(0);
-// console.log(countdown,'success');
+  const [elapsedTime, setElapsedTime] = useState<number>(0);
+  const [hasStarted, setHasStarted] = useState(false);
 
   const progressRef = useRef<number>(0);
   const timerRef = useRef<number | null>(null);
-
   const waveSurferRef = useRef<any>(null);
   const waveformContainerRef = useRef<HTMLDivElement | null>(null);
-
   const { transcript, resetTranscript } = useSpeechRecognition();
 
-
   const playBeep = () => {
-      const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
-      const oscillator = ctx.createOscillator();
-      const gainNode = ctx.createGain();
-  
-      oscillator.connect(gainNode);
-      gainNode.connect(ctx.destination);
-  
-      oscillator.type = "triangle";
-      oscillator.frequency.setValueAtTime(1000, ctx.currentTime); // 1000 Hz = beep
-      gainNode.gain.setValueAtTime(1, ctx.currentTime);
-  
-      oscillator.start();
-      oscillator.stop(ctx.currentTime + 0.3); // 0.3 second beep
-    };
+    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = ctx.createOscillator();
+    const gainNode = ctx.createGain();
+    oscillator.connect(gainNode);
+    gainNode.connect(ctx.destination);
+    oscillator.type = "triangle";
+    oscillator.frequency.setValueAtTime(1000, ctx.currentTime);
+    gainNode.gain.setValueAtTime(1, ctx.currentTime);
+    oscillator.start();
+    oscillator.stop(ctx.currentTime + 0.3);
+  };
 
-
-  // Load waveform when audioUrl changes
   useEffect(() => {
     if (audioUrl && waveformContainerRef.current) {
       waveSurferRef.current?.destroy();
@@ -82,14 +80,12 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
     }
   }, [audioUrl]);
 
-  // Handle external reset trigger
   useEffect(() => {
     if (resetRecording) {
       resetRecordingHandler();
     }
   }, [resetRecording]);
 
-  // Cleanup on unmount
   useEffect(() => {
     return () => {
       waveSurferRef.current?.destroy();
@@ -99,21 +95,17 @@ const Recorder: React.FC<RecorderProps> = ({ onRecordingComplete, onStopRecordin
     };
   }, []);
 
-const [hasStarted, setHasStarted] = useState(false);
-
-// useEffect(() => {
-//   if (countdown === 0 && !recording && !hasStarted) {
-//     setHasStarted(true); // Mark it as triggered
-//     startRecording();
-//   }
-// }, [countdown, recording, hasStarted]);
-// console.log(countdown);
+  // useEffect(() => {
+  //   if (countdown === 0 && !recording && !hasStarted) {
+  //     setHasStarted(true);
+  //     startRecording();
+  //   }
+  // }, [countdown, recording, hasStarted]);
 
   const startRecording = async () => {
-     try {
-    playBeep(); // Play beep first
+    try {
+      playBeep();
 
-    setTimeout(async () => {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
       const recorder = new MediaRecorder(stream, { mimeType: 'audio/webm' });
       const chunks: Blob[] = [];
@@ -137,20 +129,31 @@ const [hasStarted, setHasStarted] = useState(false);
 
       progressRef.current = 0;
       setProgress(0);
+      setElapsedTime(0);
+
+      // Timer starts after recording starts
       timerRef.current = window.setInterval(() => {
-        progressRef.current = Math.min(progressRef.current + 1, 100);
-        setProgress(progressRef.current);
+        setElapsedTime(prev => {
+          const newTime = prev + 1;
+          if (onTimerUpdate) onTimerUpdate(newTime);
+          if (durationLimit) {
+            const newProgress = Math.min((newTime / durationLimit) * 100, 100);
+            setProgress(newProgress);
+          }
+          if (durationLimit && newTime >= durationLimit) {
+            stopRecording();
+          }
+          return newTime;
+        });
       }, 1000);
 
-    }, 500); // Delay start to give time for beep to finish
-
-  } catch (err) {
-    console.error('Microphone access error:', err);
-  }
+    } catch (err) {
+      console.error('Microphone access error:', err);
+    }
   };
 
   const stopRecording = () => {
-    if (mediaRecorder) {
+    if (mediaRecorder && mediaRecorder.state === "recording") {
       mediaRecorder.stop();
       setRecording(false);
       SpeechRecognition.stopListening();
@@ -170,6 +173,8 @@ const [hasStarted, setHasStarted] = useState(false);
     setRecording(false);
     setProgress(0);
     progressRef.current = 0;
+    setElapsedTime(0);
+    setHasStarted(false);
     if (timerRef.current) {
       clearInterval(timerRef.current);
       timerRef.current = null;
@@ -185,7 +190,6 @@ const [hasStarted, setHasStarted] = useState(false);
       <div className="body" style={{ textAlign: "center" }}>
 
         <div className="micCard">
-          {/* Progress bar only when recording */}
           {recording && (
             <>
               <style>{progressBarStyles}</style>
@@ -203,12 +207,10 @@ const [hasStarted, setHasStarted] = useState(false);
             </>
           )}
 
-          {/* Recording status text */}
           <div className="text" style={{ marginBottom: "10px" }}>
             {recording ? "Recording... Click to Stop" : "Click to Start Recording"}
           </div>
 
-          {/* Mic button toggles start/stop */}
           <div
             className={`mic-button ${recording ? "bg-theme" : ""}`}
             onClick={recording ? stopRecording : startRecording}
@@ -241,7 +243,6 @@ const [hasStarted, setHasStarted] = useState(false);
             </div>
           </div>
         )}
-
       </div>
     </div>
   );

@@ -596,6 +596,12 @@ const DescribeImage = () => {
     }
   };
 
+  const [recordingTime, setRecordingTime] = useState(0);
+  
+    const handleTimerUpdate = (seconds: number) => {
+      setRecordingTime(seconds);
+    };
+
   return (
     <div className="page-wrappers">
       {alert && (
@@ -635,8 +641,12 @@ const DescribeImage = () => {
                 <div className="time">
                   <div className="headBtn">
                     <span className="text-danger">
-                      Prepare: {formatTime(countdown)}
-                    </span>
+                          {recordingTime > 0
+                            ? `Recording: ${recordingTime}`
+                            : countdown > 0
+                              ? `Prepare: ${formatTime(countdown)}`
+                              : "Prepare"}
+                        </span>
                     <CardButton questionData={questionData} />
                   </div>
                   <div className="row">
@@ -650,12 +660,23 @@ const DescribeImage = () => {
                     <div className="col-md-6 m-auto">
                       <div className="micSection">
                         <p className="text-danger text-center my-2">
-                          Prepare: {formatTime(countdown)}
+                          {recordingTime > 0
+                            ? `Recording: ${recordingTime}`
+                            : countdown > 0
+                              ? `Prepare: ${formatTime(countdown)}`
+                              : "Prepare"}
                         </p>
                         <Recorder
                           onRecordingComplete={handleRecordingComplete}
                           onStopRecording={handleStopRecording}
                           resetRecording={resetRecording}
+                          countdown={countdown}
+                          onTimerUpdate={handleTimerUpdate}
+                          durationLimit={
+                            questionData?.Subtype?.recording_time != null
+                              ? Number(questionData.Subtype.recording_time)
+                              : undefined
+                          }
                         />
                       </div>
                     </div>
