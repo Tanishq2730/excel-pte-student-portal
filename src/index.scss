@@ -2778,3 +2778,15 @@ body.app-chat {
   border: 1px solid #eeeeee !important;
   margin-right: 1em !important;
 }
+
+.examCount{
+  position: relative;
+  button{
+    background-color: #1b507a !important;
+    border: none !important;
+    position: absolute;
+    right: 0;
+    top: 0;
+    border-radius: 100px;
+  }
+}

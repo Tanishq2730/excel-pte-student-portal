@@ -23,7 +23,7 @@ import ActivityHistory from "./activityHistory";
 import ComparisonTool from "./comparisonTool";
 import SpeechListenCard from "./speechListenCard";
 import DashboardCard from "./dashboardCard";
-
+import WelcomeCard from "./welcomeCard";
 interface QuestionCount {
   id: number;
   heading: string;
@@ -36,30 +36,13 @@ interface DashboardCountsType {
   [key: number]: QuestionCount;
 }
 
-interface ExamCountdownType {
-  days: number;
-  hours: number;
-  minutes: number;
-  seconds: number;
-}
+
 const AdminDashboard = () => {
- 
   const [counts, setCounts] = useState<DashboardCountsType>({});
-  const [examCountdown, setExamCountdown] = useState<ExamCountdownType>({
-    days: 0,
-    hours: 0,
-    minutes: 0,
-    seconds: 0,
-  });
 
-  const cardIcons = {
-    0: { icon: "fa fa-microphone", bgClass: "bg-danger-transparent" },
-    1: { icon: "ion-edit", bgClass: "bg-secondary-transparent" },
-    2: { icon: "ion-ios7-bookmarks", bgClass: "bg-warning-transparent" },
-    3: { icon: "ion-headphone", bgClass: "bg-success-transparent" },
-  };
 
-  
+ 
+
   const bannerslides = {
     dots: false,
     autoplay: true,
@@ -127,8 +110,6 @@ const AdminDashboard = () => {
   };
   // console.log(examCountdown)
 
-  
-
   return (
     <>
       {/* Page Wrapper */}
@@ -137,72 +118,7 @@ const AdminDashboard = () => {
           <>
             <div className="row">
               <div className="col-md-6">
-                <div className="card bg-dark">
-                  <div className="overlay-img">
-                    <ImageWithBasePath
-                      src="assets/img/bg/shape-04.png"
-                      alt="img"
-                      className="img-fluid shape-01"
-                    />
-                    <ImageWithBasePath
-                      src="assets/img/bg/shape-01.png"
-                      alt="img"
-                      className="img-fluid shape-02"
-                    />
-                    <ImageWithBasePath
-                      src="assets/img/bg/shape-02.png"
-                      alt="img"
-                      className="img-fluid shape-03"
-                    />
-                    <ImageWithBasePath
-                      src="assets/img/bg/shape-03.png"
-                      alt="img"
-                      className="img-fluid shape-04"
-                    />
-                  </div>
-                  <div className="card-body">
-                    <div className="d-flex align-items-xl-center justify-content-xl-between flex-xl-row flex-column">
-                      <div className="mb-3 mb-xl-0">
-                        <div className="d-flex align-items-center flex-wrap mb-2">
-                          <h1 className="text-white me-2">
-                            Welcome, Mr. Herald
-                          </h1>
-                        </div>
-                        <div className="examCount">
-                          <div className="text-left fw-semibold h5 mb-1 mt-2 text-white">
-                            Exam Countdown
-                          </div>
-                          <div className="d-flex justify-content-start text-center mt-3">
-                            <div className="countdown">
-                              <div className="h5 fw-semibold text-white">
-                                {examCountdown?.days || 0}
-                              </div>
-                              <div className="small text-white">Days</div>
-                            </div>
-                            <div className="countdown">
-                              <div className="h5 fw-semibold text-white">
-                                {examCountdown?.hours || 0}
-                              </div>
-                              <div className="small text-white">Hours</div>
-                            </div>
-                            <div className="countdown">
-                              <div className="h5 fw-semibold text-white">
-                                {examCountdown?.minutes || 0}
-                              </div>
-                              <div className="small text-white">Minutes</div>
-                            </div>
-                            <div className="countdown">
-                              <div className="h5 fw-semibold text-white">
-                                {examCountdown?.seconds || 0}
-                              </div>
-                              <div className="small text-white">Seconds</div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <WelcomeCard />
                 {/* /Dashboard Content */}
               </div>
               <div className="col-md-6">
@@ -278,22 +194,22 @@ const AdminDashboard = () => {
                 <PteVideoSlider />
               </div>
               <div className="col-md-4 d-flex flex-column">
-                <Testimonial/>
+                <Testimonial />
               </div>
             </div>
             <div className="row">
               <div className="col-md-6">
-                <UpcomingClass/>
+                <UpcomingClass />
               </div>
               <div className="col-md-6">
-                <ActivityHistory/>
+                <ActivityHistory />
               </div>
             </div>
             <div className="row">
-              <ComparisonTool/>
+              <ComparisonTool />
             </div>
             <div className="row">
-              <SpeechListenCard/>
+              <SpeechListenCard />
             </div>
           </>
         </div>
