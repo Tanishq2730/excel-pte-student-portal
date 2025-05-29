@@ -34,8 +34,8 @@ const DashboardCard: React.FC<DashboardCardProps> = ({ counts }) => {
             <div className="card flex-fill animate-card border-1">
               <div className="card-body">
                 <div className="d-flex align-items-center">
-                  <div className={`avatar avatar-xl ${iconData.bgClass} me-2 p-1`}>
-                    <i className={iconData.icon} style={{ fontSize: "2em" }}></i>
+                  <div className={`avatar avatar-xl ${iconData?.bgClass} me-2 p-1`}>
+                    <i className={iconData?.icon} style={{ fontSize: "2em" }}></i>
                   </div>
                   <div className="overflow-hidden flex-fill">
                     <p className="mb-0">{counts[index]?.type_name}</p>
