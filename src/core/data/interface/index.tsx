@@ -365,4 +365,6 @@ export interface QuestionData {
   describe_image:string;
   transcription:string;
   Subtype: Subtype; // Add the Subtype field here
+  tested:string;
+  tested_count:number;
 }

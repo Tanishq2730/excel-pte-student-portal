@@ -329,6 +329,7 @@ const ReadingWritngFillBlank = () => {
                   <div className="card-header">
                     <div className="card-title text-white">
                       {questionData?.question_name}
+                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>
                     </div>
                   </div>
                   <div className="card-body">
