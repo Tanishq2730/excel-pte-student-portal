@@ -541,8 +541,7 @@ const ReadAloud = () => {
   const [selectedWord, setSelectedWord] = useState<string>("");
 
   const handleWordClick = (word: string) => {
-    console.log(word);
-
+   
     setSelectedWord(word);
     setShowDictionaryModal(true);
   };
@@ -552,6 +551,7 @@ const ReadAloud = () => {
   const handleTimerUpdate = (seconds: number) => {
     setRecordingTime(seconds);
   };
+console.log(questionData);
 
 
   return (
@@ -589,6 +589,7 @@ const ReadAloud = () => {
                   <div className="card-header">
                     <div className="card-title text-white">
                       {questionData?.question_name}
+                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>  
                     </div>
                   </div>
                   <div className="card-body">
