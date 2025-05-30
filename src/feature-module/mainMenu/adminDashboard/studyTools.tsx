@@ -12,7 +12,7 @@ const StudyTools: React.FC = () => {
           <div className="col-md-6">
             <Link
               to={routes.template}
-              className="d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
+              className="studycard d-block bg-success-transparent ronded p-2 text-center mb-3 class-hover"
             >
               <div className="avatar avatar-lg border p-1 border-success rounded-circle mb-2">
                 <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-success rounded-circle">
@@ -25,7 +25,7 @@ const StudyTools: React.FC = () => {
           <div className="col-md-6">
             <Link
               to={routes.classLink}
-              className="d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
+              className="studycard d-block bg-secondary-transparent ronded p-2 text-center mb-3 class-hover"
             >
               <div className="avatar avatar-lg border p-1 border-secondary rounded-circle mb-2">
                 <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-secondary rounded-circle">
@@ -38,7 +38,7 @@ const StudyTools: React.FC = () => {
           <div className="col-md-6">
             <Link
               to={routes.predictionFile}
-              className="d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
+              className="studycard d-block bg-primary-transparent ronded p-2 text-center mb-3 class-hover"
             >
               <div className="avatar avatar-lg border p-1 border-primary rounded-circle mb-2">
                 <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-primary rounded-circle">
@@ -64,7 +64,7 @@ const StudyTools: React.FC = () => {
           <div className="col-md-6">
             <Link
               to={routes.practiceHistory}
-              className="d-block bg-warning-transparent ronded p-2 text-center class-hover"
+              className="studycard d-block bg-warning-transparent ronded p-2 text-center class-hover"
             >
               <div className="avatar avatar-lg border p-1 border-warning rounded-circle mb-2">
                 <span className="d-inline-flex align-items-center justify-content-center w-100 h-100 bg-warning rounded-circle">

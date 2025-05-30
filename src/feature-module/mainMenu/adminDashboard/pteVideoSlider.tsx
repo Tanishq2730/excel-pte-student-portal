@@ -2,13 +2,16 @@ import React, { useEffect, useState } from "react";
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import {  DashboardVideo } from "../../../api/dashboardAPI";
+import { DashboardVideo } from "../../../api/dashboardAPI";
+import { Link } from "react-router-dom";
 
 interface DashboardVideoType {
   id: number;
   title: string;
   description: string;
   image: string;
+  thumbnail: string;
+  link: string;
 }
 function SampleNextArrow(props: any) {
   const { style, onClick } = props;
@@ -46,9 +49,7 @@ const PteVideoSlider = () => {
 
   const videoCount = async () => {
     const res = await DashboardVideo();
-    // console.log(video);
     if (res?.success) {
-      // console.log("Data being set to state:tanishq", res.data);
       setVideo(res.data);
     }
   };
@@ -114,30 +115,16 @@ const PteVideoSlider = () => {
         </div>
         <div className="card-body videoSlider">
           <Slider {...settings} className="owl-carousel owl-theme task-slider">
-            <div className="item">
-              <div className="bg-light-400 rounded p-2">
-                <img className="classImg" src="assets/img/slider1.png" alt="Speaking" />
-                <p className="text-dark mt-1">Speaking</p>
+            {video.map((item) => (
+              <div className="item" key={item.id}>
+                <div className="bg-light-400 rounded p-2">
+                  <Link target="_blank" to={item.link}>
+                    <img className="classImg videoImg" src={`https://excelpte.com/excelpte_api${item.thumbnail}`} />
+                  </Link>
+                  <p className="text-dark mt-2">{item.title || "No title"}</p>
+                </div>
               </div>
-            </div>
-            <div className="item">
-              <div className="bg-light-400 rounded p-2">
-                <img className="classImg" src="assets/img/slider2.png" alt="Writing" />
-                <p className="text-dark mt-1">Writing</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="bg-light-400 rounded p-2">
-                <img className="classImg" src="assets/img/slider1.png" alt="Reading" />
-                <p className="text-dark mt-1">Reading</p>
-              </div>
-            </div>
-            <div className="item">
-              <div className="bg-light-400 rounded p-2">
-                <img className="classImg" src="assets/img/slider1.png" alt="Listening" />
-                <p className="text-dark mt-1">Listening</p>
-              </div>
-            </div>
+            ))}
           </Slider>
         </div>
       </div>

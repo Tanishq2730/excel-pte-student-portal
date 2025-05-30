@@ -166,7 +166,7 @@ const AdminDashboard = () => {
                   </div>
                 </div>
               </div>
-              <div className="col-md-4">
+              <div className="col-md-4 d-flex flex-column ">
                 <div className="card">
                   <div className="card-header">
                     <h4 className="card-title">Mock Test Progress Overview</h4>
@@ -174,7 +174,7 @@ const AdminDashboard = () => {
                   <MocktestProgress />
                 </div>
               </div>
-              <div className="col-md-4 d-flex flex-column">
+              <div className="col-md-4 d-flex flex-column ">
                 {/* Quick Links */}
                 <div className="card flex-fill">
                   <div className="card-header d-flex align-items-center justify-content-between">
@@ -193,7 +193,7 @@ const AdminDashboard = () => {
               <div className="col-md-8">
                 <PteVideoSlider />
               </div>
-              <div className="col-md-4 d-flex flex-column">
+              <div className="col-md-4 d-flex flex-column ">
                 <Testimonial />
               </div>
             </div>

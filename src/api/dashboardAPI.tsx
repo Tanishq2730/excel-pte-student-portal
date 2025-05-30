@@ -22,4 +22,10 @@ export const UpcommingClasses = async () => {
 export const RecentActivity = async () => {
     return await apiHandler(`${api_url}v1/dashboard/recent-activity`, "GET");
 };
+export const RecentMocktestResults = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/mocktest-results/recent-by-type`, "GET");
+};
+export const ProgressBar = async () => {
+    return await apiHandler(`${api_url}v1/dashboard/mocktest-counts`, "GET");
+};
 
