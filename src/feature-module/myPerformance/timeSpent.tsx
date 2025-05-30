@@ -1,68 +1,69 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { timeSpent } from "../../api/performanceAPI";
 
-// Data
-const data = {
-  Speaking: [
-    { task: "ANSWER SHORT QUESTION", time: "1 HOUR 14 MIN" },
-    { task: "DESCRIBE IMAGE", time: "17 HOURS 15 MIN" },
-    { task: "RE-TELL LECTURE", time: "6 HOURS 10 MIN" },
-    { task: "READ ALOUD", time: "38 HOURS 29 MIN" },
-    { task: "REPEAT SENTENCE", time: "19 HOURS 33 MIN" },
-    { task: "RESPOND TO SITUATION", time: "4 MIN" },
-  ],
-  Writing: [
-    { task: "SUMMARIZE WRITTEN TEXT", time: "14 HOURS 16 MIN" },
-    { task: "WRITE EMAIL", time: "37 MIN" },
-    { task: "WRITE ESSAY", time: "16 HOURS 60 MIN" },
-  ],
-  Listening: [
-    { task: "FILL IN THE BLANKS", time: "23 HOURS 54 MIN" },
-    { task: "HIGHLIGHT CORRECT SUMMARY", time: "2 HOURS 6 MIN" },
-    { task: "HIGHLIGHT INCORRECT WORDS", time: "10 HOURS 45 MIN" },
-    { task: "MC, CHOOSE MULTIPLE ANSWER", time: "3 HOURS 52 MIN" },
-    { task: "MC, CHOOSE SINGLE ANSWER", time: "2 HOURS 36 MIN" },
-    { task: "SELECT MISSING WORD", time: "1 HOUR 27 MIN" },
-    { task: "SUMMARIZE SPOKEN TEXT", time: "33 HOURS 45 MIN" },
-    { task: "WRITE FROM DICTATION", time: "41 HOURS 40 MIN" },
-  ],
-  Reading: [
-    { task: "MC, CHOOSE MULTIPLE ANSWER", time: "2 HOURS 22 MIN" },
-    { task: "MC, CHOOSE SINGLE ANSWER", time: "39 MIN" },
-    { task: "RE-ORDER PARAGRAPHS", time: "25 HOURS 59 MIN" },
-    { task: "READING AND WRITING-FILL IN THE BLANKS", time: "61 HOURS 56 MIN" },
-    { task: "READING-FILL IN THE BLANKS", time: "36 HOURS 9 MIN" },
-  ],
-};
-
-// Icon map
-const iconMap: Record<keyof typeof data, string> = {
+const iconMap: Record<string, string> = {
   Speaking: "ion-mic-c",
   Writing: "ion-compose",
   Listening: "ion-headphone",
   Reading: "ion-ios7-bookmarks",
 };
 
-// Background color class map
-const bgClassMap: Record<keyof typeof data, string> = {
+const bgClassMap: Record<string, string> = {
   Speaking: "bg-primary-transparent",
   Writing: "bg-success-transparent",
   Listening: "bg-warning-transparent",
   Reading: "bg-danger-transparent",
 };
+type TimeSpentResponse = {
+  data: {
+    type_name: string;
+    total_time: string;
+    type: { name: string };
+  }[];
+  totalTime: {
+    [key: string]: {
+      name: string;
+      total_time: string;
+    }[];
+  };
+  success: boolean;
+};
 
 const TimeSpent = () => {
+  const [sectionTimeSummary, setSectionTimeSummary] = useState<any[]>([]);
+  const [taskTimeDetails, setTaskTimeDetails] = useState<Record<string, any[]>>({});
+
+  useEffect(() => {
+    getTimeSpent();
+  }, []);
+
+  const getTimeSpent = async () => {
+    const res = await timeSpent();
+     if (res?.success) {
+      setSectionTimeSummary(res.data.data || []);
+      console.log(res.data);
+      setTaskTimeDetails(res.data?.totalTime || {});
+    }
+  };
+
+
+  const getTotalTimeBySection = (section: string): string => {
+    const entry = sectionTimeSummary.find((item) => item.type_name === section);
+    return entry ? `${entry.total_time} Min` : "0 Min";
+  };
+
   return (
     <div className="card p-4">
       <div className="row text-center mb-4">
-        {Object.keys(data).map((section, i) => (
+        {Object.keys(bgClassMap).map((section, i) => (
           <div className="col-md-3 mb-3" key={i}>
             <div className="card shadow-sm">
               <div className="card-body">
-                <div className={`icon timeicon mb-2 ${bgClassMap[section as keyof typeof bgClassMap]}`}>
-                  <i className={`${iconMap[section as keyof typeof iconMap]} fs-1`}></i>
+                <div className={`icon timeicon mb-2 ${bgClassMap[section]}`}>
+                  <i className={`${iconMap[section]} fs-1`}></i>
                 </div>
                 <h5>{section}</h5>
-                <p className="text-muted">Time Spent: 23Min</p>
+                <p className="text-muted">Time Spent: {getTotalTimeBySection(section)}</p>
               </div>
             </div>
           </div>
@@ -70,17 +71,17 @@ const TimeSpent = () => {
       </div>
 
       <div className="row">
-        {Object.entries(data).map(([section, tasks], index) => (
+        {Object.entries(taskTimeDetails).map(([section, tasks], index) => (
           <div className="col-md-6 mb-4" key={index}>
             <div className="card shadow-sm">
               <div className="card-body">
                 <h5 className="card-title border-bottom pb-2 mb-3">{section}</h5>
                 <table className="table table-borderless mb-0">
                   <tbody>
-                    {tasks.map((item, idx) => (
+                    {tasks.map((item: any, idx: number) => (
                       <tr key={idx}>
-                        <td>{item.task}</td>
-                        <td className="text-end">{item.time}</td>
+                        <td>{item.name}</td>
+                        <td className="text-end">{item.total_time} Min</td>
                       </tr>
                     ))}
                   </tbody>

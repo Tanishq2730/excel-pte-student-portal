@@ -2,10 +2,27 @@ import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import Progress from "./progress";
 import TimeSpent from "./timeSpent";
-import MockTestProgress from "./mockTestProgress";
-import StudyPlanProgress from "./studyPlanProgress";
+// import MockTestProgress from "./mockTestProgress";
+// import StudyPlanProgress from "./studyPlanProgress";
+import { progressBar } from "../../api/performanceAPI";
 
 const Performance: React.FC = () => {
+
+   const [progressBars, setProgressBar] = useState<any>(null);
+  
+    useEffect(() => {
+      const getData = async () => {
+        const res = await progressBar();
+        console.log(res);
+        if (res?.success) {
+          setProgressBar(res.data);
+        }
+      };
+      getData();
+    }, []);
+
+
+
   return (
     <div className="page-wrappers">
       <div className="content">
@@ -43,30 +60,7 @@ const Performance: React.FC = () => {
                   Time Spent
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#services-center"
-                  aria-selected="false"
-                >
-                  Mock Test
-                </Link>
-              </li>
-              <li className="nav-item">
-                <Link
-                  className="nav-link"
-                  data-bs-toggle="tab"
-                  role="tab"
-                  aria-current="page"
-                  to="#contacts-center"
-                  aria-selected="false"
-                >
-                  Study Plan Progress
-                </Link>
-              </li>
+              
             </ul>
             <div className="tab-content">
               <div
@@ -74,7 +68,7 @@ const Performance: React.FC = () => {
                 id="home-center"
                 role="tabpanel"
               >
-                <Progress />
+                {progressBars && <Progress progressBars={progressBars} />}
               </div>
               <div
                 className="tab-pane text-muted"
@@ -82,21 +76,7 @@ const Performance: React.FC = () => {
                 role="tabpanel"
               >
                 <TimeSpent />
-              </div>
-              <div
-                className="tab-pane text-muted"
-                id="services-center"
-                role="tabpanel"
-              >
-                <MockTestProgress title="Mock Test Progress" />
-              </div>
-              <div
-                className="tab-pane text-muted"
-                id="contacts-center"
-                role="tabpanel"
-              >
-               <StudyPlanProgress/>
-              </div>
+              </div>              
             </div>
           </div>
         </div>

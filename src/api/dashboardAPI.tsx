@@ -7,6 +7,9 @@ export const DashboardCounts = async () => {
 export const ExamCountdown = async () => {
     return await apiHandler(`${api_url}v1/dashboard/exam-countdown`, "GET");
 };
+export const SetExamCountdown = async (data:any) => {
+    return await apiHandler(`${api_url}v1/dashboard/exam-countdown`, "POST",data);
+};
 export const StudyPlaner = async (date: string, typeId: number) => {
     return await apiHandler(`${api_url}v1/dashboard/study-plan-progress?date=${date}&typeId=${typeId}`, "GET");
 };

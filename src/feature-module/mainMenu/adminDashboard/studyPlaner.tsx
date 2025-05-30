@@ -8,31 +8,76 @@ interface StudyPlanerType {
   attempted: number;
   notAttempted: number;
 }
+interface StudyPlanItem {
+  id: number;
+  typeId: number;
+  sub_type_id: number;
+  date: string;
+  question_numbers: number;
+  Type: {
+    id: number;
+    name: string;
+  };
+  Subtype: {
+    id: number;
+    sub_name: string;
+  };
+}
+
+type StudyPlanerData = StudyPlanItem[];
 
 const StudyPlaner: React.FC = () => {
   const [date, setDate] = useState<Nullable<Date>>(null);
-
+  const [studyPlanData, setStudyPlanData] = useState<StudyPlanerData>([]);
+  const [selectedTypeId, setSelectedTypeId] = useState<number>(1);
   const [planer, setPlaner] = useState<StudyPlanerType>({
     attempted: 0,
     notAttempted: 0,
   });
 
   useEffect(() => {
-    getPlaner();
-    
-  }, []);
+    if (date) getPlaner();
+  }, [date, selectedTypeId]);
 
   const getPlaner = async () => {
-    if (date) {
-      const payload = {date:date,typeId:1}
-      const res = await StudyPlanerAPI(date.toISOString(), 1);
-
-      if (res?.success) {
-        setPlaner(res.data);
-        console.log(res);
+    try {
+      const formattedDate = date
+        ? `${date.getFullYear()}-${(date.getMonth() + 1)
+          .toString()
+          .padStart(2, "0")}-${date.getDate().toString().padStart(2, "0")}`
+        : "";
+      const res = await StudyPlanerAPI(formattedDate, selectedTypeId);
+      if (res?.success && Array.isArray(res.data)) {
+        setStudyPlanData(res.data);
       }
+    } catch (err) {
+      console.error("Error fetching study plan data:", err);
     }
   };
+
+  const renderBars = (typeId: number) => {
+    const items = studyPlanData.filter((item) => item.typeId === typeId);
+
+    return items.map((item, idx) => (
+      <div className="bar" key={idx}>
+        <div className="bardetail">
+          <h5>{item.Subtype.sub_name}</h5>
+          <span>0/{item.question_numbers}</span>
+        </div>
+        <div className="progress progress-xs flex-grow-1">
+          <div
+            className="progress-bar bg-primary rounded"
+            role="progressbar"
+            style={{ width: "80%" }}
+            aria-valuenow={30}
+            aria-valuemin={0}
+            aria-valuemax={100}
+          />
+        </div>
+      </div>
+    ));
+  };
+
 
   return (
     <div className="studyplantab">
@@ -76,51 +121,23 @@ const StudyPlaner: React.FC = () => {
           role="tablist"
           style={{ justifyContent: "center" }}
         >
-          <li className="nav-item">
-            <Link
-              className="nav-link active"
-              data-bs-toggle="tab"
-              data-bs-target="#orders"
-              aria-current="page"
-              to="#orders"
-            >
-              <i className="fa fa-microphone"></i>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#accepted"
-              to="#accepted"
-            >
-              <i className="ion-edit"></i>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#declined"
-              to="#declined"
-            >
-              <i className="ion-ios7-bookmarks"></i>
-            </Link>
-          </li>
-          <li className="nav-item">
-            <Link
-              className="nav-link"
-              data-bs-toggle="tab"
-              data-bs-target="#listening"
-              to="#listening"
-            >
-              <i className="ion-headphone"></i>
-            </Link>
-          </li>
+          {[1, 2, 3, 4].map((id, i) => (
+            <li className="nav-item" key={id}>
+              <button
+                className={`nav-link ${selectedTypeId === id ? "active" : ""}`}
+                onClick={() => setSelectedTypeId(id)}
+              >
+                {id === 1 && <i className="fa fa-microphone" />}
+                {id === 2 && <i className="ion-edit" />}
+                {id === 3 && <i className="ion-ios7-bookmarks" />}
+                {id === 4 && <i className="ion-headphone" />}
+              </button>
+            </li>
+          ))}
         </ul>
         <div className="tab-content mb-4">
           <div className="tab-pane active" id="orders" role="tabpanel">
-            <div className="card-body  rounded-3">
+            <div className="card-body rounded-3">
               <div className="studycontent">
                 <div className="head mb-3">
                   <div className="icon bg-danger-transparent">
@@ -128,186 +145,46 @@ const StudyPlaner: React.FC = () => {
                   </div>
                   <h3>Speaking</h3>
                 </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
+                {renderBars(1)}
               </div>
             </div>
           </div>
           <div className="tab-pane" id="accepted" role="tabpanel">
-            <div className="card-body  rounded-3">
+            <div className="card-body rounded-3">
               <div className="studycontent">
-                <div className="head">
-                  <div className="icon bg-secondary-transparent">
-                    <i className="ion-ios7-bookmarks"></i>
+                <div className="head mb-3">
+                  <div className="icon bg-danger-transparent">
+                    <i className="fa fa-microphone"></i>
                   </div>
-                  <h3>Reading</h3>
+                  <h3>Writing</h3>
                 </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
+                {renderBars(2)}
               </div>
             </div>
           </div>
           <div className="tab-pane" id="declined" role="tabpanel">
-            <div className="card-body  rounded-3">
+            <div className="card-body rounded-3">
               <div className="studycontent">
-                <div className="head">
-                  <div className="icon bg-warning-transparent">
-                    <i className="ion-edit"></i>
+                <div className="head mb-3">
+                  <div className="icon bg-danger-transparent">
+                    <i className="fa fa-microphone"></i>
                   </div>
-                  <h3>Writing</h3>
+                  <h3>Reading</h3>
                 </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
+                {renderBars(3)}
               </div>
             </div>
           </div>
           <div className="tab-pane" id="listening" role="tabpanel">
-            <div className="card-body  rounded-3">
+            <div className="card-body rounded-3">
               <div className="studycontent">
-                <div className="head">
-                  <div className="icon bg-success-transparent">
-                    <i className="ion-headphone"></i>
+                <div className="head mb-3">
+                  <div className="icon bg-danger-transparent">
+                    <i className="fa fa-microphone"></i>
                   </div>
                   <h3>Listening</h3>
                 </div>
-                <div className="bar">
-                  <div className="bardetail">
-                    <h5>Repeat Sentence</h5>
-                    <span>0/23</span>
-                  </div>
-                  <div className="progress progress-xs flex-grow-1">
-                    <div
-                      className="progress-bar bg-primary rounded"
-                      role="progressbar"
-                      style={{ width: "80%" }}
-                      aria-valuenow={30}
-                      aria-valuemin={0}
-                      aria-valuemax={100}
-                    />
-                  </div>
-                </div>
+                {renderBars(4)}
               </div>
             </div>
           </div>

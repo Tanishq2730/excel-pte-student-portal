@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { RecentMocktestResults } from "../../../api/dashboardAPI";
 
+interface ScoreSection {
+  score: number;
+  total_score: number;
+}
+
 interface RecentMocktestResultsType {
-  speaking: number;
-  writing: number;
-  reading: number;
-  listening: number;
-  
+  Speaking: ScoreSection;
+  Writing: ScoreSection;
+  Reading: ScoreSection;
+  Listening: ScoreSection;
 }
 
 const RecentMocktestScore: React.FC = () => {
   const [mockResult, setMocktestResult] = useState<RecentMocktestResultsType>({
-    speaking: 0,
-    writing: 0,
-    reading: 0,
-    listening: 0
+    Speaking: { score: 0, total_score: 0 },
+    Writing: { score: 0, total_score: 0 },
+    Reading: { score: 0, total_score: 0 },
+    Listening: { score: 0, total_score: 0 }
   });
 
   useEffect(() => {
@@ -22,15 +26,66 @@ const RecentMocktestScore: React.FC = () => {
   }, []);
 
   const mockresult = async () => {
-    const res = await RecentMocktestResults();
-    if (res?.success) {
-      console.clear();
-      console.log(res, "tanishqshrivastava");
-      setMocktestResult(res.data);
-    }
-  };
+  const res = await RecentMocktestResults();
+  if (res?.success) {
+    console.log(res.data); // This is an object, not array
 
-  const totalScore = mockResult.speaking + mockResult.writing + mockResult.reading + mockResult.listening;
+    // Use Object.entries to iterate over keys and values
+    const formattedData = Object.entries(res.data).reduce(
+      (acc: any, [section, value]: [string, any]) => {
+        acc[section] = {
+          score: value.score,
+          total_score: value.total_score,
+        };
+        return acc;
+      },
+      {}
+    );
+
+    setMocktestResult(formattedData);
+  }
+};
+
+  const totalScore =
+    mockResult.Speaking.score +
+    mockResult.Writing.score +
+    mockResult.Reading.score +
+    mockResult.Listening.score;
+
+  const renderSection = (
+    label: string,
+    iconClass: string,
+    color: string,
+    scoreData: ScoreSection
+  ) => {
+    const percent = scoreData.total_score
+      ? (scoreData.score / scoreData.total_score) * 100
+      : 0;
+
+    return (
+      <div className="d-flex align-items-center rounded border p-2 mb-3">
+        <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
+          <i className={`${iconClass} text-${color}`}></i>
+        </span>
+        <div className="w-100">
+          <div className="d-flex justify-content-between">
+            <p className="mb-1">{label}</p>
+            <span>{scoreData.score}/{scoreData.total_score}</span>
+          </div>
+          <div className="progress progress-xs  flex-grow-1 mb-1">
+            <div
+              className={`progress-bar progress-bar-striped progress-bar-animated bg-${color} rounded`}
+              role="progressbar"
+              style={{ width: `${percent}%` }}
+              aria-valuenow={percent}
+              aria-valuemin={0}
+              aria-valuemax={100}
+            />
+          </div>
+        </div>
+      </div>
+    );
+  };
 
   return (
     <div className="card flex-fill">
@@ -39,90 +94,10 @@ const RecentMocktestScore: React.FC = () => {
         <h5 className="text-danger">Total Score: {totalScore}</h5>
       </div>
       <div className="card-body p-3">
-        <div className="d-flex align-items-center rounded border p-2 mb-3">
-          <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-            <i className="fa fa-microphone text-danger"></i>
-          </span>
-          <div className="w-100">
-            <div className="d-flex justify-content-between">
-              <p className="mb-1">Speaking</p>
-              <span>{mockResult.speaking}/90</span>
-            </div>
-            <div className="progress progress-xs  flex-grow-1 mb-1">
-              <div
-                className="progress-bar progress-bar-striped progress-bar-animated bg-primary rounded"
-                role="progressbar"
-                style={{ width: `${(mockResult.speaking / 90) * 100}%` }}
-                aria-valuenow={(mockResult.speaking / 90) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="d-flex align-items-center rounded border p-2 mb-3">
-          <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-            <i className="ion-edit text-primary"></i>
-          </span>
-          <div className="w-100">
-            <div className="d-flex justify-content-between">
-              <p className="mb-1">Writing</p>
-              <span>{mockResult.writing}/90</span>
-            </div>
-            <div className="progress progress-xs  flex-grow-1 mb-1">
-              <div
-                className="progress-bar progress-bar-striped progress-bar-animated bg-warning rounded"
-                role="progressbar"
-                style={{ width: `${(mockResult.writing / 90) * 100}%` }}
-                aria-valuenow={(mockResult.writing / 90) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="d-flex align-items-center rounded border p-2 mb-3">
-          <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-            <i className="ion-ios7-bookmarks text-green"></i>
-          </span>
-          <div className="w-100">
-            <div className="d-flex justify-content-between">
-              <p className="mb-1">Reading</p>
-              <span>{mockResult.reading}/90</span>
-            </div>
-            <div className="progress progress-xs  flex-grow-1 mb-1">
-              <div
-                className="progress-bar progress-bar-striped progress-bar-animated bg-success rounded"
-                role="progressbar"
-                style={{ width: `${(mockResult.reading / 90) * 100}%` }}
-                aria-valuenow={(mockResult.reading / 90) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-          </div>
-        </div>
-        <div className="d-flex align-items-center rounded border p-2 mb-0">
-          <span className="avatar avatar-md flex-shrink-0 border rounded me-2">
-            <i className="ion-headphone text-warning"></i>
-          </span>
-          <div className="w-100">
-            <div className="d-flex justify-content-between">
-              <p className="mb-1">Listening</p>
-              <span>{mockResult.listening}/90</span>
-            </div>
-            <div className="progress progress-xs  flex-grow-1 mb-1">
-              <div
-                className="progress-bar progress-bar-striped progress-bar-animated bg-info rounded"
-                role="progressbar"
-                style={{ width: `${(mockResult.listening / 90) * 100}%` }}
-                aria-valuenow={(mockResult.listening / 90) * 100}
-                aria-valuemin={0}
-                aria-valuemax={100}
-              />
-            </div>
-          </div>
-        </div>
+        {renderSection("Speaking", "fa fa-microphone", "danger", mockResult.Speaking)}
+        {renderSection("Writing", "ion-edit", "warning", mockResult.Writing)}
+        {renderSection("Reading", "ion-ios7-bookmarks", "success", mockResult.Reading)}
+        {renderSection("Listening", "ion-headphone", "info", mockResult.Listening)}
       </div>
     </div>
   );
