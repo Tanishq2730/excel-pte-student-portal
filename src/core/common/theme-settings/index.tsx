@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { fetchQuestions, saveBookmark } from "../../../api/practiceAPI";
 import PageHeading from "../../../feature-module/practice/component/pageHeading";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../../../feature-module/router/all_routes";
 
 interface Subtype {
@@ -57,6 +57,11 @@ const ThemeSettings = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const itemsPerPage = 10;
+  const location = useLocation();
+
+  useEffect(() => {
+    setSidebarOpen(true);
+  }, [location.pathname]);
 
   const subtypeId = localStorage.getItem("subtypeId");
   const subtypeIdNumber = subtypeId ? parseInt(subtypeId) : null;
@@ -192,41 +197,7 @@ const getQuestionLink = (q: PracticeType): string => {
           <PageHeading title={questionData[0]?.Subtype ? questionData[0]?.Subtype?.sub_name : 'NA'} />
           <div className="d-flex align-items-center">
             {/* <h4 className="mb-1">{questionData[0]?.Subtype?.sub_name}</h4> */}
-            <div className="mainFilter">
-              <div className="myfilter" style={{ width: "40em" }}>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <select
-                      id="difficulty"
-                      className="form-select"
-                      value={difficulty}
-                      onChange={(e) => setDifficulty(e.target.value)}
-                    >
-                      <option value="">Difficulty</option>
-                      {/* <option value="">All</option> */}
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
-                    </select>
-                  </div>
-
-                  <div className="col-md-6">
-                    
-                    <select
-                      id="practiceStatus"
-                      className="form-select"
-                      value={practiceStatus}
-                      onChange={(e) => setPracticeStatus(e.target.value)}
-                    >
-                      <option value="all">Practice Status</option>
-                      {/* <option value="all">All</option> */}
-                      <option value="done">Done</option>
-                      <option value="pending">Pending</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
+            
           </div>
 
           <div className="top-nav-search">
@@ -270,6 +241,41 @@ const getQuestionLink = (q: PracticeType): string => {
                         </button>
                       </li>
                     ))}
+                    <div className="mainFilter">
+              <div className="myfilter" style={{ width: "40em" }}>
+                <div className="row g-3">
+                  <div className="col-md-6">
+                    <select
+                      id="difficulty"
+                      className="form-select"
+                      value={difficulty}
+                      onChange={(e) => setDifficulty(e.target.value)}
+                    >
+                      <option value="">Difficulty</option>
+                      {/* <option value="">All</option> */}
+                      <option value="easy">Easy</option>
+                      <option value="medium">Medium</option>
+                      <option value="hard">Hard</option>
+                    </select>
+                  </div>
+
+                  <div className="col-md-6">
+                    
+                    <select
+                      id="practiceStatus"
+                      className="form-select"
+                      value={practiceStatus}
+                      onChange={(e) => setPracticeStatus(e.target.value)}
+                    >
+                      <option value="all">Practice Status</option>
+                      {/* <option value="all">All</option> */}
+                      <option value="done">Done</option>
+                      <option value="pending">Pending</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
                     { questionData[0]?.Subtype?.sub_name === "Describe Image" &&
                     <div className="col-md-2">
                       <select

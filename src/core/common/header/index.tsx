@@ -162,8 +162,7 @@ const Header = () => {
                   </li>
                   <li
                     className="nav-item mega-menu-parent"
-                    onMouseEnter={() => setShowMegaMenu(true)}
-                    onMouseLeave={() => setShowMegaMenu(false)}
+                    onClick={() => setShowMegaMenu(!showMegaMenu)}
                   >
                     <PracticeHeader
                       showMegaMenu={showMegaMenu}
