@@ -140,13 +140,13 @@ const MultipleChooseAnswerListen = () => {
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/fib/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(`/multiple-choose-answered/${subtype_id}/${questionData?.nextQuestionId}`);
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/fib/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(`/multiple-choose-answered/${subtype_id}/${questionData?.previousQuestionId}`);
     }
   };
 
