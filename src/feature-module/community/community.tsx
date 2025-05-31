@@ -99,7 +99,7 @@ const Community: React.FC = () => {
   };
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="container py-3">
         <Form.Control
           as="textarea"

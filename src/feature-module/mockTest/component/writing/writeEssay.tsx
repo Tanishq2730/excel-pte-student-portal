@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import WriteEssayScoring from "../../../practice/component/scoring/WriteEssayScoring";
 
 interface getProps {
@@ -8,9 +8,12 @@ interface getProps {
   registerSubmit: (submitFn: () => void) => void;
 }
 
-const WriteEssay: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
-
-  const { id, session_id } = useParams<{ id: string, session_id: any }>();
+const WriteEssay: React.FC<getProps> = ({
+  questionData,
+  setAnswer,
+  registerSubmit,
+}) => {
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
   const [selectedLanguage, setSelectedLanguage] = useState("American");
   const [wordCount, setWordCount] = useState(0);
   const [summaryText, setSummaryText] = useState("");
@@ -43,7 +46,13 @@ const WriteEssay: React.FC<getProps> = ({ questionData, setAnswer, registerSubmi
     const question = questionData.question;
     const answerText = summaryText;
     const wordCounts = wordCount;
-    const scoringData = { question_id, session_id, question, answerText, wordCount };
+    const scoringData = {
+      question_id,
+      session_id,
+      question,
+      answerText,
+      wordCount,
+    };
 
     const result = await WriteEssayScoring(
       scoringData,
@@ -68,11 +77,17 @@ const WriteEssay: React.FC<getProps> = ({ questionData, setAnswer, registerSubmi
       return payload;
     }
     return false;
-
   };
 
   return (
     <div className="container mt-3">
+      <p className="mockHead">
+        You will have 20 minutes to plan, write and revise an essay about the
+        topic below. Your response will be judged on how well you develop a
+        position, organize your ideas, present supporting details, and control
+        the elements of standard written English. You should write 200-300
+        words.
+      </p>
       <div className="card p-3">
         <div
           dangerouslySetInnerHTML={{

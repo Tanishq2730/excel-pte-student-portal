@@ -122,6 +122,7 @@ const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer,
       };
   return (
     <div className="container mt-3">
+      <p className="mockHead">Listen to the recording and answer the question by selecting all the correct responses. You will need to select more than one response.</p>
       <p>{question?.question_name}</p>
 
       {/* Progress Bar for Preparation Time */}
@@ -133,7 +134,7 @@ const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer,
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
               marginBottom: "15px",
             }}
           >

@@ -6,6 +6,7 @@ import McChooseSingleAnswer from "./mcChooseSingleAnswer";
 import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
+import MockHeader from "../../../../core/common/mockHeader";
 
 interface ReadingIntroProps {
   queno: number;
@@ -113,6 +114,7 @@ const ReadingIntro: React.FC<ReadingIntroProps> = ({
 
   return (
     <>
+    <MockHeader/>
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">

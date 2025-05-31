@@ -153,16 +153,16 @@ const MockParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReo
   const renderLeftButtons = () =>
     leftButtons.map((item) => (
       <div
-        key={item.id}
+        key={item?.id}
         className="mb-2"
         draggable
-        onDragStart={() => handleDragStart(item.id, "left")}
+        onDragStart={() => handleDragStart(item?.id, "left")}
         onDragOver={handleDragOver}
-        onDrop={() => handleDropLeft(item.id)}
+        onDrop={() => handleDropLeft(item?.id)}
       >
         <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-          <span>{item.order} </span>
-          {item.text}
+          <span>{item?.order} </span>
+          {item?.text}
         </button>
       </div>
     ));

@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
 
-
 interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
@@ -8,8 +7,12 @@ interface getProps {
   setCountdownDone: (done: boolean) => void;
 }
 
-
-const SummarizeSpokenText: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
+const SummarizeSpokenText: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+  setCountdownDone,
+}) => {
   const [countdown, setCountdown] = useState(40); // Initial countdown
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
@@ -44,9 +47,12 @@ const SummarizeSpokenText: React.FC<getProps> = ({ question, setAnswer, register
 
   return (
     <div className="container mt-3">
-      <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as
-        naturally and clearly as possible. You have 40 seconds to read aloud.
+      <p className="mockHead">
+        You will hear a short report. Write a summary for a fellow student who
+        was not present. You should write 50-70 words. You have 10 minutes to
+        finish this task. Your response will be judged on the quality of your
+        writing and on how well your response presents the key points presented
+        in the lectur
       </p>
       <div className="recorderDetail">
         <div className="recorder">
@@ -56,7 +62,7 @@ const SummarizeSpokenText: React.FC<getProps> = ({ question, setAnswer, register
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
             }}
           >
             <p style={{ marginBottom: 5 }}>Recorded Answer</p>

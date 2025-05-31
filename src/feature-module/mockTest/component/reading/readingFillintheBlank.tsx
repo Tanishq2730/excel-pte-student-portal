@@ -1,14 +1,17 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import parse, { DOMNode, Element } from "html-react-parser";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => any) => void;
 }
-const ReadingFillintheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
-
+const ReadingFillintheBlank: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+}) => {
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [usedWords, setUsedWords] = useState<string[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -115,92 +118,94 @@ const ReadingFillintheBlank: React.FC<getProps> = ({ question, setAnswer, regist
   };
 
   let blankCounter = 0;
-  
-    const correctAnswers = question?.answer_american
-      ? question.answer_american.split(",").map((ans:any) => ans.trim())
-      : [];
-  
-    const customParseOptions = {
-      replace: (domNode: DOMNode) => {
-        if (
-          (domNode as Element).name === "span" &&
-          (domNode as Element).attribs?.class === "blank"
-        ) {
-          const currentIndex = blankCounter++;
-  
-          const userAnswer = answers[currentIndex];
-          const correctAnswer = correctAnswers[currentIndex];
-  
-          const isCorrect = showAnswer && userAnswer === correctAnswer;
-          const isFilled = !!userAnswer;
-  
-          return (
-            <span
-              key={currentIndex}
-              onDrop={(e) => handleDrop(e, currentIndex)}
-              onDragOver={handleDragOver}
-              style={{
-                borderBottom: "2px dashed #aaa",
-                padding: "2px 10px",
-                minWidth: "60px",
-                marginRight: "4px",
-                textAlign: "center",
-                backgroundColor: isCorrect
-                  ? "#d4edda" // ✅ Green for correct answer
-                  : isFilled && showAnswer
-                  ? "#f8d7da" // ❌ Light red for incorrect (optional)
-                  : "#fff",
-                display: "inline-block",
-                cursor: "pointer",
-              }}
-            >
-              {userAnswer || "___"}
-            </span>
-          );
-        }
-      },
-    };
+
+  const correctAnswers = question?.answer_american
+    ? question.answer_american.split(",").map((ans: any) => ans.trim())
+    : [];
+
+  const customParseOptions = {
+    replace: (domNode: DOMNode) => {
+      if (
+        (domNode as Element).name === "span" &&
+        (domNode as Element).attribs?.class === "blank"
+      ) {
+        const currentIndex = blankCounter++;
+
+        const userAnswer = answers[currentIndex];
+        const correctAnswer = correctAnswers[currentIndex];
+
+        const isCorrect = showAnswer && userAnswer === correctAnswer;
+        const isFilled = !!userAnswer;
+
+        return (
+          <span
+            key={currentIndex}
+            onDrop={(e) => handleDrop(e, currentIndex)}
+            onDragOver={handleDragOver}
+            style={{
+              borderBottom: "2px dashed #aaa",
+              padding: "2px 10px",
+              minWidth: "60px",
+              marginRight: "4px",
+              textAlign: "center",
+              backgroundColor: isCorrect
+                ? "#d4edda" // ✅ Green for correct answer
+                : isFilled && showAnswer
+                ? "#f8d7da" // ❌ Light red for incorrect (optional)
+                : "#fff",
+              display: "inline-block",
+              cursor: "pointer",
+            }}
+          >
+            {userAnswer || ""}
+          </span>
+        );
+      }
+    },
+  };
 
   const availableWords = dragDropOptions.filter(
     (word: any) => !usedWords.includes(word)
   );
 
   return (
-    <div className="container mt-3">      
-      <div className="card p-3">
-        <p>
-          In the text below some words are missing. Drag words from the box
-          below to the appropriate place in the text. To undo an answer choice,
-          drag the word back to the box below the text.
-        </p>
-      </div>
-      <div
-        className="p-4 space-y-4 bottomborder"
-        style={{ fontSize: "1.25rem" }}
-      >
-        {parse(question?.question || "", customParseOptions)}
-
+    <div className="container mt-3">
+      <p className="mockHead mb-3">
+        In the text below some words are missing. Drag words from the box below
+        to the appropriate place in the text. To undo an answer choice, drag the
+        word back to the box below the text.
+      </p>
+      <div className="card readFib p-3">
         <div
-          className="innercontent mt-4"
-          onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
-          onDragOver={handleDragOver} // Allow drop
+          className="p-4 space-y-4 bottomborder"
+          style={{ fontSize: "1.25rem" ,lineHeight:"36px"}}
         >
-          <div className="selectableBtn d-flex flex-wrap gap-2">
-            {availableWords.map((word:any, idx:any) => (
-              <div
-                key={idx}
-                draggable
-                onDragStart={(e) => handleDragStart(e, word)}
-                className="btn btn-outline-dark rounded-pill"
-              >
-                {word}
-              </div>
-            ))}
+          <div>
+          {parse(question?.question || "", customParseOptions)}
+          </div>
+
+          <div
+            className="innercontent mt-4"
+            onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
+            onDragOver={handleDragOver} // Allow drop
+          >
+            <div className="selectableBtn d-flex flex-wrap gap-2">
+              {availableWords.map((word: any, idx: any) => (
+                <div
+                  key={idx}
+                  draggable
+                  onDragStart={(e) => handleDragStart(e, word)}
+                  className="btn btn-outline-dark rounded-pill"
+                >
+                  {word}
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
-       </div>
-      );
+    </div>
+  );
 };
 
-      export default ReadingFillintheBlank;
+export default ReadingFillintheBlank;

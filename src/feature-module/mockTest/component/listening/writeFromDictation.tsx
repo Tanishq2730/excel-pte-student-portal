@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import WriteFromDictationScoring from "../../../practice/component/scoring/WriteFromDictationScoring";
 import AudioPlayer from "../audioPlayer";
 
@@ -10,7 +10,12 @@ interface getProps {
   setCountdownDone: (done: boolean) => void;
 }
 
-const WriteFromDictation: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
+const WriteFromDictation: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+  setCountdownDone,
+}) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
@@ -20,49 +25,48 @@ const WriteFromDictation: React.FC<getProps> = ({ question, setAnswer, registerS
   const [wordCount, setWordCount] = useState(0);
   const [summaryText, setSummaryText] = useState("");
   const [selectedLanguage, setSelectedLanguage] = useState("American");
-const { id, session_id } = useParams<{ id: string, session_id: any }>();
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
   const progressRef = useRef<number | null>(null);
 
   // Start the progress bar for preparation time
   useEffect(() => {
-  if (!isPlayback) return;
+    if (!isPlayback) return;
 
-  let elapsed = 0;
-  const interval = 100;
-  const totalDuration = preparationTime * 1000;
+    let elapsed = 0;
+    const interval = 100;
+    const totalDuration = preparationTime * 1000;
 
-  progressRef.current = window.setInterval(() => {
-    elapsed += interval;
-    setProgress(Math.min((elapsed / totalDuration) * 100, 100));
+    progressRef.current = window.setInterval(() => {
+      elapsed += interval;
+      setProgress(Math.min((elapsed / totalDuration) * 100, 100));
 
-    if (elapsed >= totalDuration) {
-      clearInterval(progressRef.current!);
-      setIsPlayback(false);
-      setShowCountdown(true); // start countdown after preparation
-    }
-  }, interval);
+      if (elapsed >= totalDuration) {
+        clearInterval(progressRef.current!);
+        setIsPlayback(false);
+        setShowCountdown(true); // start countdown after preparation
+      }
+    }, interval);
 
-  return () => clearInterval(progressRef.current!);
-}, [isPlayback, preparationTime]);
+    return () => clearInterval(progressRef.current!);
+  }, [isPlayback, preparationTime]);
 
-// Countdown effect
-useEffect(() => {
-  if (!showCountdown || countdown <= 0) return;
+  // Countdown effect
+  useEffect(() => {
+    if (!showCountdown || countdown <= 0) return;
 
-  const timer = window.setTimeout(() => {
-    if (countdown === 1) {
-      setShowCountdown(false);
-      setShowAudio(true); // finally show audio
-      setCountdownDone(true);
-    }
-    setCountdown((prev) => prev - 1);
-  }, 1000);
+    const timer = window.setTimeout(() => {
+      if (countdown === 1) {
+        setShowCountdown(false);
+        setShowAudio(true); // finally show audio
+        setCountdownDone(true);
+      }
+      setCountdown((prev) => prev - 1);
+    }, 1000);
 
-  return () => clearTimeout(timer);
-}, [showCountdown, countdown,setCountdownDone]);
+    return () => clearTimeout(timer);
+  }, [showCountdown, countdown, setCountdownDone]);
 
-
- const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const text = e.target.value;
     setSummaryText(text);
     const words = text
@@ -72,7 +76,7 @@ useEffect(() => {
     setWordCount(words.length);
   };
 
-   useEffect(() => {
+  useEffect(() => {
     setSummaryText(""); // Reset selection on question change
   }, [question]);
 
@@ -86,18 +90,24 @@ useEffect(() => {
       return false;
     }
 
-      const question_id = question.id;
-      const questionData = question.question;
-      const session_id = Math.random() * 1000;
-      const answerText = summaryText;
-      const wordCounts = wordCount;
-      const scoringData = { question_id, session_id, question, answerText, wordCount };
+    const question_id = question.id;
+    const questionData = question.question;
+    const session_id = Math.random() * 1000;
+    const answerText = summaryText;
+    const wordCounts = wordCount;
+    const scoringData = {
+      question_id,
+      session_id,
+      question,
+      answerText,
+      wordCount,
+    };
 
-      const result = await WriteFromDictationScoring(
-        scoringData,
-        question,
-        selectedLanguage
-      );
+    const result = await WriteFromDictationScoring(
+      scoringData,
+      question,
+      selectedLanguage
+    );
 
     if (result) {
       const { score, totalScore, userAnswerText, scoredText } = result;
@@ -116,11 +126,15 @@ useEffect(() => {
       return payload;
     }
     return false;
-
   };
-  
+
   return (
     <div className="container mt-3">
+      <p className="mockHead">
+        You will hear a sentence. Type the sentence in the box below exactly as
+        you hear it. Write as much of the sentence as you can. You will hear the
+        sentence only once.
+      </p>
       <p>{question?.question_name}</p>
 
       {/* Progress Bar for Preparation Time */}
@@ -132,13 +146,17 @@ useEffect(() => {
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
               marginBottom: "15px",
             }}
           >
             <p style={{ fontWeight: 600, marginBottom: 5 }}>Current status :</p>
             <h3 style={{ marginTop: 0 }}>
-              {isPlayback ? "Preparing..." : countdown > 0 ? "Starting soon..." : "Completed"}
+              {isPlayback
+                ? "Preparing..."
+                : countdown > 0
+                ? "Starting soon..."
+                : "Completed"}
             </h3>
             <div
               style={{
@@ -168,17 +186,17 @@ useEffect(() => {
 
       {/* Countdown or AudioPlayer */}
       {isPlayback ? null : showCountdown ? (
-          <div className="text-center mb-3">
-            <h5>Get ready... starting in {countdown}s</h5>
-          </div>
-        ) : showAudio ? (
-          <AudioPlayer questionData={question} startCountdown={countdown} />
-        ) : null}
-        <div className="card-header bg-white">
-          <div className="card-title">
-            <h5>Total Word Count: {wordCount || 0}</h5>
-          </div>
+        <div className="text-center mb-3">
+          <h5>Get ready... starting in {countdown}s</h5>
         </div>
+      ) : showAudio ? (
+        <AudioPlayer questionData={question} startCountdown={countdown} />
+      ) : null}
+      <div className="card-header bg-white">
+        <div className="card-title">
+          <h5>Total Word Count: {wordCount || 0}</h5>
+        </div>
+      </div>
 
       {/* Options */}
       <div className="card p-3 mt-4">

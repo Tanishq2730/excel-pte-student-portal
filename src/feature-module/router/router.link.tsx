@@ -89,6 +89,24 @@ export const authRoutes = [
   { path: routes.pendingMocktest, element: <PendingMocktest />, route: Route },
   { path: routes.studyPlan, element: <StudyPlan />, route: Route },
   { path: routes.planInfo, element: <PlanInfo />, route: Route },
+  { path: routes.studyTool, element: <StudyTool />, route: Route },
+  { path: routes.classRecording, element: <ClassRecording />, route: Route },
+  { path: routes.predictionFile, element: <PredictionFile />, route: Route },
+  { path: routes.timeTable, element: <TimeTable />, route: Route },
+  { path: routes.classLink, element: <ClassLink />, route: Route },
+  { path: routes.template, element: <Template />, route: Route },
+  
+  {
+    path: routes.subscriptionPlan,
+    element: <SubscriptionPlan />,
+    route: Route,
+  },
+  { path: routes.community, element: <Community />, route: Route },
+  { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
+  { path: routes.performance, element: <Performance />, route: Route },
+  { path: routes.ptetestcard, element: <Ptetestcard />, route: Route },
+  { path: routes.search, element: <Search />, route: Route },
+  { path: routes.practiceHistory, element: <PracticeHistory />, route: Route },
   
 ];
 export const myPracticeRoutes = [
@@ -237,23 +255,24 @@ export const mockRoutes = [
   { path: routes.result, element: <Result />, route: Route },
 ];
 export const commonRoutes = [
-  { path: routes.studyTool, element: <StudyTool />, route: Route },
-  { path: routes.classRecording, element: <ClassRecording />, route: Route },
-  { path: routes.predictionFile, element: <PredictionFile />, route: Route },
-  { path: routes.timeTable, element: <TimeTable />, route: Route },
-  { path: routes.classLink, element: <ClassLink />, route: Route },
-  { path: routes.template, element: <Template />, route: Route },
+  // { path: routes.studyTool, element: <StudyTool />, route: Route },
+  // { path: routes.classRecording, element: <ClassRecording />, route: Route },
+  // { path: routes.predictionFile, element: <PredictionFile />, route: Route },
+  // { path: routes.timeTable, element: <TimeTable />, route: Route },
+  // { path: routes.classLink, element: <ClassLink />, route: Route },
+  // { path: routes.template, element: <Template />, route: Route },
   { path: routes.templateDetail, element: <TemplateDetail />, route: Route },
-  {
-    path: routes.subscriptionPlan,
-    element: <SubscriptionPlan />,
-    route: Route,
-  },
-  { path: routes.community, element: <Community />, route: Route },
-  { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
-  { path: routes.performance, element: <Performance />, route: Route },
-  { path: routes.ptetestcard, element: <Ptetestcard />, route: Route },
-  { path: routes.search, element: <Search />, route: Route },
-  { path: routes.practiceHistory, element: <PracticeHistory />, route: Route },
+  // {
+  //   path: routes.subscriptionPlan,
+  //   element: <SubscriptionPlan />,
+  //   route: Route,
+  // },
+  // { path: routes.community, element: <Community />, route: Route },
+  // { path: routes.grammerPractice, element: <GrammerPractice />, route: Route },
+  // { path: routes.performance, element: <Performance />, route: Route },
+  // { path: routes.ptetestcard, element: <Ptetestcard />, route: Route },
+  // { path: routes.search, element: <Search />, route: Route },
+  // { path: routes.practiceHistory, element: <PracticeHistory />, route: Route },
   { path: routes.shareLink, element: <ShareLink />, route: Route },
 ];
+

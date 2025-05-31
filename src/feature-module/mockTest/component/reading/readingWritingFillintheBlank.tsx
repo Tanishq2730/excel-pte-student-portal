@@ -147,10 +147,10 @@ const ReadingWritingFillintheBlank: React.FC<getProps> = ({ question, setAnswer,
 
   return (
     <div className="container mt-3">
-      <p>
-        There are some words missing in the following text. Please select the correct word in the drop-down box.
+      <p className="mockHead mb-4">
+      There are some words missing in the following text. Please select the correct word in the drop-down box.
       </p>
-      <div className="card p-3">
+      <div className="card p-3 readingFib">
         <div className="innercontent">{renderParsedQuestion()}</div>
       </div>
     </div>

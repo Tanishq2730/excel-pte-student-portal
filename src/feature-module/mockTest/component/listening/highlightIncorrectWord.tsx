@@ -8,12 +8,17 @@ interface getProps {
   setCountdownDone: (done: boolean) => void;
 }
 
-const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, registerSubmit,setCountdownDone }) => {
+const HighlightIncorrectWord: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+  setCountdownDone,
+}) => {
   const preparationTime = question?.Subtype?.beginning_in || 0;
   const [isPlayback, setIsPlayback] = useState(true); // preparation progress
   const [countdown, setCountdown] = useState(3); // fixed countdown after preparation
   const [showCountdown, setShowCountdown] = useState(false); // control countdown visibility
-  const [showAudio, setShowAudio] = useState(false); // show audio only after countdown 
+  const [showAudio, setShowAudio] = useState(false); // show audio only after countdown
   const [checkedOptions, setCheckedOptions] = useState<string[]>([]);
   const [selectedWords, setSelectedWords] = useState<number[]>([]);
   const [showAnswer, setShowAnswer] = useState(false);
@@ -47,7 +52,7 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
   // Countdown effect
   useEffect(() => {
     if (!showCountdown || countdown <= 0) return;
-  
+
     const timer = window.setTimeout(() => {
       if (countdown === 1) {
         setShowCountdown(false);
@@ -56,10 +61,9 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
       }
       setCountdown((prev) => prev - 1);
     }, 1000);
-  
+
     return () => clearTimeout(timer);
   }, [showCountdown, countdown, setCountdownDone]);
-
 
   const processQuestionWithHighlights = (
     question: string,
@@ -148,9 +152,13 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
     ? correctAnswers[1].split(",").map((word: any) => word.trim())
     : [];
 
-
   return (
     <div className="container mt-3">
+      <p className="mockHead">
+        You will hear a recording. Below is a transcription of the recording.
+        Some words in the transcription differ from what the speaker said.
+        Please click on the words that are different.
+      </p>
       <p>{question?.question_name}</p>
 
       {/* Progress Bar for Preparation Time */}
@@ -162,13 +170,17 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
               marginBottom: "15px",
             }}
           >
             <p style={{ fontWeight: 600, marginBottom: 5 }}>Current status :</p>
             <h3 style={{ marginTop: 0 }}>
-              {isPlayback ? "Preparing..." : countdown > 0 ? "Starting soon..." : "Completed"}
+              {isPlayback
+                ? "Preparing..."
+                : countdown > 0
+                ? "Starting soon..."
+                : "Completed"}
             </h3>
             <div
               style={{
@@ -215,12 +227,11 @@ const HighlightIncorrectWord: React.FC<getProps> = ({ question, setAnswer, regis
               className="highlight-question"
               dangerouslySetInnerHTML={{
                 __html:
-                  question?.question &&
-                    question?.answer_american
+                  question?.question && question?.answer_american
                     ? processQuestionWithHighlights(
-                      question.question,
-                      question.answer_american
-                    )
+                        question.question,
+                        question.answer_american
+                      )
                     : "",
               }}
             />

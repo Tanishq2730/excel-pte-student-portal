@@ -41,7 +41,7 @@ const PracticeHistory: React.FC = () => {
   const today = 0; // You can replace this with actual today's count if available
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="container my-4">
         {/* Practice Stats Card */}
         <div className="card p-3 mb-4" style={{ backgroundColor: "#F2F5FF" }}>

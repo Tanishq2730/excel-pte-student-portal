@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import ReactDOMServer from "react-dom/server";
 import { image_url } from "../../../../environment";
-import SpeechRecognition, { useSpeechRecognition, } from "react-speech-recognition";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import stringSimilarity from "string-similarity";
 interface getProps {
   questionData: any;
@@ -16,12 +18,23 @@ interface Timestamp {
   timestamp: Date;
 }
 
-const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit,setCountdownDone }) => {
-  const [countdown, setCountdown] = useState(questionData.Subtype.preparation_time);
+const ReadAloud: React.FC<getProps> = ({
+  questionData,
+  setAnswer,
+  registerSubmit,
+  setCountdownDone,
+}) => {
+  const [countdown, setCountdown] = useState(
+    questionData.Subtype.preparation_time
+  );
   const [isRecording, setIsRecording] = useState(false);
   const [recordingProgress, setRecordingProgress] = useState(0);
-  const [recordingTimeLeft, setRecordingTimeLeft] = useState(questionData.Subtype.recording_time);
-  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(null);
+  const [recordingTimeLeft, setRecordingTimeLeft] = useState(
+    questionData.Subtype.recording_time
+  );
+  const [mediaRecorder, setMediaRecorder] = useState<MediaRecorder | null>(
+    null
+  );
   const [audioChunks, setAudioChunks] = useState<Blob[]>([]);
   const { id, session_id } = useParams<{ id: any; session_id: any }>();
   const [transcript, setTranscript] = useState<any>(null);
@@ -53,7 +66,8 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
   );
 
   const playBeep = () => {
-    const ctx = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const ctx = new (window.AudioContext ||
+      (window as any).webkitAudioContext)();
     const oscillator = ctx.createOscillator();
     const gainNode = ctx.createGain();
 
@@ -68,15 +82,17 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
     oscillator.stop(ctx.currentTime + 0.3); // 0.3 second beep
   };
 
-
   // Countdown
   useEffect(() => {
     if (countdown > 0) {
-      timerRef.current = window.setTimeout(() => setCountdown(countdown - 1), 1000);
+      timerRef.current = window.setTimeout(
+        () => setCountdown(countdown - 1),
+        1000
+      );
     } else {
       playBeep();
       setTimeout(() => setIsRecording(true), 300); // Small delay after beep
-      setCountdownDone(true); 
+      setCountdownDone(true);
     }
     return () => clearTimeout(timerRef.current!);
   }, [countdown]);
@@ -85,13 +101,17 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
   useEffect(() => {
     const startRecording = async () => {
       try {
-        const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        const stream = await navigator.mediaDevices.getUserMedia({
+          audio: true,
+        });
         streamRef.current = stream;
         const recorder = new MediaRecorder(stream);
         const chunks: Blob[] = [];
 
         // ✅ Setup SpeechRecognition
-        const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+        const SpeechRecognition =
+          (window as any).SpeechRecognition ||
+          (window as any).webkitSpeechRecognition;
         const recognition = new SpeechRecognition();
         recognition.lang = "en-US";
         recognition.interimResults = false;
@@ -118,7 +138,7 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
         };
 
         recorder.onstop = () => {
-          const audioBlobData = new Blob(chunks, { type: 'audio/webm' });
+          const audioBlobData = new Blob(chunks, { type: "audio/webm" });
           setSetAudioBlob(audioBlobData); // ✅ Send both audio and text
           setAudioChunks(chunks);
           recognition.stop(); // ✅ Stop listening
@@ -143,19 +163,25 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
         setRecordingTimeLeft((prev: any) => prev - 1);
-        setRecordingProgress(((questionData.Subtype.recording_time - recordingTimeLeft + 1) / questionData.Subtype.recording_time) * 100);
+        setRecordingProgress(
+          ((questionData.Subtype.recording_time - recordingTimeLeft + 1) /
+            questionData.Subtype.recording_time) *
+            100
+        );
       }, 1000);
     }
 
-    if (isRecording && recordingTimeLeft === 0 && mediaRecorder?.state === "recording") {
+    if (
+      isRecording &&
+      recordingTimeLeft === 0 &&
+      mediaRecorder?.state === "recording"
+    ) {
       mediaRecorder.stop();
       setIsRecording(false);
     }
 
     return () => clearTimeout(recordingRef.current!);
   }, [isRecording, recordingTimeLeft]);
-
-
 
   // Calculate pause duration
   const calculatePauseDuration = (currentIndex: number): number => {
@@ -215,9 +241,9 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
   const spokenWords2 = useMemo<string[]>(() => {
     return transcript
       ? transcript
-        .toLowerCase()
-        .trim()
-        .split(/\s+|(?<=\w)(?=\W)/)
+          .toLowerCase()
+          .trim()
+          .split(/\s+|(?<=\w)(?=\W)/)
       : [];
   }, [transcript]);
 
@@ -370,8 +396,6 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
     }
   }, [transcript, recordedAudioBlob]);
 
-
-
   useEffect(() => {
     setSetAudioBlob(null); // Reset selection on question change
   }, [questionData]);
@@ -387,51 +411,50 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
     }
 
     const totalscore = 90;
-          const combinedTranscriptHTML = ReactDOMServer.renderToString(
-            <span>
-              {transcriptWithPauses.map((wordObj, index) => (
-                <span key={index} className={wordObj.color}>
-                  {wordObj.word}{" "}
-                </span>
-              ))}
-            </span>
-          );
-    
-          let score_data = {
-            content: contentScoreOutOf90,
-            fluency: fluencyScoreOutOf90,
-            pronunciation: pronunciationScoreOutOf90,
-            transcript: questionData?.transcription,
-            scored_transcript: combinedTranscriptHTML,
-          };
-    
-          const questionId = questionData?.id;
-          const formData = new FormData();
-          formData.append("questionId", questionId.toString());
-          formData.append("sessionId", session_id.toString());
-          formData.append("mocktest_id", id.toString());
-          formData.append("totalscore", totalscore.toString());
-          formData.append("lateSpeak", lateSpeak.toString());
-          formData.append("score", targetScoreOutOf90.toString());
-          formData.append("score_data", JSON.stringify(score_data));
+    const combinedTranscriptHTML = ReactDOMServer.renderToString(
+      <span>
+        {transcriptWithPauses.map((wordObj, index) => (
+          <span key={index} className={wordObj.color}>
+            {wordObj.word}{" "}
+          </span>
+        ))}
+      </span>
+    );
+
+    let score_data = {
+      content: contentScoreOutOf90,
+      fluency: fluencyScoreOutOf90,
+      pronunciation: pronunciationScoreOutOf90,
+      transcript: questionData?.transcription,
+      scored_transcript: combinedTranscriptHTML,
+    };
+
+    const questionId = questionData?.id;
+    const formData = new FormData();
+    formData.append("questionId", questionId.toString());
+    formData.append("sessionId", session_id.toString());
+    formData.append("mocktest_id", id.toString());
+    formData.append("totalscore", totalscore.toString());
+    formData.append("lateSpeak", lateSpeak.toString());
+    formData.append("score", targetScoreOutOf90.toString());
+    formData.append("score_data", JSON.stringify(score_data));
     console.log(recordedAudioBlob);
-    
-          // Attach audio blob as file
-          if (recordedAudioBlob) {
-            const audioFile = new File([recordedAudioBlob], "answer.wav", {
-              type: "audio/wav",
-            });
-            formData.append("answer", audioFile);
-          }
+
+    // Attach audio blob as file
+    if (recordedAudioBlob) {
+      const audioFile = new File([recordedAudioBlob], "answer.wav", {
+        type: "audio/wav",
+      });
+      formData.append("answer", audioFile);
+    }
     return formData;
-
   };
-
 
   return (
     <div className="container mt-3">
-      <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as naturally and clearly as possible. You have 40 seconds to read aloud.
+      <p className="mockHead">
+        Look at the text below. In 40 seconds, you must read this text aloud as
+        naturally and clearly as possible. You have 40 seconds to read aloud.
       </p>
       <div className="recorderDetail">
         <div className="recorder">
@@ -441,17 +464,17 @@ const ReadAloud: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width:'25em'
             }}
           >
             <p style={{ marginBottom: 5 }}>Recorded Answer</p>
             <p style={{ marginBottom: 5 }}>Current status :</p>
-            <h4 style={{ marginTop: 0 }}>
+            <h4 style={{ marginTop: 0,width:"100%" }}>
               {isRecording
                 ? "Recording..."
                 : countdown > 0
-                  ? `Beginning in ${countdown} Seconds`
-                  : "Recording completed"}
+                ? `Beginning in ${countdown} Seconds`
+                : "Recording completed"}
             </h4>
             <div
               style={{

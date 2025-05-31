@@ -1,17 +1,21 @@
 import React, { useState, useEffect, useCallback, useRef } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 interface getProps {
   question: any;
   setAnswer: (answerData: any) => void;
   registerSubmit: (submitFn: () => void) => void;
 }
 
-const McChooseSingleAnswer: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const McChooseSingleAnswer: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+}) => {
   //console.log("question", question);
   const [checkedOptions, setCheckedOptions] = useState<string | null>(null);
   const timeStartRef = useRef(Date.now());
-  const { id,session_id } = useParams<{ id: string,session_id:any }>(); 
- 
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
+
   const options = [
     { id: "A", text: question?.option_one },
     { id: "B", text: question?.option_two },
@@ -24,7 +28,7 @@ const McChooseSingleAnswer: React.FC<getProps> = ({ question, setAnswer, registe
     setCheckedOptions(optionId);
   };
 
- const handleSubmit = () => {
+  const handleSubmit = () => {
     if (!checkedOptions) {
       return false;
     }
@@ -58,19 +62,18 @@ const McChooseSingleAnswer: React.FC<getProps> = ({ question, setAnswer, registe
     return payload;
   };
 
-    useEffect(() => {
-      setCheckedOptions(null); // Reset selection on question change
-    }, [question]);
-    useEffect(() => {
-      registerSubmit(handleSubmit); // Register new submit function on change
-    }, [question, checkedOptions]);
-  
+  useEffect(() => {
+    setCheckedOptions(null); // Reset selection on question change
+  }, [question]);
+  useEffect(() => {
+    registerSubmit(handleSubmit); // Register new submit function on change
+  }, [question, checkedOptions]);
 
   return (
     <div className="container mt-3">
-      <p>
-        In the text below some words are missing. Drag words from the box below
-        to the appropriate place in the text.
+      <p className="mockHead">
+        Read the text and answer the multiple-choice question by selecting the
+        correct response. Only one response is correct.
       </p>
       <div className="row">
         <div className="col-md-12">
@@ -87,27 +90,19 @@ const McChooseSingleAnswer: React.FC<getProps> = ({ question, setAnswer, registe
             <div className="card-body">
               <div className="col-12 col-md-12">
                 {options.map((option) => (
-                  <div
-                    key={option.id}
-                    className="col-12 col-md-12"
-                  >
+                  <div key={option.id} className="col-12 col-md-12">
                     <div
-                      className={`d-flex align-items-center border rounded p-3 h-100 ${checkedOptions === option.id
-                          ? "border-primary"
-                          : ""
-                        }`}
+                      className={`d-flex align-items-center border rounded p-3 h-100 ${
+                        checkedOptions === option.id ? "border-primary" : ""
+                      }`}
                     >
                       <input
                         type="radio"
                         name="mcq-option"
                         className="form-check-input m-auto me-3"
                         id={`option-${option.id}`}
-                        checked={
-                          checkedOptions === option.id
-                        }
-                        onChange={() =>
-                          handleChange(option.id)
-                        }
+                        checked={checkedOptions === option.id}
+                        onChange={() => handleChange(option.id)}
                       />
                       <label
                         htmlFor={`option-${option.id}`}

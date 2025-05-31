@@ -41,7 +41,7 @@ const ClassRecording: React.FC = () => {
   };
 
   return (
-    <div className="page-wrappers mt-5">
+    <div className="page-wrapper mt-5">
       <div className="content">
         <div className="container">
           <div className="mainHead pb-3 mainHeader">

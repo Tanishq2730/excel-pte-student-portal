@@ -14,6 +14,7 @@ interface RecentMocktestResultsType {
 }
 
 const RecentMocktestScore: React.FC = () => {
+  const [loading, setLoading] = useState(true);
   const [mockResult, setMocktestResult] = useState<RecentMocktestResultsType>({
     Speaking: { score: 0, total_score: 0 },
     Writing: { score: 0, total_score: 0 },
@@ -26,31 +27,42 @@ const RecentMocktestScore: React.FC = () => {
   }, []);
 
   const mockresult = async () => {
-  const res = await RecentMocktestResults();
-  if (res?.success) {
-    console.log(res.data); // This is an object, not array
-
-    // Use Object.entries to iterate over keys and values
-    const formattedData = Object.entries(res.data).reduce(
-      (acc: any, [section, value]: [string, any]) => {
-        acc[section] = {
-          score: value.score,
-          total_score: value.total_score,
+    try {
+      setLoading(true);
+      const res = await RecentMocktestResults();
+      if (res?.success && res.data) {
+        // Ensure we have all required sections with default values
+        const formattedData = {
+          Speaking: { score: 0, total_score: 0 },
+          Writing: { score: 0, total_score: 0 },
+          Reading: { score: 0, total_score: 0 },
+          Listening: { score: 0, total_score: 0 },
+          ...Object.entries(res.data).reduce(
+            (acc: any, [section, value]: [string, any]) => ({
+              ...acc,
+              [section]: {
+                score: value?.score || 0,
+                total_score: value?.total_score || 0,
+              },
+            }),
+            {}
+          ),
         };
-        return acc;
-      },
-      {}
-    );
 
-    setMocktestResult(formattedData);
-  }
-};
+        setMocktestResult(formattedData);
+      }
+    } catch (error) {
+      console.error("Error fetching mocktest results:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const totalScore =
-    mockResult.Speaking.score +
-    mockResult.Writing.score +
-    mockResult.Reading.score +
-    mockResult.Listening.score;
+    (mockResult?.Speaking?.score || 0) +
+    (mockResult?.Writing?.score || 0) +
+    (mockResult?.Reading?.score || 0) +
+    (mockResult?.Listening?.score || 0);
 
   const renderSection = (
     label: string,
@@ -58,7 +70,7 @@ const RecentMocktestScore: React.FC = () => {
     color: string,
     scoreData: ScoreSection
   ) => {
-    const percent = scoreData.total_score
+    const percent = scoreData?.total_score
       ? (scoreData.score / scoreData.total_score) * 100
       : 0;
 
@@ -70,9 +82,9 @@ const RecentMocktestScore: React.FC = () => {
         <div className="w-100">
           <div className="d-flex justify-content-between">
             <p className="mb-1">{label}</p>
-            <span>{scoreData.score}/{scoreData.total_score}</span>
+            <span>{scoreData?.score || 0}/{scoreData?.total_score || 0}</span>
           </div>
-          <div className="progress progress-xs  flex-grow-1 mb-1">
+          <div className="progress progress-xs flex-grow-1 mb-1">
             <div
               className={`progress-bar progress-bar-striped progress-bar-animated bg-${color} rounded`}
               role="progressbar"
@@ -86,6 +98,16 @@ const RecentMocktestScore: React.FC = () => {
       </div>
     );
   };
+
+  if (loading) {
+    return (
+      <div className="card flex-fill">
+        <div className="card-body p-3">
+          <div className="text-center">Loading...</div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="card flex-fill">

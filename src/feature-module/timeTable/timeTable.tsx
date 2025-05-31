@@ -43,7 +43,7 @@ const TimeTable: React.FC = () => {
   if (loading) return <p className="text-center my-5">Loading...</p>;
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
           <div className="mainHead pb-3 mainHeader">

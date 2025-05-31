@@ -14,7 +14,7 @@ const Introduction: React.FC = () => {
           in the top right corner of your screen. The number of items in the
           section will also be displayed.
           <br />
-          <img src="assets/img/timer.png" className="img-fluid my-3" alt="Time" />
+          <img src="../../../assets/img/timer.png" className="img-fluid my-3" alt="Time" />
           <br />
           - At the beginning of each part you will receive instructions. These
           will provide details on what to expect in that part of the test.

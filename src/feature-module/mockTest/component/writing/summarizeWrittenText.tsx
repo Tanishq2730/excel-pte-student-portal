@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 import SummarizeWritingTextScoring from "../../../practice/component/scoring/SummarizeWritingTextScoring";
-
 
 interface getProps {
   questionData: any;
@@ -9,8 +8,12 @@ interface getProps {
   registerSubmit: (submitFn: () => void) => void;
 }
 
-const SummarizeWritinText: React.FC<getProps> = ({ questionData, setAnswer, registerSubmit }) => {
-  const { id, session_id } = useParams<{ id: string, session_id: any }>();
+const SummarizeWritinText: React.FC<getProps> = ({
+  questionData,
+  setAnswer,
+  registerSubmit,
+}) => {
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
   const [selectedLanguage, setSelectedLanguage] = useState("American");
   const [wordCount, setWordCount] = useState(0);
   const [summaryText, setSummaryText] = useState("");
@@ -43,7 +46,13 @@ const SummarizeWritinText: React.FC<getProps> = ({ questionData, setAnswer, regi
     const question = questionData.question;
     const answerText = summaryText;
     const wordCounts = wordCount;
-    const scoringData = { question_id, session_id, question, answerText, wordCount };
+    const scoringData = {
+      question_id,
+      session_id,
+      question,
+      answerText,
+      wordCount,
+    };
 
     const result = await SummarizeWritingTextScoring(
       scoringData,
@@ -69,11 +78,17 @@ const SummarizeWritinText: React.FC<getProps> = ({ questionData, setAnswer, regi
       return payload;
     }
     return false;
-
   };
 
   return (
     <div className="container mt-3">
+      <p className="mockHead">
+        Read the passage below and summarize it using one sentence. Type your
+        response in the box at the bottom of the screen. You have 10 minutes to
+        finish this task. Your response will be judged on the quality of your
+        writing and on how well your response presents the key points in the
+        passage.
+      </p>
       <div className="card p-3">
         <div
           dangerouslySetInnerHTML={{

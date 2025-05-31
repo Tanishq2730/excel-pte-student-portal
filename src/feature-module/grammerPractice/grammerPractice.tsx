@@ -67,7 +67,7 @@ console.log(res.data);
   };
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-5">
           <div className="heading">

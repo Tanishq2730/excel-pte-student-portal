@@ -79,9 +79,8 @@ const MultipleChooseMultipleAnswer: React.FC<getProps> = ({ question, setAnswer,
 
   return (
     <div className="container mt-3">
-      <p>
-        In the text below some words are missing. Drag words from the box below
-        to the appropriate place in the text.
+      <p className="mockHead">
+      Read the text and answer the question by selecting all the correct responses. More than one response is correct.
       </p>
       <div className="row">        
         <div className="col-md-12">

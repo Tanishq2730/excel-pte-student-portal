@@ -499,8 +499,8 @@ const RespondtoSituation: React.FC<getProps> = ({ questionData, setAnswer, regis
 
  return (
     <div className="container mt-3">
-      <p>
-        Look at the text below. In 40 seconds, you must read this text aloud as naturally and clearly as possible. You have 40 seconds to read aloud.
+      <p className="mockHead">
+      You will hear a question. Please give a simple and short answer. Often just one or a few words is enough.
       </p>
       <div className="recorderDetail">
         <div className="recorder">
@@ -510,7 +510,7 @@ const RespondtoSituation: React.FC<getProps> = ({ questionData, setAnswer, regis
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
             }}
           >
             <p style={{ marginBottom: 5 }}>Recorded Answer</p>

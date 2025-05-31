@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import MockParaReorder from "../MockParaReorder";
-import { useParams } from 'react-router-dom';
+import { useParams } from "react-router-dom";
 
 interface getProps {
   question: any;
@@ -8,14 +8,17 @@ interface getProps {
   registerSubmit: (submitFn: () => any) => void;
 }
 
-const RedorderParagraph: React.FC<getProps> = ({ question, setAnswer, registerSubmit }) => {
+const RedorderParagraph: React.FC<getProps> = ({
+  question,
+  setAnswer,
+  registerSubmit,
+}) => {
+  const [showAnswer, setShowAnswer] = useState(false);
+  const [answers, setAnswers] = useState<string[]>([]);
+  const [resetParaReorder, setResetParaReorder] = useState(false);
+  const { id, session_id } = useParams<{ id: string; session_id: any }>();
 
-    const [showAnswer, setShowAnswer] = useState(false);
-    const [answers, setAnswers] = useState<string[]>([]);
-    const [resetParaReorder, setResetParaReorder] = useState(false);
-    const { id, session_id } = useParams<{ id: string; session_id: any }>();
-
-     const correctAnswers = question?.answer_american?.split(",") || [];
+  const correctAnswers = question?.answer_american?.split(",") || [];
 
   useEffect(() => {
     registerSubmit(handleSubmit);
@@ -73,9 +76,10 @@ const RedorderParagraph: React.FC<getProps> = ({ question, setAnswer, registerSu
 
   return (
     <div className="container mt-3">
-      <p>
-        There are some words missing in the following text. Please select the
-        correct word in the drop-down box.
+      <p className="mockHead">
+        The text boxes in the left panel have been placed in a random order.
+        Restore the original order by dragging the text boxes from the left
+        panel to the right panel.
       </p>
       <div className="card p-3">
         <MockParaReorder
@@ -88,4 +92,4 @@ const RedorderParagraph: React.FC<getProps> = ({ question, setAnswer, registerSu
   );
 };
 
-export default RedorderParagraph;   
+export default RedorderParagraph;

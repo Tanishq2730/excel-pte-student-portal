@@ -4,6 +4,7 @@ import WriteEmail from "./writeEmail";
 import WriteEssay from "./writeEssay";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
+import MockHeader from "../../../../core/common/mockHeader";
 
 interface WritingIntroProps {
   queno: number;
@@ -105,6 +106,7 @@ console.log(writingQuestions,'writingQuestions');
 
    return (
     <>
+    <MockHeader/>
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">

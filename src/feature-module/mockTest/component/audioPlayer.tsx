@@ -122,7 +122,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
         </button>
 
         {/* Progress Bar */}
-        <div className="flex-grow-1 me-2" style={{ minWidth: "200px" }}>
+        <div className="flex-grow-1 me-2" style={{ minWidth: "200px",display:'flex',alignItems:'center' }}>
           <input
             type="range"
             className="form-range"
@@ -133,11 +133,15 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
               accentColor: "#4a90e2",
               background: `linear-gradient(to right, #4a90e2 ${
                 (currentTime / duration) * 100
-              }%, #dee2e6 ${(currentTime / duration) * 100}%)`,
-              height: "6px",
+              }%, #e9ecef ${(currentTime / duration) * 100}%)`,
+              height: "8px",
+              borderRadius: "4px",
+              cursor: "pointer",
+              WebkitAppearance: "none",
+              appearance: "none"
             }}
           />
-          <small className="text-muted">
+          <small className="text-muted" style={{width:"6em",marginLeft:"1em"}}>
             {formatTime(currentTime)} / {formatTime(duration)}
           </small>
         </div>
@@ -178,17 +182,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
         </select>
 
         {/* Speed Dropdown */}
-        <select
-          value={playbackRate}
-          onChange={handleSpeedChange}
-          className="form-select form-select-sm w-auto"
-          title="Playback Speed"
-        >
-          <option value={0.5}>0.5x</option>
-          <option value={1}>1.0x</option>
-          <option value={1.5}>1.5x</option>
-          <option value={2}>2x</option>
-        </select>
+        
 
         <audio ref={audioRef} src={url} preload="metadata" />
       </div>

@@ -117,6 +117,7 @@ useEffect(() => {
 
   return (
     <div className="container mt-3">
+      <p className="mockHead">Listen to the recording and answer the single-choice question by selectingthe correct response . Only one response is correct.</p>
       <p>{question?.question_name}</p>
 
       {/* Progress Bar for Preparation Time */}
@@ -128,7 +129,7 @@ useEffect(() => {
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
               marginBottom: "15px",
             }}
           >

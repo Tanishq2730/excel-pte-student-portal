@@ -5,7 +5,7 @@ import { all_routes } from "../../feature-module/router/all_routes";
 const ClassLink: React.FC = () => {
   const routes = all_routes;
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-5">
           <div className="mainHead pb-3 mainHeader">

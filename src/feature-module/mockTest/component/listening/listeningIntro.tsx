@@ -9,6 +9,7 @@ import SelectMissingWord from "./selectMissingWord";
 import HighlightCorrectSummary from "./highlightCorrectSummary";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
+import MockHeader from "../../../../core/common/mockHeader";
 
 interface ListeningIntroProps {
   queno: number;
@@ -143,6 +144,7 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
 
   return (
     <>
+    <MockHeader/>
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">

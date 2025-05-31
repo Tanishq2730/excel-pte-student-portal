@@ -21,7 +21,7 @@ const Template: React.FC = () => {
   }, []);
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-4">
           <div className="mainHead pb-3 mainHeader">

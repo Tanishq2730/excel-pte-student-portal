@@ -1880,34 +1880,38 @@ body.app-chat {
 
 .mockInfoContent {
   margin-top: 2em;
-  p{
+  p {
     line-height: 30px;
     font-size: 18px;
     padding-top: 1em;
   }
-  h6{
+  h6 {
     line-height: 30px;
     font-size: 18px;
   }
-  h5{
+  h5 {
     line-height: 30px;
     font-size: 18px;
   }
 }
 
-.mocktest-session{
-  p{
+.mocktest-session {
+  p {
     line-height: 30px;
     font-size: 18px;
     padding-top: 1em;
+    margin-bottom: 0;
   }
-  .recorderDetail{
-    .recorder{
+  .recorderDetail {
+    .recorder {
       display: flex;
       justify-content: center;
+      margin-top: 1em;
+      flex-direction: column;
+      align-items: center;
     }
   }
-  .questionContent{
+  .questionContent {
     display: none;
   }
 }
@@ -1918,6 +1922,7 @@ body.app-chat {
   padding: 20px;
   border-radius: 5px;
   text-align: center;
+  width: 25em;
 }
 
 .record-title {
@@ -1929,7 +1934,7 @@ body.app-chat {
 .record-status {
   font-size: 18px;
   font-weight: 500;
-  margin-bottom: 20px;
+  margin-bottom: 20px !important;
 }
 
 .progress-wrapper {
@@ -2665,7 +2670,7 @@ body.app-chat {
 
 .answerCard {
   background-color: rgb(228, 246, 255) !important;
-  p{
+  p {
     font-size: 16px;
   }
 }
@@ -2693,7 +2698,7 @@ body.app-chat {
 }
 
 .practice-header-wrapper {
-  .tabinnerasection{
+  .tabinnerasection {
     margin-top: 2em;
   }
   .mega-column {
@@ -2704,23 +2709,22 @@ body.app-chat {
   }
 }
 
-
-.pendingQuestion{
+.pendingQuestion {
   background-color: rgb(213, 241, 255);
-  p{
+  p {
     padding: 10px;
   }
-  span{
+  span {
     color: #1b507a;
     margin-left: 1em;
-  };
+  }
 }
 
-.mainHeader{
+.mainHeader {
   display: flex;
   justify-content: left;
   align-items: center;
-  .icon{
+  .icon {
     width: 2em;
     height: 2em;
     background-color: #1b507a;
@@ -2729,43 +2733,42 @@ body.app-chat {
     justify-content: center;
     align-items: center;
     margin-right: 1em;
-    i{
+    i {
       color: #fff;
     }
   }
 }
 
-.scorebtnClose{
+.scorebtnClose {
   background-color: #fff !important;
 }
 
-.headerpersonicon{
+.headerpersonicon {
   color: #4c4c4c !important;
 }
 
-
-.timer{
+.timer {
   display: flex;
 }
 
-.cardDetail{
-  ul{
+.cardDetail {
+  ul {
     list-style: disc;
   }
-  .right{
+  .right {
     color: rgb(56, 211, 56);
   }
-  .wrong{
+  .wrong {
     color: rgb(230, 65, 65);
   }
-  .multiple{
+  .multiple {
     display: flex;
-    span{
+    span {
       margin: 0px 10px !important;
     }
   }
-  .multiples{
-    span{
+  .multiples {
+    span {
       border: 1px solid #000;
       padding: 10px 14px;
       border-radius: 100px;
@@ -2773,15 +2776,15 @@ body.app-chat {
   }
 }
 
-.activity-avatar{
+.activity-avatar {
   color: #000 !important;
   border: 1px solid #eeeeee !important;
   margin-right: 1em !important;
 }
 
-.examCount{
+.examCount {
   position: relative;
-  button{
+  button {
     background-color: #1b507a !important;
     border: none !important;
     position: absolute;
@@ -2791,7 +2794,7 @@ body.app-chat {
   }
 }
 
-.videoImg{
+.videoImg {
   height: 10em;
   object-fit: cover;
   width: 100%;
@@ -2799,4 +2802,40 @@ body.app-chat {
 
 .studycard {
   padding: 1.9em 1em !important;
+}
+
+.mockHead {
+  font-size: 16px !important;
+}
+
+.recorderQuestion {
+  font-size: 20px !important;
+  p {
+    font-size: 20px;
+  }
+}
+
+.readingFib {
+  .innercontent {
+    font-size: 1.15rem;
+    line-height: 46px;
+  }
+  .form-select {
+    font-size: 10px !important;
+  }
+}
+.readFib {
+  span {
+    padding: 2px 10px;
+    min-width: 8em !important;
+    border: 1px solid #a5a5a5 !important;
+    margin-right: 4px;
+    text-align: center;
+    border-radius: 10px;
+    background-color: rgb(255, 255, 255);
+    display: inline-block;
+    cursor: pointer;
+    height: 40px;
+    margin: 5px 0;
+  }
 }

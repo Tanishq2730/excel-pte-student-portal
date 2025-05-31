@@ -124,7 +124,7 @@ const MockFeature = () => {
         ${mobileSidebar ? "slide-nav" : ""}`}
           >
             {/* <Header /> */}
-            <MockHeader/>
+            {/* <MockHeader/> */}
             <Outlet />
             {/* {!location.pathname.includes("layout") && <ThemeSettings />} */}
           </div>
@@ -136,7 +136,7 @@ const MockFeature = () => {
         ${mobileSidebar ? "slide-nav" : ""}`}
           >
             {/* <Header /> */}
-            <MockHeader/>
+            {/* <MockHeader/> */}
             <Outlet />
             {/* {!location.pathname.includes("layout") && <ThemeSettings />} */}
           </div>

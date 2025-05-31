@@ -15,7 +15,7 @@ const KeyboardCheck: React.FC = () => {
           3. If you do not have a Q W E R T Y keyboard, raise your hand to get
           the attention of the Test Administrator.
         </p>
-        <img src="assets/img/keyboard.png" className="img-fluid" alt="Keyboard" />
+        <img src="../../../assets/img/keyboard.png" className="img-fluid" alt="Keyboard" />
       </div>
     </div>
   );

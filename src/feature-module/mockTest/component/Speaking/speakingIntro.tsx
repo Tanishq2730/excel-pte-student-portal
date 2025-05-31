@@ -1,12 +1,22 @@
-import React, { Dispatch, SetStateAction, useState,useRef, useEffect } from "react";
+import React, {
+  Dispatch,
+  SetStateAction,
+  useState,
+  useRef,
+  useEffect,
+} from "react";
 import ReadAloud from "./readAloud";
 import RepeatSentence from "./repeatSentence";
 import DescribeImage from "./describeImage";
 import RetellLecture from "./retellLecture";
 import AnswerShortQuestion from "./answerShortQuestion";
 import RespondtoSituation from "./respondtoSituation";
-import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
-import { useParams } from 'react-router-dom';
+import {
+  saveMocktestQuestion,
+  saveFinalMocktest,
+} from "../../../../api/mocktestAPI";
+import { useParams } from "react-router-dom";
+import MockHeader from "../../../../core/common/mockHeader";
 
 interface SpeakingIntroProps {
   queno: number;
@@ -25,7 +35,7 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
   const submitCurrentQuestionRef = useRef<(() => void) | null>(null);
   const { id, session_id } = useParams<{ id: string; session_id: any }>();
   const [isCountdownDone, setCountdownDone] = useState(true);
-console.log(speakingQuestions,'speakingQuestions');
+  console.log(speakingQuestions, "speakingQuestions");
 
   // Dynamically map subtype names to components
   const getComponent = (question: any, index: number) => {
@@ -33,7 +43,7 @@ console.log(speakingQuestions,'speakingQuestions');
 
     const commonProps = {
       key: index,
-      questionData:question,
+      questionData: question,
       setAnswer: setCurrentAnswer,
       registerSubmit: (fn: () => void) => {
         submitCurrentQuestionRef.current = fn;
@@ -60,66 +70,68 @@ console.log(speakingQuestions,'speakingQuestions');
   };
 
   useEffect(() => {
-  if (step > 0) {
-    setCountdownDone(false); // Reset countdown when a new question starts
-  }
-}, [step]);
+    if (step > 0) {
+      setCountdownDone(false); // Reset countdown when a new question starts
+    }
+  }, [step]);
 
   const handleNext = async () => {
-     if (step === 0) {
-       setStep(1);
-       return;
-     }
-   
-     let answer = null;
-     if (submitCurrentQuestionRef.current) {
-        answer = await submitCurrentQuestionRef.current(); // Now it will return the payload
-     }
-   
-     const currentQuestion = speakingQuestions[step - 1];
-    
-   
-     if (answer) {
-       try {
-         const response = await saveMocktestQuestion(true, answer);
-        
-       } catch (error) {
-         console.error("Error saving answer:", error);
-       }
-     }
-   
-     if (step < speakingQuestions.length) {
-       setStep(step + 1);
-     } else {
-        try {
-          const payload = {     
-             mocktestId: id,
-             sessionid: session_id
-          };
-         const response = await saveFinalMocktest(payload);
-         setSectionPart(<div className="container mt-5"><h4>Speaking section completed.</h4></div>);
-         console.log("Answer saved:", response);
-       } catch (error) {
-         console.error("Error saving answer:", error);
-       } 
-     }
-   };
-   
-   
-     const handleSkip = () => {
-       if (step < speakingQuestions.length) {
-         setStep(step + 1);
-       } else {
-         setSectionPart(
-           <div className="container mt-5">
-             <h4>Writing section completed.</h4>
-           </div>
-         );
-       }
-     };
+    if (step === 0) {
+      setStep(1);
+      return;
+    }
 
-   return (
+    let answer = null;
+    if (submitCurrentQuestionRef.current) {
+      answer = await submitCurrentQuestionRef.current(); // Now it will return the payload
+    }
+
+    const currentQuestion = speakingQuestions[step - 1];
+
+    if (answer) {
+      try {
+        const response = await saveMocktestQuestion(true, answer);
+      } catch (error) {
+        console.error("Error saving answer:", error);
+      }
+    }
+
+    if (step < speakingQuestions.length) {
+      setStep(step + 1);
+    } else {
+      try {
+        const payload = {
+          mocktestId: id,
+          sessionid: session_id,
+        };
+        const response = await saveFinalMocktest(payload);
+        setSectionPart(
+          <div className="container mt-5">
+            <h4>Speaking section completed.</h4>
+          </div>
+        );
+        console.log("Answer saved:", response);
+      } catch (error) {
+        console.error("Error saving answer:", error);
+      }
+    }
+  };
+
+  const handleSkip = () => {
+    if (step < speakingQuestions.length) {
+      setStep(step + 1);
+    } else {
+      setSectionPart(
+        <div className="container mt-5">
+          <h4>Writing section completed.</h4>
+        </div>
+      );
+    }
+  };
+
+  return (
     <>
+      <MockHeader />
       {step === 0 ? (
         <div className="container mt-5">
           <p className="font-weight-bold">
@@ -138,17 +150,27 @@ console.log(speakingQuestions,'speakingQuestions');
               <button
                 className="btn btn-primary"
                 onClick={handleNext}
-                disabled={step > speakingQuestions.length || step !== 0 && !isCountdownDone}
+                disabled={
+                  step > speakingQuestions.length ||
+                  (step !== 0 && !isCountdownDone)
+                }
               >
                 {step === 0 ? "Start" : "Save & Next"}
               </button>
             </div>
             {step > 0 && (
               <div className="col-auto text-end">
-                <button className="btn btn-outline-secondary mx-1" onClick={handleSkip}>
+                <button
+                  className="btn btn-outline-secondary mx-1"
+                  onClick={handleSkip}
+                >
                   Skip
                 </button>
-                <button className="btn btn-primary" onClick={handleNext}  disabled={!isCountdownDone} >
+                <button
+                  className="btn btn-primary"
+                  onClick={handleNext}
+                  disabled={!isCountdownDone}
+                >
                   Next
                 </button>
               </div>

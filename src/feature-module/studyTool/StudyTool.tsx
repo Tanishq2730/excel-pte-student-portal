@@ -29,7 +29,7 @@ const StudyTool: React.FC = () => {
     { icon: faCalendarAlt, title: "Timetable", link: routes.timeTable },
   ];
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="studySection">
           <div className="container">

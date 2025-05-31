@@ -115,6 +115,7 @@ useEffect(() => {
 
   return (
     <div className="container mt-3">
+      <p className="mockHead">You will hear a recording. Click on the paragraph that best relates to the recording.</p>
       <p>{question?.question_name}</p>
 
       {/* Progress Bar for Preparation Time */}
@@ -126,12 +127,12 @@ useEffect(() => {
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "fit-content",
+              width: "25em",
               marginBottom: "15px",
             }}
           >
             <p style={{ fontWeight: 600, marginBottom: 5 }}>Current status :</p>
-            <h3 style={{ marginTop: 0 }}>
+            <h3 style={{ marginTop: 0 ,marginBottom: "10px"}}>
               {isPlayback ? "Preparing..." : countdown > 0 ? "Starting soon..." : "Completed"}
             </h3>
             <div

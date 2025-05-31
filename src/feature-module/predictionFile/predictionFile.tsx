@@ -24,7 +24,7 @@ const PredictionFile: React.FC = () => {
   }, []);
 
   return (
-    <div className="page-wrappers mt-5">
+    <div className="page-wrapper mt-5">
       <div className="content">
         <div className="container">
           <div className="mainHead pb-3 mainHeader">
@@ -33,7 +33,7 @@ const PredictionFile: React.FC = () => {
                 <i className="fa fa-arrow-left"></i>
               </div>
             </Link>
-            <h3>Template</h3>
+            <h3>Prediction File</h3>
           </div>
           <div className="prediction-file my-2">
             <div className="prediction">

@@ -45,7 +45,7 @@ const SubscriptionPlan: React.FC = () => {
 console.log(tabs, "tabs");
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="container">
         <div className="content my-5">
           <div className="card-body">
