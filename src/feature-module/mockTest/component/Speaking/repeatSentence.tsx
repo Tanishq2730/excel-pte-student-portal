@@ -6,6 +6,7 @@ import SpeechRecognition, {
   useSpeechRecognition,
 } from "react-speech-recognition";
 import stringSimilarity from "string-similarity";
+
 interface getProps {
   questionData: any;
   setAnswer: (answerData: any) => void;
@@ -68,17 +69,21 @@ const RepeatSentence: React.FC<getProps> = ({
   const [recordingStartTime, setRecordingStartTime] = useState<number>(
     Date.now()
   );
+ const [isAudioPlaying, setIsAudioPlaying] = useState(false);
+  const mediaRecorderRef = useRef<MediaRecorder | null>(null);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
 
+
+  // Playback Progress
   useEffect(() => {
     if (isPlayback) {
-      let duration = 5;
       playbackRef.current = window.setInterval(() => {
         setPlaybackProgress((prev) => {
           const next = prev + 20;
           if (next >= 100) {
             clearInterval(playbackRef.current!);
             setIsPlayback(false);
-            setCountdown(40);
+            setCountdown(questionData.Subtype.preparation_time);
           }
           return next;
         });
@@ -86,6 +91,7 @@ const RepeatSentence: React.FC<getProps> = ({
     }
     return () => clearInterval(playbackRef.current!);
   }, [isPlayback]);
+
   const playBeep = () => {
     const ctx = new (window.AudioContext ||
       (window as any).webkitAudioContext)();
@@ -105,17 +111,33 @@ const RepeatSentence: React.FC<getProps> = ({
 
   // Countdown
   useEffect(() => {
-    if (countdown > 0) {
-      timerRef.current = window.setTimeout(
-        () => setCountdown(countdown - 1),
-        1000
-      );
-    } else {
-      playBeep();
-      setTimeout(() => setIsRecording(true), 300); // Small delay after beep
-    }
-    return () => clearTimeout(timerRef.current!);
-  }, [countdown]);
+  if (!isPlayback && countdown > 0) {
+    timerRef.current = window.setTimeout(() => {
+      setCountdown((prev:any) => prev - 1);
+    }, 1000);
+  }
+
+  if (!isPlayback && countdown === 0 && !isAudioPlaying) {
+    playAudio(); // Play audio *only once* after countdown ends
+  }
+
+  return () => clearTimeout(timerRef.current!);
+}, [countdown, isPlayback]);
+
+ const playAudio = () => {
+  const audio = new Audio(image_url + questionData.speak_audio_file);
+  audioRef.current = audio;
+  setIsAudioPlaying(true);
+
+  audio.play();
+
+  audio.onended = () => {
+    setIsAudioPlaying(false);
+    setIsRecording(true); // Start recording AFTER audio ends
+    setRecordingTimeLeft(questionData.Subtype.recording_time); // Reset recording time
+    setRecordingStartTime(Date.now()); // Reset recording start timestamp
+  };
+};
 
   // Start recording when isRecording becomes true
   useEffect(() => {
@@ -124,34 +146,10 @@ const RepeatSentence: React.FC<getProps> = ({
         const stream = await navigator.mediaDevices.getUserMedia({
           audio: true,
         });
+        setCountdownDone(true);
         streamRef.current = stream;
         const recorder = new MediaRecorder(stream);
         const chunks: Blob[] = [];
-
-        // ✅ Setup SpeechRecognition
-        const SpeechRecognition =
-          (window as any).SpeechRecognition ||
-          (window as any).webkitSpeechRecognition;
-        const recognition = new SpeechRecognition();
-        recognition.lang = "en-US";
-        recognition.interimResults = false;
-        recognition.continuous = true;
-
-        recognition.onresult = (event: any) => {
-          let finalTranscript = "";
-          for (let i = event.resultIndex; i < event.results.length; ++i) {
-            if (event.results[i].isFinal) {
-              finalTranscript += event.results[i][0].transcript + " ";
-            }
-          }
-          setTranscript(finalTranscript);
-        };
-
-        recognition.onerror = (e: any) => {
-          console.error("Speech recognition error:", e);
-        };
-
-        recognition.start(); // ✅ Start listening
 
         recorder.ondataavailable = (e) => {
           if (e.data.size > 0) chunks.push(e.data);
@@ -159,15 +157,12 @@ const RepeatSentence: React.FC<getProps> = ({
 
         recorder.onstop = () => {
           const audioBlobData = new Blob(chunks, { type: "audio/webm" });
-          setSetAudioBlob(audioBlobData); // ✅ Send both audio and text
-          setAudioChunks(chunks);
-          recognition.stop(); // ✅ Stop listening
+          // Handle the recorded audio blob as needed
           stream.getTracks().forEach((track) => track.stop());
         };
 
         recorder.start();
-        setMediaRecorder(recorder);
-        setAudioChunks([]);
+        mediaRecorderRef.current = recorder;
       } catch (error) {
         console.error("Error accessing microphone", error);
       }
@@ -182,7 +177,7 @@ const RepeatSentence: React.FC<getProps> = ({
   useEffect(() => {
     if (isRecording && recordingTimeLeft > 0) {
       recordingRef.current = window.setTimeout(() => {
-        setRecordingTimeLeft((prev: any) => prev - 1);
+        setRecordingTimeLeft((prev:any) => prev - 1);
         setRecordingProgress(
           ((questionData.Subtype.recording_time - recordingTimeLeft + 1) /
             questionData.Subtype.recording_time) *
@@ -194,15 +189,17 @@ const RepeatSentence: React.FC<getProps> = ({
     if (
       isRecording &&
       recordingTimeLeft === 0 &&
-      mediaRecorder?.state === "recording"
+      mediaRecorderRef.current?.state === "recording"
     ) {
-      mediaRecorder.stop();
+      mediaRecorderRef.current.stop();
       setIsRecording(false);
     }
 
     return () => clearTimeout(recordingRef.current!);
   }, [isRecording, recordingTimeLeft]);
 
+  
+  
   // Calculate pause duration
   const calculatePauseDuration = (currentIndex: number): number => {
     if (
@@ -532,6 +529,7 @@ const RepeatSentence: React.FC<getProps> = ({
     return formData;
   };
 
+  
   return (
     <div className="container mt-3">
       <p className="mockHead">
@@ -548,20 +546,39 @@ const RepeatSentence: React.FC<getProps> = ({
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
               width: "25em",
-              marginBottom: "15px"
+              marginBottom: "15px",
             }}
           >
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "15px" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                marginBottom: "15px",
+              }}
+            >
               <div>
                 <p style={{ marginBottom: 5 }}>Current status :</p>
-                <h3 style={{ marginTop: 0 }}>Completed</h3>
+                <h3 style={{ marginTop: 0 }}>
+                  {isPlayback
+                    ? "Playing..."
+                    : countdown > 0
+                    ? `Beginning in ${countdown} Seconds`
+                    : isAudioPlaying
+                    ? "Playing Audio..."
+                    : isRecording
+                    ? "Recording..."
+                    : "Completed"}
+                </h3>
               </div>
-              <span style={{ 
-                color: "red", 
-                fontSize: 20,
-                display: "flex",
-                alignItems: "center"
-              }}>
+              <span
+                style={{
+                  color: "red",
+                  fontSize: 20,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
                 🔊
               </span>
             </div>
@@ -572,7 +589,7 @@ const RepeatSentence: React.FC<getProps> = ({
                 borderRadius: 10,
                 position: "relative",
                 overflow: "hidden",
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <div
@@ -594,13 +611,19 @@ const RepeatSentence: React.FC<getProps> = ({
               padding: "20px",
               backgroundColor: "#f5f5f8",
               borderRadius: "5px",
-              width: "25em"
+              width: "25em",
             }}
           >
             <p style={{ marginBottom: 5 }}>Recorded Answer</p>
             <p style={{ marginBottom: 5 }}>Current status :</p>
             <h4 style={{ marginTop: 0 }}>
-              {isRecording ? "Recording..." : `Beginning in ${countdown} Seconds`}
+              {isRecording
+                ? "Recording..."
+                : countdown > 0
+                ? `Beginning in ${countdown} Seconds`
+                : isAudioPlaying
+                ? "Playing Audio..."
+                : "Completed"}
             </h4>
             <div
               style={{
@@ -609,7 +632,7 @@ const RepeatSentence: React.FC<getProps> = ({
                 borderRadius: 10,
                 position: "relative",
                 overflow: "hidden",
-                marginTop: 10
+                marginTop: 10,
               }}
             >
               <div

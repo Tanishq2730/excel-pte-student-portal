@@ -58,11 +58,11 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
         return (
           <FillIntheBlank {...commonProps} />
         );
-      case "MC, Select Single Answer":
+      case "MC, Choose Single Answer":
         return (
           <MultipleChooseSingleAnswer {...commonProps} />
         );
-      case "MC, Select Multiple Answer":
+      case "MC, Choose Multiple Answer":
         return (
           <MultipleChooseMultipleAnswer {...commonProps} />
         );

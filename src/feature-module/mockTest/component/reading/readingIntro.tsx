@@ -49,9 +49,9 @@ const ReadingIntro: React.FC<ReadingIntroProps> = ({
         return <ReadingWritingFillintheBlank {...commonProps} />;
       case "Reading Fill in the Blanks":
         return <ReadingFillintheBlank {...commonProps} />;
-      case "MC, Choose Single Answer":
+      case "MC, Select Single Answer":
         return <McChooseSingleAnswer {...commonProps} />;
-      case "MC, Choose Multiple Answer":
+      case "MC, Select Multiple Answer":
         return <MultipleChooseMultipleAnswer {...commonProps} />;
       default:
         return <div key={index}>Unsupported reading question type</div>;

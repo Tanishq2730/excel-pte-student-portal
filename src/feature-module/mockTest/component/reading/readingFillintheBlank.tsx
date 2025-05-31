@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect,useMemo } from "react";
 import parse, { DOMNode, Element } from "html-react-parser";
 import { useParams } from "react-router-dom";
 
@@ -60,113 +60,127 @@ const ReadingFillintheBlank: React.FC<getProps> = ({
     registerSubmit(handleSubmit);
   }, [answers]);
 
-  const dragDropOptions = question?.drag_drop
-    ? question.drag_drop.split(",").map((text: any) => text.trim())
-    : [];
-
-  const handleDragStart = (
-    e: React.DragEvent<HTMLDivElement | HTMLSpanElement>,
-    word: string
-  ) => {
+   const dragDropOptions = useMemo(() => {
+    return question?.drag_drop
+      ? question.drag_drop.split(",").map((text:any) => text.trim())
+      : [];
+  }, [question]);
+  
+  const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number) => {
     e.dataTransfer.setData("text/plain", word);
+    if (sourceIndex !== undefined) {
+      e.dataTransfer.setData("sourceIndex", sourceIndex.toString());
+    }
   };
-
-  const handleDrop = (e: React.DragEvent, index: number | null = null) => {
+  
+    const handleDrop = (e: React.DragEvent, targetIndex: number | null) => {
     e.preventDefault();
     const word = e.dataTransfer.getData("text/plain");
-
-    if (index !== null) {
-      setAnswers((prevAnswers) => {
-        const existingWord = prevAnswers[index];
-
-        if (existingWord === word) return prevAnswers; // if same word, do nothing
-
-        const updatedAnswers = { ...prevAnswers, [index]: word };
-
-        // Remove old word from usedWords if present
-        if (existingWord) {
-          setUsedWords((prevUsed) =>
-            prevUsed.filter((w) => w !== existingWord)
+    const sourceIndexRaw = e.dataTransfer.getData("sourceIndex");
+    const sourceIndex = sourceIndexRaw ? parseInt(sourceIndexRaw, 10) : null;
+  
+    if (!word) return;
+  
+    if (targetIndex !== null) {
+      setAnswers((prev) => {
+        const updated = { ...prev };
+  
+        // Remove word from source blank if exists
+        if (sourceIndex !== null && updated[sourceIndex] === word) {
+          delete updated[sourceIndex];
+        }
+  
+        // Remove any word already in target
+        if (updated[targetIndex]) {
+          const wordInTarget = updated[targetIndex];
+          setUsedWords((prevWords) =>
+            prevWords.filter((w) => w !== wordInTarget)
           );
         }
-
-        // Add new word to usedWords if not already present
-        setUsedWords((prevUsed) =>
-          prevUsed.includes(word) ? prevUsed : [...prevUsed, word]
-        );
-
-        return updatedAnswers;
+  
+        // Assign new word to target
+        updated[targetIndex] = word;
+        return updated;
+      });
+  
+      setUsedWords((prev) => {
+        const withoutWord = prev.filter((w) => w !== word);
+        return [...withoutWord, word];
       });
     } else {
-      // Dropping back into word bank
+      // Drop back to word bank
       const indexToRemove = Object.keys(answers).find(
         (key) => answers[parseInt(key, 10)] === word
       );
       if (indexToRemove !== undefined) {
         setAnswers((prev) => {
-          const newAnswers = { ...prev };
-          delete newAnswers[parseInt(indexToRemove)];
-          return newAnswers;
+          const updated = { ...prev };
+          delete updated[parseInt(indexToRemove)];
+          return updated;
         });
         setUsedWords((prev) => prev.filter((w) => w !== word));
       }
     }
   };
-
-  const handleDragOver = (e: React.DragEvent) => {
-    e.preventDefault();
-  };
-
-  let blankCounter = 0;
-
-  const correctAnswers = question?.answer_american
-    ? question.answer_american.split(",").map((ans: any) => ans.trim())
-    : [];
-
-  const customParseOptions = {
-    replace: (domNode: DOMNode) => {
-      if (
-        (domNode as Element).name === "span" &&
-        (domNode as Element).attribs?.class === "blank"
-      ) {
-        const currentIndex = blankCounter++;
-
-        const userAnswer = answers[currentIndex];
-        const correctAnswer = correctAnswers[currentIndex];
-
-        const isCorrect = showAnswer && userAnswer === correctAnswer;
-        const isFilled = !!userAnswer;
-
-        return (
-          <span
-            key={currentIndex}
-            onDrop={(e) => handleDrop(e, currentIndex)}
-            onDragOver={handleDragOver}
-            style={{
-              borderBottom: "2px dashed #aaa",
-              padding: "2px 10px",
-              minWidth: "60px",
-              marginRight: "4px",
-              textAlign: "center",
-              backgroundColor: isCorrect
-                ? "#d4edda" // ✅ Green for correct answer
-                : isFilled && showAnswer
-                ? "#f8d7da" // ❌ Light red for incorrect (optional)
-                : "#fff",
-              display: "inline-block",
-              cursor: "pointer",
-            }}
-          >
-            {userAnswer || ""}
-          </span>
-        );
-      }
-    },
-  };
-
-  const availableWords = dragDropOptions.filter(
-    (word: any) => !usedWords.includes(word)
-  );
+  
+    const handleDragOver = (e: React.DragEvent) => {
+      e.preventDefault();
+    };
+  
+    let blankCounter = 0;
+  
+    const correctAnswers = useMemo(() => {
+    return question?.answer_american
+      ? question.answer_american.split(",").map((ans:any) => ans.trim())
+      : [];
+  }, [question]);
+  
+    const customParseOptions = {
+      replace: (domNode: DOMNode) => {
+        if (
+          (domNode as Element).name === "span" &&
+          (domNode as Element).attribs?.class === "blank"
+        ) {
+          const currentIndex = blankCounter++;
+  
+          const userAnswer = answers[currentIndex];
+          const correctAnswer = correctAnswers[currentIndex];
+  
+          const isCorrect = showAnswer && userAnswer === correctAnswer;
+          const isFilled = !!userAnswer;
+  
+          return (
+            <span
+    key={currentIndex}
+    draggable={!!userAnswer}
+    onDragStart={(e) => handleDragStart(e, userAnswer, currentIndex)}
+    onDrop={(e) => handleDrop(e, currentIndex)}
+    onDragOver={handleDragOver}
+    style={{
+      borderBottom: "2px dashed #aaa",
+      padding: "2px 10px",
+      minWidth: "60px",
+      marginRight: "4px",
+      textAlign: "center",
+      backgroundColor: isCorrect
+        ? "#d4edda"
+        : isFilled && showAnswer
+        ? "#f8d7da"
+        : "#fff",
+      display: "inline-block",
+      cursor: !!userAnswer ? "grab" : "pointer",
+    }}
+  >
+    {userAnswer || ""}
+  </span>
+          );
+        }
+      },
+    };
+  
+    const availableWords = dragDropOptions.filter(
+      (word:any) => !usedWords.includes(word)
+    );
 
   return (
     <div className="container mt-3">
