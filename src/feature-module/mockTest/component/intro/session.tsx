@@ -27,7 +27,7 @@ const Session: React.FC = () => {
         ExcelPTE.
       </p>
 
-      <p style={{ color: "#ff0027" }}>
+      {/* <p style={{ color: "#ff0027" }}>
         <b>
           Disclaimer: We have enabled the option of "skip button" for our
           testing purposes and "skip timer" button to skip the practice time
@@ -36,7 +36,7 @@ const Session: React.FC = () => {
           their time. However, these two options are not available in the real
           PTE ACADEMIC TEST.
         </b>
-      </p>
+      </p> */}
 
       <div className="languageCard">
         <div className="container">

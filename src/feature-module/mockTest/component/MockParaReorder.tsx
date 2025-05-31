@@ -160,7 +160,7 @@ const MockParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReo
         onDragOver={handleDragOver}
         onDrop={() => handleDropLeft(item?.id)}
       >
-        <button className="btn btn-outline-primary w-100 text-start redorder-btn d-flex align-items-center">
+        <button className="btn innerout btn-outline-primary w-100 text-start redorder-btn d-flex align-items-center">
           <span className="me-2 fw-bold" style={{ minWidth: '30px' }}>{item?.order}</span>
           <p className="">{item?.text}</p>
         </button>
@@ -190,7 +190,7 @@ const MockParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReo
         {/* LEFT CARD */}
         <div className="col-md-6">
           <div className="card" onDragOver={handleDragOver}>
-            <div className="card-header bg-primary">
+            <div className="card-header bg-primary text-center">
               <h5 className="text-white m-0">Source</h5>
             </div>
             <div className="card-body">{renderLeftButtons()}</div>
@@ -204,7 +204,7 @@ const MockParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReo
           onDrop={() => handleDropRight(null)}
         >
           <div className="card">
-            <div className="card-header bg-success">
+            <div className="card-header bg-primary text-center">
               <h5 className="text-white m-0">Target</h5>
             </div>
             <div className="card-body">{renderRightButtons()}</div>
