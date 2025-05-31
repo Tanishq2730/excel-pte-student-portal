@@ -10,6 +10,7 @@ import HighlightCorrectSummary from "./highlightCorrectSummary";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
 import MockHeader from "../../../../core/common/mockHeader";
+import SuccesfullyCompleted from "../common/successfullyCompleted";
 
 interface ListeningIntroProps {
   queno: number;
@@ -135,8 +136,8 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
            setStep(step + 1);
          } else {
            setSectionPart(
-             <div className="container mt-5">
-               <h4>Listening section completed.</h4>
+             <div className="container">
+               <SuccesfullyCompleted/>
              </div>
            );
          }
@@ -165,7 +166,7 @@ const ListeningIntro: React.FC<ListeningIntroProps> = ({
                 onClick={handleNext}
                 disabled={step > listeningQuestions.length || step !== 0 && !isCountdownDone}
               >
-                {step === 0 ? "Start" : "Save & Next"}
+                {step === 0 ? "Start" : "Save & Exit" }
               </button>
             </div>
             {step > 0 && (

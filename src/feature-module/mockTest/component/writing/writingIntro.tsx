@@ -5,6 +5,7 @@ import WriteEssay from "./writeEssay";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
 import MockHeader from "../../../../core/common/mockHeader";
+import SuccesfullyCompleted from "../common/successfullyCompleted";
 
 interface WritingIntroProps {
   queno: number;
@@ -97,8 +98,8 @@ console.log(writingQuestions,'writingQuestions');
        setStep(step + 1);
      } else {
        setSectionPart(
-         <div className="container mt-5">
-           <h4>Reading section completed.</h4>
+         <div className="container ">
+           <SuccesfullyCompleted/>
          </div>
        );
      }
@@ -127,7 +128,7 @@ console.log(writingQuestions,'writingQuestions');
                 onClick={handleNext}
                 disabled={step > writingQuestions.length}
               >
-                {step === 0 ? "Start" : "Save & Next"}
+                {step === 0 ? "Start" : "Save & Exit"}
               </button>
             </div>
             {step > 0 && (

@@ -159,7 +159,7 @@ const HighlightIncorrectWord: React.FC<getProps> = ({
         Some words in the transcription differ from what the speaker said.
         Please click on the words that are different.
       </p>
-      <p>{question?.question_name}</p>
+      {/* <p>{question?.question_name}</p> */}
 
       {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">

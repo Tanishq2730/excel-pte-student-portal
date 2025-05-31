@@ -219,7 +219,7 @@ const FillIntheBlank: React.FC<getProps> = ({ question, setAnswer, registerSubmi
   return (
     <div className="container mt-3">
       <p className="mockHead">You will hear a recording. Type the missing words in each blank.</p>
-      <p>{question?.question_name}</p>
+      {/* <p>{question?.question_name}</p> */}
 
       {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">

@@ -17,6 +17,7 @@ import {
 } from "../../../../api/mocktestAPI";
 import { useParams } from "react-router-dom";
 import MockHeader from "../../../../core/common/mockHeader";
+import SuccesfullyCompleted from "../common/successfullyCompleted";
 
 interface SpeakingIntroProps {
   queno: number;
@@ -122,8 +123,8 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
       setStep(step + 1);
     } else {
       setSectionPart(
-        <div className="container mt-5">
-          <h4>Writing section completed.</h4>
+        <div className="container">
+         <SuccesfullyCompleted/>
         </div>
       );
     }
@@ -155,7 +156,7 @@ const SpeakingIntro: React.FC<SpeakingIntroProps> = ({
                   (step !== 0 && !isCountdownDone)
                 }
               >
-                {step === 0 ? "Start" : "Save & Next"}
+                {step === 0 ? "Start" : "Save & Exit"}
               </button>
             </div>
             {step > 0 && (

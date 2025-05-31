@@ -7,6 +7,7 @@ import MultipleChooseMultipleAnswer from "./multipleChooseMultipleAnswer";
 import { saveMocktestQuestion,saveFinalMocktest } from "../../../../api/mocktestAPI";
 import { useParams } from 'react-router-dom';
 import MockHeader from "../../../../core/common/mockHeader";
+import SuccesfullyCompleted from "../common/successfullyCompleted";
 
 interface ReadingIntroProps {
   queno: number;
@@ -105,8 +106,8 @@ const ReadingIntro: React.FC<ReadingIntroProps> = ({
       setStep(step + 1);
     } else {
       setSectionPart(
-        <div className="container mt-5">
-          <h4>Reading section completed.</h4>
+        <div className="container ">
+          <SuccesfullyCompleted/>
         </div>
       );
     }
@@ -135,7 +136,7 @@ const ReadingIntro: React.FC<ReadingIntroProps> = ({
                 onClick={handleNext}
                 disabled={step > readingQuestions.length}
               >
-                {step === 0 ? "Start" : "Save & Next"}
+                {step === 0 ? "Start" : "Save & Exit"}
               </button>
             </div>
             {step > 0 && (

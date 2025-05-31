@@ -1750,9 +1750,10 @@ body.app-chat {
     background-color: #33b9c7 !important;
     padding: 10px !important;
     margin-right: 1em;
-    border-radius: 5px;
+    border-radius: 10px;
     color: #fff;
     height: 100%;
+    margin-left: 4px;
   }
 }
 
@@ -2837,5 +2838,22 @@ body.app-chat {
     cursor: pointer;
     height: 40px;
     margin: 5px 0;
+  }
+}
+
+.check-img{
+  width: 8%;
+  margin: auto;
+}
+
+.mock-test-cards{
+  text-align: center;
+  margin:auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 88vh;
+  h2{
+    margin: 1em 0 3em;
   }
 }

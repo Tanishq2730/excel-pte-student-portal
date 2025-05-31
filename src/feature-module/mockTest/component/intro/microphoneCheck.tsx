@@ -136,7 +136,7 @@ const MicrophoneCheck: React.FC = () => {
             <br />
             3. Click "Stop" when done, then click "Playback" to listen.
             <br />
-            4. If you can’t hear your voice clearly, contact the administrator.
+            4. If you can't hear your voice clearly, contact the administrator.
           </p>
 
           <div className="descimgage2">
@@ -147,19 +147,39 @@ const MicrophoneCheck: React.FC = () => {
             {/* Progress Bar */}
             <div
               className="progress mb-3"
-              style={{ height: "12px", borderRadius: "20px", backgroundColor: "#e0e0e0",width:"16em" }}
+              style={{ 
+                height: "15px", 
+                borderRadius: "25px", 
+                backgroundColor: "#f0f0f0",
+                width: "20em",
+                boxShadow: "inset 0 1px 3px rgba(0,0,0,0.1)",
+                position: "relative",
+                overflow: "hidden"
+              }}
             >
               <div
                 className="progress-bar"
                 role="progressbar"
                 style={{
                   width: `${progress}%`,
-                  // width: `${progress}%`,
-                  backgroundColor: "#183052",
-                  transition: "width 0.2s linear",
+                  backgroundColor: recording ? "#ff4444" : "#183052",
+                  transition: "width 0.3s ease-in-out",
+                  borderRadius: "25px",
+                  backgroundImage: "linear-gradient(45deg, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent)",
+                  backgroundSize: "1rem 1rem",
+                  animation: recording ? "progress-bar-stripes 1s linear infinite" : "none"
                 }}
-              ></div>
+              />
             </div>
+
+            <style>
+              {`
+                @keyframes progress-bar-stripes {
+                  from { background-position: 1rem 0; }
+                  to { background-position: 0 0; }
+                }
+              `}
+            </style>
 
             {/* Audio Player */}
             <div className="my-3">

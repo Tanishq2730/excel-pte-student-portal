@@ -116,7 +116,7 @@ useEffect(() => {
   return (
     <div className="container mt-3">
       <p className="mockHead">You will hear a recording. Click on the paragraph that best relates to the recording.</p>
-      <p>{question?.question_name}</p>
+      {/* <p>{question?.question_name}</p> */}
 
       {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">

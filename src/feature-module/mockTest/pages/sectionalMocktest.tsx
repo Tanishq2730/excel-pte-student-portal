@@ -19,7 +19,9 @@ interface MockTest {
 
 const SectionalMocktest: React.FC = () => {
   const [types, setTypes] = useState<Type[]>([]);
-  const [mockTestsByType, setMockTestsByType] = useState<{ [key: number]: MockTest[] }>({});
+  const [mockTestsByType, setMockTestsByType] = useState<{
+    [key: number]: MockTest[];
+  }>({});
   const [activeTab, setActiveTab] = useState<number | null>(null);
 
   useEffect(() => {
@@ -37,10 +39,10 @@ const SectionalMocktest: React.FC = () => {
         }
 
         setMockTestsByType(mockTestsMap);
-         if (typeList.length > 0) {
-            setActiveTab(typeList[0].id);
-            localStorage.setItem("mockSection", typeList[0].name); // Set "Speaking" or first tab
-          }
+        if (typeList.length > 0) {
+          setActiveTab(typeList[0].id);
+          localStorage.setItem("mockSection", typeList[0].name); // Set "Speaking" or first tab
+        }
         if (typeList.length > 0) setActiveTab(typeList[0].id); // set first type as active tab
       } catch (err) {
         console.error("Error loading sectional mock tests:", err);
@@ -57,15 +59,20 @@ const SectionalMocktest: React.FC = () => {
             <h3>Sectional Mocktest</h3>
           </div>
           <div className="card-body">
-            <ul className="nav nav-pills justify-content-start nav-style-2 mb-3" role="tablist">
+            <ul
+              className="nav nav-pills justify-content-start nav-style-2 mb-3"
+              role="tablist"
+            >
               {types.map((type) => (
                 <li className="nav-item" key={type.id}>
                   <button
-                    className={`nav-link ${activeTab === type.id ? "active" : ""}`}
+                    className={`nav-link ${
+                      activeTab === type.id ? "active" : ""
+                    }`}
                     onClick={() => {
-                                      setActiveTab(type.id);
-                                      localStorage.setItem("mockSection", type.name);
-                                    }}
+                      setActiveTab(type.id);
+                      localStorage.setItem("mockSection", type.name);
+                    }}
                   >
                     {type.name}
                   </button>
@@ -76,13 +83,15 @@ const SectionalMocktest: React.FC = () => {
               {types.map((type) => (
                 <div
                   key={type.id}
-                  className={`tab-pane text-muted ${activeTab === type.id ? "show active" : ""}`}
+                  className={`tab-pane text-muted ${
+                    activeTab === type.id ? "show active" : ""
+                  }`}
                   role="tabpanel"
                 >
                   <div className="row">
                     {mockTestsByType[type.id]?.length ? (
                       mockTestsByType[type.id].map((test, index) => (
-                        <div className="col-md-3" key={test.id || index}>
+                        <div className="col-md-4" key={test.id || index}>
                           <MockTestCard
                             id={test.id}
                             name={test.name}

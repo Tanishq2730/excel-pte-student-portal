@@ -68,7 +68,7 @@ const FullMocktest: React.FC = () => {
           <div className="row">
             {mockTests.length > 0 ? (
               mockTests.map((test, index) => (
-                <div className="col-md-3" key={index}>
+                <div className="col-md-4" key={index}>
                   <MockTestCard
                     id={test.id}
                     name={test.name}

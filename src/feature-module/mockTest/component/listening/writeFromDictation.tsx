@@ -135,7 +135,7 @@ const WriteFromDictation: React.FC<getProps> = ({
         you hear it. Write as much of the sentence as you can. You will hear the
         sentence only once.
       </p>
-      <p>{question?.question_name}</p>
+      {/* <p>{question?.question_name}</p> */}
 
       {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">

@@ -160,9 +160,9 @@ const MockParaReorder = ({ questionData, onAnswerChange, resetTrigger }: ParaReo
         onDragOver={handleDragOver}
         onDrop={() => handleDropLeft(item?.id)}
       >
-        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-          <span>{item?.order} </span>
-          {item?.text}
+        <button className="btn btn-outline-primary w-100 text-start redorder-btn d-flex align-items-center">
+          <span className="me-2 fw-bold" style={{ minWidth: '30px' }}>{item?.order}</span>
+          <p className="">{item?.text}</p>
         </button>
       </div>
     ));

@@ -125,7 +125,7 @@ const SelectMissingWord: React.FC<getProps> = ({
         recording the lost word or group of words has been replaced by a beep.
         Select the correct option to complete the recording.
       </p>
-      <p>{question?.question_name}</p>
+      {/* <p>{question?.question_name}</p> */}
 
       {/* Progress Bar for Preparation Time */}
       <div className="recorderDetail">
