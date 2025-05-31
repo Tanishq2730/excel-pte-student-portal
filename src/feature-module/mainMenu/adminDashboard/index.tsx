@@ -96,7 +96,7 @@ const AdminDashboard = () => {
   }, []);
   const count = async () => {
     const res = await DashboardCounts();
-    // console.log(res);
+     console.log(res);
     if (res?.success) {
       setCounts(res.data);
     }
