@@ -148,13 +148,13 @@ const WriteFromDictation = () => {
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/fib/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(`/write-from-dictation/${subtype_id}/${questionData?.nextQuestionId}`);
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/fib/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(`/write-from-dictation/${subtype_id}/${questionData?.previousQuestionId}`);
     }
   };
 

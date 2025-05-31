@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback,useRef } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
 import CardHeading from "../component/cardHeading";
-import { fetchQuestionData } from "../../../api/practiceAPI";
+import { fetchQuestionData, savePractice } from "../../../api/practiceAPI";
 import { QuestionData } from "../../../core/data/interface";
 import { all_routes } from "../../router/all_routes";
 import CardButton from "../component/cardButton";
@@ -11,6 +11,8 @@ import QuestionNavigation from "../component/questionNavigation";
 import AudioPlayer from "../component/audioPlayer";
 import PageHeading from "../component/pageHeading";
 import MyNotes from "../component/myNotes";
+import SummarizeSpokenTextScoring from "../component/scoring/SummarizeSpokenTextScoring";
+import AlertComponent from "../../../core/common/AlertComponent";
 
 const SummarizeSpokenText = () => {
   const { subtype_id, question_id } = useParams<{
@@ -25,12 +27,47 @@ const SummarizeSpokenText = () => {
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [resetRecording, setResetRecording] = useState<boolean>(false); // Add reset state
   const [showNotes, setShowNotes] = useState<boolean>(false);
+  const [selectedLanguage, setSelectedLanguage] = useState("American");
+  const [wordCount, setWordCount] = useState(0);
+  const [summaryText, setSummaryText] = useState("");
+ const [alert, setAlert] = useState<{
+    type: "success" | "danger";
+    message: string;
+  } | null>(null);
+
+  const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const text = e.target.value;
+    setSummaryText(text);
+    const words = text
+      .trim()
+      .split(/\s+/)
+      .filter((word) => word.length > 0);
+    setWordCount(words.length);
+  };
+
+  const [timeSpent, setTimeSpent] = useState(0);
+  const startTime = useRef(Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const elapsedTime = (Date.now() - startTime.current) / 1000 / 60; // Convert to minutes
+      setTimeSpent(parseFloat(elapsedTime.toFixed(2))); // Parse back to number
+    }, 1000);
+
+    return () => clearInterval(interval);
+  }, []);
 
   const toggleNotes = () => {
     setShowNotes((prev) => !prev);
   };
-  useEffect(() => {
-    const getData = async () => {
+  useEffect(() => {   
+
+    if (subtype_id) {
+      getData();
+    }
+  }, [subtype_id, question_id, navigate]);
+
+  const getData = async () => {
       try {
         const subtypeIdNum = Number(subtype_id);
         const questionIdNum = question_id ? Number(question_id) : 0;
@@ -50,15 +87,10 @@ const SummarizeSpokenText = () => {
       }
     };
 
-    if (subtype_id) {
-      getData();
-    }
-  }, [subtype_id, question_id, navigate]);
-
   useEffect(() => {
-    if (questionData?.Subtype?.preparation_time) {
+    if (questionData?.Subtype?.remaining_time) {
       const preparationTimeInSeconds = parseInt(
-        questionData.Subtype.preparation_time,
+        questionData.Subtype.remaining_time,
         10
       );
       setCountdown(preparationTimeInSeconds);
@@ -67,7 +99,7 @@ const SummarizeSpokenText = () => {
   }, [questionData]);
 
   const startRecordingCallback = useCallback(() => {
-    if (questionData && questionData.Subtype.preparation_time === "0") {
+    if (questionData && questionData.Subtype.remaining_time === "0") {
       document.getElementById("startRecordingButton")?.click();
     }
   }, [questionData]);
@@ -107,7 +139,8 @@ const SummarizeSpokenText = () => {
     );
     setCountdown(preparationTimeInSeconds);
     setTimerActive(true); // Restart the countdown
-
+    setTimeSpent(0);
+    setSummaryText("");
     setShowAnswer(false); // Optionally reset the answer view
 
     // Trigger reset for recording
@@ -121,6 +154,8 @@ const SummarizeSpokenText = () => {
       navigate(
         `/summarize-spoken-text/${subtype_id}/${questionData?.nextQuestionId}`
       );
+      setTimeSpent(0);
+      setSummaryText("");
     }
   };
 
@@ -129,10 +164,79 @@ const SummarizeSpokenText = () => {
       navigate(
         `/summarize-spoken-text/${subtype_id}/${questionData?.previousQuestionId}`
       );
+      setTimeSpent(0);
+      setSummaryText("");
     }
   };
+
+  const handleSubmitPractice = async () => {
+    if (!questionData?.id || !subtype_id) return;
+
+    try {
+      const id = questionData.id;
+      const question = questionData.question || questionData.transcription;
+      const session_id = Math.random() * 1000;
+      const answerText = summaryText;
+      const wordCounts = wordCount;
+      const scoringData = { id, session_id, question, answerText, wordCount };
+
+      const result = await SummarizeSpokenTextScoring(
+        scoringData,
+        questionData,
+        selectedLanguage
+      );
+
+      if (result) {
+        const { score, totalscore, user_answer, score_data } = result;
+
+        // Now you can safely use score, totalScore, userAnswerText, scoredText
+        const payload = {
+          questionId: questionData.id,
+          totalscore: totalscore, // You can adjust this if you calculate it
+          lateSpeak: 1,
+          timeSpent: timeSpent,
+          score: score,
+          score_data: JSON.stringify(score_data),
+          answer: user_answer,
+        };
+        const response = await savePractice(false, payload);
+
+        if (response.success) {
+          getData();
+          const preparationTimeInSeconds = parseInt(
+            questionData?.Subtype.remaining_time || "0",
+            10
+          );
+          setCountdown(preparationTimeInSeconds);
+          setTimerActive(true); // Restart the countdown
+          setTimeSpent(0);
+          setShowAnswer(false); // Optionally reset the answer view
+          setSummaryText("");
+          setWordCount(0);
+          setAlert({ type: "success", message: "Your Answer Saved!" });
+        } else {
+          setAlert({ type: "danger", message: "Failed to save practice" });
+        }
+        // Continue with your logic...
+      } else {
+        // Handle the case where result is null or undefined
+        console.error("Scoring result is null or undefined");
+      }
+    } catch (error) {
+      console.error("Error saving practice:", error);
+      setAlert({ type: "danger", message: "Something went wrong." });
+    }
+  };
+
   return (
     <div className="page-wrappers">
+      {alert && (
+        <AlertComponent
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <div className="content">
         <div className="container">
           <div className="row">
@@ -171,13 +275,13 @@ const SummarizeSpokenText = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
-                        <AudioPlayer />
+                        <AudioPlayer questionData={questionData} />
                       </div>
                       <div className="micSection">
                         <div className="card">
                           <div className="card-header bg-white">
                             <div className="card-title">
-                              <h5>Total Word Count: 0</h5>
+                              <h5>Total Word Count: {wordCount}</h5>
                             </div>
                           </div>
                           <div className="card-body">
@@ -185,6 +289,8 @@ const SummarizeSpokenText = () => {
                               className="form-control"
                               rows={16}
                               placeholder="Write a Summary..."
+                              value={summaryText}
+                              onChange={handleTextChange}
                             ></textarea>
                           </div>
                         </div>
@@ -196,16 +302,12 @@ const SummarizeSpokenText = () => {
                         >
                           <div className="audio-inner p-4 rounded-3">
                           <h3 className="mb-3">Answer</h3>
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source
-                                  src="your-audio-file.mp3"
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                           <p
+                              dangerouslySetInnerHTML={{
+                                __html: questionData?.transcription || "",
+                              }}
+                            />
+                            <hr />                            
                           </div>
                         </div>
                       )}
@@ -216,6 +318,7 @@ const SummarizeSpokenText = () => {
                           onRestart={handleRestart}
                           onNext={handleNext}
                           onPrevious={handlePrevious}
+                          onSubmit={handleSubmitPractice}
                         />
                       </div>
                     </div>

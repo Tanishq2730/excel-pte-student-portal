@@ -160,7 +160,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                     {questionData?.Type?.name === "Reading" && (
                       <ReadingScoreModal logDetail={selectedLogDetails} />
                     )}
-                    {questionData?.Type?.name === "Listning" && (
+                    {questionData?.Type?.name === "Listening" && (
                       <ListeningScoreModal logDetail={selectedLogDetails} />
                     )}
                   </div>

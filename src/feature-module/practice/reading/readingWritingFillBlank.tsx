@@ -102,7 +102,7 @@ const ReadingWritngFillBlank = () => {
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
       navigate(
-        `/select-missing-word/${subtype_id}/${questionData?.nextQuestionId}`
+        `/reading-&-writng-fb/${subtype_id}/${questionData?.nextQuestionId}`
       );
     }
   };
@@ -110,7 +110,7 @@ const ReadingWritngFillBlank = () => {
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
       navigate(
-        `/select-missing-word/${subtype_id}/${questionData?.previousQuestionId}`
+        `/reading-&-writng-fb/${subtype_id}/${questionData?.previousQuestionId}`
       );
     }
   };
