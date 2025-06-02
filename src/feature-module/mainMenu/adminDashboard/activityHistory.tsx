@@ -42,9 +42,9 @@ const ActivityHistory: React.FC = () => {
             <li key={activity.id} className="list-group-item py-3 px-0 pb-0">
               <div className="d-flex align-items-center justify-content-between flex-wrap">
                 <div className="d-flex align-items-center overflow-hidden mb-3">
-                  <Link to="#" className="avatar activity-avatar avatar-xl flex-shrink-0 me-2">
+                  {/* <Link to="#" className="avatar activity-avatar avatar-xl flex-shrink-0 me-2">
                     <i className="ion-person"></i>
-                  </Link>
+                  </Link> */}
                   <div className="overflow-hidden">
                     <p className="d-flex align-items-center text-info mb-1">
                       {activity.badge}

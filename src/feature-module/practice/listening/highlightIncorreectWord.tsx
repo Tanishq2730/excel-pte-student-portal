@@ -326,7 +326,7 @@ const HighlightIncorrectWord = () => {
               </button>
             </div>
             <div className={showNotes ? "col-md-9" : "col-md-12"}>
-              <PageHeading title="Highlight Correct Word" />
+              <PageHeading title="Highlight Incorrect Word" />
               <div className="practiceLayout">
                 <p className="my-3">
                   There are some words missing in the following text. Please
@@ -375,16 +375,7 @@ const HighlightIncorrectWord = () => {
                         >
                           <div className="audio-inner p-4 rounded-3">
                           <h3 className="mb-3">Answer</h3>
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source
-                                  src="your-audio-file.mp3"
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                            
                           </div>
                         </div>
                       )}

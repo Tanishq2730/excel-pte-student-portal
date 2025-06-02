@@ -288,16 +288,7 @@ const ReOrderParagraph = () => {
              
                           >
                             <h3 className="mb-3">Answer</h3>
-                            <hr />
-                            <div className="rounded-pill">
-                              <audio controls className="w-100">
-                                <source
-                                  src="your-audio-file.mp3"
-                                  type="audio/mpeg"
-                                />
-                                Your browser does not support the audio element.
-                              </audio>
-                            </div>
+                            
                           </div>
                         </div>
                       )}

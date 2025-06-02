@@ -20,10 +20,20 @@ interface PracticeLog {
   createdAt: string;
   late_speak: boolean;
   total_score: number;
+  score_data: string;
+  Type: {
+    name: string;
+  };
   user: {
     name: string;
     profile_image: string | null;
   };
+  type_id: number;
+}
+
+interface ScoreData {
+  user_answer?: string;
+  correct_answer?: string;
 }
 
 const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
@@ -91,7 +101,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               </div>
             </div>
 
-            <div className=" align-items-start" style={{ width: "45%" }}>
+            <div className=" align-items-start" style={{ width: "25%" }}>
               <button
                 className="popbtn border rounded-pill px-2 py-1 me-3"
                 data-bs-toggle="modal"
@@ -110,9 +120,42 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                 </strong>
               </button>
               <div className="text-danger" style={{ fontSize: "0.9rem" }}>
-                {log.late_speak == false
-                  && "You have started speaking after 3 seconds and your response is not scored."}
+                {log.late_speak == false &&
+                  "You have started speaking after 3 seconds and your response is not scored."}
               </div>
+              {log?.type_id === 3 ||
+                (log?.type_id === 4 &&
+                  (() => {
+                    let parsedScoreData: any = {};
+                    try {
+                      parsedScoreData = JSON.parse(log?.score_data || "{}");
+                    } catch (err) {
+                      console.error(
+                        "Failed to parse score_data for log ID:",
+                        log.id,
+                        err
+                      );
+                    }
+
+                    return (
+                      <div className="mt-2">
+                        <div>
+                          <strong>Your Answer:</strong>{" "}
+                          <span>{parsedScoreData?.user_answer || "N/A"}</span>
+                        </div>
+                        <div>
+                          <strong>Correct Answer:</strong>{" "}
+                          <span>
+                            {parsedScoreData?.correct_answer || "N/A"}
+                          </span>
+                        </div>
+                      </div>
+                    );
+                  })())}
+            </div>
+
+            <div className=" align-items-start" style={{ width: "5%" }}>
+              <h5 className="mb-0">07:34</h5>
             </div>
 
             <div>

@@ -658,6 +658,15 @@ console.log(questionData);
                                 __html: questionData?.answer_american || "",
                               }}
                             />
+                            <hr />
+                          <audio controls className="w-100" style={{background:'#fff !important'}}>
+                            <source
+                              src="your-audio-file.mp3"
+                              type="audio/mpeg"
+                              style={{background:'#fff !important'}}
+                            />
+                            Your browser does not support the audio element.
+                          </audio>
                           </div>
                         </div>
                       )}

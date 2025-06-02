@@ -217,14 +217,13 @@ const SummarizeWritinText = () => {
 
   const [showDictionaryModal, setShowDictionaryModal] = useState(false);
   const [selectedWord, setSelectedWord] = useState<string>("");
-  
+
   const handleWordClick = (word: string) => {
     console.log(word);
-    
+
     setSelectedWord(word);
     setShowDictionaryModal(true);
   };
-
 
   return (
     <div className="page-wrappers">
@@ -262,7 +261,10 @@ const SummarizeWritinText = () => {
                   <div className="card-header">
                     <div className="card-title text-white">
                       {questionData?.question_name}
-                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>
+                      <span>
+                        {questionData?.tested === "yes" &&
+                          `Tested (${questionData?.tested_count})`}
+                      </span>
                     </div>
                   </div>
                   <div className="card-body">
@@ -275,17 +277,19 @@ const SummarizeWritinText = () => {
                       </div>
                       <div className="innercontent">
                         <p>
-                              {questionData?.question?.split(" ").map((word, idx) => (
-                                <span
-                                  key={idx}
-                                  onClick={() => handleWordClick(word)}
-                                  style={{ cursor: "pointer", marginRight: 4 }}
-                                  title="Click to see definition"
-                                >
-                                  {word}
-                                </span>
-                              ))}
-                            </p>  
+                          {questionData?.question
+                            ?.split(" ")
+                            .map((word, idx) => (
+                              <span
+                                key={idx}
+                                onClick={() => handleWordClick(word)}
+                                style={{ cursor: "pointer", marginRight: 4 }}
+                                title="Click to see definition"
+                              >
+                                {word}
+                              </span>
+                            ))}
+                        </p>
                       </div>
                       <div className="card">
                         <div className="card-header bg-white">
@@ -322,7 +326,7 @@ const SummarizeWritinText = () => {
                           }}
                         >
                           <div className="audio-inner p-4 rounded-3">
-                          <h3 className="mb-3">Answer</h3>
+                            <h3 className="mb-3">Answer</h3>
                             <hr />
                             <p
                               dangerouslySetInnerHTML={{
@@ -330,7 +334,6 @@ const SummarizeWritinText = () => {
                               }}
                             />
                             <hr />
-                            
                           </div>
                         </div>
                       )}
@@ -339,11 +342,11 @@ const SummarizeWritinText = () => {
                 </div>
               </div>
             </div>
-             <DictionaryModal
-                        isOpen={showDictionaryModal}
-                        onClose={() => setShowDictionaryModal(false)}
-                        word={selectedWord}
-                      />
+            <DictionaryModal
+              isOpen={showDictionaryModal}
+              onClose={() => setShowDictionaryModal(false)}
+              word={selectedWord}
+            />
             {showNotes && (
               <div className="col-md-3">
                 <MyNotes />

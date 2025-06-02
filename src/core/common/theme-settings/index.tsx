@@ -18,7 +18,7 @@ interface PracticeType {
   weekly: boolean;
   Subtype: Subtype;
   bookmarked: boolean;
-  image_type:string;
+  image_type: string;
 }
 
 const routeNameMap: { [key: string]: keyof typeof all_routes } = {
@@ -60,7 +60,14 @@ const ThemeSettings = () => {
   const location = useLocation();
 
   useEffect(() => {
-    setSidebarOpen(true);
+    const pathParts = location.pathname.split("/");
+    const currentMainPath = pathParts[1];
+    const previousMainPath = localStorage.getItem("previousMainPath");
+
+    if (currentMainPath !== previousMainPath) {
+      setSidebarOpen(true);
+      localStorage.setItem("previousMainPath", currentMainPath);
+    }
   }, [location.pathname]);
 
   const subtypeId = localStorage.getItem("subtypeId");
@@ -124,7 +131,10 @@ const ThemeSettings = () => {
       if (practiceStatus === "done" && !q.practiced) return false;
       if (practiceStatus === "pending" && q.practiced) return false;
 
-      if (questionData[0]?.Subtype?.sub_name === "Describe Image" && imageType !== "0") {
+      if (
+        questionData[0]?.Subtype?.sub_name === "Describe Image" &&
+        imageType !== "0"
+      ) {
         // Assuming questions have a field like `image_type` to compare against imageType
         if (q.image_type !== imageType) return false;
       }
@@ -156,17 +166,16 @@ const ThemeSettings = () => {
       console.error("Error toggling bookmark:", error);
     }
   };
-// console.log(questionData[0]?.Subtype?.sub_name);
+  // console.log(questionData[0]?.Subtype?.sub_name);
 
-const getQuestionLink = (q: PracticeType): string => {
-  const routeKey = routeNameMap[q.Subtype?.sub_name];
-  const route = all_routes[routeKey];
-  if (!route) return "#";
-  return route
-    .replace(":subtype_id", q.Subtype?.id.toString())
-    .replace("/:question_id?", `/${q.id}`);
-};
-
+  const getQuestionLink = (q: PracticeType): string => {
+    const routeKey = routeNameMap[q.Subtype?.sub_name];
+    const route = all_routes[routeKey];
+    if (!route) return "#";
+    return route
+      .replace(":subtype_id", q.Subtype?.id.toString())
+      .replace("/:question_id?", `/${q.id}`);
+  };
 
   return (
     <>
@@ -194,10 +203,15 @@ const getQuestionLink = (q: PracticeType): string => {
         </button>
 
         <div className="offcanvas-header d-flex align-items-center justify-content-between bg-light-500">
-          <PageHeading title={questionData[0]?.Subtype ? questionData[0]?.Subtype?.sub_name : 'NA'} />
+          <PageHeading
+            title={
+              questionData[0]?.Subtype
+                ? questionData[0]?.Subtype?.sub_name
+                : "NA"
+            }
+          />
           <div className="d-flex align-items-center">
             {/* <h4 className="mb-1">{questionData[0]?.Subtype?.sub_name}</h4> */}
-            
           </div>
 
           <div className="top-nav-search">
@@ -242,60 +256,62 @@ const getQuestionLink = (q: PracticeType): string => {
                       </li>
                     ))}
                     <div className="mainFilter">
-              <div className="myfilter" style={{ width: "40em" }}>
-                <div className="row g-3">
-                  <div className="col-md-6">
-                    <select
-                      id="difficulty"
-                      className="form-select"
-                      value={difficulty}
-                      onChange={(e) => setDifficulty(e.target.value)}
-                    >
-                      <option value="">Difficulty</option>
-                      {/* <option value="">All</option> */}
-                      <option value="easy">Easy</option>
-                      <option value="medium">Medium</option>
-                      <option value="hard">Hard</option>
-                    </select>
-                  </div>
+                      <div className="myfilter" style={{ width: "40em" }}>
+                        <div className="row g-3">
+                          <div className="col-md-6">
+                            <select
+                              id="difficulty"
+                              className="form-select"
+                              value={difficulty}
+                              onChange={(e) => setDifficulty(e.target.value)}
+                            >
+                              <option value="">Difficulty</option>
+                              {/* <option value="">All</option> */}
+                              <option value="easy">Easy</option>
+                              <option value="medium">Medium</option>
+                              <option value="hard">Hard</option>
+                            </select>
+                          </div>
 
-                  <div className="col-md-6">
-                    
-                    <select
-                      id="practiceStatus"
-                      className="form-select"
-                      value={practiceStatus}
-                      onChange={(e) => setPracticeStatus(e.target.value)}
-                    >
-                      <option value="all">Practice Status</option>
-                      {/* <option value="all">All</option> */}
-                      <option value="done">Done</option>
-                      <option value="pending">Pending</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-                    { questionData[0]?.Subtype?.sub_name === "Describe Image" &&
-                    <div className="col-md-2">
-                      <select
-                        id="imageType"
-                        className="form-select"
-                        value={imageType}
-                        onChange={(e) => setImageType(e.target.value)}
-                      >
-                        <option value="0">All</option>
-                        <option value="1">Line Graph</option>
-                        <option value="2">Bar Graph</option>
-                        <option value="3">Pie Chart</option>
-                        <option value="4">Table</option>
-                        <option value="5">Flow Chart</option>
-                        <option value="6">Image</option>
-                        <option value="7">Process</option>
-                        <option value="8">Maps</option>
-                      </select>
+                          <div className="col-md-6">
+                            <select
+                              id="practiceStatus"
+                              className="form-select"
+                              value={practiceStatus}
+                              onChange={(e) =>
+                                setPracticeStatus(e.target.value)
+                              }
+                            >
+                              <option value="all">Practice Status</option>
+                              {/* <option value="all">All</option> */}
+                              <option value="done">Done</option>
+                              <option value="pending">Pending</option>
+                            </select>
+                          </div>
+                        </div>
+                      </div>
                     </div>
-                    }
+                    {questionData[0]?.Subtype?.sub_name ===
+                      "Describe Image" && (
+                      <div className="col-md-2">
+                        <select
+                          id="imageType"
+                          className="form-select"
+                          value={imageType}
+                          onChange={(e) => setImageType(e.target.value)}
+                        >
+                          <option value="0">All</option>
+                          <option value="1">Line Graph</option>
+                          <option value="2">Bar Graph</option>
+                          <option value="3">Pie Chart</option>
+                          <option value="4">Table</option>
+                          <option value="5">Flow Chart</option>
+                          <option value="6">Image</option>
+                          <option value="7">Process</option>
+                          <option value="8">Maps</option>
+                        </select>
+                      </div>
+                    )}
                   </ul>
 
                   <div className="tab-content">
@@ -314,98 +330,103 @@ const getQuestionLink = (q: PracticeType): string => {
                       <div className="questionCard">
                         {paginatedQuestions.map((item, index) => (
                           <Link to={getQuestionLink(item)}>
-     
-    
-                          <div
-                            key={item.id}
-                            className={`card mb-3 p-3 d-flex justify-content-between onhovercard align-items-center ${
-                              activeIndex === index ? "border border-1" : ""
-                            }`}
-                            style={{
-                              borderColor:
-                                activeIndex === index ? "#000" : "#ccc",
-                              cursor: "pointer",
-                              borderRadius: "15px",
-                            }}
-                            onClick={() => setActiveIndex(index)}
-                          >
-                            <div className="d-flex align-items-center w-100">
-                              <div className="flex-grow-1">
-                                <strong>
-                                  {index + 1}. {item.question_name}
-                                </strong>
-                              </div>
-                              <div className="d-flex gap-2 align-items-center flex-wrap">
-                                {item.new_question && (
+                            <div
+                              key={item.id}
+                              className={`card mb-3 p-3 d-flex justify-content-between onhovercard align-items-center ${
+                                activeIndex === index ? "border border-1" : ""
+                              }`}
+                              style={{
+                                borderColor:
+                                  activeIndex === index ? "#000" : "#ccc",
+                                cursor: "pointer",
+                                borderRadius: "15px",
+                              }}
+                              onClick={() => {
+                                setActiveIndex(index);
+                                setSidebarOpen(false);
+                              }}
+                            >
+                              <div className="d-flex align-items-center w-100">
+                                <div className="flex-grow-1">
+                                  <strong>
+                                    {index + 1}. {item.question_name}
+                                  </strong>
+                                </div>
+                                <div className="d-flex gap-2 align-items-center flex-wrap">
+                                  {item.new_question && (
+                                    <span
+                                      className="btn btn-group py-1"
+                                      style={{
+                                        background: "#ff838333",
+                                        color: "#000",
+                                      }}
+                                    >
+                                      New
+                                    </span>
+                                  )}
                                   <span
                                     className="btn btn-group py-1"
                                     style={{
-                                      background: "#ff838333",
+                                      background: "#ffbb8a47",
                                       color: "#000",
                                     }}
                                   >
-                                    New
+                                    {item.difficulties}
                                   </span>
-                                )}
-                                <span
-                                  className="btn btn-group py-1"
-                                  style={{
-                                    background: "#ffbb8a47",
-                                    color: "#000",
-                                  }}
-                                >
-                                  {item.difficulties}
-                                </span>
-                                {item.weekly && (
+                                  {item.weekly && (
+                                    <span
+                                      className="btn btn-group py-1"
+                                      style={{
+                                        background: "#8ad9ff4d",
+                                        color: "#000",
+                                      }}
+                                    >
+                                      Prediction
+                                    </span>
+                                  )}
                                   <span
                                     className="btn btn-group py-1"
                                     style={{
-                                      background: "#8ad9ff4d",
-                                      color: "#000",
+                                      backgroundColor: item.practiced
+                                        ? "#6bff9133"
+                                        : "#6bff9133",
+                                      color: item.practiced
+                                        ? "#0f5132"
+                                        : "#000",
                                     }}
                                   >
-                                    Prediction
+                                    {item.practiced
+                                      ? "Practiced"
+                                      : "Unattempted"}
                                   </span>
-                                )}
-                                <span
-                                  className="btn btn-group py-1"
-                                  style={{
-                                    backgroundColor: item.practiced
-                                      ? "#6bff9133"
-                                      : "#6bff9133",
-                                    color: item.practiced ? "#0f5132" : "#000",
-                                  }}
-                                >
-                                  {item.practiced ? "Practiced" : "Unattempted"}
-                                </span>
 
-                                <button
-                                  className="btn btn-sm rounded-circle text-dark"
-                                  style={{
-                                    backgroundColor: item.bookmarked
-                                      ? "#f8d7da"
-                                      : "transparent",
-                                    border: "1px solid",
-                                    borderColor: "#dc3545",
-                                  }}
-                                  onClick={(e) => {
-                                    e.stopPropagation();
-                                    handleBookmarkToggle(item.id);
-                                  }}
-                                  title={
-                                    item.bookmarked
-                                      ? "Remove Bookmark"
-                                      : "Add Bookmark"
-                                  }
-                                >
-                                  <i
-                                    className={`fa fa-bookmark`}
-                                    style={{ color: "#dc3545" }}
-                                  />
-                                </button>
+                                  <button
+                                    className="btn btn-sm rounded-circle text-dark"
+                                    style={{
+                                      backgroundColor: item.bookmarked
+                                        ? "#f8d7da"
+                                        : "transparent",
+                                      border: "1px solid",
+                                      borderColor: "#dc3545",
+                                    }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleBookmarkToggle(item.id);
+                                    }}
+                                    title={
+                                      item.bookmarked
+                                        ? "Remove Bookmark"
+                                        : "Add Bookmark"
+                                    }
+                                  >
+                                    <i
+                                      className={`fa fa-bookmark`}
+                                      style={{ color: "#dc3545" }}
+                                    />
+                                  </button>
+                                </div>
                               </div>
                             </div>
-                          </div>
                           </Link>
                         ))}
                       </div>

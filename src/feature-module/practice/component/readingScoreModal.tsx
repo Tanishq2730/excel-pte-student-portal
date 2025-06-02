@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { image_url } from "../../../environment";
 
 interface ReadingScoreModalProps {
@@ -6,6 +6,17 @@ interface ReadingScoreModalProps {
 }
 
 const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
+  useEffect(() => {
+    // Log the entire logDetail object
+    console.log('Complete logDetail data:', logDetail);
+    
+    // Log specific important properties
+    console.log('Subtype:', logDetail?.subtype);
+    console.log('Score:', logDetail?.score);
+    console.log('Total Score:', logDetail?.total_score);
+    console.log('Answer:', logDetail?.answer);
+  }, [logDetail]);
+
   if (!logDetail) return null;
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;
@@ -41,6 +52,7 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
       totalscore: logDetail.total_score || 0,
       barColor: "#b0e0e6",
     },
+    
   ];
 
   return (
@@ -83,44 +95,49 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
             </div>
           </div>
         ))}
-        <div className="cardDetail">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">Correct answer</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <ul>
-                    <li>up</li>
-                    <li>seen</li>
-                    <li>so that</li>
-                    <li>up</li>
-                    <li>whilst</li>
-                    <li>covered</li>
-                  </ul>
+
+        {/* {scoreData.map((item, idx) => ( */}
+          <div className="cardDetail">
+            <div className="row">
+              <div className="col-md-6">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-center">Correct answer</div>
+                  </div>
+                  <div className="card-body" style={{ paddingLeft: "10em" }}>
+                    <ul>
+                      <li>up</li>
+                      <li>seen</li>
+                      <li>so that</li>
+                      <li>up</li>
+                      <li>whilst</li>
+                      <li>covered</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">User's Response</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <ul>
-                    <li className="right">up</li>
-                    <li className="right">seen</li>
-                    <li className="wrong">however</li>
-                    <li className="right">out</li>
-                    <li className="wrong">although</li>
-                    <li className="right">covered</li>
-                  </ul>
+              <div className="col-md-6">
+                <div className="card">
+                  <div className="card-header">
+                    <div className="card-title text-center">
+                      User's Response
+                    </div>
+                  </div>
+                  <div className="card-body" style={{ paddingLeft: "10em" }}>
+                    <ul>
+                      <li className="right">up</li>
+                      <li className="right">seen</li>
+                      <li className="wrong">however</li>
+                      <li className="right">out</li>
+                      <li className="wrong">although</li>
+                      <li className="right">covered</li>
+                    </ul>
+                  </div>
                 </div>
               </div>
             </div>
           </div>
-        </div>
+        {/* ))} */}
         <div className="cardDetail">
           <div className="row">
             <div className="col-md-6">
@@ -158,7 +175,7 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
                   <div className="card-title text-center">Correct answer</div>
                 </div>
                 <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <ul style={{color:"green"}}>
+                  <ul style={{ color: "green" }}>
                     <li>5</li>
                     <li>4</li>
                     <li>3</li>
@@ -173,7 +190,7 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
                   <div className="card-title text-center">User's Response</div>
                 </div>
                 <div className="card-body" style={{ paddingLeft: "10em" }}>
-                <ul>
+                  <ul>
                     <li>2</li>
                     <li>4</li>
                     <li>3</li>
