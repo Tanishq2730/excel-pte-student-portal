@@ -1610,7 +1610,7 @@ body.app-chat {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  .card-title{
+  .card-title {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -1751,15 +1751,21 @@ body.app-chat {
 }
 
 .redorder-btn {
-  padding-left: 0 !important;
-  span {
+  display: flex;
+  padding: 0 !important;
+  align-items: center;
+  h5 {
     // background-color: #33b9c7 !important;
-    padding: 10px !important;
+    padding: 20px !important;
     margin-right: 1em;
-    border-radius: 10px;
+    border-radius: 0px;
     color: #000000;
     height: 100%;
-    margin-left: 4px;
+    margin-left: 0px;
+    margin-bottom: 0;
+    height: 100%;
+    background-color: #1b507a;
+    color: #ffffff;
   }
 }
 
@@ -1778,8 +1784,7 @@ body.app-chat {
   text-align: center;
   font-family: sans-serif;
   box-shadow: 0 0 0 1px #d0f0f0;
-  border: 1px solid #1b507a
-  btn{
+  border: 1px solid #1b507a btn {
     width: 40% !important;
     margin: auto !important;
   }
@@ -2376,6 +2381,10 @@ body.app-chat {
   line-height: 2.2;
 }
 
+.innercontent span{
+  display: inline-block !important;
+}
+
 .mynotesBtn {
   position: fixed;
   right: 0;
@@ -2851,29 +2860,28 @@ body.app-chat {
   }
 }
 
-.check-img{
+.check-img {
   width: 8%;
   margin: auto;
 }
 
-.mock-test-cards{
+.mock-test-cards {
   text-align: center;
-  margin:auto;
+  margin: auto;
   display: flex;
   justify-content: center;
   align-items: center;
   height: 88vh;
-  h2{
+  h2 {
     margin: 1em 0 3em;
   }
 }
 
-.innerout{
-  p{
+.innerout {
+  p {
     padding-top: 0 !important;
     padding-top: 0 !important;
     color: #000 !important;
     line-height: 36px !important;
-
   }
 }

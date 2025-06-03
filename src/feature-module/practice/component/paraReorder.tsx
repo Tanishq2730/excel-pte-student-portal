@@ -165,8 +165,8 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
         onDrop={handleDropLeft}
       >
         <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-          <span>{index + 1}. </span>
-          {item.text}
+          <h5>{index + 1}. </h5>
+          <p>{item.text}</p>
         </button>
       </div>
     ));
@@ -182,9 +182,9 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
         onDragEnter={() => handleDragEnter(item.id)}
         onDrop={handleDropRight}
       >
-        <button className="btn btn-outline-success w-100 text-start redorder-btn">
-          <span>{index + 1}. </span>
-          {item.text}
+        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
+          <h5>{index + 1}. </h5>
+          <p>{item.text}</p>
         </button>
       </div>
     ));
@@ -194,22 +194,34 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
       <div className="row">
         {/* Left Panel */}
         <div
-          className="col-md-6 border p-3"
+          className="col-md-6  p-3"
           onDragOver={handleDragOver}
           onDrop={handleDropLeft}
         >
-          <h5>Left Panel</h5>
-          {renderLeftButtons()}
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title text-white">Left Panel</div>
+            </div>
+            <div className="card-body">
+              {renderLeftButtons()}
+            </div>
+          </div>
         </div>
 
         {/* Right Panel */}
         <div
-          className="col-md-6 border p-3"
+          className="col-md-6  p-3"
           onDragOver={handleDragOver}
           onDrop={handleDropRight}
         >
-          <h5>Right Panel</h5>
-          {renderRightButtons()}
+          <div className="card">
+            <div className="card-header">
+              <div className="card-title text-white">Right Panel</div>
+            </div>
+            <div className="card-body">
+              {renderRightButtons()}
+            </div>
+          </div>
         </div>
       </div>
       <div className="text-center mt-3">
