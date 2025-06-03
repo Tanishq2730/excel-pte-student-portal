@@ -258,7 +258,7 @@ const ThemeSettings = () => {
                     <div className="mainFilter">
                       <div className="myfilter" style={{ width: "40em" }}>
                         <div className="row g-3">
-                          <div className="col-md-6">
+                          <div className="col-md-4">
                             <select
                               id="difficulty"
                               className="form-select"
@@ -273,7 +273,7 @@ const ThemeSettings = () => {
                             </select>
                           </div>
 
-                          <div className="col-md-6">
+                          <div className="col-md-4">
                             <select
                               id="practiceStatus"
                               className="form-select"
@@ -288,30 +288,32 @@ const ThemeSettings = () => {
                               <option value="pending">Pending</option>
                             </select>
                           </div>
+                          <div className="col-md-4">
+                            {questionData[0]?.Subtype?.sub_name ===
+                              "Describe Image" && (
+                              <div className="">
+                                <select
+                                  id="imageType"
+                                  className="form-select"
+                                  value={imageType}
+                                  onChange={(e) => setImageType(e.target.value)}
+                                >
+                                  <option value="0">Select Type</option>
+                                  <option value="1">Line Graph</option>
+                                  <option value="2">Bar Graph</option>
+                                  <option value="3">Pie Chart</option>
+                                  <option value="4">Table</option>
+                                  <option value="5">Flow Chart</option>
+                                  <option value="6">Image</option>
+                                  <option value="7">Process</option>
+                                  <option value="8">Maps</option>
+                                </select>
+                              </div>
+                            )}
+                          </div>
                         </div>
                       </div>
                     </div>
-                    {questionData[0]?.Subtype?.sub_name ===
-                      "Describe Image" && (
-                      <div className="col-md-2">
-                        <select
-                          id="imageType"
-                          className="form-select"
-                          value={imageType}
-                          onChange={(e) => setImageType(e.target.value)}
-                        >
-                          <option value="0">All</option>
-                          <option value="1">Line Graph</option>
-                          <option value="2">Bar Graph</option>
-                          <option value="3">Pie Chart</option>
-                          <option value="4">Table</option>
-                          <option value="5">Flow Chart</option>
-                          <option value="6">Image</option>
-                          <option value="7">Process</option>
-                          <option value="8">Maps</option>
-                        </select>
-                      </div>
-                    )}
                   </ul>
 
                   <div className="tab-content">
@@ -396,7 +398,7 @@ const ThemeSettings = () => {
                                     }}
                                   >
                                     {item.practiced
-                                      ? "Practiced"
+                                      ? "Attempted"
                                       : "Unattempted"}
                                   </span>
 

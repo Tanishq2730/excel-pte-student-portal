@@ -231,7 +231,7 @@ const MultipleChooseSingleAnswerListen = () => {
                         <div className="card-body">
                           <div className="row g-3">
                             {options.map((option) => (
-                              <div key={option.id} className="col-12 col-md-12">
+                              <div key={option.id} className="col-12 col-md-6">
                                 <div className="d-flex align-items-start border rounded p-3 h-100">
                                   <input
                                     type="checkbox"

@@ -37,9 +37,9 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
       <div className="col-md-6">
         <div className="btnBottom">
           {onSubmit && (
-            <button className="btn btn-info" onClick={onSubmit}>
+            <a href="#community" className="btn btn-info" onClick={onSubmit}>
               Submit
-            </button>
+            </a>
           )}
           <button className="btn btn-info mx-3" onClick={onRestart}>
             Re-Start

@@ -76,7 +76,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
   };
 
   return (
-    <>
+    <div className="practice-data-container">
       {practiceLogs.length === 0 ? (
         <p className="text-center text-muted">No practice logs found.</p>
       ) : (
@@ -95,9 +95,9 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               </div>
               <div>
                 <div className="fw-bold">{log.user.name}</div>
-                <div style={{ fontSize: "0.9rem" }}>
+                {/* <div style={{ fontSize: "0.9rem" }}>
                   {moment(log.createdAt).format("DD/MM/YYYY")}
-                </div>
+                </div> */}
               </div>
             </div>
 
@@ -154,8 +154,11 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                   })())}
             </div>
 
-            <div className=" align-items-start" style={{ width: "5%" }}>
-              <h5 className="mb-0">07:34</h5>
+            <div className="align-items-start" style={{ width: "15%" }}>
+              <div style={{ fontSize: "0.9rem" }}>
+                {moment(log.createdAt).format("DD/MM/YYYY")}
+              </div>
+              <h5 className="mb-0" style={{ fontSize: "0.9rem" }}>07:34</h5>
             </div>
 
             <div>
@@ -250,7 +253,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
           </div>
         ))
       )}
-    </>
+    </div>
   );
 };
 

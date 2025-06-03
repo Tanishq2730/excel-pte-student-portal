@@ -110,7 +110,7 @@ const Ptetestcard: React.FC = () => {
   };
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="content">
         <div className="container my-5">
         <div className="mainHead pb-3">

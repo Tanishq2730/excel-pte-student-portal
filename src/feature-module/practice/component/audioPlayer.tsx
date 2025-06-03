@@ -126,7 +126,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
         <div className="flex-grow-1 me-2" style={{ minWidth: "200px",display:'flex',alignItems:'center' }}>
           <input
             type="range"
-            className="form-range"
+            className="form-range mainRange"
             value={currentTime}
             max={duration}
             onChange={handleProgressChange}

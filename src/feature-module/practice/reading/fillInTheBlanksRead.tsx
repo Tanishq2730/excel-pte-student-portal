@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef,useMemo } from "react";
+import React, { useState, useEffect, useRef, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import RecorderComponent from "../component/recorderComponent";
 import Community from "../component/Community/community";
@@ -115,67 +115,71 @@ const FillInTheBlanksRead = () => {
   };
 
   const dragDropOptions = useMemo(() => {
-  return questionData?.drag_drop
-    ? questionData.drag_drop.split(",").map((text) => text.trim())
-    : [];
-}, [questionData]);
+    return questionData?.drag_drop
+      ? questionData.drag_drop.split(",").map((text) => text.trim())
+      : [];
+  }, [questionData]);
 
-const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number) => {
-  e.dataTransfer.setData("text/plain", word);
-  if (sourceIndex !== undefined) {
-    e.dataTransfer.setData("sourceIndex", sourceIndex.toString());
-  }
-};
+  const handleDragStart = (
+    e: React.DragEvent,
+    word: string,
+    sourceIndex?: number
+  ) => {
+    e.dataTransfer.setData("text/plain", word);
+    if (sourceIndex !== undefined) {
+      e.dataTransfer.setData("sourceIndex", sourceIndex.toString());
+    }
+  };
 
   const handleDrop = (e: React.DragEvent, targetIndex: number | null) => {
-  e.preventDefault();
-  const word = e.dataTransfer.getData("text/plain");
-  const sourceIndexRaw = e.dataTransfer.getData("sourceIndex");
-  const sourceIndex = sourceIndexRaw ? parseInt(sourceIndexRaw, 10) : null;
+    e.preventDefault();
+    const word = e.dataTransfer.getData("text/plain");
+    const sourceIndexRaw = e.dataTransfer.getData("sourceIndex");
+    const sourceIndex = sourceIndexRaw ? parseInt(sourceIndexRaw, 10) : null;
 
-  if (!word) return;
+    if (!word) return;
 
-  if (targetIndex !== null) {
-    setAnswers((prev) => {
-      const updated = { ...prev };
-
-      // Remove word from source blank if exists
-      if (sourceIndex !== null && updated[sourceIndex] === word) {
-        delete updated[sourceIndex];
-      }
-
-      // Remove any word already in target
-      if (updated[targetIndex]) {
-        const wordInTarget = updated[targetIndex];
-        setUsedWords((prevWords) =>
-          prevWords.filter((w) => w !== wordInTarget)
-        );
-      }
-
-      // Assign new word to target
-      updated[targetIndex] = word;
-      return updated;
-    });
-
-    setUsedWords((prev) => {
-      const withoutWord = prev.filter((w) => w !== word);
-      return [...withoutWord, word];
-    });
-  } else {
-    // Drop back to word bank
-    const indexToRemove = Object.keys(answers).find(
-      (key) => answers[parseInt(key, 10)] === word
-    );
-    if (indexToRemove !== undefined) {
+    if (targetIndex !== null) {
       setAnswers((prev) => {
         const updated = { ...prev };
-        delete updated[parseInt(indexToRemove)];
+
+        // Remove word from source blank if exists
+        if (sourceIndex !== null && updated[sourceIndex] === word) {
+          delete updated[sourceIndex];
+        }
+
+        // Remove any word already in target
+        if (updated[targetIndex]) {
+          const wordInTarget = updated[targetIndex];
+          setUsedWords((prevWords) =>
+            prevWords.filter((w) => w !== wordInTarget)
+          );
+        }
+
+        // Assign new word to target
+        updated[targetIndex] = word;
         return updated;
       });
-      setUsedWords((prev) => prev.filter((w) => w !== word));
+
+      setUsedWords((prev) => {
+        const withoutWord = prev.filter((w) => w !== word);
+        return [...withoutWord, word];
+      });
+    } else {
+      // Drop back to word bank
+      const indexToRemove = Object.keys(answers).find(
+        (key) => answers[parseInt(key, 10)] === word
+      );
+      if (indexToRemove !== undefined) {
+        setAnswers((prev) => {
+          const updated = { ...prev };
+          delete updated[parseInt(indexToRemove)];
+          return updated;
+        });
+        setUsedWords((prev) => prev.filter((w) => w !== word));
+      }
     }
-  }
-};
+  };
 
   const handleDragOver = (e: React.DragEvent) => {
     e.preventDefault();
@@ -184,10 +188,10 @@ const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number)
   let blankCounter = 0;
 
   const correctAnswers = useMemo(() => {
-  return questionData?.answer_american
-    ? questionData.answer_american.split(",").map((ans) => ans.trim())
-    : [];
-}, [questionData]);
+    return questionData?.answer_american
+      ? questionData.answer_american.split(",").map((ans) => ans.trim())
+      : [];
+  }, [questionData]);
 
   const customParseOptions = {
     replace: (domNode: DOMNode) => {
@@ -205,28 +209,36 @@ const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number)
 
         return (
           <span
-  key={currentIndex}
-  draggable={!!userAnswer}
-  onDragStart={(e) => handleDragStart(e, userAnswer, currentIndex)}
-  onDrop={(e) => handleDrop(e, currentIndex)}
-  onDragOver={handleDragOver}
-  style={{
-    borderBottom: "2px dashed #aaa",
-    padding: "2px 10px",
-    minWidth: "60px",
-    marginRight: "4px",
-    textAlign: "center",
-    backgroundColor: isCorrect
-      ? "#d4edda"
-      : isFilled && showAnswer
-      ? "#f8d7da"
-      : "#fff",
-    display: "inline-block",
-    cursor: !!userAnswer ? "grab" : "pointer",
-  }}
->
-  {userAnswer || "___"}
-</span>
+            className="fillblankreading"
+            key={currentIndex}
+            draggable={!!userAnswer}
+            onDragStart={(e) => handleDragStart(e, userAnswer, currentIndex)}
+            onDrop={(e) => handleDrop(e, currentIndex)}
+            onDragOver={handleDragOver}
+            style={{
+              borderBottom: "2px solid #aaa",
+              padding: "4px 12px",
+              minWidth: "80px",
+              marginRight: "4px",
+              marginLeft: "4px",
+              textAlign: "center",
+              backgroundColor: isCorrect
+                ? "#d4edda"
+                : isFilled && showAnswer
+                ? "#f8d7da"
+                : "#fff",
+              display: "inline-flex",
+              alignItems: "center",
+              justifyContent: "center",
+              height: "35px",
+              verticalAlign: "middle",
+              borderRadius: "4px",
+              cursor: !!userAnswer ? "grab" : "pointer",
+              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
+            }}
+          >
+            {userAnswer || ""}
+          </span>
         );
       }
     },
@@ -334,7 +346,10 @@ const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number)
                   <div className="card-header">
                     <div className="card-title text-white">
                       {questionData?.question_name}
-                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>
+                      <span>
+                        {questionData?.tested === "yes" &&
+                          `Tested (${questionData?.tested_count})`}
+                      </span>
                     </div>
                   </div>
                   <div className="card-body">
@@ -362,7 +377,28 @@ const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number)
                               key={idx}
                               draggable
                               onDragStart={(e) => handleDragStart(e, word)}
-                              className="btn btn-secondary rounded-pill"                             
+                              className="btn btn-secondary rounded-pill"
+                              style={{
+                                padding: "8px 16px",
+                                margin: "4px",
+                                backgroundColor: "#f8f9fa",
+                                color: "#333",
+                                border: "1px solid #ddd",
+                                fontWeight: "500",
+                                transition: "all 0.2s ease",
+                                cursor: "grab",
+                                boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+                              }}
+                              onMouseOver={(e) => {
+                                e.currentTarget.style.backgroundColor = "#e9ecef";
+                                e.currentTarget.style.transform = "translateY(-1px)";
+                                e.currentTarget.style.boxShadow = "0 2px 4px rgba(0,0,0,0.15)";
+                              }}
+                              onMouseOut={(e) => {
+                                e.currentTarget.style.backgroundColor = "#f8f9fa";
+                                e.currentTarget.style.transform = "translateY(0)";
+                                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,0,0,0.1)";
+                              }}
                             >
                               {word}
                             </div>
@@ -387,12 +423,10 @@ const handleDragStart = (e: React.DragEvent, word: string, sourceIndex?: number)
                         style={{ background: "rgb(228 246 255)" }}
                       >
                         <div className="audio-inner p-4 rounded-3">
-                        <h3 className="mb-3">Answer</h3>
+                          <h3 className="mb-3">Answer</h3>
                           <p>
-                            <b>Correct Answers : </b>{" "}
-                            {questionData?.answer_american}
+                            <b></b> {questionData?.answer_american}
                           </p>
-                          
                         </div>
                       </div>
                     )}
