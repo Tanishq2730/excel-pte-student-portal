@@ -81,6 +81,10 @@ const ReadAloud = () => {
 
   const timeSpentRef = useRef(0);
 
+
+
+
+
   useEffect(() => {
     const interval = setInterval(() => {
       timeSpentRef.current = (Date.now() - startTime.current) / 1000 / 60;
@@ -492,6 +496,10 @@ const ReadAloud = () => {
         pronunciation: pronunciationScoreOutOf90,
         transcript: questionData?.transcription,
         scored_transcript: combinedTranscriptHTML,
+        badWords:badWords,
+        avgWords:avgWords,
+        pauseWords:pauseWords,
+        goodWords:goodWords
       };
 
       const questionId = questionData?.id;

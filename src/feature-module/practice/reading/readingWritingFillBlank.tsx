@@ -29,6 +29,7 @@ const ReadingWritngFillBlank = () => {
   const [countdown, setCountdown] = useState<number>(0);
   const [timerActive, setTimerActive] = useState<boolean>(false);
   const [userAnswers, setUserAnswers] = useState<string[]>([]);
+  const userAnswersRef = useRef<string[]>([]);
   const [submitted, setSubmitted] = useState(false);
   const [timeSpent, setTimeSpent] = useState(0);
   const startTime = useRef(Date.now());
@@ -127,11 +128,23 @@ const ReadingWritngFillBlank = () => {
     setShowAnswer(false); // Optionally reset the answer view
   };
 
-  const handleDropdownChange = (index: number, value: string) => {
-    const updated = [...userAnswers];
-    updated[index] = value;
-    setUserAnswers(updated);
-  };
+  useEffect(() => {
+  if (questionData?.question) {
+    const dropdownCount = (questionData.question.match(/<select/g) || []).length;
+    const initialAnswers = Array(dropdownCount).fill("");
+    setUserAnswers(initialAnswers);
+    userAnswersRef.current = initialAnswers;
+  }
+}, [questionData]);
+
+const handleDropdownChange = (index: number, value: string) => {
+  const updated = [...userAnswers];
+  updated[index] = value.trim();
+  setUserAnswers(updated);
+  userAnswersRef.current = updated;
+};
+
+ console.log(userAnswers);
 
   const handleSubmitPractice = async () => {
     setSubmitted(true);
@@ -139,9 +152,9 @@ const ReadingWritngFillBlank = () => {
 
     try {
       // Convert answers to string
-      const answerArray = Object.values(correctAnswers);
-      const userAnswerStr = answerArray.join(",");
-      const correctAnswerStr = correctAnswers.join(",");
+    const answerArray = userAnswersRef.current; // <--- use ref here
+    const userAnswerStr = answerArray.join(",");
+    const correctAnswerStr = correctAnswers.join(",");
 
       // Score logic
       let score = 0;
@@ -150,6 +163,7 @@ const ReadingWritngFillBlank = () => {
           score++;
         }
       });
+      
       const totalscore = answerArray.length;
 
       const score_data = {
@@ -208,94 +222,97 @@ const ReadingWritngFillBlank = () => {
   };
   
   
-  const renderQuestionWithDropdowns = (): { __html: string } | undefined => {
-  if (!questionData?.question) return undefined;
+ const renderQuestionWithDropdowns = () => {
+  if (!questionData?.question) return null;
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(questionData.question, "text/html");
 
-  const wrapWords = (node: ChildNode) => {
+  const elements: React.ReactNode[] = [];
+
+  let dropdownIndex = 0;
+
+  const traverse = (node: ChildNode | HTMLElement) => {
     if (node.nodeType === Node.TEXT_NODE) {
       const text = node.textContent || "";
-      const words = text.split(/(\s+)/); // keep spaces
+      const words = text.split(/(\s+)/); // Keep spaces
 
-      const wrapped = words
-        .map((word) => {
-          const trimmed = word.trim();
-          if (!trimmed) return word;
+      words.forEach((word, i) => {
+        const trimmed = word.trim();
+        if (!trimmed) {
+          elements.push(" ");
+        } else {
+          elements.push(
+            <span
+              key={`word-${elements.length}-${i}`}
+              onClick={() => handleWordClick(trimmed)}
+              style={{ cursor: "pointer" }}
+            >
+              {word}
+            </span>
+          );
+        }
+      });
+    } else if (node.nodeName === "SELECT") {
+      const select = node as HTMLSelectElement;
+      const options = Array.from(select.querySelectorAll("option")).map(
+        (opt) => opt.textContent || ""
+      );
 
-          const span = document.createElement("span");
-          span.textContent = word;
-          span.style.cursor = "pointer";
+      const selectedValue = userAnswers[dropdownIndex] || "";
+      const correctAnswer = correctAnswers[dropdownIndex];
 
-          span.onclick = () => handleWordClick(trimmed);
+      const borderClass =
+        showAnswer && selectedValue
+          ? selectedValue === correctAnswer
+            ? "border-success text-success"
+            : "border-danger text-danger"
+          : "";
 
-          const wrapper = document.createElement("span");
-          wrapper.appendChild(span);
-          return wrapper.innerHTML;
-        })
-        .join("");
+      elements.push(
+        <React.Fragment key={`dropdown-${dropdownIndex}`}>
+          <select
+            className={`form-select d-inline w-auto mx-1 align-baseline ${borderClass}`}
+            value={(userAnswers[dropdownIndex] || "").trim()}
+            onChange={(e) =>
+              handleDropdownChange(dropdownIndex, e.target.value)
+            }
+          >
+            <option value="" disabled>
+              Select
+            </option>
+            {options.map((opt, idx) => (
+              <option key={idx} value={opt.trim()} >
+                {opt}
+              </option>
+            ))}
+          </select>
 
-      const wrapper = document.createElement("span");
-      wrapper.innerHTML = wrapped;
-      node.replaceWith(wrapper);
-    } else if (node.childNodes) {
-      Array.from(node.childNodes).forEach(wrapWords);
+          {showAnswer && (
+            <strong
+              className="ml-2"
+              style={{
+                backgroundColor: "#d4edda",
+                padding: "2px 6px",
+                borderRadius: "4px",
+                marginLeft: "4px",
+                color: "#155724",
+              }}
+            >
+              {correctAnswer}
+            </strong>
+          )}
+        </React.Fragment>
+      );
+
+      dropdownIndex++;
+    } else {
+      node.childNodes.forEach((child) => traverse(child));
     }
   };
 
-  wrapWords(doc.body);
-
-  const selects = Array.from(doc.querySelectorAll("select"));
-  selects.forEach((select, index) => {
-    const options = Array.from(select.querySelectorAll("option")).map(
-      (opt) => opt.textContent || ""
-    );
-    const selectedValue = userAnswers[index] || "";
-    const correctAnswer = correctAnswers[index];
-
-    const borderClass =
-      showAnswer && selectedValue
-        ? selectedValue === correctAnswer
-          ? "border-success text-success"
-          : "border-danger text-danger"
-        : "";
-
-    const dropdown = (
-      <select
-        value={selectedValue}
-        onChange={(e) => handleDropdownChange(index, e.target.value)}
-        className={`form-select d-inline w-auto mx-1 align-baseline ${borderClass}`}
-      >
-        <option value="" disabled>
-          Select
-        </option>
-        {options.map((opt, i) => (
-          <option key={i} value={opt}>
-            {opt}
-          </option>
-        ))}
-      </select>
-    );
-
-    const wrapper = document.createElement("span");
-    wrapper.innerHTML = ReactDOMServer.renderToStaticMarkup(dropdown);
-    select.replaceWith(wrapper);
-
-    if (showAnswer) {
-      const correctSpan = document.createElement("strong");
-      correctSpan.textContent = ` ${correctAnswer}`;
-      correctSpan.style.backgroundColor = "#d4edda";
-      correctSpan.style.padding = "2px 6px";
-      correctSpan.style.borderRadius = "4px";
-      correctSpan.style.marginLeft = "4px";
-      correctSpan.style.color = "#155724";
-
-      wrapper.appendChild(correctSpan);
-    }
-  });
-
-  return { __html: doc.body.innerHTML };
+  traverse(doc.body);
+  return <div>{elements}</div>;
 };
 
   const correctAnswers = questionData?.answer_american?.split(",") || [];
@@ -340,10 +357,7 @@ const ReadingWritngFillBlank = () => {
                         </span>
                         <CardButton questionData={questionData} />
                       </div>
-                      <div
-                        className="innercontent"
-                        dangerouslySetInnerHTML={renderQuestionWithDropdowns()}
-                      />
+                      <div>{renderQuestionWithDropdowns()}</div>
 
                       <div className="bottomBtn mt-3">
                         <QuestionNavigation

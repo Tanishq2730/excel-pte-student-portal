@@ -65,13 +65,16 @@ const SpeakingScoreModal: React.FC<SpeakingScoreModalProps> = ({
       </div>
       <div className="mt-2 mb-3">
         <button className="btn btn-outline-danger">
-          <span className="">Bad words :30</span>
+          <span className="">Bad words :{parsedScoreData.badWords}</span>
         </button>
         <button className="btn btn-outline-warning mx-3">
-          <span className=""> AVG Words :40</span>
+          <span className=""> AVG Words :{parsedScoreData.avgWords}</span>
         </button>
         <button className="btn btn-outline-success">
-          <span className="">Good Words :60</span>
+          <span className="">Good Words :{parsedScoreData.goodWords}</span>
+        </button>
+        <button className="btn btn-outline-info mx-3">
+          <span className="">Pauses Words :{parsedScoreData.pauseWords}</span>
         </button>
       </div>
       {/* Scored Transcript */}

@@ -338,7 +338,12 @@ const MultipleChooseAnswerListen = () => {
                           style={{ background: "#ffe4e4" }}
                         >
                           <div className="audio-inner p-4 rounded-3">
-                          <h3 className="mb-3">Answer</h3>                           
+                          <h3 className="mb-3">Answer</h3>  
+                           <p
+                              dangerouslySetInnerHTML={{
+                                __html: questionData?.answer_american || "",
+                              }}
+                            />                         
                           </div>
                         </div>
                       )}

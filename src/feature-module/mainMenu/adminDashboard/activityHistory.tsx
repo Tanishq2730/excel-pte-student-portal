@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import ImageWithBasePath from "../../../core/common/imageWithBasePath";
 import { RecentActivity } from "../../../api/dashboardAPI";
+import { all_routes } from "../../router/all_routes";
 
 interface RecentActivityType {
   id: number;
@@ -9,11 +10,39 @@ interface RecentActivityType {
   description: string;
   image: string;
   badge: string;
+  type:string;
+  questionId:number;
+  sub_type_id:number;
   created_at: string;
 }
 
+const routeNameMap: { [key: string]: keyof typeof all_routes } = {
+  "Read Aloud": "readAloud",
+  "Repeat Sentence": "repeatSentence",
+  "Describe Image": "describeImage",
+  "Re-tell Lecture": "reTellLecture",
+  "Answer Short Question": "answerShortQuestion",
+  "Respond to Situation": "respondSituation",
+  "Summarize Written Text": "summarizeWritinText",
+  "Write Essay": "writeEssay",
+  "Write Email": "writeEmail",
+  "Reading and Writing Fill in the Blanks": "readingWritngFillBlank",
+  "MC, Choose Multiple Answer": "multipleChooseAnswer",
+  "MC, Choose Single Answer": "multipleChooseSingleAnswer",
+  "Reading Fill in the Blanks": "fillInTheBlanksRead",
+  "Re-order Paragraphs": "reorderParagraph",
+  "Summarize Spoken Text": "summarizeSpokenText",
+  "MC, Select Multiple Answer": "multipleChooseAnswerListen",
+  "Fill in the Blanks": "fillInTheBlanks",
+  "Highlight Correct Summary": "highlightCorrectSummary",
+  "MC, Select Single Answer": "multipleChooseSingleAnswerListen",
+  "Select Missing Word": "selectMissingWord",
+  "Highlight Incorrect Words": "highlightIncorrectWord",
+  "Write from Dictation": "writeFromDictation",
+};
+
 const ActivityHistory: React.FC = () => {
-  const [recentActivity, setRecentActivity] = useState<RecentActivityType[]>([]);
+  const [recentActivity, setRecentActivity] = useState<any[]>([]);
 
   useEffect(() => {
     getRecentActivity();
@@ -27,6 +56,18 @@ const ActivityHistory: React.FC = () => {
       setRecentActivity(res.data);
     }
   };
+
+
+ const getQuestionLink = (q: any): string => {
+  const routeKey = routeNameMap[q.Subtype?.sub_name];
+  const route = all_routes[routeKey];
+  if (!route) return "#";
+  return route
+    .replace(":subtype_id", q.Subtype?.id.toString())
+    .replace("/:question_id?", `/${q.id}`);
+};
+  console.log(recentActivity);
+  
 
     return (
     <div className="card flex-fill">
@@ -46,11 +87,20 @@ const ActivityHistory: React.FC = () => {
                     <i className="ion-person"></i>
                   </Link> */}
                   <div className="overflow-hidden">
-                    <p className="d-flex align-items-center text-info mb-1">
+                   <Link
+                      to={getQuestionLink({
+                        id: activity.questionId,
+                        Subtype: {
+                          id: activity.sub_type_id,
+                          sub_name: activity.type?.split(" - ")[1]?.trim(),
+                        },
+                      })}
+                      className="d-flex align-items-center text-info mb-1"
+                    >
                       {activity.badge}
-                    </p>
+                    </Link>
                     <h6 className="text-truncate mb-1">
-                      {activity.title}
+                      {activity.type}
                     </h6>
                     <div className="d-flex align-items-center flex-wrap">
                       <p>{activity.created_at || "No description"}</p>

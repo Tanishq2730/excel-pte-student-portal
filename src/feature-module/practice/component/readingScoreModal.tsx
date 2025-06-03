@@ -6,17 +6,7 @@ interface ReadingScoreModalProps {
 }
 
 const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
-  useEffect(() => {
-    // Log the entire logDetail object
-    console.log('Complete logDetail data:', logDetail);
-    
-    // Log specific important properties
-    console.log('Subtype:', logDetail?.subtype);
-    console.log('Score:', logDetail?.score);
-    console.log('Total Score:', logDetail?.total_score);
-    console.log('Answer:', logDetail?.answer);
-  }, [logDetail]);
-
+ 
   if (!logDetail) return null;
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;

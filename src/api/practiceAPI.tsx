@@ -39,7 +39,7 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
     return await apiHandler(`${api_url}v1/community_score/likes`, "DELETE", formData);
   };
 
-  export const fetchQuestions = async (subtype_id: number, params: any) => {
+  export const fetchQuestions = async (subtype_id: number, params?: any) => {
     return await apiHandler(
       `${api_url}v1/get-questions/${subtype_id}`,
       "GET",
@@ -49,6 +49,10 @@ export const fetchQuestionData = async (subtype_id: number, question_id?: number
 
   export const saveBookmark = async (formData: any) => {
       return await apiHandler(`${api_url}v1/bookmarks`, "POST",formData);
+  };
+
+   export const resetPractice = async () => {
+    return await apiHandler(`${api_url}v1/practice/user/delete`, "DELETE");
   };
 
   export async function fetchWfdCheck(CorrectText: string, UserText: string, lang: string) {

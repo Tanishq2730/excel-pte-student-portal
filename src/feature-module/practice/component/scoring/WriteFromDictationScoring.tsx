@@ -9,16 +9,18 @@ const WriteFromDictationScoring = async (scoringData: any, questionData: any, se
     const { answerText, wordCount } = scoringData;
 
     const QueData = await questionData || question;
-
+  
     let answer = "";
     if (selectedLanguage === "American") {
-        answer = QueData.question.answer;
+        answer = QueData.answer_american;
+       
     } else {
-        if (QueData.question.answer_british == null || QueData.question.answer_british === "") {
-            answer = QueData.question.answer;
+          
+        if (QueData.answer_british == null || QueData.answer_british === "") {
+            answer = QueData.answer_american;
             console.log(answer);
         } else {
-            answer = QueData.question.answer_british;
+            answer = QueData.answer_british;
         }
     }
 
@@ -27,7 +29,6 @@ const WriteFromDictationScoring = async (scoringData: any, questionData: any, se
     const doc = parser.parseFromString(answer, "text/html");
     answer = doc.body.textContent || "";
     answer = answer.trim(); // Correct Answer
-
     let answerData = answerText;
     const parser2 = new DOMParser();
     const doc2 = parser2.parseFromString(answerData, "text/html");
@@ -41,8 +42,8 @@ const WriteFromDictationScoring = async (scoringData: any, questionData: any, se
     let CorrectTextArr = CorrectText.match(/\b[\w.]+\b/g);
     const maxscoreLength = CorrectTextArr ? CorrectTextArr.length : 0;
 
-    console.log(CorrectText, 'CorrectText');
-    console.log(UserText, 'UserText');
+    // console.log(CorrectText, 'CorrectText');
+    // console.log(UserText, 'UserText');
 
     // Fetching API data for scoring
     try {

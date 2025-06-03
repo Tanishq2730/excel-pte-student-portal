@@ -584,6 +584,10 @@ const ReTellLecture = () => {
         pronunciation: pronunciationScoreOutOf90,
         transcript: questionData?.transcription,
         scored_transcript: combinedTranscriptHTML,
+        badWords:badWords,
+        avgWords:avgWords,
+        pauseWords:pauseWords,
+        goodWords:goodWords
       };
 
       const questionId = questionData?.id;

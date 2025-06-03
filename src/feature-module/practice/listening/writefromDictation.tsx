@@ -168,12 +168,14 @@ const WriteFromDictation = () => {
       const answerText = summaryText;
       const wordCounts = wordCount;
       const scoringData = { id, session_id, question, answerText, wordCount };
+console.log(answerText);
 
       const result = await WriteFromDictationScoring(
         scoringData,
         questionData,
         selectedLanguage
       );
+console.log(result);
 
       if (result) {
         const { score, totalScore, userAnswerText, scoredText } = result;

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { fetchQuestions, saveBookmark } from "../../../api/practiceAPI";
+import { fetchQuestions, saveBookmark, resetPractice } from "../../../api/practiceAPI";
 import PageHeading from "../../../feature-module/practice/component/pageHeading";
 import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../../../feature-module/router/all_routes";
@@ -91,6 +91,29 @@ const ThemeSettings = () => {
     };
     getTypes();
   }, [subtypeIdNumber]);
+
+
+  const handleReset = async () => {
+     const confirmed = window.confirm("Are you sure you want to reset the practice status?");
+      if (!confirmed) return;
+
+    try {
+      const response = await resetPractice();
+      if(response.success == false){
+        alert(response.error);
+      }else{
+        alert(response.message);
+      }
+      console.log(response);
+      
+      // Or use a toast message
+    } catch (error: any) {
+      console.error('Error resetting practice status:', error);
+      alert(error.response?.data?.message || 'Failed to reset practice status.');
+    }
+  };
+
+
 
   useEffect(() => {
     if (questionData.length > 0) {
@@ -323,7 +346,7 @@ const ThemeSettings = () => {
                           Done {questionData.filter((q) => q.practiced).length},
                           Found {filterQuestions().length} Questions
                         </h5>
-                        <button className="btn btn-danger rounded-pill">
+                        <button className="btn btn-danger rounded-pill" onClick={handleReset}>
                           <i className="ion-refresh me-2" />
                           Reset Practice Status
                         </button>
