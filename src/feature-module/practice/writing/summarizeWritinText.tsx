@@ -13,6 +13,14 @@ import SummarizeWritingTextScoring from "../component/scoring/SummarizeWritingTe
 import PageHeading from "../component/pageHeading";
 import MyNotes from "../component/myNotes";
 import DictionaryModal from "../component/DictionaryModal";
+import parse, {
+  domToReact,
+  HTMLReactParserOptions,
+  Element,
+  Text,
+  DOMNode
+} from "html-react-parser";
+
 
 const SummarizeWritinText = () => {
   const { subtype_id, question_id } = useParams<{
@@ -110,9 +118,8 @@ const SummarizeWritinText = () => {
   const formatTime = (time: number) => {
     const minutes = Math.floor(time / 60);
     const seconds = time % 60;
-    return `${minutes < 10 ? `0${minutes}` : minutes}:${
-      seconds < 10 ? `0${seconds}` : seconds
-    }`;
+    return `${minutes < 10 ? `0${minutes}` : minutes}:${seconds < 10 ? `0${seconds}` : seconds
+      }`;
   };
 
   // Handling navigation to next and previous questions
@@ -225,6 +232,67 @@ const SummarizeWritinText = () => {
     setShowDictionaryModal(true);
   };
 
+  const wrapWordsInSpans = (text: string) => {
+    return text.split(" ").map((word, idx) => (
+      <span
+        key={idx}
+        onClick={() => handleWordClick(word)}
+        style={{ cursor: "pointer", marginRight: 4 }}
+        title="Click to see definition"
+      >
+        {word}{" "}
+      </span>
+    ));
+  };
+
+  const parseStyle = (styleString: string): React.CSSProperties => {
+    const styleObject: Record<string, string> = {};
+
+    styleString
+      .split(";")
+      .filter(Boolean)
+      .forEach((rule) => {
+        const [key, value] = rule.split(":").map((s) => s.trim());
+        if (!key || !value) return;
+        const camelKey = key.replace(/-([a-z])/g, (_, char) => char.toUpperCase());
+        styleObject[camelKey] = value;
+      });
+
+    return styleObject as React.CSSProperties;
+  };
+
+  const options: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode.type === "tag" && domNode.name === "br") {
+        return <br />;
+      }
+
+      if (domNode.type === "text") {
+        return <>{wrapWordsInSpans(domNode.data)}</>;
+      }
+
+      if (domNode.type === "tag") {
+        const element = domNode as Element;
+
+        // Convert attribs to a new object with possibly a parsed style
+        const props: React.HTMLAttributes<HTMLElement> = { ...element.attribs };
+
+        // Parse style only if it's a string
+        if (typeof props.style === "string") {
+          props.style = parseStyle(props.style as string);
+        }
+
+        return React.createElement(
+          element.name,
+          props,
+          domToReact(element.children as DOMNode[], options)
+        );
+      }
+
+      return null;
+    },
+  };
+
   return (
     <div className="page-wrappers">
       {alert && (
@@ -276,20 +344,7 @@ const SummarizeWritinText = () => {
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="innercontent">
-                        <p>
-                          {questionData?.question
-                            ?.split(" ")
-                            .map((word, idx) => (
-                              <span
-                                key={idx}
-                                onClick={() => handleWordClick(word)}
-                                style={{ cursor: "pointer", marginRight: 4 }}
-                                title="Click to see definition"
-                              >
-                                {word}
-                              </span>
-                            ))}
-                        </p>
+                        <p>{questionData?.question && parse(questionData.question, options)}</p>
                       </div>
                       <div className="card">
                         <div className="card-header bg-white">

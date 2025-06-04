@@ -196,45 +196,44 @@ const FillInTheBlanks = () => {
     : [];
 
   const customParseOptions = {
-    replace: (domNode: DOMNode) => {
-      if (
-        (domNode as Element).name === "span" &&
-        (domNode as Element).attribs?.class === "blank"
-      ) {
-        const currentIndex = blankCounter++;
+  replace: (domNode: DOMNode) => {
+    if (
+      (domNode as Element).name === "span" &&
+      (domNode as Element).attribs?.class === "blank"
+    ) {
+      const currentIndex = blankCounter++;
+      const userAnswer = answers[currentIndex] || "";
+      const correctAnswer = correctAnswers[currentIndex];
+      const isCorrect = showAnswer && userAnswer === correctAnswer;
 
-        const userAnswer = answers[currentIndex];
-        const correctAnswer = correctAnswers[currentIndex];
-
-        const isCorrect = showAnswer && userAnswer === correctAnswer;
-        const isFilled = !!userAnswer;
-
-        return (
-          <span
-            key={currentIndex}
-            onDrop={(e) => handleDrop(e, currentIndex)}
-            onDragOver={handleDragOver}
-            style={{
-              borderBottom: "2px dashed #aaa",
-              padding: "2px 10px",
-              minWidth: "60px",
-              marginRight: "4px",
-              textAlign: "center",
-              backgroundColor: isCorrect
-                ? "#d4edda" // ✅ Green for correct answer
-                : isFilled && showAnswer
-                ? "#f8d7da" // ❌ Light red for incorrect (optional)
-                : "#fff",
-              display: "inline-block",
-              cursor: "pointer",
-            }}
-          >
-            {userAnswer || "___"}
-          </span>
-        );
-      }
-    },
-  };
+      return (
+        <input
+          key={currentIndex}
+          type="text"
+          value={userAnswer}
+          onChange={(e) => {
+            const newValue = e.target.value;
+            setAnswers((prev) => ({ ...prev, [currentIndex]: newValue }));
+          }}
+          style={{
+            borderBottom: "2px solid #aaa",
+            minWidth: "40px",
+            padding: "4px",
+            marginRight: "8px",
+            textAlign: "center",
+            backgroundColor: showAnswer
+              ? isCorrect
+                ? "#d4edda"
+                : "#f8d7da"
+              : "#fff",
+            borderRadius: "4px",
+            outline: "none",
+          }}
+        />
+      );
+    }
+  },
+};
 
   const availableWords = dragDropOptions.filter(
     (word) => !usedWords.includes(word)

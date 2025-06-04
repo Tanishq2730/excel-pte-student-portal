@@ -61,9 +61,13 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
   }, []);
 
   useEffect(() => {
-  if (startCountdown === 0 && audioRef.current) {
-    audioRef.current.play();
-    setIsPlaying(true);
+   if (startCountdown === 0 && audioRef.current) {
+    audioRef.current
+      .play()
+      .then(() => setIsPlaying(true))
+      .catch((err) => {
+        console.warn("Autoplay failed due to browser policy:", err);
+      });
   }
 }, [startCountdown]);
 

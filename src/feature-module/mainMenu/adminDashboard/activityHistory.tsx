@@ -66,7 +66,6 @@ const ActivityHistory: React.FC = () => {
     .replace(":subtype_id", q.Subtype?.id.toString())
     .replace("/:question_id?", `/${q.id}`);
 };
-  console.log(recentActivity);
   
 
     return (
