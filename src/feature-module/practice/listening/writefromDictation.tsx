@@ -84,7 +84,6 @@ const WriteFromDictation = () => {
     setWordCount(words.length);
   };
 
-
   useEffect(() => {
     if (questionData?.Subtype?.beginning_in) {
       const preparationTimeInSeconds = parseInt(
@@ -148,13 +147,17 @@ const WriteFromDictation = () => {
   // Handling navigation to next and previous questions
   const handleNext = () => {
     if (questionData?.nextQuestionId) {
-      navigate(`/write-from-dictation/${subtype_id}/${questionData?.nextQuestionId}`);
+      navigate(
+        `/write-from-dictation/${subtype_id}/${questionData?.nextQuestionId}`
+      );
     }
   };
 
   const handlePrevious = () => {
     if (questionData?.previousQuestionId) {
-      navigate(`/write-from-dictation/${subtype_id}/${questionData?.previousQuestionId}`);
+      navigate(
+        `/write-from-dictation/${subtype_id}/${questionData?.previousQuestionId}`
+      );
     }
   };
 
@@ -168,14 +171,14 @@ const WriteFromDictation = () => {
       const answerText = summaryText;
       const wordCounts = wordCount;
       const scoringData = { id, session_id, question, answerText, wordCount };
-console.log(answerText);
+      console.log(answerText);
 
       const result = await WriteFromDictationScoring(
         scoringData,
         questionData,
         selectedLanguage
       );
-console.log(result);
+      console.log(result);
 
       if (result) {
         const { score, totalScore, userAnswerText, scoredText } = result;
@@ -204,7 +207,7 @@ console.log(result);
           setShowAnswer(false); // Optionally reset the answer view
           setSummaryText("");
           setWordCount(0);
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }
@@ -252,17 +255,25 @@ console.log(result);
                   <div className="card-header">
                     <div className="card-title text-white">
                       {questionData?.question_name}
-                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>
+                      <span>
+                        {questionData?.tested === "yes" &&
+                          `Tested (${questionData?.tested_count})`}
+                      </span>
                     </div>
                   </div>
                   <div className="card-body">
                     <div className="time">
                       <div className="headBtn">
-                        <span className="text-danger">Beginning in: {countdown}</span>
+                        <span className="text-danger">
+                          Beginning in: {countdown}
+                        </span>
                         <CardButton questionData={questionData} />
                       </div>
                       <div className="mb-3">
-                        <AudioPlayer questionData={questionData} startCountdown={countdown} />
+                        <AudioPlayer
+                          questionData={questionData}
+                          startCountdown={countdown}
+                        />
                       </div>
                       <div className="card">
                         <div className="card-header bg-white">
@@ -286,7 +297,7 @@ console.log(result);
                           style={{ background: "#ffe4e4" }}
                         >
                           <div className="audio-inner p-4 rounded-3">
-                          <h3 className="mb-3">Answer</h3>
+                            <h3 className="mb-3">Answer</h3>
                             <p>
                               <b>American Answers : </b>{" "}
                               {questionData?.answer_american}
@@ -298,7 +309,6 @@ console.log(result);
                               </p>
                             )}
                             {/* <h3 className="fw-semibold mb-2">Audio Answer:</h3> */}
-                            
                           </div>
                         </div>
                       )}

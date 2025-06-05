@@ -216,7 +216,7 @@ const FillInTheBlanksRead = () => {
             onDrop={(e) => handleDrop(e, currentIndex)}
             onDragOver={handleDragOver}
             style={{
-              borderBottom: "2px solid #aaa",
+              border: "1px solid #193050 !important",
               padding: "4px 12px",
               minWidth: "80px",
               marginRight: "4px",
@@ -226,15 +226,14 @@ const FillInTheBlanksRead = () => {
                 ? "#d4edda"
                 : isFilled && showAnswer
                 ? "#f8d7da"
-                : "#fff",
+                : "#f5f6f7",
               display: "inline-flex",
               alignItems: "center",
               justifyContent: "center",
-              height: "35px",
+              height: "30px",
               verticalAlign: "middle",
               borderRadius: "4px",
               cursor: !!userAnswer ? "grab" : "pointer",
-              boxShadow: "0 1px 3px rgba(0,0,0,0.1)",
             }}
           >
             {userAnswer || ""}
@@ -298,7 +297,7 @@ const FillInTheBlanksRead = () => {
           setShowAnswer(false); // Optionally reset the answer view
           setAnswers({});
           setUsedWords([]);
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }
@@ -362,7 +361,14 @@ const FillInTheBlanksRead = () => {
 
                     <div
                       className="p-4 space-y-4 bottomborder"
-                      style={{ fontSize: "1.25rem" }}
+                      style={{ 
+                        fontSize: "18px",
+                        display: "inline-block",
+                        flexWrap: "wrap",
+                        alignItems: "center",
+                        gap: "4px",
+                        lineHeight: "38px"
+                      }}
                     >
                       {parse(questionData?.question || "", customParseOptions)}
 

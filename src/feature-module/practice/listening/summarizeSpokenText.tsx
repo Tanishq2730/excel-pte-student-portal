@@ -213,7 +213,7 @@ const SummarizeSpokenText = () => {
           setShowAnswer(false); // Optionally reset the answer view
           setSummaryText("");
           setWordCount(0);
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }

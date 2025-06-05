@@ -197,7 +197,7 @@ const handleDropdownChange = (index: number, value: string) => {
           setTimeSpent(0);
           setShowAnswer(false); // Optionally reset the answer view
 
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }
@@ -235,7 +235,7 @@ const handleDropdownChange = (index: number, value: string) => {
   const traverse = (node: ChildNode | HTMLElement) => {
     if (node.nodeType === Node.TEXT_NODE) {
       const text = node.textContent || "";
-      const words = text.split(/(\s+)/); // Keep spaces
+      const words = text.split(/(\s+)/);
 
       words.forEach((word, i) => {
         const trimmed = word.trim();
@@ -246,7 +246,12 @@ const handleDropdownChange = (index: number, value: string) => {
             <span
               key={`word-${elements.length}-${i}`}
               onClick={() => handleWordClick(trimmed)}
-              style={{ cursor: "pointer" }}
+              style={{ 
+                cursor: "pointer",
+                display: "inline-block",
+                margin: "0 2px",
+                verticalAlign: "middle"
+              }}
             >
               {word}
             </span>
@@ -255,12 +260,13 @@ const handleDropdownChange = (index: number, value: string) => {
       });
     } else if (node.nodeName === "SELECT") {
       const select = node as HTMLSelectElement;
-      const options = Array.from(select.querySelectorAll("option")).map(
-        (opt) => opt.textContent || ""
-      );
+      const options = Array.from(select.querySelectorAll("option"))
+        .map(opt => opt.textContent || "")
+        .filter(opt => opt.trim());
 
-      const selectedValue = userAnswers[dropdownIndex] || "";
-      const correctAnswer = correctAnswers[dropdownIndex];
+      const currentIndex = dropdownIndex;
+      const selectedValue = userAnswers[currentIndex] || "";
+      const correctAnswer = correctAnswers[currentIndex];
 
       const borderClass =
         showAnswer && selectedValue
@@ -270,19 +276,36 @@ const handleDropdownChange = (index: number, value: string) => {
           : "";
 
       elements.push(
-        <React.Fragment key={`dropdown-${dropdownIndex}`}>
+        <span
+          key={`select-wrapper-${currentIndex}`}
+          style={{
+            display: "inline-flex",
+            alignItems: "center",
+            margin: "0 4px",
+            verticalAlign: "middle"
+          }}
+        >
           <select
-            className={`form-select d-inline w-auto mx-1 align-baseline ${borderClass}`}
-            value={(userAnswers[dropdownIndex] || "").trim()}
-            onChange={(e) =>
-              handleDropdownChange(dropdownIndex, e.target.value)
-            }
+            key={`dropdown-${currentIndex}`}
+            className={`form-select ${borderClass}`}
+            value={selectedValue}
+            onChange={(e) => {
+              e.preventDefault();
+              handleDropdownChange(currentIndex, e.target.value);
+            }}
+            style={{
+              display: "inline-block",
+              width: "auto",
+              minWidth: "130px",
+              padding: "0px 24px 0px 8px",
+              margin: showAnswer ? "0px 0px 0px 8px " : "0 5px",
+              verticalAlign: "middle",
+              height: "30px"
+            }}
           >
-            <option value="" disabled>
-              Select
-            </option>
+            <option value="">Select</option>
             {options.map((opt, idx) => (
-              <option key={idx} value={opt.trim()} >
+              <option key={`${currentIndex}-${idx}`} value={opt.trim()}>
                 {opt}
               </option>
             ))}
@@ -290,19 +313,22 @@ const handleDropdownChange = (index: number, value: string) => {
 
           {showAnswer && (
             <strong
-              className="ml-2"
+              key={`answer-${currentIndex}`}
               style={{
+                display: "inline-block",
                 backgroundColor: "#d4edda",
-                padding: "2px 6px",
+                padding: "4px 8px",
                 borderRadius: "4px",
-                marginLeft: "4px",
                 color: "#155724",
+                fontSize: "14px",
+                verticalAlign: "middle",
+                marginLeft: "4px"
               }}
             >
               {correctAnswer}
             </strong>
           )}
-        </React.Fragment>
+        </span>
       );
 
       dropdownIndex++;
@@ -312,7 +338,18 @@ const handleDropdownChange = (index: number, value: string) => {
   };
 
   traverse(doc.body);
-  return <div>{elements}</div>;
+  return (
+    <div style={{ 
+      lineHeight: "2",
+      fontSize: "16px",
+      padding: "16px",
+      backgroundColor: "#fff",
+      borderRadius: "8px",
+      boxShadow: "0 1px 3px rgba(0,0,0,0.1)"
+    }}>
+      {elements}
+    </div>
+  );
 };
 
   const correctAnswers = questionData?.answer_american?.split(",") || [];
@@ -357,7 +394,7 @@ const handleDropdownChange = (index: number, value: string) => {
                         </span>
                         <CardButton questionData={questionData} />
                       </div>
-                      <div>{renderQuestionWithDropdowns()}</div>
+                      <div className="readfib">{renderQuestionWithDropdowns()}</div>
 
                       <div className="bottomBtn mt-3">
                         <QuestionNavigation

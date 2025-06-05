@@ -14,7 +14,15 @@ import AlertComponent from "../../../core/common/AlertComponent";
 import PageHeading from "../component/pageHeading";
 import MyNotes from "../component/myNotes";
 
-const FillInTheBlanks = () => {
+interface ParseOptions {
+  replace: (domNode: DOMNode) => JSX.Element | undefined;
+}
+
+interface DragEvent<T = Element> extends React.DragEvent<T> {
+  dataTransfer: DataTransfer;
+}
+
+const FillInTheBlanks: React.FC = () => {
   const { subtype_id, question_id } = useParams<{
     subtype_id: string;
     question_id?: string;
@@ -24,7 +32,7 @@ const FillInTheBlanks = () => {
     type: "success" | "danger";
     message: string;
   } | null>(null);
-  const [showAnswer, setShowAnswer] = useState(false);
+  const [showAnswer, setShowAnswer] = useState<boolean>(false);
   const [questionData, setQuestionData] = useState<QuestionData | null>(null);
   const [countdown, setCountdown] = useState<number>(0); // Store remaining time in seconds
   const [timerActive, setTimerActive] = useState<boolean>(false);
@@ -32,8 +40,8 @@ const FillInTheBlanks = () => {
   const [answers, setAnswers] = useState<{ [key: number]: string }>({});
   const [usedWords, setUsedWords] = useState<string[]>([]);
 
-  const [timeSpent, setTimeSpent] = useState(0);
-  const startTime = useRef(Date.now());
+  const [timeSpent, setTimeSpent] = useState<number>(0);
+  const startTime = useRef<number>(Date.now());
   const [showNotes, setShowNotes] = useState<boolean>(false);
 
   const toggleNotes = () => {
@@ -143,7 +151,7 @@ const FillInTheBlanks = () => {
     e.dataTransfer.setData("text/plain", word);
   };
 
-  const handleDrop = (e: React.DragEvent, index: number | null = null) => {
+  const handleDrop = (e: React.DragEvent<HTMLElement>, index: number | null = null) => {
     e.preventDefault();
     const word = e.dataTransfer.getData("text/plain");
 
@@ -151,18 +159,16 @@ const FillInTheBlanks = () => {
       setAnswers((prevAnswers) => {
         const existingWord = prevAnswers[index];
 
-        if (existingWord === word) return prevAnswers; // if same word, do nothing
+        if (existingWord === word) return prevAnswers;
 
         const updatedAnswers = { ...prevAnswers, [index]: word };
 
-        // Remove old word from usedWords if present
         if (existingWord) {
           setUsedWords((prevUsed) =>
             prevUsed.filter((w) => w !== existingWord)
           );
         }
 
-        // Add new word to usedWords if not already present
         setUsedWords((prevUsed) =>
           prevUsed.includes(word) ? prevUsed : [...prevUsed, word]
         );
@@ -170,7 +176,6 @@ const FillInTheBlanks = () => {
         return updatedAnswers;
       });
     } else {
-      // Dropping back into word bank
       const indexToRemove = Object.keys(answers).find(
         (key) => answers[parseInt(key, 10)] === word
       );
@@ -185,7 +190,7 @@ const FillInTheBlanks = () => {
     }
   };
 
-  const handleDragOver = (e: React.DragEvent) => {
+  const handleDragOver = (e: React.DragEvent<HTMLElement>) => {
     e.preventDefault();
   };
 
@@ -302,7 +307,7 @@ const FillInTheBlanks = () => {
           setShowAnswer(false); // Optionally reset the answer view
           setAnswers({});
           setUsedWords([]);
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }
@@ -346,9 +351,13 @@ const FillInTheBlanks = () => {
                 </p>
                 <div className="card">
                   <div className="card-header">
-                    <div className="card-title text-white">
+                    <div className="card-title text-white d-flex align-items-center">
                       {questionData?.question_name}
-                      <span>{questionData?.tested === "yes" && `Tested (${questionData?.tested_count})`}</span>
+                      {questionData?.tested === "yes" && (
+                        <span className="ms-2 badge bg-light text-dark">
+                          Tested ({questionData?.tested_count})
+                        </span>
+                      )}
                     </div>
                   </div>
                   <div className="card-body">
@@ -362,12 +371,16 @@ const FillInTheBlanks = () => {
                       </div>
                       <div
                         className="p-4 space-y-4 fillDropdown bottomborder"
-                        style={{ fontSize: "1.25rem" }}
+                        style={{ 
+                          fontSize: "18px",
+                          display: "inline-block",
+                          flexWrap: "wrap",
+                          alignItems: "center",
+                          gap: "4px",
+                          lineHeight: "38px"
+                        }}
                       >
-                        {parse(
-                          questionData?.question || "",
-                          customParseOptions
-                        )}
+                        {parse( questionData?.question || "", customParseOptions  )}
 
                         <div
                           className="innercontent mt-4"

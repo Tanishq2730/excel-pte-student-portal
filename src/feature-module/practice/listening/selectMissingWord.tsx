@@ -208,7 +208,7 @@ const SelectMissingWord = () => {
         setTimeSpent(0);
         setShowAnswer(false); // Optionally reset the answer view
         setCheckedOptions("");
-        setAlert({ type: "success", message: "Your Answer Saved!" });
+        // setAlert({ type: "success", message: "Your Answer Saved!" });
       } else {
         setAlert({ type: "danger", message: "Failed to save practice" });
       }

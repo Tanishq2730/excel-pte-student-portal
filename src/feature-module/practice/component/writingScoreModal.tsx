@@ -1,5 +1,13 @@
-import React from 'react';
-import { image_url } from '../../../environment';
+import React from "react";
+import { image_url } from "../../../environment";
+
+interface ScoreData {
+  content?: number;
+  form?: number;
+  grammer?: number;
+  vocabulary?: number;
+  highlightedText?: string;
+}
 
 interface WritingScoreModalProps {
   logDetail: any;
@@ -7,67 +15,75 @@ interface WritingScoreModalProps {
 
 const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
   if (!logDetail) return null;
+  console.log(logDetail, "tansihqqq");
+  
+  let parsedScoreData: ScoreData = {};
+  
+  try {
+    if (typeof logDetail?.score_data === "string") {
+      parsedScoreData = JSON.parse(logDetail.score_data);
+    } else if (typeof logDetail?.score_data === "object" && logDetail?.score_data !== null) {
+      parsedScoreData = logDetail.score_data;
+    }
+  } catch (error) {
+    console.error("Error parsing score data:", error);
+    parsedScoreData = {};
+  }
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;
-  const parsedScoreData = JSON.parse(logDetail?.score_data || '{}');
 
   const scoreData = [
     {
-      label: 'Content',
+      label: "Content",
       score: parsedScoreData.content || 0,
       totalscore: 2,
-      desc: 'Good Summary!',
-      barColor: '#f08080'
+      desc: "Good Summary!",
+      barColor: "#f08080",
     },
     {
-      label: 'Form',
+      label: "Form",
       score: parsedScoreData.form || 0,
       totalscore: 1,
-      desc: 'Excellent!!',
-      barColor: '#aee1f9'
+      desc: "Excellent!!",
+      barColor: "#aee1f9",
     },
     {
-      label: 'Grammar',
+      label: "Grammar",
       score: parsedScoreData.grammer || 0,
       totalscore: 2,
-      desc: 'Has correct grammatical structure',
-      barColor: '#fdd76e'
+      desc: "Has correct grammatical structure",
+      barColor: "#fdd76e",
     },
     {
-      label: 'Vocabulary',
+      label: "Vocabulary",
       score: parsedScoreData.vocabulary || 0,
       totalscore: 2,
-      desc: 'Has appropriate choice of words',
-      barColor: '#fdd76e'
+      desc: "Has appropriate choice of words",
+      barColor: "#fdd76e",
     },
     {
-      label: 'Your Score',
+      label: "Your Score",
       score: logDetail.score || 0,
       totalscore: 7,
-      desc: '',
-      barColor: '#b0e0e6'
-    }
+      desc: "",
+      barColor: "#b0e0e6",
+    },
   ];
 
   return (
-    <div className="container py-4" style={{ fontFamily: 'Arial, sans-serif' }}>
+    <div className="container py-4" style={{ fontFamily: "Arial, sans-serif" }}>
       {/* Word Buttons */}
-      <div className="mt-2 mb-3">
-        <button className="btn btn-outline-danger">
-          <span>Bad words :30</span>
-        </button>
-        <button className="btn btn-outline-warning mx-3">
-          <span>AVG Words :40</span>
-        </button>
-        <button className="btn btn-outline-success">
-          <span>Good Words :60</span>
-        </button>
-      </div>
+      
 
       {/* AI Speech Recognition */}
-      <div className="p-3 rounded mb-4" style={{ backgroundColor: '#f1f9fb' }}>
+      <div className="p-3 rounded mb-4" style={{ backgroundColor: "#f1f9fb" }}>
         <strong>AI Speech Recognition:</strong>
-        <div className="mt-2" dangerouslySetInnerHTML={{ __html: parsedScoreData.highlightedText || '' }} />
+        <div
+          className="mt-2"
+          dangerouslySetInnerHTML={{
+            __html: parsedScoreData.highlightedText || "",
+          }}
+        />
       </div>
 
       {/* Score Section */}
@@ -78,9 +94,9 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
             <div
               className="p-3 rounded shadow-sm"
               style={{
-                backgroundColor: '#fef9f7',
-                border: '1px solid #f1e1dc',
-                height: '100%'
+                backgroundColor: "#fef9f7",
+                border: "1px solid #f1e1dc",
+                height: "100%",
               }}
             >
               <div className="d-flex justify-content-between fw-semibold mb-1">
@@ -92,19 +108,22 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
               <div
                 className="w-100"
                 style={{
-                  backgroundColor: '#e0e0e0',
-                  height: '8px',
-                  borderRadius: '4px',
-                  overflow: 'hidden'
+                  backgroundColor: "#e0e0e0",
+                  height: "8px",
+                  borderRadius: "4px",
+                  overflow: "hidden",
                 }}
               >
                 <div
                   style={{
-                    width: `${Math.min((item.score / item.totalscore) * 100, 100)}%`,
+                    width: `${Math.min(
+                      (item.score / item.totalscore) * 100,
+                      100
+                    )}%`,
                     backgroundColor: item.barColor,
-                    height: '100%',
-                    borderRadius: '4px',
-                    transition: 'width 0.5s ease'
+                    height: "100%",
+                    borderRadius: "4px",
+                    transition: "width 0.5s ease",
                   }}
                 ></div>
               </div>

@@ -5,7 +5,9 @@
 @import url("https://fonts.gstatic.com");
 /******* Base *******/
 body {
-  font-family:"Poppins", sans-serif;;
+  font-family:"Poppins", sans-serif;
+  /* font-family: PingFang SC, Hiragino Sans GB, Segoe UI, Microsoft YaHei, Helvetica Neue,
+    Helvetica, Arial, sans-serif, "Chinese Quote", -apple-system, BlinkMacSystemFont; */
   font-size: 14px;
   color: #6f6f6f;
   line-height: 1.5;

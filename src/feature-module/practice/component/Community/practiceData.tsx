@@ -29,6 +29,7 @@ interface PracticeLog {
     profile_image: string | null;
   };
   type_id: number;
+  subtype_id: number;
 }
 
 interface ScoreData {
@@ -45,6 +46,7 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
     const getData = async () => {
       try {
         const res = await fetchPracticeLogs(questionData.id);
+        console.log(res, "hello");
         if (res.success) {
           setPracticeLogs(res.data);
         } else {
@@ -123,42 +125,48 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                 {log.late_speak == false &&
                   "You have started speaking after 3 seconds and your response is not scored."}
               </div>
-              {log?.type_id === 3 ||
-                (log?.type_id === 4 &&
-                  (() => {
-                    let parsedScoreData: any = {};
-                    try {
-                      parsedScoreData = JSON.parse(log?.score_data || "{}");
-                    } catch (err) {
-                      console.error(
-                        "Failed to parse score_data for log ID:",
-                        log.id,
-                        err
-                      );
-                    }
-
-                    return (
-                      <div className="mt-2">
-                        <div>
-                          <strong>Your Answer:</strong>{" "}
-                          <span>{parsedScoreData?.user_answer || "N/A"}</span>
-                        </div>
-                        <div>
-                          <strong>Correct Answer:</strong>{" "}
-                          <span>
-                            {parsedScoreData?.correct_answer || "N/A"}
-                          </span>
-                        </div>
-                      </div>
-                    );
-                  })())}
+              {(() => {
+                let parsedScoreData: any = {};
+                try {
+                  parsedScoreData = JSON.parse(log?.score_data || "{}");
+                } catch (err) {
+                  console.error(
+                    "Failed to parse score_data for log ID:",
+                    log.id,
+                    err
+                  );
+                }
+                console.log(parsedScoreData, "fsfsfa");
+                return (log?.type_id === 3 || log?.type_id === 4) &&
+                  log?.subtype_id !== 20 ? (
+                  <div className="mt-2">
+                    <div>
+                      <strong>Your Answer:</strong>{" "}
+                      <span>{parsedScoreData?.user_answer || "N/A"}</span>
+                    </div>
+                    <div>
+                      <strong>Correct Answer:</strong>{" "}
+                      <span>{parsedScoreData?.correct_answer || "N/A"}</span>
+                    </div>
+                  </div>
+                ) : (
+                  <p
+                    className="mb-2 mt-4"
+                    dangerouslySetInnerHTML={{
+                      __html: parsedScoreData?.scored_text || "",
+                    }}
+                  ></p>
+                );
+              })()}
             </div>
 
             <div className="align-items-start" style={{ width: "15%" }}>
               <div style={{ fontSize: "0.9rem" }}>
                 {moment(log.createdAt).format("DD/MM/YYYY")}
               </div>
-              <h5 className="mb-0" style={{ fontSize: "0.9rem" }}>07:34</h5>
+              <h5 className="mb-0" style={{ fontSize: "0.9rem" }}>
+                {moment(log.createdAt).format("HH:mm")}
+              </h5>
             </div>
 
             <div>

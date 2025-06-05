@@ -643,7 +643,7 @@ useEffect(() => {
           setTimerActive(true); // Restart the countdown
           setTimeSpent(0);
           setShowAnswer(false); // Optionally reset the answer view
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }

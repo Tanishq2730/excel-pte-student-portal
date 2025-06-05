@@ -20,7 +20,6 @@ interface QuestionNavigationProps {
   onSubmit?: () => void; // Optional
 }
 
-
 const routeNameMap: { [key: string]: keyof typeof all_routes } = {
   "Read Aloud": "readAloud",
   "Repeat Sentence": "repeatSentence",
@@ -46,7 +45,6 @@ const routeNameMap: { [key: string]: keyof typeof all_routes } = {
   "Write from Dictation": "writeFromDictation",
 };
 
-
 const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
   questionData,
   onAnswerClick,
@@ -56,6 +54,7 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
   onSubmit,
 }) => {
   const [isAnswerVisible, setIsAnswerVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
   const handleToggleChange = () => {
     setIsAnswerVisible(!isAnswerVisible);
@@ -85,6 +84,19 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
     }
   };
 
+  // Update selectedIndex when URL changes or after Next/Previous button clicks
+  useEffect(() => {
+    const updateSelectedIndex = () => {
+      const currentId = Number(window.location.pathname.split("/").pop());
+      const foundIndex = questionList.findIndex((q: any) => q.id === currentId);
+      setSelectedIndex(foundIndex >= 0 ? foundIndex : 0);
+    };
+
+    if (questionList.length > 0) {
+      updateSelectedIndex();
+    }
+  }, [questionList, window.location.pathname]);
+
   useEffect(() => {
     const getTypes = async () => {
       try {
@@ -104,12 +116,42 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
     getTypes();
   }, [subtypeIdNumber]);
 
+  const handleSubmit = async () => {
+    if (onSubmit) {
+      setIsLoading(true);
+      try {
+        await onSubmit();
+      } finally {
+        setIsLoading(false);
+      }
+    }
+  };
+
+  const Preloader = () => {
+    return (
+      <div id="global-loader">
+        <div className="page-loader"></div>
+      </div>
+    );
+  };
+
+  const handleNextWithSync = () => {
+    onNext();
+    // The selectedIndex will be automatically updated by the useEffect when the URL changes
+  };
+
+  const handlePreviousWithSync = () => {
+    onPrevious();
+    // The selectedIndex will be automatically updated by the useEffect when the URL changes
+  };
+
   return (
     <div className="row">
       <div className="col-md-6">
+        {isLoading && <Preloader />}
         <div className="btnBottom">
           {onSubmit && (
-            <a href="#community" className="btn btn-info" onClick={onSubmit}>
+            <a href="#community" className="btn btn-info" onClick={handleSubmit}>
               Submit
             </a>
           )}
@@ -117,7 +159,6 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
             Re-Start
           </button>
 
-          {/* Using your provided switch here */}
           <div className="form-check form-switch d-inline-block">
             <input
               className="form-check-input"
@@ -140,15 +181,16 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
       </div>
       <div className="col-md-6">
         <div className="btnBottom text-end d-flex justify-content-end">
-          <button className="btn btn-info" onClick={onPrevious}>
+          <button className="btn btn-info" onClick={handlePreviousWithSync}>
             Previous
           </button>
-          <div className="mx-3">
+          <div className="mx-3 btn btn-primary d-flex align-items-center p-0">
             <select
               className="form-select bg-info text-white"
               aria-label="Question select"
               onChange={handleQuestionChange}
               value={selectedIndex !== null ? selectedIndex : ""}
+              style={{ width: '6em' }}
             >
               {questionList.map((_, index) => (
                 <option key={index} value={index}>
@@ -156,11 +198,11 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
                 </option>
               ))}
             </select>
-            <small style={{ fontSize: '0.85em', color: 'black' }}>
+            <small style={{ fontSize: '0.85em', color: '#fff' ,width:'9em' }}>
               Question {selectedIndex !== null ? selectedIndex + 1 : 0} of {questionList.length}
             </small>
           </div>
-          <button className="btn btn-info" onClick={onNext}>
+          <button className="btn btn-info" onClick={handleNextWithSync}>
             Next
           </button>
         </div>

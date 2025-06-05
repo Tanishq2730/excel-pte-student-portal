@@ -214,7 +214,7 @@ const ReOrderParagraph = () => {
           setTimeout(() => {
             setResetParaReorder(false); // Allow reset to be triggered again in the future
           }, 100); // Small delay to avoid state issues
-          setAlert({ type: "success", message: "Your Answer Saved!" });
+          // setAlert({ type: "success", message: "Your Answer Saved!" });
         } else {
           setAlert({ type: "danger", message: "Failed to save practice" });
         }

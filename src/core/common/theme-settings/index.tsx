@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from "react";
-import { fetchQuestions, saveBookmark, resetPractice } from "../../../api/practiceAPI";
+import {
+  fetchQuestions,
+  saveBookmark,
+  resetPractice,
+} from "../../../api/practiceAPI";
 import PageHeading from "../../../feature-module/practice/component/pageHeading";
 import { Link, useLocation } from "react-router-dom";
 import { all_routes } from "../../../feature-module/router/all_routes";
@@ -19,6 +23,7 @@ interface PracticeType {
   Subtype: Subtype;
   bookmarked: boolean;
   image_type: string;
+  attemptedCount: number;
 }
 
 const routeNameMap: { [key: string]: keyof typeof all_routes } = {
@@ -92,28 +97,29 @@ const ThemeSettings = () => {
     getTypes();
   }, [subtypeIdNumber]);
 
-
   const handleReset = async () => {
-     const confirmed = window.confirm("Are you sure you want to reset the practice status?");
-      if (!confirmed) return;
+    const confirmed = window.confirm(
+      "Are you sure you want to reset the practice status?"
+    );
+    if (!confirmed) return;
 
     try {
       const response = await resetPractice();
-      if(response.success == false){
+      if (response.success == false) {
         alert(response.error);
-      }else{
+      } else {
         alert(response.message);
       }
       console.log(response);
-      
+
       // Or use a toast message
     } catch (error: any) {
-      console.error('Error resetting practice status:', error);
-      alert(error.response?.data?.message || 'Failed to reset practice status.');
+      console.error("Error resetting practice status:", error);
+      alert(
+        error.response?.data?.message || "Failed to reset practice status."
+      );
     }
   };
-
-
 
   useEffect(() => {
     if (questionData.length > 0) {
@@ -278,8 +284,9 @@ const ThemeSettings = () => {
                         </button>
                       </li>
                     ))}
-                    <div className="mainFilter">
-                      <div className="myfilter" style={{ width: "40em" }}>
+                    <div className="mainFilter"  style={{ width: "50% !important" }}>
+                      <div className="myfilter" style={{ width: "100% !important" }}>
+                        <div className="col-md-12">
                         <div className="row g-3">
                           <div className="col-md-4">
                             <select
@@ -335,6 +342,7 @@ const ThemeSettings = () => {
                             )}
                           </div>
                         </div>
+                        </div>
                       </div>
                     </div>
                   </ul>
@@ -346,7 +354,10 @@ const ThemeSettings = () => {
                           Done {questionData.filter((q) => q.practiced).length},
                           Found {filterQuestions().length} Questions
                         </h5>
-                        <button className="btn btn-danger rounded-pill" onClick={handleReset}>
+                        <button
+                          className="btn btn-danger rounded-pill"
+                          onClick={handleReset}
+                        >
                           <i className="ion-refresh me-2" />
                           Reset Practice Status
                         </button>
@@ -423,10 +434,12 @@ const ThemeSettings = () => {
                                     {item.practiced
                                       ? "Attempted"
                                       : "Unattempted"}
+                                    {item.attemptedCount}
                                   </span>
 
+                                  {/* Old bookmark button - commented out
                                   <button
-                                    className="btn btn-sm rounded-circle text-dark"
+                                    className="btn btn-sm rounded-circle text-dark oldbtn"
                                     style={{
                                       backgroundColor: item.bookmarked
                                         ? "#f8d7da"
@@ -448,6 +461,48 @@ const ThemeSettings = () => {
                                       className={`fa fa-bookmark`}
                                       style={{ color: "#dc3545" }}
                                     />
+                                  </button>
+                                  */}
+                                  <button
+                                    className="btn btn-group py-1 newbtn"
+                                    style={{ color: "#000" }}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleBookmarkToggle(item.id);
+                                    }}
+                                    title={
+                                      item.bookmarked
+                                        ? "Remove Bookmark"
+                                        : "Add Bookmark"
+                                    }
+                                  >
+                                    {item.bookmarked ? (
+                                      <svg
+                                        width="14"
+                                        height="18"
+                                        viewBox="0 0 14 18"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M0 18V2C0 1.45 0.196 0.979333 0.588 0.588C0.98 0.196667 1.45067 0.000666667 2 0H12C12.55 0 13.021 0.196 13.413 0.588C13.805 0.98 14.0007 1.45067 14 2V18L7 15L0 18Z"
+                                          fill="black"
+                                        />
+                                      </svg>
+                                    ) : (
+                                      <svg
+                                        width="14"
+                                        height="18"
+                                        viewBox="0 0 14 18"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M0 18V2C0 1.45 0.196 0.979333 0.588 0.588C0.98 0.196667 1.45067 0.000666667 2 0H12C12.55 0 13.021 0.196 13.413 0.588C13.805 0.98 14.0007 1.45067 14 2V18L7 15L0 18ZM2 14.95L7 12.8L12 14.95V2H2V14.95Z"
+                                          fill="black"
+                                        />
+                                      </svg>
+                                    )}
                                   </button>
                                 </div>
                               </div>

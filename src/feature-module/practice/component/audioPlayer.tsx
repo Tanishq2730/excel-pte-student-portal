@@ -9,7 +9,7 @@ interface AudioPlayerProps {
   startCountdown?: number | null;
 }
 
-const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }) => {
+const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData, startCountdown }) => {
   const url = `${image_url}${questionData?.speak_audio_file}`;
   const audioRef = useRef<HTMLAudioElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
@@ -127,7 +127,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
         </button>
 
         {/* Progress Bar */}
-        <div className="flex-grow-1 me-2" style={{ minWidth: "200px",display:'flex',alignItems:'center' }}>
+        <div className="flex-grow-1 me-2" style={{ minWidth: "200px", display: 'flex', alignItems: 'center' }}>
           <input
             type="range"
             className="form-range mainRange"
@@ -136,17 +136,17 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
             onChange={handleProgressChange}
             style={{
               accentColor: "#4a90e2",
-              background: `linear-gradient(to right, #4a90e2 ${
-                (currentTime / duration) * 100
-              }%, #e9ecef ${(currentTime / duration) * 100}%)`,
+              background: `linear-gradient(to right, red ${(currentTime / duration) * 100}%, #e9ecef ${(currentTime / duration) * 100}%)`,
               height: "8px",
               borderRadius: "4px",
               cursor: "pointer",
               WebkitAppearance: "none",
-              appearance: "none"
+              appearance: "none",
+              outline: "none",
+              transition: "background 0.2s ease"
             }}
           />
-          <small className="text-muted" style={{width:"6em",marginLeft:"1em"}}>
+          <small className="text-muted" style={{ width: "6em", marginLeft: "1em" }}>
             {formatTime(currentTime)} / {formatTime(duration)}
           </small>
         </div>
@@ -158,9 +158,7 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
           title={isMuted ? "Unmute" : "Mute"}
           style={{ padding: "10px 12px !important" }}
         >
-          <i
-            className={`fa ${isMuted ? "fa-volume-mute" : "fa-volume-up"}`}
-          ></i>
+          <i className={`fa ${isMuted ? "fa-volume-mute" : "fa-volume-up"}`}></i>
         </button>
 
         {/* Volume Slider */}
@@ -174,9 +172,6 @@ const AudioPlayer: React.FC<AudioPlayerProps> = ({ questionData,startCountdown }
           className="form-range"
           style={{ width: "80px", accentColor: "#4a90e2" }}
         />
-
-        {/* Volume Dropdown */}
-        
 
         {/* Speed Dropdown */}
         <select
