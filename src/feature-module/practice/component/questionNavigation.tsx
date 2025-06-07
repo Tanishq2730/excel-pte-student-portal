@@ -198,8 +198,8 @@ const QuestionNavigation: React.FC<QuestionNavigationProps> = ({
                 </option>
               ))}
             </select>
-            <small style={{ fontSize: '0.85em', color: '#fff' ,width:'9em' }}>
-              Question {selectedIndex !== null ? selectedIndex + 1 : 0} of {questionList.length}
+            <small style={{ fontSize: '0.85em', color: '#fff' ,width:'2em', }}>
+             {questionList.length}
             </small>
           </div>
           <button className="btn btn-info" onClick={handleNextWithSync}>

@@ -605,10 +605,10 @@ console.log(questionData);
                       <div className="headBtn">
                         <span className="text-danger">
                           {recordingTime > 0
-                            ? `Recording: ${recordingTime}`
+                            ? `Recording time: ${recordingTime}`
                             : countdown > 0
-                              ? `Prepare: ${formatTime(countdown)}`
-                              : "Prepare"}
+                              ? `Prepartion time: ${formatTime(countdown)}`
+                              : "Prepartion time"}
                         </span>
                         <CardButton questionData={questionData} />
                       </div>

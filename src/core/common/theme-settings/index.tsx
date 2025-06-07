@@ -314,8 +314,8 @@ const ThemeSettings = () => {
                             >
                               <option value="all">Practice Status</option>
                               {/* <option value="all">All</option> */}
-                              <option value="done">Done</option>
-                              <option value="pending">Pending</option>
+                              <option value="done">Practice</option>
+                              <option value="pending">Non Practice</option>
                             </select>
                           </div>
                           <div className="col-md-4">

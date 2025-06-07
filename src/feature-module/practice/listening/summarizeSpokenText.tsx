@@ -274,7 +274,7 @@ const SummarizeSpokenText = () => {
                         </span>
                         <CardButton questionData={questionData} />
                       </div>
-                      <div className="innercontent">
+                      <div className="innercontents mb-3">
                         <AudioPlayer questionData={questionData} />
                       </div>
                       <div className="micSection">

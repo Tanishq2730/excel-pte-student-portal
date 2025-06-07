@@ -61,7 +61,7 @@ const Search: React.FC = () => {
   };
 
   return (
-    <div className="page-wrappers">
+    <div className="page-wrapper">
       <div className="container p-4">
         {/* Search Bar */}
         <Form.Control

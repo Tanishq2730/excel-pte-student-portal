@@ -6,7 +6,6 @@ interface ReadingScoreModalProps {
 }
 
 const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
- 
   if (!logDetail) return null;
 
   const audioUrl = `${image_url}/${logDetail?.answer}`;
@@ -14,6 +13,7 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
   // Determine label based on subtype name
   let scoreLabel = "Choice"; // Default
   const subtypeName = logDetail?.subtype?.sub_name;
+  console.log(logDetail, "hellobudy");
 
   if (subtypeName === "Reading and Writing Fill in the Blanks") {
     scoreLabel = "R & W Fill Blanks";
@@ -42,7 +42,6 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
       totalscore: logDetail.total_score || 0,
       barColor: "#b0e0e6",
     },
-    
   ];
 
   return (
@@ -87,6 +86,129 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
         ))}
 
         {/* {scoreData.map((item, idx) => ( */}
+        {logDetail?.subtype?.sub_name ===
+          "Reading and Writing Fill in the Blanks" ||
+          logDetail?.subtype?.sub_name === "Reading Fill in the Blanks" ||
+          (logDetail?.subtype?.sub_name === "Reading and Writing Fill in the Blanks" && (
+            <div className="cardDetail">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="card">
+                    <div className="card-header">
+                      <div className="card-title text-center">
+                        Correct answer
+                      </div>
+                    </div>
+                    <div className="card-body" style={{ paddingLeft: "10em" }}>
+                      <ul>
+                        {logDetail?.score_data?.correct_answer
+                          ?.split(",")
+                          .map((word: string, index: number) => (
+                            <li key={index}>{word.trim()}</li>
+                          ))}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="card">
+                    <div className="card-header">
+                      <div className="card-title text-center">
+                        User's Response
+                      </div>
+                    </div>
+                    <div className="card-body" style={{ paddingLeft: "10em" }}>
+                      <ul style={{ color: "green" }}>
+                        {(() => {
+                          const userAnswer = logDetail?.score_data?.user_answer;
+                          let items: string[] = [];
+
+                          if (Array.isArray(userAnswer)) {
+                            items = userAnswer;
+                          } else if (typeof userAnswer === "string") {
+                            items = userAnswer
+                              .split(",")
+                              .map((item) => item.trim());
+                          } else if (userAnswer) {
+                            items = [userAnswer.toString()];
+                          }
+
+                          return items.map((item: string, index: number) => (
+                            <li key={index}>{item}</li>
+                          ));
+                        })()}
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        {/* ))} */}
+
+        {logDetail?.subtype?.sub_name === "MC, Select Multiple Answer" ||
+          (logDetail?.subtype?.sub_name === "MC, Select Single Answer" && (
+            <div className="cardDetail">
+              <div className="row">
+                <div className="col-md-6">
+                  <div className="card">
+                    <div className="card-header">
+                      <div className="card-title text-center">
+                        Correct answer
+                      </div>
+                    </div>
+                    <div className="card-body" style={{ paddingLeft: "10em" }}>
+                      <div className="multiple">
+                        {Array.isArray(
+                          logDetail?.score_data?.correct_answer
+                        ) ? (
+                          logDetail.score_data.correct_answer.map(
+                            (answer: string, index: number) => (
+                              <span key={index}>{answer}</span>
+                            )
+                          )
+                        ) : (
+                          <span>{logDetail?.score_data?.correct_answer}</span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className="col-md-6">
+                  <div className="card">
+                    <div className="card-header">
+                      <div className="card-title text-center">
+                        User's Response
+                      </div>
+                    </div>
+                    <div className="card-body" style={{ paddingLeft: "10em" }}>
+                      <div className="multiples">
+                        {(() => {
+                          const userAnswer = logDetail?.score_data?.user_answer;
+                          let items: string[] = [];
+
+                          if (Array.isArray(userAnswer)) {
+                            items = userAnswer;
+                          } else if (typeof userAnswer === "string") {
+                            items = userAnswer
+                              .split(",")
+                              .map((item) => item.trim());
+                          } else if (userAnswer) {
+                            items = [userAnswer.toString()];
+                          }
+
+                          return items.map((answer: string, index: number) => (
+                            <span key={index}>{answer}</span>
+                          ));
+                        })()}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        {logDetail?.subtype?.sub_name === "Re-order Paragraphs" && (
           <div className="cardDetail">
             <div className="row">
               <div className="col-md-6">
@@ -95,13 +217,19 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
                     <div className="card-title text-center">Correct answer</div>
                   </div>
                   <div className="card-body" style={{ paddingLeft: "10em" }}>
-                    <ul>
-                      <li>up</li>
-                      <li>seen</li>
-                      <li>so that</li>
-                      <li>up</li>
-                      <li>whilst</li>
-                      <li>covered</li>
+                    <ul style={{ color: "green" }}>
+                      {Array.isArray(logDetail?.score_data?.answer)
+                        ? logDetail.score_data.answer.map(
+                            (item: string, index: number) => (
+                              <li key={index}>{item}</li>
+                            )
+                          )
+                        : logDetail?.score_data?.answer
+                            ?.toString()
+                            ?.split(",")
+                            .map((item: string, index: number) => (
+                              <li key={index}>{item.trim()}</li>
+                            ))}
                     </ul>
                   </div>
                 </div>
@@ -114,83 +242,32 @@ const ReadingScoreModal: React.FC<ReadingScoreModalProps> = ({ logDetail }) => {
                     </div>
                   </div>
                   <div className="card-body" style={{ paddingLeft: "10em" }}>
-                    <ul>
-                      <li className="right">up</li>
-                      <li className="right">seen</li>
-                      <li className="wrong">however</li>
-                      <li className="right">out</li>
-                      <li className="wrong">although</li>
-                      <li className="right">covered</li>
+                    <ul style={{ color: "green" }}>
+                      {(() => {
+                        const userAnswer = logDetail?.score_data?.user_answer;
+                        let items: string[] = [];
+
+                        if (Array.isArray(userAnswer)) {
+                          items = userAnswer;
+                        } else if (typeof userAnswer === "string") {
+                          items = userAnswer
+                            .split(",")
+                            .map((item) => item.trim());
+                        } else if (userAnswer) {
+                          items = [userAnswer.toString()];
+                        }
+
+                        return items.map((item: string, index: number) => (
+                          <li key={index}>{item}</li>
+                        ));
+                      })()}
                     </ul>
                   </div>
                 </div>
               </div>
             </div>
           </div>
-        {/* ))} */}
-        <div className="cardDetail">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">Correct answer</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <div className="multiple">
-                    <span>4</span>
-                    <span>4</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">User's Response</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <div className="multiples">
-                    <span>4</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div className="cardDetail">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">Correct answer</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <ul style={{ color: "green" }}>
-                    <li>5</li>
-                    <li>4</li>
-                    <li>3</li>
-                    <li>2</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <div className="card">
-                <div className="card-header">
-                  <div className="card-title text-center">User's Response</div>
-                </div>
-                <div className="card-body" style={{ paddingLeft: "10em" }}>
-                  <ul>
-                    <li>2</li>
-                    <li>4</li>
-                    <li>3</li>
-                    <li>1</li>
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+        )}
       </div>
     </div>
   );

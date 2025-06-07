@@ -164,9 +164,9 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
         onDragEnter={() => handleDragEnter(item.id)}
         onDrop={handleDropLeft}
       >
-        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-          <h5>{index + 1}. </h5>
-          <p>{item.text}</p>
+        <button className="btn btn-outline-primary w-100 text-start redorder-btn p-4">
+          <h5 className="m-0">{index + 1}. </h5>
+          <p className="mb-0" style={{marginLeft:'1em'}}>{item.text}</p>
         </button>
       </div>
     ));
@@ -182,9 +182,9 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
         onDragEnter={() => handleDragEnter(item.id)}
         onDrop={handleDropRight}
       >
-        <button className="btn btn-outline-primary w-100 text-start redorder-btn">
-          <h5>{index + 1}. </h5>
-          <p>{item.text}</p>
+        <button className="btn btn-outline-primary w-100 text-start redorder-btn p-4">
+          <h5 className="m-0">{index + 1}. </h5>
+          <p className="mb-0">{item.text}</p>
         </button>
       </div>
     ));
@@ -199,10 +199,10 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
           onDrop={handleDropLeft}
         >
           <div className="card">
-            <div className="card-header">
-              <div className="card-title text-white">Left Panel</div>
+            <div className="card-header p-3">
+              <div className="card-title text-white mb-0">Left Panel</div>
             </div>
-            <div className="card-body">
+            <div className="card-body p-4">
               {renderLeftButtons()}
             </div>
           </div>
@@ -215,10 +215,10 @@ const AmericanOrdering: React.FC<Props> = ({ questionData, onAnswerChange }) => 
           onDrop={handleDropRight}
         >
           <div className="card">
-            <div className="card-header">
-              <div className="card-title text-white">Right Panel</div>
+            <div className="card-header p-3">
+              <div className="card-title text-white mb-0">Right Panel</div>
             </div>
-            <div className="card-body">
+            <div className="card-body p-4">
               {renderRightButtons()}
             </div>
           </div>

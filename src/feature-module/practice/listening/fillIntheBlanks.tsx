@@ -221,18 +221,31 @@ const FillInTheBlanks: React.FC = () => {
             setAnswers((prev) => ({ ...prev, [currentIndex]: newValue }));
           }}
           style={{
-            borderBottom: "2px solid #aaa",
-            minWidth: "40px",
-            padding: "4px",
-            marginRight: "8px",
+            minWidth: "120px",
+            width: "auto",
+            height: "32px",
+            padding: "8px 12px",
+            margin: "0 15px",
             textAlign: "center",
             backgroundColor: showAnswer
               ? isCorrect
                 ? "#d4edda"
                 : "#f8d7da"
               : "#fff",
-            borderRadius: "4px",
+            borderRadius: "6px",
             outline: "none",
+            border: "1px solid rgb(191, 191, 191)",
+            transition: "all 0.3s ease",
+            fontSize: "16px",
+            fontWeight: "500"
+          }}
+          onFocus={(e) => {
+            e.target.style.borderColor = "#007bff";
+            e.target.style.boxShadow = "0 0 0 3px rgba(0,123,255,0.25)";
+          }}
+          onBlur={(e) => {
+            e.target.style.borderColor = "#e0e0e0";
+            e.target.style.boxShadow = "0 2px 4px rgba(0,0,0,0.05)";
           }}
         />
       );
@@ -366,7 +379,7 @@ const FillInTheBlanks: React.FC = () => {
                        <span className="text-danger">Beginning in: {countdown}</span>
                         <CardButton questionData={questionData} />
                       </div>
-                      <div>
+                      <div className="mb-4">
                         <AudioPlayer questionData={questionData} startCountdown={countdown } />
                       </div>
                       <div
@@ -377,15 +390,27 @@ const FillInTheBlanks: React.FC = () => {
                           flexWrap: "wrap",
                           alignItems: "center",
                           gap: "4px",
-                          lineHeight: "38px"
+                          lineHeight: "38px",
+                          backgroundColor: "#f8f9fa",
+                          borderRadius: "8px",
+                          padding: "20px",
+                          minHeight: "200px",
+                          width: "100%",
+                          boxShadow: "0 2px 4px rgba(0,0,0,0.05)"
                         }}
                       >
                         {parse( questionData?.question || "", customParseOptions  )}
 
-                        <div
+                        {/* <div
                           className="innercontent mt-4"
-                          onDrop={(e) => handleDrop(e, null)} // Enable dropping *into* the word bank
-                          onDragOver={handleDragOver} // Allow drop
+                          onDrop={(e) => handleDrop(e, null)}
+                          onDragOver={handleDragOver}
+                          style={{
+                            padding: "15px",
+                            backgroundColor: "#fff",
+                            borderRadius: "8px",
+                            border: "1px solid #e0e0e0"
+                          }}
                         >
                           <div className="selectableBtn d-flex flex-wrap gap-2">
                             {availableWords.map((word, idx) => (
@@ -399,7 +424,7 @@ const FillInTheBlanks: React.FC = () => {
                               </div>
                             ))}
                           </div>
-                        </div>
+                        </div> */}
                       </div>
                       {showAnswer && (
                         <div

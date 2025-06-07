@@ -702,7 +702,7 @@ const RespondSituation = () => {
                      {startCountdownActive ? (
                         <span className="text-primary">Starting in: {startCountdown}</span>
                       ) : (
-                        <span className="text-danger">Prepare: {formatTime(countdown)}</span>
+                        <span className="text-danger">Prepartion time: {formatTime(countdown)}</span>
                       )}
                     <CardButton questionData={questionData} />
                   </div>

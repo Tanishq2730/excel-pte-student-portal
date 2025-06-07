@@ -7,6 +7,8 @@ interface ScoreData {
   grammer?: number;
   vocabulary?: number;
   highlightedText?: string;
+  spelling?: number;  
+  devstrcoh?: number;
 }
 
 interface WritingScoreModalProps {
@@ -15,8 +17,8 @@ interface WritingScoreModalProps {
 
 const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
   if (!logDetail) return null;
-  console.log(logDetail, "tansihqqq");
   
+  console.log(logDetail, "logDetailtansihq");
   let parsedScoreData: ScoreData = {};
   
   try {
@@ -57,6 +59,20 @@ const WritingScoreModal: React.FC<WritingScoreModalProps> = ({ logDetail }) => {
     {
       label: "Vocabulary",
       score: parsedScoreData.vocabulary || 0,
+      totalscore: 2,
+      desc: "Has appropriate choice of words",
+      barColor: "#fdd76e",
+    },
+    {
+      label: "Spelling",
+      score: parsedScoreData.spelling || 0,
+      totalscore: 2,
+      desc: "Has appropriate choice of words",
+      barColor: "#fdd76e",
+    },
+    {
+      label: "Development, Structure & Coherence",
+      score: parsedScoreData.devstrcoh || 0,
       totalscore: 2,
       desc: "Has appropriate choice of words",
       barColor: "#fdd76e",

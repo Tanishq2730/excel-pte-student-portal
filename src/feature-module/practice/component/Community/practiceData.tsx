@@ -97,13 +97,18 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
               </div>
               <div>
                 <div className="fw-bold">{log.user.name}</div>
-                {/* <div style={{ fontSize: "0.9rem" }}>
-                  {moment(log.createdAt).format("DD/MM/YYYY")}
-                </div> */}
+                <div className="d-flex align-items-center">
+                  <div style={{ fontSize: "0.9rem" }}>
+                    {moment(log.createdAt).format("DD/MM/YYYY")}
+                  </div>
+                  <h5 className="mb-0 timers" style={{ fontSize: "0.9rem" }}>
+                    {moment(log.createdAt).format("HH:mm")}
+                  </h5>
+                </div>
               </div>
             </div>
 
-            <div className=" align-items-start" style={{ width: "25%" }}>
+            <div className=" align-items-start" style={{ width: "50%" }}>
               <button
                 className="popbtn border rounded-pill px-2 py-1 me-3"
                 data-bs-toggle="modal"
@@ -136,9 +141,9 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                     err
                   );
                 }
-                console.log(parsedScoreData, "fsfsfa");
+                // console.log(parsedScoreData, "fsfsfa");
                 return (log?.type_id === 3 || log?.type_id === 4) &&
-                  log?.subtype_id !== 20 ? (
+                  log?.subtype_id === 22 ? (
                   <div className="mt-2">
                     <div>
                       <strong>Your Answer:</strong>{" "}
@@ -151,23 +156,15 @@ const PracticeData: React.FC<PracticeDataProps> = ({ questionData }) => {
                   </div>
                 ) : (
                   <p
-                    className="mb-2 mt-4"
+                    className=" mt-2"
                     dangerouslySetInnerHTML={{
-                      __html: parsedScoreData?.scored_text || "",
+                      __html: parsedScoreData?.answer || "",
                     }}
                   ></p>
                 );
               })()}
             </div>
 
-            <div className="align-items-start" style={{ width: "15%" }}>
-              <div style={{ fontSize: "0.9rem" }}>
-                {moment(log.createdAt).format("DD/MM/YYYY")}
-              </div>
-              <h5 className="mb-0" style={{ fontSize: "0.9rem" }}>
-                {moment(log.createdAt).format("HH:mm")}
-              </h5>
-            </div>
 
             <div>
               <button

@@ -276,7 +276,7 @@ const MultipleChooseAnswerListen = () => {
                         </span>
                         <CardButton questionData={questionData} />
                       </div>
-                      <div className="innercontent">
+                      <div className="innercontents mb-3">
                         <AudioPlayer questionData={questionData} startCountdown={countdown} />
                       </div>
                       <div className="chooseSection">

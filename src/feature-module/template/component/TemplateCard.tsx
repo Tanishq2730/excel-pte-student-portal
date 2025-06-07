@@ -37,15 +37,15 @@ const TemplateCard: React.FC<TemplateCardProps> = ({ typeId }) => {
     <div className="speaking-card">
       <div className="row">
         {templates.map((template) => (
-          <div className="col-md-2" key={template.id}>
+          <div className="col-md-3" key={template.id}>
             <div className="card">
               <Link
                 to={all_routes.templateDetail.replace(":id", template.id.toString())}
                 state={{ template }}
               >
-                <div className="cardIcon">
+                {/* <div className="cardIcon">
                   <i className="ion-person" style={{ fontSize: "50px" }}></i>
-                </div>
+                </div> */}
                 <h5>{template.title}</h5>
               </Link>
             </div>
